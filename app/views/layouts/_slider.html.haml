@@ -1,0 +1,79 @@
+#carousel1.carousel.slide.center-block{"data-ride" => "carousel"}
+  %ol.carousel-indicators
+    %li.0{"data-target" => "#carousel1", "data-slide-to" => "0"}
+    %li{"data-target" => "#carousel1", "data-slide-to" => "1"}
+    %li{"data-target" => "#carousel1", "data-slide-to" => "2"}
+    %li{"data-target" => "#carousel1", "data-slide-to" => "3"}
+
+  .carousel-inner
+    .item.active
+      %img{:src => "https://s3.amazonaws.com/aquapark-s9434/water-103817_1920.jpg"}
+      .carousel-caption
+        %h3 Witaj w naszym wodnym świecie!
+        %p Czeka na Ciebie mnóstwo atrakcji!
+    .item
+      %img{:src => "https://s3.amazonaws.com/aquapark-s9434/interior_small.jpg"}
+      .carousel-caption
+        %h3 Strefa relaksu
+        %p Odpręż się i odpocznij.
+    .item
+      %img{:src => "https://s3.amazonaws.com/aquapark-s9434/swimming-pool.jpg"}
+      .carousel-caption
+        %h3 Kompleks basenów
+        %p Oferujemy szeroki wachlarz miejsc do pływania.
+    .item
+      %img{:src => "https://s3.amazonaws.com/aquapark-s9434/original_small.jpg"}
+      .carousel-caption
+        %h3 Niezapomniane chwile
+        %p Z nami spełnisz swoje wodne aspiracje.
+  %a.left.carousel-control{:href => "#carousel1", "data-slide" => "prev"}
+    %span.glyphicon.glyphicon-chevron-left{"aria-hidden" => "true"}
+  %a.right.carousel-control{:href => "#carousel1", "data-slide" => "next"}
+    %span.glyphicon.glyphicon-chevron-right{"aria-hidden" => "true"}
+.container.text-center
+  %h3 Innowacja i nowoczesność
+  %br
+    .row
+      .col-md-4
+        %a.thumbnail{:href => "#", "data-toggle" => "modal", "data-target" => "#lightbox"}
+          %img.blur{:src => "https://s3.amazonaws.com/aquapark-s9434/steam-bathing-1.jpg"}
+        #lightbox.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myLargeModalLabel", :role => "dialog", :tabindex => "-1"}
+          .modal-dialog
+            %button.close.hidden{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+            .modal-content
+              .modal-body
+                %img{:alt => "", :src => "https://s3.amazonaws.com/aquapark-s9434/steam-bathing-large.jpg"}
+      .col-md-4
+        %a.thumbnail{:href => "#", "data-toggle" => "modal", "data-target" => "#lightbox"}
+          %img.blur{:src => "https://s3.amazonaws.com/aquapark-s9434/slide.jpg"}
+        #lightbox.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myLargeModalLabel", :role => "dialog", :tabindex => "-1"}
+          .modal-dialog
+            %button.close.hidden{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+            .modal-content
+              .modal-body
+                %img{:alt => "https://s3.amazonaws.com/aquapark-s9434/slide-large.jpg", :src => ""}
+      .col-md-4
+        %a.thumbnail{:href => "#", "data-toggle" => "modal", "data-target" => "#lightbox"}
+          %img.blur{:src => "https://s3.amazonaws.com/aquapark-s9434/attractive_swimmers.jpeg"}
+        #lightbox.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myLargeModalLabel", :role => "dialog", :tabindex => "-1"}
+          .modal-dialog
+            %button.close.hidden{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+            .modal-content
+              .modal-body
+                %img{:alt => "https://s3.amazonaws.com/aquapark-s9434/attractive_swimmers-large.jpg", :src => ""}
+    / #lightbox.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myLargeModalLabel", :role => "dialog", :tabindex => "-1"}
+    /   .modal-dialog
+    /     %button.close.hidden{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+    /     .modal-content
+    /       .modal-body
+    /         %img{:alt => "", :src => ""}
+    .row
+      .col-md-4
+        .well
+          %p Some text...
+      .col-md-4
+        .well
+          %p Some text...
+      .col-md-4
+        .well
+          %p Some text...

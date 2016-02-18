@@ -1,0 +1,108 @@
+  /*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+ @import "bootstrap-sprockets";
+ @import "bootstrap";
+ @import "font-awesome";
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "lightbox-bootstrap";
+
+/* Remove the navbar's default margin-bottom and rounded borders */
+
+.navbar {
+  margin-bottom: 0;
+  border-radius: 0;
+}
+#carousel1 {
+  width: 1200px;
+}
+.item {
+  height: 400px;
+}
+.carousel-inner img {
+  width: 100%;
+  /* Set width to 100% */
+  margin: auto;
+  min-height: 200px;
+}
+
+.fa.fa-chevron-left {
+  width: 30px;
+  height: 30px;
+  margin-top: -15px;
+  font-size: 30px;
+}
+.fa.fa-chevron-right {
+  right: 50%;
+  margin-right: -10px;
+}
+/* Hide the carousel text when the screen is less than 600 pixels wide */
+
+@media (max-width: 600px) {
+  .carousel-caption {
+    display: none;
+  }
+}
+
+/* Override Bootstrap 3 font locations */
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../assets/glyphicons-halflings-regular.eot');
+  src: url('../assets/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+  url('../assets/glyphicons-halflings-regular.woff') format('woff'),
+  url('../assets/glyphicons-halflings-regular.ttf') format('truetype'),
+  url('../assets/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+.thumbnail {
+  width: 300px;
+  height: 165px;
+}
+
+img.blur {
+  -webkit-transition: all 1s ease;
+   -moz-transition: all 1s ease;
+     -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+        transition: all 1s ease;
+}
+img.blur:hover {
+  -webkit-filter: grayscale(100%);
+}
+
+.row .col-md-4 .well {
+  width: 300px;
+}
+
+#lightbox .modal-content{
+    display: inline-block;
+    text-align: center;   
+}
+
+#lightbox .close {
+    opacity: 1;
+    color: rgb(255, 255, 255);
+    background-color: rgb(25, 25, 25);
+    padding: 5px 8px;
+    border-radius: 30px;
+    border: 2px solid rgb(255, 255, 255);
+    position: absolute;
+    top: -15px;
+    right: -55px;
+    
+    z-index:1032;
+}
