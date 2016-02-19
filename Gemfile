@@ -42,3 +42,4 @@ gem 'bootstrap-sass', '~> 3.3.6'
 
 gem "font-awesome-rails" #the font-awesome font bundled as an asset for the rails asset pipeline http://fortawesome.github.com/Font-Awesome/
 gem 'lightbox-bootstrap-rails' #This gem was built for the use of 'Lightbox for Bootstrap 3' as Rails assets pipeline
+gem 'devise' #Flexible authentication solution for Rails with Warden.

@@ -1,0 +1,54 @@
+#contact.container
+  .row
+    .text-center
+      %h2
+        Skontaktuj się
+      %h4
+        Postaramy Ci się pomóc.
+    .col-md-8
+      .well.well-sm
+        %form
+          .row
+            .col-md-6
+              .form-group
+                %label{:for => "name"}
+                  Imię
+                %input#name.form-control{:placeholder => "Imię...", :required => "required", :type => "text"}
+              .form-group
+                %label{:for => "email"}
+                  Email
+                .input-group
+                  %span.input-group-addon
+                    %span.glyphicon.glyphicon-envelope
+                  %input#email.form-control{:placeholder => "Email...", :required => "required", :type => "email"}
+              .form-group
+                %label{:for => "subject"}
+                  Temat
+                %select#subject.form-control{:name => "subject", :required => "required"}
+                  %option{:selected => "selected", :value => "na"} Wybierz:
+                  %option{:value => "general"} Ogólna pomoc
+                  %option{:value => "suggestions"} Sugestie
+                  %option{:value => "product"} Pomoc techniczna
+            .col-md-6
+              .form-group
+                %label{:for => "name"}
+                  Wiadomość
+                %textarea#message.form-control{:cols => "25", :name => "message", :placeholder => "Wiadomość", :required => "required", :rows => "9"}
+            .col-md-12
+              %button#btnContactUs.btn.btn-primary.pull-right{:type => "submit"}
+                Wyślij
+    .col-md-4
+      %form
+        %legend
+          %i.glyphicon.glyphicon-globe
+            Adres
+        %addres
+          %strong Pure Space
+          %br
+          Al.Solidarności 128
+          %br
+          01-207, Warszawa
+          %br
+          (22) 865-32-11
+          %br
+          %a{:href =>"mailto:#"} biuro.obslugi@purespace.pl
