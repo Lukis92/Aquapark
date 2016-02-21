@@ -13,6 +13,8 @@
  *= require_tree .
  *= require_self
  */
+
+ @import "reset.scss";
  @import "bootstrap-sprockets";
  @import "bootstrap";
  @import "font-awesome";
@@ -23,16 +25,44 @@
 
 /* Remove the navbar's default margin-bottom and rounded borders */
 
+body {
+  background-image: url(https://s3.amazonaws.com/aquapark-s9434/blue-slate.jpg);
+  color: #fff;
+}
+.fa.fa-check{
+  color: green;
+}
+.container{
+  padding-top: 10px;
+}
+
+.divider{
+  text-align: center;
+  padding-top: 50px;
+  padding-bottom: 30px;
+}
+.well {
+  border-color: #000;
+  color: #fff;
+  border-style: round(2);
+  background-color: #009ACD;
+}
 .navbar {
   margin-bottom: 0;
   border-radius: 0;
 }
-#carousel1 {
-  width: 1200px;
+#contact {
+  padding-bottom: 60px;
+}
+.footer {
+  border-top: 1px dotted #009ACD;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 .item {
   height: 400px;
 }
+
 .carousel-inner img {
   width: 100%;
   /* Set width to 100% */
@@ -68,9 +98,21 @@
   url('../assets/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 
-.thumbnail {
+.thumbnail{
+  border: 0 none;
+  box-shadow: none;
+  background: transparent;
+}
+
+.thumbnail:hover{
+  border: 0 none;
+  box-shadow: none;
+  background: transparent;
+}
+.thumbnail img{
   width: 300px;
   height: 165px;
+  overflow: auto;
 }
 
 img.blur {
@@ -214,4 +256,8 @@ img.blur:hover {
 }
 .navbar-custom .navbar-link:hover {
   color: #c0c0c0;
+}
+
+.carousel-inner{
+  font-family: 'Archivo Black', sans-serif;
 }

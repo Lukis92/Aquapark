@@ -16,4 +16,11 @@ ActiveRecord::Schema.define(version: 0) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "persons", force: :cascade do |t|
+    t.integer "pesel"
+    t.string  "imie"
+    t.string  "nazwisko"
+    t.date    "dataUrodzenia"
+  end
+
 end
