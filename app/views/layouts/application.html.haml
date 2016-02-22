@@ -7,11 +7,17 @@
     = csrf_meta_tags
     %link{:href => "http://fonts.googleapis.com/css?family=Andada&subset=latin,latin-ext", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext", :rel => "stylesheet", :type => "text/css"}
+    / MDB core CSS
+    %link{:href => "http://mdbootstrap.com/mdbcdn/mdb.min.css", :rel => "stylesheet"}
+    / MDB core JavaScript
+    %script{:src => "http://mdbootstrap.com/mdbcdn/mdb.min.js", :type => "text/javascript"}
+    / Material Design Icons
+    %link{:href => "https://fonts.googleapis.com/icon?family=Material+Icons", :rel => "stylesheet"}
+    / Material Design Bootstrap
+    %link{:href => "css/mdb.css", :rel => "stylesheet"}
+
+
   %body{"data-spy" => "scroll", "data-target" => ".navbar", "data-offset" => "50"}
     = render '/layouts/navbar'
-    = render '/layouts/slider'
-    = render '/layouts/about'
-    = render '/layouts/price'
-    = render '/layouts/contact'
     = yield
     = render '/layouts/footer'
