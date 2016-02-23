@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ClientTest < ActiveSupport::TestCase
+class BoughtTicketTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

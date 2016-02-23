@@ -1,8 +1,10 @@
 class CreateClients < ActiveRecord::Migration
   def change
     create_table :clients do |t|
-      add_foreign_key :persons
+      t.references :person
       t.timestamps null: false
     end
+
+    cti_create_view('Client')
   end
 end
