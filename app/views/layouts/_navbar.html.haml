@@ -1,24 +1,25 @@
-%nav.navbar.navbar-custom
+%nav.navbar.blue.darken-4.navbar-fixed-top.z-depth-1{:role => "navigation"}
   .container-fluid
     .navbar-header
-      %button.navbar-toggle{"data-target" => "#myNavbar", "data-toggle" => "collapse", :type => "button"}
+      %button.navbar-toggle.collapsed{"data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+        %span.sr-only Toggle navigation
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
-      %a.navbar-brand{:href => ""}
+      %a.navbar-brand.waves-effect.waves-light{:href => ""}
         %span
           %img{:src => "https://s3.amazonaws.com/aquapark-s9434/swimming-figure_brand.png"}
         Pure Space
-    #myNavbar.collapse.navbar-collapse
+    #bs-example-navbar-collapse-1.collapse.navbar-collapse
       %ul.nav.navbar-nav
-        %li.active
-          %a{:href => "#home"} Strona Główna
         %li
-          %a{:href => "#about"} O nas
+          %a.waves-effect.waves-light{:href => "#carousel1"} Strona Główna
         %li
-          %a{:href => "#price"} Cennik
+          %a.waves-effect.waves-light{:href => "#about"} O nas
         %li
-          %a{:href => "#contact"} Kontakt
+          %a.waves-effect.waves-light{:href => "#price"} Cennik
+        %li
+          %a.waves-effect.waves-light{:href => "#contact"} Kontakt
       %ul.nav.navbar-nav.navbar-right
         %li
           %a{:href => "#"}

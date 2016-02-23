@@ -1,13 +1,19 @@
 class CreatePersons < ActiveRecord::Migration
-  def change
+  def self.up
     create_table :persons do |t|
-      t.column :pesel, :string, null: false
-      t.column :first_name, :string, null: false
-      t.column :last_name, :string, null: false
-      t.column :email, :string, null: false
-      t.column :data_of_birth, :date, null: false
-      t.column :password_digest, :string, null: false
+      t.string :pesel, null: false
+      t.string :first_name, null: false
+      t.string :last_name, null: false
+      t.string :email, null: false
+      t.date :data_of_birth, null: false
+      t.string :password_digest, null: false
+      # required for STI
+      t.string :type
       t.timestamps null: false
     end
+  end
+
+  def self.down
+    drop_table :persons
   end
 end

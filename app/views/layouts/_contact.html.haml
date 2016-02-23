@@ -1,56 +1,91 @@
 .container.divider
   %img{:src => "https://s3.amazonaws.com/aquapark-s9434/divider.png"}
 #contact.container
+  .text-center
+    %h2 Kontakt
+    %h4 W razie jakichkolwiek pytań skontaktuj się z nami.
   .row
-    .text-center
-      %h2
-        Skontaktuj się
-      %h4
-        Postaramy Ci się pomóc.
-    .col-md-8
-      .well.well-sm
-        %form
-          .row
-            .col-md-6
-              .form-group
-                %label{:for => "name"}
-                  Imię
-                %input#name.form-control{:placeholder => "Imię...", :required => "required", :type => "text"}
-              .form-group
-                %label{:for => "email"}
-                  Email
-                .input-group
-                  %span.input-group-addon
-                    %span.glyphicon.glyphicon-envelope
-                  %input#email.form-control{:placeholder => "Email...", :required => "required", :type => "email"}
-              .form-group
-                %label{:for => "subject"}
-                  Temat
-                %select#subject.form-control{:name => "subject", :required => "required"}
-                  %option{:selected => "selected", :value => "na"} Wybierz:
-                  %option{:value => "general"} Ogólna pomoc
-                  %option{:value => "suggestions"} Sugestie
-                  %option{:value => "product"} Pomoc techniczna
-            .col-md-6
-              .form-group
-                %label{:for => "name"}
-                  Wiadomość
-                %textarea#message.form-control{:cols => "25", :name => "message", :placeholder => "Wiadomość", :required => "required", :rows => "9"}
-            .col-md-12
-              %button#btnContactUs.btn.btn-primary.pull-right{:type => "submit"}
-                Wyślij
-    .col-md-4
-      %form
-        %legend
-          %i.glyphicon.glyphicon-globe
-            Adres
-        %addres
-          %strong Pure Space
-          %br
-          Al.Solidarności 128
-          %br
-          01-207, Warszawa
-          %br
-          (22) 865-32-11
-          %br
-          %a{:href =>"mailto:#"} biuro.obslugi@purespace.pl
+    %form
+      .row
+        .input-field.col-md-6
+          %input#first_name.validate{:type => "text"}
+          %label{:for => "first_name"} Imię
+        .input-field.col-md-6
+          %input#last_name.validate{:type => "text"}
+          %label{:for => "last_name"} Nazwisko
+      .row
+        .input-field.col-md-12
+          %input#email.validate{:type => "text"}
+          %label{:for => "email"} Email
+      .row
+        .input-field.col-md-12
+          %input#email.validate{:type => "text"}
+          %label{:for => "subject"} Temat
+      .row
+        .input-field.col-md-12
+          %textarea#textarea1.materialize-textarea
+          %label{:for => "content"} Treść
+      .row
+        %button.btn.btn-primary.btn-lg.btn-block.waves-effect.waves-light{:type => "button"} Wyślij
+
+-# %select#subject.form-control{:name => "subject", :required => "required"}
+-#                 %option{:selected => "selected", :value => "na"} Wybierz:
+-#                 %option{:value => "general"} Ogólna pomoc
+-#                 %option{:value => "suggestions"} Sugestie
+-#                 %option{:value => "product"} Pomoc techniczna
+
+-# .container.divider
+-#   %img{:src => "https://s3.amazonaws.com/aquapark-s9434/divider.png"}
+-# #contact.container
+-#   .row
+-#     .text-center
+-#       %h2
+-#         Skontaktuj się
+-#       %h4
+-#         Postaramy Ci się pomóc.
+-#     .col-md-8
+-#       %form
+-#         .row
+-#           .col-md-6
+-#             .input-field
+-#               %label{:for => "name"}
+-#                 Imię
+-#               %input#name.form-control{:placeholder => "Imię...", :required => "required", :type => "text"}
+-#             .input-field
+-#               %label{:for => "email"}
+-#                 Email
+-#               .input-group
+-#                 %span.input-group-addon
+-#                   %span.glyphicon.glyphicon-envelope
+-#                 %input#email.form-control{:placeholder => "Email...", :required => "required", :type => "email"}
+-#             .form-group
+-#               %label{:for => "subject"}
+-#                 Temat
+-#               %select#subject.form-control{:name => "subject", :required => "required"}
+-#                 %option{:selected => "selected", :value => "na"} Wybierz:
+-#                 %option{:value => "general"} Ogólna pomoc
+-#                 %option{:value => "suggestions"} Sugestie
+-#                 %option{:value => "product"} Pomoc techniczna
+-#           .col-md-6
+-#             .form-group
+-#               %label{:for => "name"}
+-#                 Wiadomość
+-#               %textarea#message.form-control{:cols => "25", :name => "message", :placeholder => "Wiadomość", :required => "required", :rows => "9"}
+-#           .col-md-12
+-#             %button#btnContactUs.btn.btn-primary.pull-right{:type => "submit"}
+-#               Wyślij
+-#     .col-md-4
+-#       %form
+-#         %legend
+-#           %i.glyphicon.glyphicon-globe
+-#             Adres
+-#         %addres
+-#           %strong Pure Space
+-#           %br
+-#           Al.Solidarności 128
+-#           %br
+-#           01-207, Warszawa
+-#           %br
+-#           (22) 865-32-11
+-#           %br
+-#           %a{:href =>"mailto:#"} biuro.obslugi@purespace.pl

@@ -15,9 +15,10 @@
     %link{:href => "https://fonts.googleapis.com/icon?family=Material+Icons", :rel => "stylesheet"}
     / Material Design Bootstrap
     %link{:href => "css/mdb.css", :rel => "stylesheet"}
+    / Material Design Bootstrap
+    %script{:src => "js/mdb.js", :type => "text/javascript"}
 
-
-  %body{"data-spy" => "scroll", "data-target" => ".navbar", "data-offset" => "50"}
+  %body{"data-spy" => "scroll"}
     = render '/layouts/navbar'
     = yield
     = render '/layouts/footer'

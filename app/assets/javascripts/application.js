@@ -41,4 +41,11 @@ $(document).ready(function() {
         $lightbox.find('.modal-dialog').css({'width': $img.width()});
         $lightbox.find('.close').removeClass('hidden');
     });
+
+    $('#smoothscroll').affix({
+        offset: {
+            top: 0,
+            bottom: ($('footer').outerHeight(true) + $('.affix-end').outerHeight(true)) + 30
+        }
+    });
 });
