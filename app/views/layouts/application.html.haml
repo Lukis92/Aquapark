@@ -20,5 +20,12 @@
 
   %body{"data-spy" => "scroll"}
     = render '/layouts/navbar'
+      - flash.each do |name, msg|
+        - if msg.is_a?(String)
+          %div{:class => "alert alert-#{name == "notice" ? "success" : "danger"} alert-dismissable"}
+            %button.close{"data-dismiss" => "alert", :type => "button"}
+              %span{"aria-hidden" => "true"} &times;
+              %span.sr-only Close
+            = content_tag :div, msg, :id => "flash_#{name}"
     = yield
     = render '/layouts/footer'
