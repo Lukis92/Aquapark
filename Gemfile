@@ -42,7 +42,6 @@ gem 'bootstrap-sass', '~> 3.3.6'
 
 gem "font-awesome-rails" #the font-awesome font bundled as an asset for the rails asset pipeline http://fortawesome.github.com/Font-Awesome/
 gem 'lightbox-bootstrap-rails' #This gem was built for the use of 'Lightbox for Bootstrap 3' as Rails assets pipeline
-gem 'devise' #Flexible authentication solution for Rails with Warden.
 gem 'bcrypt' # password hashing algorithm, allowing you to easily store a secure hash of your users' passwords.
 gem 'simple_form' #Forms made easy for Rails! It's tied to a simple DSL, with no opinion on markup.
 gem 'annotate' #Annotate Rails classes with schema and routes info
