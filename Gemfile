@@ -46,3 +46,4 @@ gem 'bcrypt' # password hashing algorithm, allowing you to easily store a secure
 gem 'simple_form' #Forms made easy for Rails! It's tied to a simple DSL, with no opinion on markup.
 gem 'annotate' #Annotate Rails classes with schema and routes info
 gem 'better_errors' #Better error page for Rack apps
+gem 'devise' #Flexible authentication solution for Rails with Warden.

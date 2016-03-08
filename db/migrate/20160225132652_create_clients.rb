@@ -4,7 +4,5 @@ class CreateClients < ActiveRecord::Migration
         t.references :person
         t.timestamps null: false
       end
-
-      cti_create_view('Client')
     end
 end
