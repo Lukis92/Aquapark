@@ -8,8 +8,9 @@ Rails.application.routes.draw do
   end
   root 'home#index'
 
-  namespace :client do
-    root "home#index"
-    resources :profile, only: [:edit, :update]
+  namespace :backend do
+    resources :clients, except: [:new, :create] do
+      get '/profile', to: 'clients#show_profile'
+    end
   end
 end

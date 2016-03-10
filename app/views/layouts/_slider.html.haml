@@ -27,12 +27,20 @@
         .carousel-caption
           %h3 Niezapomniane chwile
           %p Z nami spełnisz swoje wodne aspiracje.
-    %a.left.carousel-control{:href => "#carousel1", "data-slide" => "prev"}
-      %span.glyphicon.glyphicon-chevron-left{"aria-hidden" => "true"}
-    %a.right.carousel-control{:href => "#carousel1", "data-slide" => "next"}
-      %span.glyphicon.glyphicon-chevron-right{"aria-hidden" => "true"}
+    -# %a.left.carousel-control.new-control{:href => "#carousel1", "data-slide" => "prev", :role => "button"}
+    -#   %i.fa.fa-chevron-left{"aria-hidden" => "true"}
+    -#     %span.sr-only Previous
+    -# %a.right.carousel-control{:href => "#carousel1", "data-slide" => "next"}
+    -#   %i.fa.fa-chevron-right{"aria-hidden" => "true"}
+    %a.left.carousel-control{"data-slide" => "prev", "data-target" => "#carousel1", :role => "button"}
+      %span.fa.fa.fa-angle-left
+      %span.sr-only Previous
+    %a.right.carousel-control{"data-slide" => "next", "data-target" => "#carousel1", :role => "button"}
+      %span.fa.fa.fa-angle-right
+      %span.sr-only Next
+
 .container.text-center
-  %h3 Innowacja i nowoczesność
+  %h3.divider-new Innowacja i nowoczesność
   %br
   .row
     .col-md-4
@@ -49,11 +57,11 @@
         .mask
   .row
     .col-sm-4
-      .well
+      .well.description
         %p Do państwa dyspozycji oddajemy, aż 7500m2 powierzchni kompleksu basenowego. Posiadamy najwyższej jakości sauny parowe oraz suche, oraz różnego rodzaju jacuzii. Każdy znajdzie coś dla siebie!
     .col-sm-4
-      .well
+      .well.description
         %p Pure Space to idealne miejsce do reailzacji różnego rodzaju wodnych aktywności. Po za oferowanymi zajęciami dajemy Państwu do dyspozycji mnóstwo atrakcji dla młodszych jak i starszych m.in. zjeżdzalnie, wodne turbiny jak i groty solne!
     .col-sm-4
-      .well
+      .well.description
         %p Nad Państwa bezpieczeństwem czuwają wykwalifikowani ratownicy oraz personel basenowy. Każdy obszar aquaparku jest stale monitorowany przez naszych pracowników. Nie musicie martwić się o bezpieczeństwo wasze i swoich najbliższych!

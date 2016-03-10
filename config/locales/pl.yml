@@ -46,10 +46,21 @@ pl:
       models:
         client:
           attributes:
+            first_name:
+              blank: Pole Imię jest wymagane
+            last_name:
+              blank: Pole Nazwisko jest wymagane
+            password:
+              blank: Pole Hasło jest wymagane
             current_password:
-              blank: jest wymagane
+              blank: pole Obecne hasło jest wymagane
             email:
-              blank: jest wymagane
+              blank: pole Email jest wymagane
+              taken: Taki email istnieje już w bazie
+            pesel:
+              taken: Taki pesel istnieje już w bazie
+              wrong_length: Pesel musi posiadać 11 cyfr
+              blank: pole Pesel jest wymagane
   # Views:
   views:
     devise:
@@ -60,4 +71,3 @@ pl:
         forgot_password: "Zapomniałeś hasła?"
         didnt_receive_confirmation_instructions: "Nie otrzymałeś instrukcji aktywacji?"
         didnt_receive_unlock_instructions: "Nie otrzymałeś instrukcji odblokowania konta?"
-  

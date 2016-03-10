@@ -1,0 +1,66 @@
+!!!
+%html
+  %head
+    %title Panel Backend
+    = stylesheet_link_tag    'application', media: 'all'
+    = javascript_include_tag 'application'
+    = csrf_meta_tags
+  %body
+    %nav.navbar.navbar-default
+      .container-fluid
+        .navbar-header
+          %a.navbar-brand{:href => "#"} Backend Panel
+        %ul.nav.navbar-nav
+          %li.active
+            %a{:href => "#"} Home
+          %li
+            %a{:href => "#"} Page 1
+          %li
+            %a{:href => "#"} Page 2
+          %li
+            %a{:href => "#"} Page 3
+
+        %ul.nav.navbar-nav.navbar-right
+          %li.dropdown
+            = link_to backend_client_profile_path(current_person.id) do
+              %i.fa.fa-user
+              = current_person.fullName
+              %i.caret
+            %ul.dropdown-menu
+              %li
+                %a{:href => "#", :tabindex => "-1"}
+                  %i.fa.fa-bars
+                    Profil
+              %li.divider
+              %li
+                = link_to destroy_person_session_path, method: :delete do
+                  %i.fa.fa-sign-out
+                  Wyloguj
+    .container-fluid
+      .row
+        .col-md-2
+          #sidebar.well.sidebar-nav
+            %h5
+              %i.fa.fa-ticket
+              %small
+                %b Bilety
+            %ul.nav.nav-pills.nav-stacked
+              %li.active
+                %a{:href => "#"} Cennik
+              %li
+                %a{:href => "#"} Historia Zakupów
+              %li
+                %a{:href => "#"} Zakup Bilet
+            %h5
+              %i.fa.fa-clipboard
+              %small
+                %b Karnety
+            %ul.nav.nav-pills.nav-stacked
+              %li
+                %a{:href => "#"} Cennik
+              %li
+                %a{:href => "#"} Historia Zakupów
+              %li
+                %a{:href => "#"} Zakup karnet
+        .col-md-10
+          = yield

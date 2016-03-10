@@ -1,15 +1,21 @@
 .container.fix
-  %h2 Rejestracja
+  %h2.text-center Rejestracja
   = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
     = f.error_notification
     .form-inputs
-      = f.input :pesel, required: true, autofocus: true
-      = f.input :first_name, required: true
-      = f.input :last_name, required: true
-      = f.input :date_of_birth, required: true
-      = f.input :email, required: true
-      = f.input :password, required: true, hint: ("minimum #{@minimum_password_length} znaków" if @minimum_password_length)
-      = f.input :password_confirmation, required: true
-    .form-actions
-      = f.button :submit, "Zarejestruj się", class: "btn btn-success"
+      .input-field
+        = f.input :pesel, required: true, autofocus: true
+      .input-field
+        = f.input :first_name, required: true
+      .input-field
+        = f.input :last_name, required: true
+      = f.input :date_of_birth, required: true, start_year: Date.today.year - 100, end_year: Date.today.year - 13
+      .input-field
+        = f.input :email, required: true
+      .input-field
+        = f.input :password, required: true, hint: ("minimum #{@minimum_password_length} znaków" if @minimum_password_length)
+      .input-field
+        = f.input :password_confirmation, required: true
+      .form-actions
+        = f.button :submit, "Zarejestruj się", class: "btn btn-info"
   = render "devise/shared/links"

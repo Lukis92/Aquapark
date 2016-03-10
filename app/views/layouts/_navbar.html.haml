@@ -13,13 +13,13 @@
     #bs-example-navbar-collapse-1.collapse.navbar-collapse
       %ul.nav.navbar-nav
         %li
-          %a.waves-effect.waves-light{:href => "#carousel1"} Strona Główna
+          %a.waves-effect.waves-light{:href => "#{root_path}#carousel1"} Strona Główna
         %li
-          %a.waves-effect.waves-light{:href => "#about"} O nas
+          %a.waves-effect.waves-light{:href => "#{root_path}#about"} O nas
         %li
-          %a.waves-effect.waves-light{:href => "#price"} Cennik
+          %a.waves-effect.waves-light{:href => "#{root_path}#price"} Cennik
         %li
-          %a.waves-effect.waves-light{:href => "#contact"} Kontakt
+          %a.waves-effect.waves-light{:href => "#{root_path}#contact"} Kontakt
       %ul.nav.navbar-nav.navbar-right
         - unless person_signed_in?
           %li
@@ -32,7 +32,7 @@
               Rejestracja
         - else
           %li
-            = link_to edit_client_profile_path(current_person.id) do
+            = link_to backend_client_path(current_person.id) do
               = current_person.fullName
           %li
             = link_to destroy_person_session_path, method: :delete do

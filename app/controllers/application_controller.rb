@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
     return new_person_session_path unless person_signed_in?
     case current_person.class.name
     when "Client"
-      client_root_path
+      backend_clients_path
     else
       root_path
     end if person_signed_in?

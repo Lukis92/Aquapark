@@ -18,7 +18,7 @@
     / Material Design Bootstrap
     %script{:src => "js/mdb.js", :type => "text/javascript"}
 
-  %body{"data-spy" => "scroll"}
+  %body#frontend{"data-spy" => "scroll"}
     = render '/layouts/navbar'
     - flash.each do |name, msg|
       - if msg.is_a?(String)

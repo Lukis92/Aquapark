@@ -15,15 +15,12 @@
  */
 
  @import "reset.scss";
- @import "bootstrap-sprockets";
  @import "bootstrap";
+ @import "bootstrap-sprockets";
  @import "font-awesome";
 
-@import "bootstrap-sprockets";
-@import "bootstrap";
-@import "lightbox-bootstrap";
 
-body {
+#frontend {
   background-image: url(https://s3.amazonaws.com/aquapark-s9434/blue-slate.jpg);
   color: #fff;
 }
@@ -45,12 +42,33 @@ body {
 
 }
 
+/*Change style of select boxes of date_of_birth in a RegisterPage */
+select  {
+    outline: 0;
+    overflow: hidden;
+    height: 30px;
+    background: #2c343c;
+    color: #747a80;
+    border: #2c343c;
+    padding: 5px 3px 5px 10px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 10px;
+}
+
+select option {border: 1px solid #000; background: #010;}
+/****************************************************************/
+
+// label {
+//   color: #4C93A1 !important;
+// }
 /*Box below slider */
-.well {
+.description {
   border-color: #000;
   color: #fff;
   border-style: round(2);
   background-color: #009ACD;
+  height: 314px;
 }
 
 /* Parallax before about container */

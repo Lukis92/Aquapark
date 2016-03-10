@@ -8,7 +8,7 @@
 #
 
 class ClientsController < ApplicationController
-
+  layout 'backend'
   def new
     @client = Client.new
   end
