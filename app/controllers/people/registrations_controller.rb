@@ -1,16 +1,16 @@
-class People::RegistrationsController < Devise::RegistrationsController
-# before_filter :configure_sign_up_params, only: [:create]
-# before_filter :configure_account_update_params, only: [:update]
+class Client::RegistrationsController < Devise::RegistrationsController
+before_filter :configure_sign_up_params, only: [:create]
+before_filter :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  def new
+    super
+  end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    super
+  end
 
   # GET /resource/edit
   # def edit
@@ -60,13 +60,15 @@ class People::RegistrationsController < Devise::RegistrationsController
 
 
   private
-
+ # def resource_params
+ #   params.require(resource_name).permit(:email, :password, :password_confirmation)
+ # end
   def sign_up_params
-    params.require(:person).permin(:pesel, :first_name, :last_name, :date_of_birth, :email, :password, :password_confirmation)
+    params.require(:person).permit(:pesel, :first_name, :last_name, :date_of_birth, :email, :password, :password_confirmation)
     #code
   end
 
   def account_update_params
-   params.require(:person).permin(:pesel, :first_name, :last_name, :date_of_birth, :email, :password, :password_confirmation, :current_password)
+   params.require(:person).permit(:pesel, :first_name, :last_name, :date_of_birth, :email, :password, :password_confirmation, :current_password)
   end
 end

@@ -1,0 +1,2 @@
+class Lifeguard < Person
+end

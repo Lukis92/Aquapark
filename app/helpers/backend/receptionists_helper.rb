@@ -1,0 +1,2 @@
+module Backend::ReceptionistsHelper
+end

@@ -1,9 +1,27 @@
+# == Schema Information
+#
+# Table name: people
+#
+#  id            :integer          not null
+#  pesel         :string           not null
+#  first_name    :string           not null
+#  last_name     :string           not null
+#  date_of_birth :date             not null
+#  email         :string           not null
+#  type          :string           not null
+#  salary        :decimal(5, 2)
+#  hiredate      :date
+#
+
 class Person < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
- # self.abstract_class = true
+ # Include default devise modules. Others available are:
+ # :confirmable, :lockable, :timeoutable and :omniauthable
+ # devise :database_authenticatable, :registerable,
+ #         :recoverable, :rememberable, :trackable, :validatable
  self.table_name = 'people'
 
  validates :pesel, presence: true,
