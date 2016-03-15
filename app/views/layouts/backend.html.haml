@@ -22,7 +22,7 @@
 
         %ul.nav.navbar-nav.navbar-right
           %li.dropdown
-            = link_to backend_client_profile_path(current_person.id) do
+            = link_to backend_person_path(current_person.id) do
               %i.fa.fa-user
               = current_person.fullName
               %i.caret

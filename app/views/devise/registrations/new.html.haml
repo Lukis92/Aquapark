@@ -12,6 +12,8 @@
       = f.input :date_of_birth, required: true, start_year: Date.today.year - 100, end_year: Date.today.year - 13
       .input-field
         = f.input :email, required: true
+
+      = f.input :profile_image, as: :file
       .input-field
         = f.input :password, required: true, hint: ("minimum #{@minimum_password_length} znaków" if @minimum_password_length)
       .input-field

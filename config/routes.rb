@@ -10,28 +10,35 @@ Rails.application.routes.draw do
     get '/login', to: 'sessions#new', as: :new_person_session
     post '/login', to: 'sessions#create', as: :person_session
     delete '/logout', to: 'sessions#destroy', as: :destroy_person_session
+
   end
   root 'home#index'
 
   namespace :backend do
-      resources :managers, except: [:new, :create] do
-        get '/profile', to: 'managers#show_profile'
+    resources :people do
+      member do
+         get 'edit_profile'
+         delete 'remove_photo'
       end
-
-      resources :clients, except: [:new, :create] do
-        get '/profile', to: 'clients#show_profile'
-      end
-
-      resources :receptionists, except: [:new, :create] do
-        get '/profile', to: 'receptionists#show_profile'
-      end
-
-      resources :trainers, except: [:new, :create] do
-        get '/profile', to: 'trainers#show_profile'
-      end
-
-      resources :lifeguards, except: [:new, :create] do
-        get '/profile', to: 'lifeguards#show_profile'
-      end
+    end
+    [:managers, :clients, :receptionists, :trainers, :lifeguards].each do |type|
+       get type, to: "people#index"
+    end
   end
+
+  # namespace :backend do
+  #     resources :people, except: [:new, :create] do
+  #       get '/profile', to: 'people#show_profile'
+  #       get '/edit_profile', to: 'people#edit_profile'
+  #     end
+  #     resources :managers, except: [:new, :create]
+  #
+  #     resources :clients, except: [:new, :create]
+  #
+  #     resources :receptionists, except: [:new, :create]
+  #
+  #     resources :trainers, except: [:new, :create]
+  #
+  #     resources :lifeguards, except: [:new, :create]
+  # end
 end

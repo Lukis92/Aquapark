@@ -32,7 +32,7 @@
               Rejestracja
         - else
           %li
-            = link_to backend_client_path(current_person.id) do
+            = link_to backend_person_path(current_person.id) do
               = current_person.fullName
           %li
             = link_to destroy_person_session_path, method: :delete do

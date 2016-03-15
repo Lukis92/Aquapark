@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CreateBoughtPassTest < ActiveSupport::TestCase
+class Backend::PeopleControllerTest < ActionController::TestCase
   # test "the truth" do
   #   assert true
   # end
