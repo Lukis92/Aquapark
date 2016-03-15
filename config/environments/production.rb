@@ -80,9 +80,9 @@ Rails.application.configure do
   config.paperclip_defaults = {
     :storage => :s3,
     :s3_credentials => {
-      :bucket => ENV['aquapark-pubic-s9434'],
-      :access_key_id => ENV['AKIAJHFVE4B32HLJLCWQ'],
-      :secret_access_key => ENV['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']
+      :bucket => ENV['AWS_BUCKET_NAME'],
+      :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
+      :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
     }
   }
 

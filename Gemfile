@@ -49,3 +49,4 @@ gem 'better_errors' #Better error page for Rack apps
 gem 'devise' #Flexible authentication solution for Rails with Warden.
 gem "paperclip", "~> 4.3" #Easy file attachment management for ActiveRecord
 gem 'aws-sdk' #The official AWS SDK for Ruby
+gem 'rails_12factor', group: :production #Makes running your Rails app easier.
