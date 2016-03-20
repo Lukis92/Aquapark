@@ -26,19 +26,4 @@ Rails.application.routes.draw do
     end
   end
 
-  # namespace :backend do
-  #     resources :people, except: [:new, :create] do
-  #       get '/profile', to: 'people#show_profile'
-  #       get '/edit_profile', to: 'people#edit_profile'
-  #     end
-  #     resources :managers, except: [:new, :create]
-  #
-  #     resources :clients, except: [:new, :create]
-  #
-  #     resources :receptionists, except: [:new, :create]
-  #
-  #     resources :trainers, except: [:new, :create]
-  #
-  #     resources :lifeguards, except: [:new, :create]
-  # end
 end
