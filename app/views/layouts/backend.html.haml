@@ -36,13 +36,7 @@
                 = link_to destroy_person_session_path, method: :delete do
                   %i.fa.fa-sign-out
                   Wyloguj
-    - flash.each do |name, msg|
-      - if msg.is_a?(String)
-        %div{:class => "alert alert-#{name == "notice" ? "success" : "danger"} alert-dismissable"}
-          %button.close{"data-dismiss" => "alert", :type => "button"}
-            %span{"aria-hidden" => "true"} &times;
-            %span.sr-only Close
-          = content_tag :div, msg, :id => "flash_#{name}"
+    = render 'layouts/messages'
     .container-fluid
       .row
         .col-md-2

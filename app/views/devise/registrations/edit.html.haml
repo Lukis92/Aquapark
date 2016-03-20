@@ -1,7 +1,7 @@
 %h2
   Edycja profilu
 = simple_form_for(@person, :url => person_session_path) do |f|
-  = devise_error_messages!
+  = form_errors_for @person
   .form-group
     = f.input :pesel, required: true, autofocus: true, class: "form-control"
   .form-group

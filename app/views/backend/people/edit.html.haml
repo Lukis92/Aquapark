@@ -2,7 +2,6 @@
   Edycja profilu
 .col-md-6
   = simple_form_for([:backend, @person], as: :person, url: {action: "update"}, html: { class: 'form-horizontal' }) do |f|
-    = devise_error_messages!
     .form-group
       = f.input :pesel, required: true, autofocus: true, class: "form-control"
     .form-group
