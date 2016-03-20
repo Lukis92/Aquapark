@@ -47,6 +47,6 @@ gem 'simple_form' #Forms made easy for Rails! It's tied to a simple DSL, with no
 gem 'annotate' #Annotate Rails classes with schema and routes info
 gem 'better_errors' #Better error page for Rack apps
 gem 'devise' #Flexible authentication solution for Rails with Warden.
+gem 'aws-sdk', '< 2.0' #The official AWS SDK for Ruby
 gem "paperclip", "~> 4.3" #Easy file attachment management for ActiveRecord
-gem 'aws-sdk' #The official AWS SDK for Ruby
 gem 'rails_12factor', group: :production #Makes running your Rails app easier.

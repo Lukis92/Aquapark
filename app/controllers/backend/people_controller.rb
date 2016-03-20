@@ -11,16 +11,10 @@ class Backend::PeopleController < BackendController
 
 
   def update
-    respond_to do |format|
       if @person.update_with_password(person_params)
         sign_in(current_person, bypass: true)
-        format.html { redirect_to backend_person_path(@person), notice: 'Pomyślnie zaktualizowano.'}
-        format.json { render :show_profile, status: :ok, location: @person }
-      else
-        format.html { render :edit }
-        format.json { render json: @person.errors, status: :unprocessable_entity }
+       redirect_to backend_person_path(@person), notice: 'Pomyślnie zaktualizowano.'
       end
-    end
   end
 
   def remove_photo
