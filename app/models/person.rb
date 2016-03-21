@@ -31,13 +31,9 @@ class Person < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-  has_attached_file :profile_image, styles: { medium: "300x300>", thumb: "100x100>" },
-                    default_url: "https://s3.amazonaws.com/aquapark-s9434/user_default.png",
-                    storage: :s3,
-                    bucket: "aquapark-pubic-s9434"
-  validates_attachment_content_type :profile_image, content_type: /\Aimage\/.*\Z/
   self.table_name = 'people'
 
+ #**VALIDATIONS*******************************************************#
  validates :pesel, presence: true,
                    length: {is: 11},
                    uniqueness: true
@@ -47,9 +43,19 @@ class Person < ActiveRecord::Base
  validates :email, presence: true,
                    uniqueness: true,
                    format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i}
+ has_attached_file :profile_image, styles: { medium: "300x300>", thumb: "100x100>" },
+                   default_url: "https://s3.amazonaws.com/aquapark-s9434/user_default.png",
+                   storage: :s3,
+                   bucket: "aquapark-pubic-s9434"
+ validates_attachment_content_type :profile_image, content_type: /\Aimage\/.*\Z/
+#########################################################################
 
+#**ASSOCIATIONS**********#
+  has_many :work_schedules
+##########################
+
+#**METHODS*********************#
  def fullName
    "#{first_name} #{last_name}"
  end
-
 end

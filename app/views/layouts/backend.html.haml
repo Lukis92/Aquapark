@@ -63,5 +63,16 @@
                 %a{:href => "#"} Historia Zakupów
               %li
                 %a{:href => "#"} Zakup karnet
+            %h5
+              %i.fa.fa-calendar
+              %small
+                %b Harmonogram pracy
+            %ul.nav.nav-pills.nav-stacked
+              %li
+                = link_to "Grafik pracy", backend_work_schedules_path
+              %li
+                = link_to "Mój grafik pracy", work_schedule_backend_person_path(current_person.id)
+              %li
+                = link_to "Dodaj grafik pracy", new_backend_work_schedule_path
         .col-md-10
           = yield

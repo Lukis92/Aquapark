@@ -15,12 +15,15 @@ Rails.application.routes.draw do
   root 'home#index'
 
   namespace :backend do
+    resources :work_schedules
     resources :people do
-      member do
-         get 'edit_profile'
-         delete 'remove_photo'
-      end
+        member do
+           get 'edit_profile'
+           delete 'remove_photo'
+           get 'work_schedule', to: 'work_schedules#show'
+        end
     end
+
     [:managers, :clients, :receptionists, :trainers, :lifeguards].each do |type|
        get type, to: "people#index"
     end

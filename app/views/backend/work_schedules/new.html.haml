@@ -1,0 +1,7 @@
+= simple_form_for([:backend, @work_schedule], as: :work_schedule, url: {action: "create"}) do |f|
+  = f.input :start_time
+  = f.input :end_time
+  = f.input :day_of_week, collection: WorkSchedule::DAYS, include_blank: 'Wybierz dzień tygodnia'
+  = f.collection_select :person_id, @employee, :id, :fullName, {prompt: "Wybierz pracownika"}, {class: "form-control"}
+
+  = f.button :submit

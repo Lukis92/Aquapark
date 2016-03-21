@@ -1,0 +1,34 @@
+-@work_schedule
+%h1 Pracownik
+%h2
+  = @person.fullName
+
+%table.table
+  %thead
+    %tr
+      %th
+        Dzień tygodnia
+      %th
+        Czas od
+      %th
+        Czas do
+
+      %th.text-center
+        Zarządzanie
+  %tbody
+    - @person.work_schedules.each do |work|
+      %tr
+        %td
+          = work.day_of_week
+        %td
+          = work.start_time.strftime("%H:%M")
+        %td
+          = work.end_time.strftime("%H:%M")
+        %td
+          = link_to edit_backend_work_schedule_path(work), class: "btn btn-link" do
+            %i.glyphicon.glyphicon-edit
+            Edytuj
+        %td
+          = link_to [:backend,work], method: :delete, data: {confirm: 'Jesteś pewny/a?'}, class: "btn btn-link" do
+            %i.glyphicon.glyphicon-trash
+            Usuń

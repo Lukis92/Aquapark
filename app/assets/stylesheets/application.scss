@@ -15,8 +15,8 @@
  */
 
  @import "reset.scss";
- @import "bootstrap";
  @import "bootstrap-sprockets";
+ @import "bootstrap";
  @import "font-awesome";
 
 
@@ -90,6 +90,22 @@
   height: 300px;
 }
 /***********************/
+
+/* Sortable arrows in Work_Schedule index */
+.pretty th .current {
+  padding-right: 15px;
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+.pretty th .asc {
+  background-image: url(https://s3.amazonaws.com/aquapark-s9434/up_arrow.gif);
+}
+
+.pretty th .desc {
+  background-image: url(https://s3.amazonaws.com/aquapark-s9434/down_arrow.gif);
+}
+/******************************************/
 
 #contact {
   padding-bottom: 100px;
