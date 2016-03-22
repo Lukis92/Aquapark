@@ -94,3 +94,6 @@ pl:
         forgot_password: "Zapomniałeś hasła?"
         didnt_receive_confirmation_instructions: "Nie otrzymałeś instrukcji aktywacji?"
         didnt_receive_unlock_instructions: "Nie otrzymałeś instrukcji odblokowania konta?"
+  will_paginate:
+    previous_label: "Poprzednia"
+    next_label: "Następna"

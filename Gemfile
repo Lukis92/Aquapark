@@ -50,3 +50,5 @@ gem 'devise' #Flexible authentication solution for Rails with Warden.
 gem 'aws-sdk', '< 2.0' #The official AWS SDK for Ruby
 gem "paperclip", "~> 4.3" #Easy file attachment management for ActiveRecord
 gem 'rails_12factor', group: :production #Makes running your Rails app easier.
+gem 'faker' #A library for generating fake data such as names, addresses, and phone numbers.
+gem 'will_paginate-bootstrap' #Integrates the Twitter Bootstrap pagination component with will_paginate

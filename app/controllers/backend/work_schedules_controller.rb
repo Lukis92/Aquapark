@@ -3,6 +3,7 @@ class Backend::WorkSchedulesController < BackendController
     before_action :select_employee, only: [:new, :edit]
     helper_method :sort_column, :sort_direction
     before_action :set_person, only: [:show]
+    before_action :set_current_person
 
   # GET /phrases
   # GET /phrases.json
@@ -70,6 +71,10 @@ class Backend::WorkSchedulesController < BackendController
       @person = Person.find(params[:id])
     end
 
+    def set_current_person
+      @current_person = current_person
+    end
+
     def select_employee
       @employee = Person.where.not(type: "Client")
     end
@@ -81,4 +86,5 @@ class Backend::WorkSchedulesController < BackendController
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     end
+
 end

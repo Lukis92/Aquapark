@@ -1,8 +1,8 @@
-%h1 Zarejestrowane osoby
+%h1 Klienci
 %p
   Obecnie w bazie posiadamy
-  = Person.count
-  zarejestrowanych użytkowników.
+  = Client.count
+  zarejestrowanych osób.
 %table.table.pretty
   %thead
     %tr
@@ -17,7 +17,7 @@
       %th
         = sortable "email", "Email"
   %tbody
-    - @people.each do |person|
+    - @clients.each do |person|
       %tr
         %td
           = person.pesel
@@ -29,5 +29,4 @@
           = person.date_of_birth
         %td
           = person.email
-
-= will_paginate @people, renderer: BootstrapPagination::Rails
+= will_paginate @clients, renderer: BootstrapPagination::Rails

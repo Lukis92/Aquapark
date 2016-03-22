@@ -19,12 +19,11 @@
             %a{:href => "#"} Page 2
           %li
             %a{:href => "#"} Page 3
-
         %ul.nav.navbar-nav.navbar-right
           %li.dropdown
-            = link_to backend_person_path(current_person.id) do
+            = link_to backend_person_path(@current_person) do
               %i.fa.fa-user
-              = current_person.fullName
+              = @current_person.fullName
               %i.caret
             %ul.dropdown-menu
               %li
@@ -41,38 +40,42 @@
       .row
         .col-md-2
           #sidebar.well.sidebar-nav
+            -# %h5
+            -#   %i.fa.fa-ticket
+            -#   %small
+            -#     %b Bilety
+            -# %ul.nav.nav-pills.nav-stacked
+            -#   %li.active
+            -#     %a{:href => "#"} Cennik
+            -#   %li
+            -#     %a{:href => "#"} Historia Zakupów
+            -#   %li
+            -#     %a{:href => "#"} Zakup Bilet
             %h5
-              %i.fa.fa-ticket
+              %i.fa.fa-users
               %small
-                %b Bilety
+                %b Zarejestrowane osoby
             %ul.nav.nav-pills.nav-stacked
-              %li.active
-                %a{:href => "#"} Cennik
-              %li
-                %a{:href => "#"} Historia Zakupów
-              %li
-                %a{:href => "#"} Zakup Bilet
-            %h5
-              %i.fa.fa-clipboard
-              %small
-                %b Karnety
-            %ul.nav.nav-pills.nav-stacked
-              %li
-                %a{:href => "#"} Cennik
-              %li
-                %a{:href => "#"} Historia Zakupów
-              %li
-                %a{:href => "#"} Zakup karnet
+              %li{class: current_page?(backend_people_path) && 'active'}
+                = link_to "Użytkownicy", backend_people_path
+              %li{class: current_page?(backend_clients_path) && 'active'}
+                = link_to "Klienci", backend_clients_path
+              %li{class: current_page?(backend_receptionists_path) && 'active'}
+                = link_to "Recepcjoniści", backend_receptionists_path
+              %li{class: current_page?(backend_trainers_path) && 'active'}
+                = link_to "Trenerzy", backend_trainers_path
+              %li{class: current_page?(backend_lifeguards_path) && 'active'}
+                = link_to "Ratownicy", backend_lifeguards_path
             %h5
               %i.fa.fa-calendar
               %small
                 %b Harmonogram pracy
             %ul.nav.nav-pills.nav-stacked
-              %li
+              %li{class: current_page?(backend_work_schedules_path) && 'active'}
                 = link_to "Grafik pracy", backend_work_schedules_path
-              %li
-                = link_to "Mój grafik pracy", work_schedule_backend_person_path(current_person.id)
-              %li
+              %li{class: current_page?(work_schedule_backend_person_path(@current_person)) && 'active'}
+                = link_to "Mój grafik pracy", work_schedule_backend_person_path(@current_person) if @current_person.present?
+              %li{class: current_page?(new_backend_work_schedule_path) && 'active'}
                 = link_to "Dodaj grafik pracy", new_backend_work_schedule_path
         .col-md-10
           = yield

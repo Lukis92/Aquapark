@@ -1,0 +1,41 @@
+%h1 Trenerzy
+%p
+  Obecnie w bazie posiadamy
+  = Receptionist.count
+  zarejestrowanych trenerów.
+%table.table.pretty
+  %thead
+    %tr
+      %th
+        = sortable "pesel", "Pesel"
+      %th
+        = sortable "first_name", "Imię"
+      %th
+        = sortable "last_name", "Nazwisko"
+      %th
+        = sortable "date_of_birth", "Data urodzenia"
+      %th
+        = sortable "email", "Email"
+      %th
+        = sortable "salary", "Wynagrodzenie"
+      %th
+        = sortable "hiredate", "Data zatrudnienia"
+  %tbody
+    - @trainers.each do |trainer|
+      %tr
+        %td
+          = trainer.pesel
+        %td
+          = trainer.first_name
+        %td
+          = trainer.last_name
+        %td
+          = trainer.date_of_birth
+        %td
+          = trainer.email
+        %td
+          = trainer.salary
+        %td
+          = trainer.hiredate
+
+= will_paginate @trainers, renderer: BootstrapPagination::Rails

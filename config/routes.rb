@@ -25,7 +25,7 @@ Rails.application.routes.draw do
     end
 
     [:managers, :clients, :receptionists, :trainers, :lifeguards].each do |type|
-       get type, to: "people#index"
+       get type, to: "people#"+type.to_s
     end
   end
 

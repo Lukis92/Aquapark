@@ -11,7 +11,7 @@ Receptionist.destroy_all
 Lifeguard.destroy_all
 Trainer.destroy_all
 Manager.destroy_all
-
+ActiveRecord::Base.connection.reset_pk_sequence!('people')
 Manager.create!([{
   pesel: "95232822947",
   first_name: "Prezes",
@@ -23,52 +23,57 @@ Manager.create!([{
 
   p "Created #{Manager.count} managers"
 
-Client.create!([{
-  pesel: "98543029375",
-  first_name: "Łukasz",
-  last_name: "Korol",
-  date_of_birth: "1992-05-21",
-  email: "lukas.korol@gmail.com",
-  password: "_/f4:X-{5,P/}(JV",
-  }])
-
+50.times do
+  Client.create!(
+    pesel: Faker::Number.number(11),
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name,
+    date_of_birth: Faker::Time.between("1970-01-01", "2000-12-31"),
+    email: Faker::Internet.email,
+    password: Faker::Internet.password
+  )
+end
   p "Created #{Client.count} clients"
 
-Receptionist.create!([{
-  pesel: "92253068447",
-  first_name: "Tomasz",
-  last_name: "Nowak",
-  date_of_birth: "1986-08-15",
-  email: "tomasz.nowak@gmail.com",
-  salary: 2500.00,
-  hiredate: "2016-03-21",
-  password: "/GUrFr~8{@8u_7L/"
-  }])
+20.times do
+  Receptionist.create!(
+    pesel: Faker::Number.number(11),
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name,
+    date_of_birth: Faker::Time.between("1970-01-01", "2000-12-31"),
+    email: Faker::Internet.email,
+    password: Faker::Internet.password,
+    salary: Faker::Number.decimal(4, 2),
+    hiredate: Faker::Time.between("2016-01-01", "2016-04-30")
+    )
+end
 
   p "Created #{Receptionist.count} receptionists"
 
-Lifeguard.create!([{
-  pesel: "99129557279",
-  first_name: "Weronika",
-  last_name: "Laskowska",
-  date_of_birth: "1989-09-04",
-  email: "weronika.laskowska@gmail.com",
-  salary: 3700.00,
-  hiredate: "2016-04-19",
-  password: "e,qY};6XF/9'w;[4"
-  }])
-
+20.times do
+  Lifeguard.create!(
+    pesel: Faker::Number.number(11),
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name,
+    date_of_birth: Faker::Time.between("1970-01-01", "2000-12-31"),
+    email: Faker::Internet.email,
+    password: Faker::Internet.password,
+    salary: Faker::Number.decimal(4, 2),
+    hiredate: Faker::Time.between("2016-01-01", "2016-04-30")
+    )
+end
  p "Created #{Lifeguard.count} lifeguards"
 
-Trainer.create!([{
-  pesel: "96461803299",
-  first_name: "Alicja",
-  last_name: "Pocholska",
-  date_of_birth: "1986-11-15",
-  email: "alicja.pocholska@gmail.com",
-  salary: 3100.00,
-  hiredate: "2016-03-03",
-  password: "pbx.mLEb+5xeg5>7"
-  }])
-
+20.times do
+  Trainer.create!(
+    pesel: Faker::Number.number(11),
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name,
+    date_of_birth: Faker::Time.between("1970-01-01", "2000-12-31"),
+    email: Faker::Internet.email,
+    password: Faker::Internet.password,
+    salary: Faker::Number.decimal(4, 2),
+    hiredate: Faker::Time.between("2016-01-01", "2016-04-30")
+    )
+end
  p "Created #{Trainer.count} trainers"
