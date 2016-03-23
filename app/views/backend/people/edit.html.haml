@@ -18,9 +18,10 @@
       = f.input :password, hint: ("minimum #{@minimum_password_length} znaków" if @minimum_password_length)
     .form-group
       = f.input :password_confirmation
-    .form-group
-      %i (potrzebujemy hasło do potwierdzenia zmian)
-      = f.input :current_password, required: true, autocomplete: "off"
+    - unless @current_person.type = "Manager"
+      .form-group
+        %i (potrzebujemy hasło do potwierdzenia zmian)
+        = f.input :current_password, required: true, autocomplete: "off"
     .form-actions
       = f.button :submit, "Zapisz", class: "btn btn-info"
       - if @person.profile_image.present?

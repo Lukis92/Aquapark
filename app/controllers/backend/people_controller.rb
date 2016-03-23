@@ -1,5 +1,5 @@
 class Backend::PeopleController < BackendController
-  before_action :set_person, only: [:edit, :update, :show, :remove_photo]
+  before_action :set_person, only: [:edit, :update, :destroy, :show, :remove_photo]
   before_action :set_current_person
   helper_method :sort_column, :sort_direction
 
@@ -57,6 +57,14 @@ class Backend::PeopleController < BackendController
         format.html { render :edit }
         format.json { render json: @person.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def destroy
+    @person.destroy
+    respond_to do |format|
+      format.html { redirect_to :back, notice: 'Pomyślnie usunięto.' }
+      format.json { head :no_content }
     end
   end
 

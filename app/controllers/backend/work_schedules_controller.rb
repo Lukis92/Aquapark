@@ -5,19 +5,19 @@ class Backend::WorkSchedulesController < BackendController
     before_action :set_person, only: [:show]
     before_action :set_current_person
 
-  # GET /phrases
-  # GET /phrases.json
+  # GET backend/work_schedules
+  # GET backend/work_schedules.json
   def index
     @work_schedules = WorkSchedule.order(sort_column + " " + sort_direction)
   end
 
-  # GET /phrases/new
+  # GET backend/work_schedules/new
   def new
     @work_schedule = WorkSchedule.new
   end
 
-  # POST /phrases
-  # POST /phrases.json
+  # POST backend/work_schedules
+  # POST backend/work_schedules.json
   def create
     @work_schedule = WorkSchedule.new(work_schedule_params)
     @employee = Person.where.not(type: "Client")
@@ -32,8 +32,8 @@ class Backend::WorkSchedulesController < BackendController
     end
   end
 
-  # PATCH/PUT /phrases/1
-  # PATCH/PUT /phrases/1.json
+  # PATCH/PUT backend/work_schedules/1
+  # PATCH/PUT backend/work_schedules/1.json
   def update
     respond_to do |format|
       if @work_schedule.update(work_schedule_params)
@@ -46,8 +46,8 @@ class Backend::WorkSchedulesController < BackendController
     end
   end
 
-  # DELETE /phrases/1
-  # DELETE /phrases/1.json
+  # DELETE backend/work_schedules/1
+  # DELETE backend/work_schedules/1.json
   def destroy
     @work_schedule.destroy
     respond_to do |format|
@@ -59,6 +59,7 @@ class Backend::WorkSchedulesController < BackendController
   def show
     #code
   end
+  
   private
 
     def work_schedule_params

@@ -3,9 +3,12 @@
   Obecnie w bazie posiadamy
   = Client.count
   zarejestrowanych osób.
-%table.table.pretty
+%table.table.pretty.table-hover
   %thead
     %tr
+      %th
+        %em.fa.fa-cog
+        Zarządzanie
       %th
         = sortable "pesel", "Pesel"
       %th
@@ -20,6 +23,16 @@
     - @clients.each do |person|
       %tr
         %td
+          = link_to backend_person_path(person) do
+            %i.btn.btn-success
+              %i.fa.fa-user
+          = link_to edit_backend_person_path(person) do
+            %i.btn.btn-default
+              %i.fa.fa-pencil
+          = link_to backend_person_path(person), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+            %i.btn.btn-danger
+              %i.fa.fa-trash
+        %td
           = person.pesel
         %td
           = person.first_name
@@ -30,3 +43,5 @@
         %td
           = person.email
 = will_paginate @clients, renderer: BootstrapPagination::Rails
+
+/http://bootsnipp.com/snippets/featured/table-panel-with-pagination
