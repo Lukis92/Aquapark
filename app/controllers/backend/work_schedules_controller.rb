@@ -3,12 +3,16 @@ class Backend::WorkSchedulesController < BackendController
     before_action :select_employee, only: [:new, :edit]
     helper_method :sort_column, :sort_direction
     before_action :set_person, only: [:show]
+    before_action :set_employees, only: [:create, :edit, :update]
     before_action :set_current_person
 
   # GET backend/work_schedules
   # GET backend/work_schedules.json
   def index
-    @work_schedules = WorkSchedule.order(sort_column + " " + sort_direction)
+    respond_to do |format|
+      format.html { @work_schedules = WorkSchedule.order(sort_column + " " + sort_direction).paginate(page: params[:page], per_page: 5) }
+      format.json { @work_schedules = WorkSchedule.all }
+    end
   end
 
   # GET backend/work_schedules/new
@@ -20,7 +24,6 @@ class Backend::WorkSchedulesController < BackendController
   # POST backend/work_schedules.json
   def create
     @work_schedule = WorkSchedule.new(work_schedule_params)
-    @employee = Person.where.not(type: "Client")
     respond_to do |format|
       if @work_schedule.save
        format.html { redirect_to backend_work_schedules_path, notice: 'Pomyślnie dodano.' }
@@ -59,7 +62,7 @@ class Backend::WorkSchedulesController < BackendController
   def show
     #code
   end
-  
+
   private
 
     def work_schedule_params
@@ -71,7 +74,9 @@ class Backend::WorkSchedulesController < BackendController
     def set_person
       @person = Person.find(params[:id])
     end
-
+    def set_employees
+      @employees = Person.where.not(type: "Client")
+    end
     def set_current_person
       @current_person = current_person
     end

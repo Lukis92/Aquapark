@@ -84,6 +84,13 @@ pl:
               taken: Taki pesel istnieje już w bazie
               wrong_length: Pesel musi posiadać 11 cyfr
               blank: pole Pesel jest wymagane
+        work_schedule:
+          attributes:
+            person_id:
+              missing: jest wymagane
+            day_of_week:
+              blank: Pole Dzień tygodnia jest wymagany
+              taken: jest już zajęty
   # Views:
   views:
     devise:

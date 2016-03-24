@@ -21,6 +21,7 @@ Rails.application.routes.draw do
            get 'edit_profile'
            delete 'remove_photo'
            get 'work_schedule', to: 'work_schedules#show'
+           get 'add_work_schedule', to: 'work_schedules#new'
         end
     end
 

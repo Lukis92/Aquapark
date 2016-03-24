@@ -15,7 +15,10 @@ class WorkSchedule < ActiveRecord::Base
 #**VALIDATIONS***************************#
   validates :start_time, presence: true
   validates :end_time, presence: true
+  validates_uniqueness_of :day_of_week, scope: :person_id
+  validates :day_of_week, presence: true
   validate :start_must_be_before_end_time
+  validate :person_existing
 #****************************************#
 
 #**ASSOCIATIONS**********#
@@ -30,4 +33,7 @@ private
       start_time < end_time
   end
 
+  def person_existing
+    errors.add(:person_id, :missing) if person.blank?
+  end
 end

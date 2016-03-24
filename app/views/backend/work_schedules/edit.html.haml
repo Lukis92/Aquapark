@@ -3,6 +3,6 @@
   = f.input :start_time
   = f.input :end_time
   = f.input :day_of_week, collection: WorkSchedule::DAYS
-  = f.collection_select :person_id, @employee, :id, :fullName, {}, {class: "form-control"}
+  = f.input :person_id, label: "Pracownik", :collection => @employees.map{|e| [e.fullName, e.id]}
 
   = f.button :submit

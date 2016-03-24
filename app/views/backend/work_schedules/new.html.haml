@@ -1,7 +1,7 @@
 = simple_form_for([:backend, @work_schedule], as: :work_schedule, url: {action: "create"}) do |f|
+  = errors_for(@work_schedule)
   = f.input :start_time
   = f.input :end_time
   = f.input :day_of_week, collection: WorkSchedule::DAYS, include_blank: 'Wybierz dzień tygodnia'
-  = f.collection_select :person_id, @employee, :id, :fullName, {prompt: "Wybierz pracownika"}, {class: "form-control"}
-
+  = f.input :person_id, label: "Pracownik", :collection => @employees.map{|e| [e.fullName, e.id]}, prompt: "Wybierz pracownika"
   = f.button :submit

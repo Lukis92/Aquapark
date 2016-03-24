@@ -1,6 +1,9 @@
-%table.table.pretty
+%h1 Grafik pracy wszystkich pracowników
+%table.table.table-striped.table-bordered.table-list
   %thead
     %tr
+      %th
+        %em.fa.fa-cog
       %th
         = sortable "day_of_week", "Dzień tygodnia"
       %th
@@ -9,11 +12,16 @@
         = sortable "end_time", "Czas do"
       %th
         Pracownik
-      %th.text-center
-        Zarządzanie
+      %th
+        Rola
   %tbody
     - @work_schedules.each do |work|
       %tr
+        %td{:align => "center"}
+          %a.btn.btn-default
+            %em.fa.fa-pencil
+          %a.btn.btn-danger
+            %em.fa.fa-trash
         %td
           = work.day_of_week
         %td
@@ -23,10 +31,13 @@
         %td
           = work.person.try(:fullName)
         %td
-          = link_to edit_backend_work_schedule_path(work), class: "btn btn-link" do
-            %i.glyphicon.glyphicon-edit
-            Edytuj
-        %td
-          = link_to [:backend,work], method: :delete, data: {confirm: 'Jesteś pewny/a?'}, class: "btn btn-link" do
-            %i.glyphicon.glyphicon-trash
-            Usuń
+          - if work.person.type == "Manager"
+            %i.btn.btn-danger
+              = work.person.type
+          - elsif work.person.type == "Client"
+            %i.btn.btn-warning
+              = work.person.type
+          - else
+            %i.btn.btn-info
+              = work.person.type
+    = will_paginate @work_schedules, renderer: BootstrapPagination::Rails
