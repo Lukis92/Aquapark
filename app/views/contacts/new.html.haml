@@ -1,0 +1,26 @@
+.container-fluid.parallax#parallax_contact
+#contact.container
+  .text-center
+    %h2.divider-new Kontakt
+    %h4 W razie jakichkolwiek pytań skontaktuj się z nami.
+    - flash.each do |name, msg|
+      - if msg.is_a?(String)
+        %div{:class => "alert alert-#{name == "notice" ? "success" : "danger"} alert-dismissable"}
+          %button.close{"data-dismiss" => "alert", :type => "button"}
+            %span{"aria-hidden" => "true"} &times;
+            %span.sr-only Close
+          = content_tag :div, msg, :id => "flash_#{name}"
+  .row
+  = simple_form_for @contact do |f|
+    .input-field.col-md-6
+      = f.input :first_name, required: true
+    .input-field.col-md-6
+      = f.input :last_name, required: true
+    .input-field.col-md-12
+      = f.input :email, required: true
+    .input-field.col-md-12
+      = f.input :subject, required: true
+    .input-field.col-md-12
+      = f.input :content, required: true, as: :text, input_html: {class: "materialize-textarea", rows: 10}
+    .row
+      = f.button :submit, 'Wyślij', :class=> "btn btn-primary btn-lg btn-block waves-effect.waves-light"

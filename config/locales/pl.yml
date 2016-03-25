@@ -95,7 +95,29 @@ pl:
             day_of_week:
               blank: Pole Dzień tygodnia jest wymagany
               taken: jest już zajęty
-
+  mail_form:
+    attributes:
+      contact:
+        first_name: Imię
+        last_name: Nazwisko
+        email: Email
+        subject: Temat
+        content: Treść
+    errors:
+      models:
+        contact:
+          attributes:
+            first_name:
+              blank: jest wymagane
+            last_name:
+              blank: jest wymagane
+            email:
+              blank: jest wymagane
+              invalid: jest nieprawidłowy
+            subject:
+              blank: jest wymagane
+            content:
+              blank: jest wymagane
   # Views:
   views:
     devise:

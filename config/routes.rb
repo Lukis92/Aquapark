@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   devise_for :lifeguards, skip: [:sessions, :registrations]
   devise_for :trainers, skip: [:sessions, :registrations]
   devise_for :clients, skip: :sessions
-
-
+  get '/contacts',     to: 'contacts#new'
+  resources "contacts", only: [:new, :create]
   devise_for :people, skip: [:registrations] do
     get '/login', to: 'sessions#new', as: :new_person_session
     post '/login', to: 'sessions#create', as: :person_session
@@ -29,5 +29,4 @@ Rails.application.routes.draw do
        get type, to: "people#"+type.to_s
     end
   end
-
 end
