@@ -37,3 +37,5 @@ latest.dump
 gradle.properties
 
 # Project-specific
+.env
+Procfile
