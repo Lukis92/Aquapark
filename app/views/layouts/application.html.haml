@@ -18,7 +18,7 @@
     / Material Design Bootstrap
     %script{:src => "js/mdb.js", :type => "text/javascript"}
 
-  %body#frontend{"data-spy" => "scroll"}
+  %body#frontend{"data-spy" => "scroll", "data-target" => ".navbar"}
     = render '/layouts/navbar'
     = render 'layouts/messages'
     = yield

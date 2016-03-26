@@ -46,19 +46,19 @@
                 %td Zarejestrowany jako:
                 %td
                   = @person.type
-              %tr
-                %td
-                  = link_to work_schedule_backend_person_path(@person), class: "btn btn-primary" do
-                    %i.fa.fa-calendar
-                    Harmonogram pracy
-        -# %a.btn.btn-primary{:href => "#"} Harmonogram pracy
+        %br
+
         %a.btn.btn-primary{:href => "#"} Team Sales Performance
+        = link_to work_schedule_backend_person_path(@person), class: "btn btn-primary" do
+          %i.fa.fa-calendar
+          Harmonogram pracy
   .panel-footer
     %a.btn.btn-sm.btn-primary{"data-original-title" => "Broadcast Message", "data-toggle" => "tooltip", :type => "button"}
       %i.glyphicon.glyphicon-envelope
-    %span.pull-right
+    %i.pull-right
       = link_to edit_backend_person_path(@person), class: "btn btn-sm btn-warning" do
         %i.fa.fa-pencil-square
         Edytuj
-      %a.btn.btn-sm.btn-danger{"data-original-title" => "Remove this user", "data-toggle" => "tooltip", :type => "button"}
-        %i.glyphicon.glyphicon-remove
+      = link_to backend_people_path, method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "btn btn-sm btn-danger" do
+        %i.fa.fa-trash
+        Usuń

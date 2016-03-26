@@ -1,5 +1,5 @@
 class Backend::PeopleController < BackendController
-  before_action :set_person, only: [:edit, :update, :destroy, :show, :remove_photo]
+  before_action :set_person, only: [:edit, :edit_profile, :update, :destroy, :show, :remove_photo]
   before_action :set_current_person
   helper_method :sort_column, :sort_direction
 
@@ -40,10 +40,6 @@ class Backend::PeopleController < BackendController
       format.html { @lifequards = Lifeguard.order(sort_column + " " + sort_direction).paginate(page: params[:page], per_page: 10) }
       format.json { @lifequards = Lifeguard.all }
     end
-  end
-
-  def edit
-
   end
 
 

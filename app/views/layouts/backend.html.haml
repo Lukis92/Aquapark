@@ -21,15 +21,15 @@
             %a{:href => "#"} Page 3
         %ul.nav.navbar-nav.navbar-right
           %li.dropdown
-            = link_to backend_person_path(@current_person) do
+            %a.dropdown-toggle{"data-toggle" => "dropdown", :href => backend_person_path(@current_person)}
               %i.fa.fa-user
               = @current_person.fullName
               %i.caret
             %ul.dropdown-menu
               %li
-                %a{:href => "#", :tabindex => "-1"}
+                = link_to backend_person_path(@current_person) do
                   %i.fa.fa-bars
-                    Profil
+                  Profil
               %li.divider
               %li
                 = link_to destroy_person_session_path, method: :delete do

@@ -11,15 +11,15 @@
           %img{:src => "https://s3.amazonaws.com/aquapark-s9434/swimming-figure_brand.png"}
         Pure Space
     #bs-example-navbar-collapse-1.collapse.navbar-collapse
-      %ul.nav.navbar-nav
+      %ul.nav.navbar-nav.nav-pills
         %li
-          %a.waves-effect.waves-light{:href => "#{root_path}#carousel1"} Strona Główna
+          %a.waves-effect.waves-light{:href => "#carousel1" } Strona Główna
         %li
-          %a.waves-effect.waves-light{:href => "#{root_path}#about"} O nas
+          %a.waves-effect.waves-light{:href => "#about"} O nas
         %li
-          %a.waves-effect.waves-light{:href => "#{root_path}#price"} Cennik
+          %a.waves-effect.waves-light{:href => "#price"} Cennik
         %li
-          %a.waves-effect.waves-light{:href => "#{root_path}#contact"} Kontakt
+          %a.waves-effect.waves-light{:href => "#contact"} Kontakt
       %ul.nav.navbar-nav.navbar-right
         - unless person_signed_in?
           %li
