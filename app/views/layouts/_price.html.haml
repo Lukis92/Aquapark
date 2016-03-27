@@ -1,4 +1,4 @@
-#price.container
+#price.container.fix
   .row.text-center
     %h2.divider-new Cennik
     %h4 Wybierz interesujący Cię rodzaj wejściówki.
@@ -13,51 +13,205 @@
       .tab-content
         #tickets.tab-pane
           %br
-          - @entry_types.each do |type|
-            - if type.kind == 'Bilet'
-              .col-md-4.col-sm-6.col-xs-12.float-shadow
-                .price_table_container
-                  .price_table_heading
-                    = type.kind
-                  .price_table_body
-                    .price_table_row.cost.success-bg
-                      %strong
-                      PLN
-                      = type.price
-                      %br
-                      %span /DZIEŃ
-                    .price_table_row
-                      = type.kind_details
-                    .price_table_row
-                      = type.description
-                    .price_table_row
-                      Możliwość wchodzenia na teren obiektu przez 24h od momentu zakupienia.
-                    .center
-                      .btn.btn-success.btn.lg.btn-block
-                        .fa.fa-shopping-cart
-                        Kup Bilet
+          #carousel-multi-item.carousel.slide.multiitem-car
+            .text-center
+              %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "prev", :href => "#carousel-multi-item", :role => "button"}
+                %i.material-icons keyboard_arrow_left
+              %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "next", :href => "#carousel-multi-item", :role => "button"}
+                %i.material-icons keyboard_arrow_right
+            / Indicators
+            %ol.carousel-indicators
+              %li.active{"data-slide-to" => "0", "data-target" => "#carousel-multi-item"}
+              %li{"data-slide-to" => "1", "data-target" => "#carousel-multi-item"}
+              %li{"data-slide-to" => "2", "data-target" => "#carousel-multi-item"}
+            / Wrapper for slides
+            .carousel-inner
+              - groups = @tickets.in_groups_of(3, false)
+              - groups.each_with_index do |group, i|
+                - if i == 0
+                  .item.active
+                    .row.text-center
+                      - group.each do |field|
+                        .col-sm-4.item-card
+                          .pricing-card.text-center.z-depth-1.hoverable
+                            .success-color-dark.z-depth-1
+                              %p.no-margin.white-text.extra-padding-05
+                                = field.kind
+                            / Price
+                            .card-up.success-color
+                              %h6 Wejście
+                              %h1
+                                = field.price
+                                ZŁ
+                            .card-content
+                              %ul.features-list
+                                %li
+                                  %p
+                                    %i.fa.fa-check.green-text
+                                    = field.kind_details
+                                %li
+                                  %p
+                                    %i.fa.fa-check.green-text
+                                    = field.description
+                                %li
+                                  %p
+                                    %i.fa.fa-times.green-text
+                                    Darmowy zestaw ręczników
+                                %li
+                                  %p
+                                    %i.fa.fa-times.red-text
+                                    Płatna sauna
+                                %li
+                                  %p
+                                    %i.fa.fa-times.red-text
+                                    Brak dostępu do jacuzii
+                              %hr
+                                / CTA
+                                .btn.btn-danger.btn-etc.waves-effect.waves-light
+                                  .fa.fa-shopping-cart
+                                  Kup teraz
+                - else
+                  .item
+                    .row.text-center
+                      - group.each do |field|
+                        .col-sm-4.item-card
+                          .pricing-card.text-center.z-depth-1.hoverable
+                            .success-color-dark.z-depth-1
+                              %p.no-margin.white-text.extra-padding-05
+                                = field.kind
+                            / Price
+                            .card-up.success-color
+                              %h6 Wejście
+                              %h1
+                                = field.price
+                                ZŁ
+                            .card-content
+                              %ul.features-list
+                                %li
+                                  %p
+                                    %i.fa.fa-check.green-text
+                                    = field.kind_details
+                                - if field.description
+                                  %li
+                                    %p
+                                      %i.fa.fa-check.green-text
+                                      = field.description
+                                %li
+                                  %p
+                                    %i.fa.fa-times.green-text
+                                    Darmowy zestaw ręczników
+                                %li
+                                  %p
+                                    %i.fa.fa-times.red-text
+                                    Płatna sauna
+                                %li
+                                  %p
+                                    %i.fa.fa-times.red-text
+                                    Brak dostępu do jacuzii
+                              %hr
+                                / CTA
+                                .btn.btn-danger.btn-etc.waves-effect.waves-light
+                                  .fa.fa-shopping-cart
+                                  Kup teraz
+
         #passes.tab-pane
           %br
-          - @entry_types.each do |type|
-            - if type.kind == 'Karnet'
-              .col-md-4.col-sm-6.col-xs-12.float-shadow
-                .price_table_container
-                  .price_table_heading
-                    = type.kind
-                  .price_table_body
-                    .price_table_row.cost.primary-bg
-                      %strong
-                      PLN
-                      = type.price
-                      %br
-                      %span /MIESIĄC
-                    .price_table_row
-                      = type.kind_details
-                    .price_table_row
-                      = type.description
-                    .price_table_row
-                      Możliwość wchodzenia na teren obiektu przez miesiąc od momentu zakupienia.
-                    .center
-                      .btn.btn-primary.btn.lg.btn-block
-                        .fa.fa-shopping-cart
-                        Kup Karnet
+          #carousel-multi-item.carousel.slide.multiitem-car
+            .text-center
+              %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "prev", :href => "#carousel-multi-item", :role => "button"}
+                %i.material-icons keyboard_arrow_left
+              %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "next", :href => "#carousel-multi-item", :role => "button"}
+                %i.material-icons keyboard_arrow_right
+            / Indicators
+            %ol.carousel-indicators
+              %li.active{"data-slide-to" => "0", "data-target" => "#carousel-multi-item"}
+              %li{"data-slide-to" => "1", "data-target" => "#carousel-multi-item"}
+              %li{"data-slide-to" => "2", "data-target" => "#carousel-multi-item"}
+            / Wrapper for slides
+            .carousel-inner
+              - groups = @passes.in_groups_of(3, false)
+              - groups.each_with_index do |group, i|
+                - if i == 0
+                  .item.active
+                    .row.text-center
+                      - group.each do |field|
+                        .col-sm-4.item-card
+                          .pricing-card.text-center.z-depth-1.hoverable
+                            .primary-color-dark.z-depth-1
+                              %p.no-margin.white-text.extra-padding-05
+                                = field.kind
+                            / Price
+                            .card-up.primary-color
+                              %h6 Miesiąc
+                              %h1
+                                = field.price
+                                ZŁ
+                            .card-content
+                              %ul.features-list
+                                %li
+                                  %p
+                                    %i.fa.fa-check.green-text
+                                    = field.kind_details
+                                %li
+                                  %p
+                                    %i.fa.fa-check.green-text
+                                    = field.description
+                                %li
+                                  %p
+                                    %i.fa.fa-times.green-text
+                                    Darmowy zestaw ręczników
+                                %li
+                                  %p
+                                    %i.fa.fa-times.red-text
+                                    Płatna sauna
+                                %li
+                                  %p
+                                    %i.fa.fa-times.red-text
+                                    Brak dostępu do jacuzii
+                              %hr
+                                .btn.btn-danger.btn-etc.waves-effect.waves-light
+                                  .fa.fa-shopping-cart
+                                  Kup teraz
+                - else
+                  .item
+                    .row.text-center
+                      - group.each do |field|
+                        .col-sm-4.item-card
+                          .pricing-card.text-center.z-depth-1.hoverable
+                            .primary-color-dark.z-depth-1
+                              %p.no-margin.white-text.extra-padding-05
+                                = field.kind
+                            / Price
+                            .card-up.primary-color
+                              %h6 Miesiąc
+                              %h1
+                                = field.price
+                                ZŁ
+                            .card-content
+                              %ul.features-list
+                                %li
+                                  %p
+                                    %i.fa.fa-check.green-text
+                                    = field.kind_details
+                                - if field.description
+                                  %li
+                                    %p
+                                      %i.fa.fa-check.green-text
+                                      = field.description
+                                %li
+                                  %p
+                                    %i.fa.fa-times.green-text
+                                    Darmowy zestaw ręczników
+                                %li
+                                  %p
+                                    %i.fa.fa-times.red-text
+                                    Płatna sauna
+                                %li
+                                  %p
+                                    %i.fa.fa-times.red-text
+                                    Brak dostępu do jacuzii
+                              %hr
+                                / CTA
+                                .btn.btn-danger.btn-etc.waves-effect.waves-light
+                                  .fa.fa-shopping-cart
+                                  Kup teraz
