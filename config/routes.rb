@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   namespace :backend do
     resources :work_schedules
+    resources :entry_types
     resources :people do
         member do
            get 'edit_profile'

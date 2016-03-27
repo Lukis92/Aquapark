@@ -95,6 +95,12 @@ pl:
             day_of_week:
               blank: Pole Dzień tygodnia jest wymagany
               taken: jest już zajęty
+        entry_type:
+          attributes:
+            kind:
+              blank: jest wymagane
+            kind_details:
+              blank: jest wymagane
   mail_form:
     attributes:
       contact:

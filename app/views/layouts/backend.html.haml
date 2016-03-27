@@ -40,17 +40,17 @@
       .row
         .col-md-2
           #sidebar.well.sidebar-nav
-            -# %h5
-            -#   %i.fa.fa-ticket
-            -#   %small
-            -#     %b Bilety
-            -# %ul.nav.nav-pills.nav-stacked
-            -#   %li.active
-            -#     %a{:href => "#"} Cennik
-            -#   %li
-            -#     %a{:href => "#"} Historia Zakupów
-            -#   %li
-            -#     %a{:href => "#"} Zakup Bilet
+            %h5
+              %i.fa.fa-ticket
+              %small
+                %b Wejściówki
+            %ul.nav.nav-pills.nav-stacked
+              %li{class: current_page?(backend_entry_types_path) && 'active'}
+                = link_to "Bilety/Karnety", backend_entry_types_path
+              -# %li
+              -#   %a{:href => "#"} Historia Zakupów
+              -# %li
+              -#   %a{:href => "#"} Zakup Bilet
             %h5
               %i.fa.fa-users
               %small

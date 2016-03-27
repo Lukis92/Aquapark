@@ -1,0 +1,40 @@
+%h1 Rodzaje wszystkich wejściówek
+= link_to new_backend_entry_type_path do
+  .btn.btn-info.waves-effect.waves-light
+    %i.fa.fa-plus
+    Dodaj bilet/karnet
+
+%table.table.table-striped.table-bordered.table-list
+  %thead
+    %tr
+      %th
+        %em.fa.fa-cog
+      %th
+        Bilet/Karnet
+      %th
+        Szczegóły
+      %th
+        Opis
+      %th
+        Cena
+  %tbody
+    - @entry_types.each do |entry|
+      %tr
+        %td{:align => "center"}
+          = link_to edit_backend_entry_type_path(entry) do
+            .btn.btn-default
+              %i.fa.fa-pencil
+          = link_to backend_entry_type_path(entry), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+            .btn.btn-danger
+              %i.fa.fa-trash
+        %td
+          = entry.kind
+        %td
+          = entry.kind_details
+        %td
+          = entry.description
+        %td
+          = entry.price
+          zł
+
+= will_paginate @entry_types, renderer: BootstrapPagination::Rails

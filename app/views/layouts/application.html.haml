@@ -7,6 +7,7 @@
     = csrf_meta_tags
     %link{:href => "http://fonts.googleapis.com/css?family=Andada&subset=latin,latin-ext", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext", :rel => "stylesheet", :type => "text/css"}
+    %script{:src => "http://code.jquery.com/jquery-2.2.2.min.js", :type => "text/javascript"}
     / MDB core CSS
     %link{:href => "http://mdbootstrap.com/mdbcdn/mdb.min.css", :rel => "stylesheet"}
     / MDB core JavaScript
@@ -17,6 +18,7 @@
     %link{:href => "css/mdb.css", :rel => "stylesheet"}
     / Material Design Bootstrap
     %script{:src => "js/mdb.js", :type => "text/javascript"}
+
 
   %body#frontend{"data-spy" => "scroll", "data-target" => ".navbar"}
     = render '/layouts/navbar'

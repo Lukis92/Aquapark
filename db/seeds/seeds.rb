@@ -6,14 +6,6 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Client.destroy_all
-Receptionist.destroy_all
-Lifeguard.destroy_all
-Trainer.destroy_all
-Manager.destroy_all
-WorkSchedule.destroy_all
-ActiveRecord::Base.connection.reset_pk_sequence!('people')
-ActiveRecord::Base.connection.reset_pk_sequence!('work_schedules')
 Manager.create!([{
   pesel: "95232822947",
   first_name: "Prezes",
@@ -79,13 +71,3 @@ end
     )
 end
  p "Created #{Trainer.count} trainers"
-
-60.times do
-  WorkSchedule.create!(
-    start_time: Faker::Time.forward(1).strftime("%H:%M"),
-    end_time: Faker::Time.forward(1).strftime("%H:%M"),
-    day_of_week: Date::DAYNAMES[Random.new.rand(0..6)],
-    person_id: Faker::Number.between(52, 112)
-  )
-end
-  p "Created #{WorkSchedule.count} work schedules"
