@@ -4,7 +4,9 @@
     %title Panel Backend
     = stylesheet_link_tag    'application', media: 'all'
     = javascript_include_tag 'application'
+    = javascript_include_tag "https://js.stripe.com/v2"
     = csrf_meta_tags
+    = tag :meta, :name => "stripe-key", :content => ENV["STRIPE_PUBLIC_KEY"]
     %link{:href => "http://fonts.googleapis.com/css?family=Andada&subset=latin,latin-ext", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "https://googledrive.com/host/0B3yx98FbxNb4YzZfa0Q1TnVSbEE", :rel => "stylesheet"}

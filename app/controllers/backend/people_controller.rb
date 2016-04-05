@@ -1,6 +1,6 @@
 class Backend::PeopleController < BackendController
   before_action :set_person, only: [:edit, :edit_profile, :update, :destroy, :show, :remove_photo]
-  before_action :set_current_person
+  # before_action :set_current_person
   helper_method :sort_column, :sort_direction
 
   def index
@@ -83,7 +83,7 @@ private
     @person = Person.find(params[:id])
   end
 
-  def set_current_person
-    @current_person = current_person
-  end
+  # def set_current_person
+  #   @current_person = current_person
+  # end
 end

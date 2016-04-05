@@ -52,6 +52,7 @@ class Person < ActiveRecord::Base
 
 #**ASSOCIATIONS**********#
   has_many :work_schedules
+  has_many :bought_details
 ##########################
 
 #**METHODS*********************#

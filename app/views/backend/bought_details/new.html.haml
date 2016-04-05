@@ -1,0 +1,35 @@
+%h4 Zakupy
+
+= simple_form_for([:backend, @bought_detail], as: :bought_detail, url: {action: "create"}) do |f|
+  = errors_for(@bought_detail)
+  .col-md-6
+    %ul.collection
+      %li.collection-item
+        %h5 Szczegóły:
+      %li.collection-item
+        %b
+          Aktualnie kupujesz:
+          = @entry_type.kind
+      %li.collection-item
+        %b
+          Cena:
+          = @entry_type.price
+          zł
+  .col-md-6
+    .row.input-field
+      = f.input :card_number, input_html: {:name => nil, :'data-stripe' => "number"}
+    .row.input-field
+      = f.input :card_code, input_html: {:name => nil, :'data-stripe' => "cvc"}
+    .col-md-6
+    .row
+      .col-md-3
+        = select_month nil, {add_month_numbers: true}, {name: nil, id: "card_month", class: "form-control"}
+      .col-md-3
+        = select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year", class: "form-control"}
+    .row
+      = f.button :submit
+
+:javascript
+  $(document).ready(function () {
+              $('select').material_select();
+          });

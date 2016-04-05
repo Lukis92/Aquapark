@@ -15,6 +15,10 @@ validates :kind, presence: true
 validates :kind_details, presence: true
 validates :price, presence: true
 #########################################################################
+
+#**ASSOCIATIONS**********#
+has_many :bought_details
+#************************#
 KIND = ['Bilet', 'Karnet']
 
 end

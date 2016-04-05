@@ -11,10 +11,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160326153803) do
+ActiveRecord::Schema.define(version: 20160405100944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "backend_payments", force: :cascade do |t|
+    t.float    "amount"
+    t.integer  "responseCode"
+    t.string   "responseMessage"
+    t.string   "xref"
+    t.float    "amountReceived"
+    t.string   "transactionID"
+    t.string   "cardNumberMask"
+    t.string   "cardTypeCode"
+    t.string   "cardType"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "bought_details", force: :cascade do |t|
+    t.date "bought_data", null: false
+    t.date "start_on"
+    t.date "end_on",      null: false
+  end
+
+  create_table "carts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "contacts", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -26,6 +51,20 @@ ActiveRecord::Schema.define(version: 20160326153803) do
     t.string  "kind_details",                         null: false
     t.text    "description"
     t.decimal "price",        precision: 5, scale: 2, null: false
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.float    "amount"
+    t.integer  "responseCode"
+    t.string   "responseMessage"
+    t.string   "xref"
+    t.float    "amountReceived"
+    t.string   "transactionID"
+    t.string   "cardNumberMask"
+    t.string   "cardTypeCode"
+    t.string   "cardType"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   create_table "people", force: :cascade do |t|

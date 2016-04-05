@@ -54,3 +54,4 @@ gem 'rails_12factor', group: :production #Makes running your Rails app easier.
 gem 'faker' #A library for generating fake data such as names, addresses, and phone numbers.
 gem 'will_paginate-bootstrap' #Integrates the Twitter Bootstrap pagination component with will_paginate
 gem "mail_form" #Send e-mail straight from forms in Rails with I18n, validations, attachments and request information.
+gem 'stripe' #Stripe Ruby bindings
