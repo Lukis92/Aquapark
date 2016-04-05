@@ -44,7 +44,7 @@ class Person < ActiveRecord::Base
                    uniqueness: true,
                    format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i}
  has_attached_file :profile_image, styles: { medium: "300x300>", thumb: "100x100>" },
-                   default_url: "https://s3.amazonaws.com/aquapark-s9434/user_default.png",
+                   default_url: "http://www.mediafire.com/convkey/2d40/jkaqkubtfktr7w3zg.jpg",
                    storage: :s3,
                    bucket: "aquapark-pubic-s9434"
  validates_attachment_content_type :profile_image, content_type: /\Aimage\/.*\Z/

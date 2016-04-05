@@ -5,8 +5,16 @@
     = stylesheet_link_tag    'application', media: 'all'
     = javascript_include_tag 'application'
     = csrf_meta_tags
+    %link{:href => "http://fonts.googleapis.com/css?family=Andada&subset=latin,latin-ext", :rel => "stylesheet", :type => "text/css"}
+    %link{:href => "http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext", :rel => "stylesheet", :type => "text/css"}
+    %link{:href => "https://googledrive.com/host/0B3yx98FbxNb4YzZfa0Q1TnVSbEE", :rel => "stylesheet"}
+    %link{:href => "https://googledrive.com//host/0B3yx98FbxNb4ci0zLVBWVy1sQWc", :rel => "stylesheet"}
+    %link{:href => "https://fonts.googleapis.com/icon?family=Material+Icons", :rel => "stylesheet"}
+
+    %script{:src => "https://googledrive.com/host/0B3yx98FbxNb4d3RZRHVjUmh4azQ", :type => "text/javascript"}
+    %script{:src => "https://code.jquery.com/jquery-2.2.2.min.js", :type => "text/javascript"}
   %body
-    %nav.navbar.navbar-default
+    %nav.navbar.primary-color
       .container-fluid
         .navbar-header
           %a.navbar-brand{:href => "#"} Backend Panel
