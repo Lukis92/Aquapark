@@ -1,38 +1,64 @@
 .container.divider
-  #carousel1.carousel.slide{"data-ride" => "carousel"}
+  / Carousel
+  #carousel1.carousel.slide.carousel-fade.hoverable
+    / Indicators
     %ol.carousel-indicators
-      %li{"data-target" => "#carousel1", "data-slide-to" => "0"}
-      %li{"data-target" => "#carousel1", "data-slide-to" => "1"}
-      %li{"data-target" => "#carousel1", "data-slide-to" => "2"}
-      %li{"data-target" => "#carousel1", "data-slide-to" => "3"}
-
-    .carousel-inner
+      %li.active{"data-slide-to" => "0", "data-target" => "#carousel1"}
+      %li{"data-slide-to" => "1", "data-target" => "#carousel1"}
+      %li{"data-slide-to" => "2", "data-target" => "#carousel1"}
+    / Wrapper for slides
+    .carousel-inner.carous1.z-depth-2{:role => "listbox"}
+      / First slide
       .item.active
-        %img{:src => "http://www.mediafire.com/convkey/3629/jqsgcsawzs6864vzg.jpg"}
-        .carousel-caption
-          %h3 Witaj w naszym wodnym świecie!
-          %p Czeka na Ciebie mnóstwo atrakcji!
+        .view.overlay.hm-blue-slight
+          %a
+            %img.img-responsiv{:alt => "slide1", :src => "https://s3.amazonaws.com/aquapark-project/layout/water.jpg"}/
+            .mask.waves-effect.waves-light
+          .carousel-caption.hidden-xs
+            .animated.fadeInDown
+              %h3 Witaj w naszym wodnym świecie!
+              %p Czeka na Ciebie mnóstwo atrakcji!
+      / /.item
+      / Second slide
       .item
-        %img{:src => "http://www.mediafire.com/convkey/8dc6/w4wflhq8ksb68s5zg.jpg"}
-        .carousel-caption
-          %h3 Strefa relaksu
-          %p Odpręż się i odpocznij.
+        .view.overlay.hm-blue-slight
+          %a
+            %img.img-responsive{:alt => "slide2", :src => "https://s3.amazonaws.com/aquapark-project/layout/interior_small.jpg"}/
+            .mask.waves-effect.waves-light
+          .carousel-caption.hidden-xs
+            .animated.fadeInDown
+              %h3 Strefa relaksu
+              %p Odpręż się i odpocznij.
+      / /.item
+      / Third slide
       .item
-        %img{:src => "http://www.mediafire.com/convkey/4109/jukpsw71c83g7t8zg.jpg"}
-        .carousel-caption
-          %h3 Kompleks basenów
-          %p Oferujemy szeroki wachlarz miejsc do pływania.
+        .view.overlay.hm-blue-slight
+          %a
+            %img.img-responsive{:alt => "slide3", :src => "https://s3.amazonaws.com/aquapark-project/layout/swimming-pool.jpg"}/
+            .mask.waves-effect.waves-light
+          .carousel-caption.hidden-xs
+            .animated.fadeInDown
+              %h3 Kompleks basenów
+              %p Oferujemy szeroki wachlarz miejsc do pływania.
       .item
-        %img{:src => "http://www.mediafire.com/convkey/861c/0tvmumwxwgp1uijzg.jpg"}
-        .carousel-caption
-          %h3 Niezapomniane chwile
-          %p Z nami spełnisz swoje wodne aspiracje.
-    %a.left.carousel-control{"data-slide" => "prev", "data-target" => "#carousel1", :role => "button"}
-      %span.fa.fa.fa-angle-left
+        .view.overlay.hm-blue-slight
+          %a
+            %img.img-responsive{:alt => "slide4", :src => "https://s3.amazonaws.com/aquapark-project/layout/original_small.jpg"}/
+            .mask.waves-effect.waves-light
+          .carousel-caption.hidden-xs
+            .animated.fadeInDown
+              %h3 Niezapomniane chwile
+              %p Z nami spełnisz swoje wodne aspiracje.
+      / /.item
+    / /.carousel-inner
+    / Controls
+    %a.left.carousel-control.new-control{"data-slide" => "prev", :href => "#carousel1", :role => "button"}
+      %span.fa.fa.fa-angle-left.waves-effect.waves-light
       %span.sr-only Previous
-    %a.right.carousel-control{"data-slide" => "next", "data-target" => "#carousel1", :role => "button"}
-      %span.fa.fa.fa-angle-right
+    %a.right.carousel-control.new-control{"data-slide" => "next", :href => "#carousel1", :role => "button"}
+      %span.fa.fa.fa-angle-right.waves-effect.waves-light
       %span.sr-only Next
+  / /.carousel
 
 .container.text-center
   %h3.divider-new Innowacja i nowoczesność
@@ -40,15 +66,15 @@
   .row
     .col-md-4
       .view.overlay.hm-white-light.view-overlay
-        %img.img-responsive{:src => "http://www.mediafire.com/convkey/313d/zf24ryd143515l3zg.jpg"}
+        %img.img-responsive{:src => "https://s3.amazonaws.com/aquapark-project/layout/steam-bathing.jpg"}
         .mask
     .col-md-4
       .view.overlay.hm-white-light.view-overlay
-        %img.img-responsive{:src => "http://www.mediafire.com/convkey/e157/qgpay5cvol8w53dzg.jpg"}
+        %img.img-responsive{:src => "https://s3.amazonaws.com/aquapark-project/layout/slide.jpg"}
         .mask
     .col-md-4
       .view.overlay.hm-white-light.view-overlay
-        %img.img-responsive{:src => "http://www.mediafire.com/convkey/8321/2t668yjy98gbup0zg.jpg"}
+        %img.img-responsive{:src => "https://s3.amazonaws.com/aquapark-project/layout/attractive_swimmers.jpeg"}
         .mask
   .row
     .col-sm-4

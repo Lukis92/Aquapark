@@ -1,6 +1,6 @@
 %h4 Zakupy
 
-= simple_form_for([:backend, @bought_detail], as: :bought_detail, url: {action: "create"}) do |f|
+= simple_form_for([:backend, @entry_type, @bought_detail], url: {action: "create"}) do |f|
   = errors_for(@bought_detail)
   .col-md-6
     %ul.collection
@@ -16,20 +16,16 @@
           = @entry_type.price
           zł
   .col-md-6
+    #stripe_error.alert.alert-danger{:style => "display:none"}
     .row.input-field
-      = f.input :card_number, input_html: {:name => nil, :'data-stripe' => "number"}
+      = f.input :credit_card_number, input_html: {'data-stripe' => "number"}
     .row.input-field
-      = f.input :card_code, input_html: {:name => nil, :'data-stripe' => "cvc"}
+      = f.input :card_code, input_html: {'data-stripe' => "cvc"}
     .col-md-6
     .row
       .col-md-3
-        = select_month nil, {add_month_numbers: true}, {name: nil, id: "card_month", class: "form-control"}
+        = select_month nil, {add_month_numbers: true}, {name: nil, id: "card_month", :'data-stripe' => "exp-month", class: "form-control"}
       .col-md-3
-        = select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year", class: "form-control"}
+        = select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year", :'data-stripe' => "exp-year", class: "form-control"}
     .row
       = f.button :submit
-
-:javascript
-  $(document).ready(function () {
-              $('select').material_select();
-          });

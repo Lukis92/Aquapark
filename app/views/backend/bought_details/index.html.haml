@@ -11,3 +11,20 @@
         Data do
       %th
         Klient
+      %th
+        Numer karty płatniczej
+  %tbody
+    - @bought_details.each do |bought|
+      %tr
+        %td
+          = bought.bought_data
+        %td
+          = bought.entry_type.kind unless bought.entry_type.blank?
+        %td
+          = bought.start_on
+        %td
+          = bought.end_on
+        %td
+          = bought.person.fullName unless bought.person.blank?
+        %td
+          = bought.credit_card_number

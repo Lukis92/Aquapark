@@ -59,13 +59,13 @@ before_action :configure_account_update_params, only: [:update]
   # end
 
 
-  private
-  def sign_up_params
-    params.require(:person).permit(:pesel, :first_name, :last_name, :date_of_birth, :email, :profile_image, :password, :password_confirmation)
-    #code
-  end
-
-  def account_update_params
-   params.require(:person).permit(:pesel, :first_name, :last_name, :date_of_birth, :email, :profile_image, :current_password)
-  end
+  # private
+  # def sign_up_params
+  #   params.require(:person).permit(:pesel, :first_name, :last_name, :date_of_birth, :email, :profile_image, :password, :password_confirmation)
+  #   #code
+  # end
+  #
+  # def account_update_params
+  #  params.require(:person).permit(:pesel, :first_name, :last_name, :date_of_birth, :email, :profile_image, :current_password)
+  # end
 end

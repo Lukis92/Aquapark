@@ -3,7 +3,7 @@
   Obecnie w bazie posiadamy
   = Lifeguard.count
   zarejestrowanych ratowników.
-%table.table.pretty
+%table.table.pretty.table-hover
   %thead
     %tr
       %th
@@ -26,6 +26,16 @@
   %tbody
     - @lifequards.each do |lifeguard|
       %tr
+        %td
+          = link_to backend_person_path(lifeguard) do
+            %i.btn.btn-success
+              %i.fa.fa-user
+          = link_to edit_backend_person_path(lifeguard) do
+            %i.btn.btn-default
+              %i.fa.fa-pencil
+          = link_to backend_person_path(lifeguard), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+            %i.btn.btn-danger
+              %i.fa.fa-trash
         %td
           = lifeguard.pesel
         %td

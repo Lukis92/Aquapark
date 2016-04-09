@@ -18,109 +18,119 @@
 @import "bootstrap";
 @import "font-awesome";
 #frontend {
-  background-image: url("http://www.mediafire.com/convkey/2899/3bll4f4ua739s29zg.jpg");
-  color: #fff;
+    background-image: url("http://www.mediafire.com/convkey/2899/3bll4f4ua739s29zg.jpg");
+    color: #fff;
 }
 /* Fix position for container below navbar */
 .fix {
-  margin-top: 50px;
+    margin-top: 50px;
+}
+.alert.alert-danger {
+    margin-top: 100px;
+}
+.error-box {
+    margin-top: 100px;
 }
 /**********/
 .container {
-  padding-top: 10px;
+    padding-top: 10px;
 }
 .divider {
-  text-align: center;
+    text-align: center;
 }
 /*Text in price tables*/
 #price p {
-  color: #000;
+    color: #000;
 }
-
 /*Box below slider */
 .description {
-  border-color: #000;
-  color: #fff;
-  border-style: round(2);
-  background-color: #009ACD;
-  height: 314px;
+    border-color: #000;
+    color: #fff;
+    border-style: round(2);
+    background-color: #009ACD;
+    height: 314px;
 }
 /* Parallax before about container */
 #parallax_about {
-  background-image: url("http://www.mediafire.com/convkey/f621/g3ms9t3b9xbz9sszg.jpg");
-  margin-top: 30px;
-  margin-bottom: 30px;
-  height: 300px;
+    background-image: url("http://www.mediafire.com/convkey/f621/g3ms9t3b9xbz9sszg.jpg");
+    margin-top: 30px;
+    margin-bottom: 30px;
+    height: 300px;
 }
 /*Checks in about container*/
 .fa.fa-check {
-  color: green;
+    color: green;
 }
 /* Parallax before contact */
 #parallax_contact {
-  background-image: url("http://www.mediafire.com/convkey/a71e/7fhgnddvrmo3mshzg.jpg");
-  margin-top: 30px;
-  margin-bottom: 30px;
-  height: 300px;
+    background-image: url("http://www.mediafire.com/convkey/a71e/7fhgnddvrmo3mshzg.jpg");
+    margin-top: 30px;
+    margin-bottom: 30px;
+    height: 300px;
 }
 /***********************/
 /* Sortable arrows in Work_Schedule index */
 .pretty th .current {
-  padding-right: 15px;
-  background-repeat: no-repeat;
-  background-position: right center;
+    padding-right: 15px;
+    background-repeat: no-repeat;
+    background-position: right center;
 }
 .pretty th .asc {
-  background-image: url("http://www.mediafire.com/convkey/9079/eeceysidfjx66fbzg.jpg");
+    background-image: url("http://www.mediafire.com/convkey/9079/eeceysidfjx66fbzg.jpg");
 }
 .pretty th .desc {
-  background-image: url("http://www.mediafire.com/convkey/02ab/ovw423uyzqi7wf5zg.jpg");
+    background-image: url("http://www.mediafire.com/convkey/02ab/ovw423uyzqi7wf5zg.jpg");
 }
 /******************************************/
 #contact {
-  padding-bottom: 100px;
+    padding-bottom: 100px;
 }
 .item {
-  height: 400px;
+    height: 400px;
 }
 #carousel1 {
-  margin-top: 30px;
+    margin-top: 100px;
+}
+/* Main carousel on top page */
+.carous1 {
+    height: 380px;
 }
 .carousel-inner img {
-  width: 100%;
-  /* Set width to 100% */
-  margin: auto;
-  min-height: 200px;
+    width: 100%;
+    /* Set width to 100% */
+    margin: auto;
+    min-height: 200px;
 }
+/***************************/
 /* Hide the carousel text when the screen is less than 600 pixels wide */
 @media (max-width: 600px) {
-  .carousel-caption {
-    display: none;
-  }
+    .carousel-caption {
+        display: none;
+    }
 }
 /* Override Bootstrap 3 font locations */
 @font-face {
-  font-family: 'Glyphicons Halflings';
-  src: url('../assets/glyphicons-halflings-regular.eot');
-  src: url('../assets/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../assets/glyphicons-halflings-regular.woff') format('woff'), url('../assets/glyphicons-halflings-regular.ttf') format('truetype'), url('../assets/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+    font-family: 'Glyphicons Halflings';
+    src: url('../assets/glyphicons-halflings-regular.eot');
+    src: url('../assets/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../assets/glyphicons-halflings-regular.woff') format('woff'), url('../assets/glyphicons-halflings-regular.ttf') format('truetype'), url('../assets/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .view-overlay {
-  width: 300px;
-  height: 165px;
-  overflow: auto;
-  display: inline-block;
-  text-align: center;
+    width: 300px;
+    height: 165px;
+    overflow: auto;
+    display: inline-block;
+    text-align: center;
 }
 .row .col-md-4 .well {
-  width: 300px;
+    width: 300px;
 }
 #about {
-  font-family: 'Andada', sans-serif;
+    font-family: 'Andada', sans-serif;
 }
 #swim {
-  padding-left: 60px;
-  padding-top: 60px;
+    padding-left: 60px;
+    padding-top: 60px;
 }
 .carousel-inner {
-  font-family: 'Archivo Black', sans-serif;
+    font-family: 'Archivo Black', sans-serif;
 }

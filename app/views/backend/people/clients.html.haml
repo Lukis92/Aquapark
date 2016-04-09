@@ -2,7 +2,7 @@
 %p
   Obecnie w bazie posiadamy
   = Client.count
-  zarejestrowanych osób.
+  zarejestrowanych klientów.
 %table.table.pretty.table-hover
   %thead
     %tr
@@ -43,5 +43,3 @@
         %td
           = person.email
 = will_paginate @clients, renderer: BootstrapPagination::Rails
-
-/http://bootsnipp.com/snippets/featured/table-panel-with-pagination

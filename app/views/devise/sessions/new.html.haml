@@ -1,6 +1,8 @@
 .container.fix
-  %h2 Logowanie
+  %h2.text-center Logowanie
   = simple_form_for(resource, as: resource_name, url: person_session_path) do |f|
+    = f.error_notification
+    -# = raise('Dupa')
     .form-inputs
       .input-field
         = f.input :email, required: false, autofocus: true

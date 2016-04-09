@@ -2,7 +2,7 @@
 %h1 Pracownik
 %h2
   = @person.fullName
-= link_to add_work_schedule_backend_person_path(@person) do
+= link_to new_backend_work_schedule_path(@person) do
   %i.btn.btn-success
     %i.fa.fa-plus
     Dodaj grafik

@@ -67,9 +67,10 @@
                                     Brak dostępu do jacuzii
                               %hr
                                 / CTA
-                                .btn.btn-danger.btn-etc.waves-effect.waves-light
-                                  .fa.fa-shopping-cart
-                                  Kup teraz
+                                = link_to new_backend_entry_type_bought_detail_path(field) do
+                                  .btn.btn-danger.btn-etc.waves-effect.waves-light
+                                    .fa.fa-shopping-cart
+                                    Kup teraz
                 - else
                   .item
                     .row.text-center

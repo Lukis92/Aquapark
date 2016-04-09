@@ -46,7 +46,7 @@ class Person < ActiveRecord::Base
  has_attached_file :profile_image, styles: { medium: "300x300>", thumb: "100x100>" },
                    default_url: "http://www.mediafire.com/convkey/2d40/jkaqkubtfktr7w3zg.jpg",
                    storage: :s3,
-                   bucket: "aquapark-pubic-s9434"
+                   bucket: "aquapark-project"
  validates_attachment_content_type :profile_image, content_type: /\Aimage\/.*\Z/
 #########################################################################
 
