@@ -10,8 +10,9 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
+ *= require jquery-ui
  *= require_self
+ *= require_tree .
  */
 @import "reset.scss";
 @import "bootstrap-sprockets";
@@ -25,9 +26,9 @@
 .fix {
     margin-top: 50px;
 }
-.alert.alert-danger {
-    margin-top: 100px;
-}
+// .alert.alert-danger {
+//     margin-top: 100px;
+// }
 .error-box {
     margin-top: 100px;
 }

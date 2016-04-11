@@ -13,6 +13,9 @@ Rails.application.routes.draw do
     namespace :backend do
         root 'people#index'
         resources :entry_types do
+          collection do
+            get 'buy', to: 'entry_types#show'
+          end
             resources :bought_details
         end
 
@@ -20,6 +23,7 @@ Rails.application.routes.draw do
         resources :people do
             member do
                 delete 'remove_photo'
+                get 'bought_history', to: 'people#bought_history'
                 resources :work_schedules, only: [:edit, :show, :update]
             end
         end

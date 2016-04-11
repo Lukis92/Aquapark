@@ -1,3 +1,26 @@
+%h1 Historia zakupów
+.row
+  .col-md-6
+    .card-panel
+      .blue-text.text-darken-2
+        %i.fa.fa-info-circle
+        Jesteś na stronie historii wszystkich dokonanych tranzakcji.
+.row
+  .col-md-6
+    %ul.collection
+      %li.collection-item
+        %h5 Ostatni zakup:
+      %li.collection-item
+        %p
+          Data:
+          = @last_bought.bought_data
+        %p
+          Rodzaj:
+          = @entry_type.kind
+        %p
+          Cena:
+          = @entry_type.price
+          zł
 %table.table
   %thead
     %tr
@@ -6,13 +29,15 @@
       %th
         Bilet/Karnet
       %th
-        Data od
+        Cena
       %th
-        Data do
+        Data ważności od
+      %th
+        Data ważności do
+      %th
+        Aktywny?
       %th
         Klient
-      %th
-        Numer karty płatniczej
   %tbody
     - @bought_details.each do |bought|
       %tr
@@ -21,10 +46,11 @@
         %td
           = bought.entry_type.kind unless bought.entry_type.blank?
         %td
-          = bought.start_on
+          = bought.entry_type.price
+          zł
         %td
           = bought.end_on
         %td
-          = bought.person.fullName unless bought.person.blank?
+          = bought.active
         %td
-          = bought.credit_card_number
+          = bought.person.fullName unless bought.person.blank?

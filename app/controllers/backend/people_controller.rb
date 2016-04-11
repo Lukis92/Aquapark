@@ -1,5 +1,5 @@
 class Backend::PeopleController < BackendController
-    before_action :set_person, only: [:edit, :edit_profile, :update, :destroy, :show, :remove_photo]
+    before_action :set_person, only: [:edit, :edit_profile, :update, :destroy, :show, :remove_photo, :bought_history]
     # before_action :set_current_person
     helper_method :sort_column, :sort_direction
 
@@ -68,6 +68,10 @@ class Backend::PeopleController < BackendController
         @person.update_attributes(profile_image_file_name: nil, profile_image_content_type: nil,
                                   profile_image_file_size: nil, profile_image_updated_at: nil)
         redirect_to backend_person_path(@person), notice: 'Zdjęcie zostało pomyślnie usunięte.'
+    end
+
+    def bought_history
+      @bought_history = BoughtDetail.where(person_id: @person)
     end
 
     private

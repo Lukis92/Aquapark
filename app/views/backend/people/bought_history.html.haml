@@ -1,0 +1,30 @@
+.row
+  .col-md-6
+    .card-panel
+      .blue-text.text-darken-2
+        %i.fa.fa-info-circle
+        Poniżej przedstawiona jest lista dokonanych przez Ciebie zakupów.
+%table.table
+  %thead
+    %tr
+      %th
+        Data zakupu
+      %th
+        Bilet/Karnet
+      %th
+        Cena
+      %th
+        Data do
+
+  %tbody
+    - @bought_history.each do |bought|
+      %tr
+        %td
+          = bought.bought_data
+        %td
+          = bought.entry_type.kind unless bought.entry_type.blank?
+        %td
+          = bought.entry_type.price
+          zł
+        %td
+          = bought.end_on

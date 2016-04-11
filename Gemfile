@@ -12,7 +12,7 @@ gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.1.0'
 # Use jquery as the JavaScript library
-gem 'jquery-rails'
+gem "jquery-rails"
 # Turbolinks makes following links in your web application faster.
 # Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -57,8 +57,10 @@ gem 'faker' # a library for generating fake data.
 gem 'will_paginate-bootstrap' # bootstrap pagination
 gem 'mail_form' # send e-mail straight from forms in Rails.
 gem 'stripe' # stripe Ruby bindings
-gem 'rails_best_practices'
-gem 'traceroute' # helps you find the dead routes and actions
-gem 'rubocop', require: false
-gem "rubycritic", :require => false
 gem "jquery-ui-rails" #jQuery UI for the Rails asset pipeline
+group :test do
+  gem 'rails_best_practices'
+  gem 'traceroute' # helps you find the dead routes and actions
+  gem 'rubocop', require: false
+  gem "rubycritic", :require => false
+end

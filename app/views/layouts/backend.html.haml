@@ -59,6 +59,10 @@
             %ul.nav.nav-pills.nav-stacked
               %li{class: current_page?(backend_entry_types_path) && 'active'}
                 = link_to "Bilety/Karnety", backend_entry_types_path
+              %li{class: current_page?(bought_history_backend_person_path(@current_person)) && 'active'}
+                = link_to "Historia Zakupów", bought_history_backend_person_path(@current_person)
+              %li{class: current_page?(buy_backend_entry_types_path) && 'active'}
+                = link_to "Kup Bilet/Karnet", buy_backend_entry_types_path, data: {no_turbolink: true}
               -# %li
               -#   %a{:href => "#"} Historia Zakupów
               -# %li

@@ -48,7 +48,9 @@
                   = @person.type
         %br
 
-        %a.btn.btn-primary{:href => "#"} Team Sales Performance
+        = link_to bought_history_backend_person_path(@person), class: "btn btn-primary" do
+          %i.fa.fa-shopping-cart
+          Zakupione bilety/karnety
         = link_to backend_work_schedule_path(@person), class: "btn btn-primary" do
           %i.fa.fa-calendar
           Harmonogram pracy

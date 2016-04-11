@@ -45,6 +45,10 @@ class Backend::EntryTypesController < BackendController
         end
     end
 
+    def show
+      @tickets = EntryType.where(kind: "Bilet")
+      @passes = EntryType.where(kind: "Karnet")
+    end
     # DELETE backend/entry_types/1
     # DELETE backend/entry_types/1.json
     def destroy
