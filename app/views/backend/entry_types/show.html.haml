@@ -42,7 +42,7 @@
                         = field.description
                     / Buttons
                     .card-action.text-center
-                      = link_to new_backend_entry_type_bought_detail_path(field) do
+                      = link_to new_backend_entry_type_bought_detail_path(field), data: { no_turbolink: true} do
                         .fa.fa-shopping-cart
                         Kup Teraz
         - else
@@ -63,7 +63,7 @@
                         = field.description
                     / Buttons
                     .card-action.text-center
-                      = link_to new_backend_entry_type_bought_detail_path(field) do
+                      = link_to new_backend_entry_type_bought_detail_path(field), data: {no_turbolink: true} do
                         .fa.fa-shopping-cart
                         Kup Teraz
 .divider-new
@@ -102,7 +102,7 @@
                         = field.description
                     / Buttons
                     .card-action.text-center
-                      = link_to new_backend_entry_type_bought_detail_path(field) do
+                      = link_to new_backend_entry_type_bought_detail_path(field), data: { no_turbolink: true}  do
                         .fa.fa-shopping-cart
                         Kup Teraz
         - else
@@ -123,7 +123,7 @@
                         = field.description
                     / Buttons
                     .card-action.text-center
-                      = link_to new_backend_entry_type_bought_detail_path(field) do
+                      = link_to new_backend_entry_type_bought_detail_path(field), data: {no_turbolink: true} do
                         .fa.fa-shopping-cart
                         Kup Teraz
     / /.Buttons

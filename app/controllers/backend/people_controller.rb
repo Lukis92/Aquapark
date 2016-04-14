@@ -72,6 +72,7 @@ class Backend::PeopleController < BackendController
 
     def bought_history
       @bought_history = BoughtDetail.where(person_id: @person)
+      @last_bought = BoughtDetail.where(person_id: @person).order('bought_data').last
     end
 
     private

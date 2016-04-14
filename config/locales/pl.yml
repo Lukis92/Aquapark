@@ -101,6 +101,10 @@ pl:
               blank: jest wymagane
             kind_details:
               blank: jest wymagane
+        bought_detail:
+          attributes:
+            days:
+              blank: jest wymagane
   mail_form:
     attributes:
       contact:

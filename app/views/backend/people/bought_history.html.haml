@@ -1,9 +1,26 @@
+%h1 Historia zakupów
 .row
   .col-md-6
     .card-panel
       .blue-text.text-darken-2
         %i.fa.fa-info-circle
-        Poniżej przedstawiona jest lista dokonanych przez Ciebie zakupów.
+        Jesteś na stronie historii wszystkich dokonanych tranzakcji.
+.row
+  .col-md-6
+    %ul.collection
+      %li.collection-item
+        %h5 Ostatni zakup:
+      %li.collection-item
+        %p
+          Data:
+          = @last_bought.bought_data unless @last_bought.blank?
+        %p
+          Rodzaj:
+          = @last_bought.entry_type.kind
+        %p
+          Cena:
+          = @last_bought.entry_type.price
+          zł
 %table.table
   %thead
     %tr
@@ -14,17 +31,31 @@
       %th
         Cena
       %th
-        Data do
-
+        Data ważności od
+      %th
+        Data ważności do
+      %th
+        Aktywny?
+      %th
+        Klient
   %tbody
     - @bought_history.each do |bought|
       %tr
         %td
-          = bought.bought_data
+          = bought.bought_data unless bought.bought_data.blank?
         %td
           = bought.entry_type.kind unless bought.entry_type.blank?
         %td
           = bought.entry_type.price
           zł
         %td
-          = bought.end_on
+          = bought.start_on unless bought.end_on.blank?
+        %td
+          = bought.end_on unless bought.end_on.blank?
+        %td
+          - if bought.expired?
+            %i.fa.fa-check
+          - else
+            %i.fa.fa-times
+        %td
+          = bought.person.fullName unless bought.person.blank?

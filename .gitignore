@@ -39,3 +39,6 @@ gradle.properties
 # Project-specific
 .env
 Procfile
+
+# Ignore application configuration
+/config/application.yml

@@ -1,4 +1,5 @@
-%h1 Historia zakupów
+%h1 Historia zakupów wejściówki:
+%h5
 .row
   .col-md-6
     .card-panel
@@ -13,13 +14,13 @@
       %li.collection-item
         %p
           Data:
-          = @last_bought.bought_data unless @bought_details.blank?
+          = @last_bought.bought_data unless @last_bought.blank?
         %p
           Rodzaj:
-          = @last_bought.entry_type.kind
+          = @entry_type.kind
         %p
           Cena:
-          = @last_bought.entry_type.price
+          = @entry_type.price
           zł
 %table.table
   %thead

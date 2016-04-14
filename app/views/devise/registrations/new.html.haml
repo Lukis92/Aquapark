@@ -9,10 +9,12 @@
         = f.input :first_name, required: true
       .input-field
         = f.input :last_name, required: true
-      = f.input :date_of_birth, required: true, start_year: Date.today.year - 100, end_year: Date.today.year - 13
+      .row
+        .col-md-5
+          = f.input :date_of_birth, required: true, start_year: Date.today.year - 100, end_year: Date.today.year - 13
       .input-field
         = f.input :email, required: true
-
+      .file-field.input-field
       = f.input :profile_image, as: :file
       .input-field
         = f.input :password, required: true, hint: ("minimum #{@minimum_password_length} znaków" if @minimum_password_length)
@@ -21,3 +23,8 @@
       .form-actions
         = f.button :submit, "Zarejestruj się", class: "btn btn-info"
   = render "devise/shared/links"
+
+:javascript
+  $(document).ready(function () {
+            $('select').material_select();
+        });

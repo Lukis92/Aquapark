@@ -7,14 +7,17 @@
     = csrf_meta_tags
     %link{:href => "http://fonts.googleapis.com/css?family=Andada&subset=latin,latin-ext", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext", :rel => "stylesheet", :type => "text/css"}
+    %link{:href => "https://fonts.googleapis.com/icon?family=Material+Icons", :rel => "stylesheet"}
     %script{:src => "https://code.jquery.com/jquery-2.2.2.min.js", :type => "text/javascript"}
-    %script{:src => "https://s3.amazonaws.com/mdb-bootstrap/js/jquery.min.js", :type => "text/javascript"}
-
-    %link{:href => "https://s3.amazonaws.com/mdb-bootstrap/css/mdb.css", :rel => "stylesheet"}
-    %link{:href => "https://s3.amazonaws.com/mdb-bootstrap/css/mdb.min.css", :rel => "stylesheet"}
-    %script{:src => "https://s3.amazonaws.com/mdb-bootstrap/js/mdb.min.js", :type => "text/javascript"}
-    %link{:href => "https://fonts.googleapis.com/icon?family=Material+Icons", :rel => "stylesheet"}/
-
+    /jquery.min.js
+    %script{:src => "https://googledrive.com/host/0B3yx98FbxNb4ZEVLZUJjYWNMTnc/", :type => "text/javascript"}
+    /mdb.css
+    %link{:href => "https://googledrive.com/host/0B3yx98FbxNb4STVleGxYZTZnOEE/", :rel => "stylesheet"}
+    /mdb.min.css
+    %link{:href => "https://googledrive.com/host/0B3yx98FbxNb4U2RwYi1udXE0MzA/", :rel => "stylesheet"}
+    /mdb.min.js
+    %script{:src => "https://googledrive.com/host/0B3yx98FbxNb4TVBMRWdIZjBSQkE/", :type => "text/javascript"}
+  %body
   %body#frontend{"data-spy" => "scroll", "data-target" => ".navbar"}
     = render '/layouts/navbar'
     = yield
