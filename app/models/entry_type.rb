@@ -12,8 +12,8 @@
 class EntryType < ActiveRecord::Base
 #**VALIDATIONS*******************************************************#
 validates :kind, presence: true
-validates :kind_details, presence: true, length: {minimum: 5, maximum: 20}
-validates :description, length: {minimum: 5, maximum: 100}, allow_blank: true
+validates :kind_details, presence: true
+validates :description, presence: true, allow_blank: true
 validates :price, presence: true
 #########################################################################
 

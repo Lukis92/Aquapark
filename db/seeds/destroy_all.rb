@@ -6,3 +6,5 @@ Manager.destroy_all
 WorkSchedule.destroy_all
 ActiveRecord::Base.connection.reset_pk_sequence!('people')
 ActiveRecord::Base.connection.reset_pk_sequence!('work_schedules')
+EntryType.destroy_all
+ActiveRecord::Base.connection.reset_pk_sequence!('entry_types')

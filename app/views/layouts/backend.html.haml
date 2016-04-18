@@ -19,17 +19,18 @@
     %link{:href => "https://googledrive.com/host/0B3yx98FbxNb4U2RwYi1udXE0MzA/", :rel => "stylesheet"}
     /mdb.min.js
     %script{:src => "https://googledrive.com/host/0B3yx98FbxNb4TVBMRWdIZjBSQkE/", :type => "text/javascript"}
-
   %body
+  - if @current_person.present?
     %nav.navbar.primary-color
       .container-fluid
         .navbar-header
           %a.navbar-brand{:href => "#"} Backend Panel
         %ul.nav.navbar-nav
-          %li.active
-            %a{:href => "#"} Home
           %li
-            %a{:href => "#"} Page 1
+            %a{:href => "#"} Home
+          %li{class: current_page?(backend_statistics_path) && 'active'}
+            = link_to backend_statistics_path do
+              Statystyki
           %li
             %a{:href => "#"} Page 2
           %li

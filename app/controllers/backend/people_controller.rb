@@ -79,7 +79,7 @@ class Backend::PeopleController < BackendController
 
     def person_params
         params.require(:person).permit(:pesel, :first_name, :last_name, :date_of_birth,
-                                       :email, :profile_image, :salary, :hiredate, :password, :password_confirmation, :current_password)
+                                       :email, :profile_image, :salary, :hiredate, :password, :password_confirmation, :current_password, :remember_me, :roles, :roles_mask)
     end
 
     def set_person

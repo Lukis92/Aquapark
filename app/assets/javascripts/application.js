@@ -11,12 +11,18 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery-ui
 //= require jquery_ujs
+//= require jquery-ui
 //= require bootstrap-sprockets
-//= require lightbox-bootstrap
 //= require turbolinks
 //= require_tree .
+
+//alert disappear after few seconds
+window.setTimeout(function() {
+  $(".alert").fadeTo(500, 0).slideUp(500, function(){
+    $(this).remove();
+  });
+}, 5000);
 
 $(document).ready(function() {
     var $lightbox = $('#lightbox');
@@ -60,14 +66,6 @@ $(document).ready(function() {
     //   }
     // });
     // });
-
-    //alert disappear after few seconds
-    window.setTimeout(function() {
-    $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
-        $(this).remove();
-    });
-    }, 5000);
-
 
     $('#new_bought_detail').formValidation({
         fields: {

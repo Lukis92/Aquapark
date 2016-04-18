@@ -8,6 +8,7 @@
 #  entry_type_id :integer
 #  person_id     :integer
 #  start_on      :date
+#  cost          :decimal(5, 2)    not null
 #
 
 class BoughtDetail < ActiveRecord::Base
@@ -15,7 +16,9 @@ class BoughtDetail < ActiveRecord::Base
     belongs_to :person
     before_save :set_bought_data, :set_start_on, :set_end_on
     validate :validate_start_on
+    validates :bought_data, presence: true
     validates :days, presence: true
+    validates :cost, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }
     attr_accessor :credit_card, :card_code, :days
 
     def set_bought_data
@@ -40,8 +43,8 @@ class BoughtDetail < ActiveRecord::Base
     end
 
     def validate_start_on
-      if start_on < Date.today
-        errors.add(:bought_details, "Czas rozpoczęcia nie może być wcześniejszy niż dzisiejsza data.")
-      end
+        if start_on < Date.today
+            errors.add(:bought_details, "Czas rozpoczęcia nie może być wcześniejszy niż dzisiejsza data.")
+        end
     end
 end

@@ -18,7 +18,7 @@ class WorkSchedule < ActiveRecord::Base
   validates_uniqueness_of :day_of_week, scope: :person_id
   validates :day_of_week, presence: true
   validate :start_must_be_before_end_time
-  validate :person_existing
+  #validate :person_existing
 #****************************************#
 
 #**ASSOCIATIONS**********#

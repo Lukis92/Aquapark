@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Backend::BoughtDetailTest < ActiveSupport::TestCase
+class BoughtDetailTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

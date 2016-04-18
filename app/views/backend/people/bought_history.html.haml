@@ -7,20 +7,24 @@
         Jesteś na stronie historii wszystkich dokonanych tranzakcji.
 .row
   .col-md-6
-    %ul.collection
-      %li.collection-item
-        %h5 Ostatni zakup:
-      %li.collection-item
-        %p
-          Data:
-          = @last_bought.bought_data unless @last_bought.blank?
-        %p
-          Rodzaj:
-          = @last_bought.entry_type.kind
-        %p
-          Cena:
-          = @last_bought.entry_type.price
-          zł
+    - unless @last_bought.blank?
+      %ul.collection
+        %li.collection-item
+          %h5 Ostatni zakup:
+        %li.collection-item
+          %p
+            Data:
+            = @last_bought.bought_data unless @last_bought.blank?
+          %p
+            Rodzaj:
+            = @last_bought.entry_type.kind
+          %p
+            Cena:
+            = @last_bought.entry_type.price
+            zł
+    - else
+      .alert.alert-info
+        Brak zakupów.
 %table.table
   %thead
     %tr

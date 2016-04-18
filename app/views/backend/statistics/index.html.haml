@@ -1,0 +1,38 @@
+.col-md-3
+  .panel.panel-primary
+    .panel-heading.text-center Liczba wszystkich użytkowników
+    .panel-body.text-center
+      %h3
+        = @all_people
+.col-md-3
+  .panel.panel-primary
+    .panel-heading.text-center Ilość wszystkich pracowników
+    .panel-body.text-center
+      %h3
+        = @employees
+.col-md-3
+  .panel.panel-primary
+    .panel-heading.text-center Suma płac pracowników
+    .panel-body.text-center
+      %h3
+        = @sum_salaries
+        zł
+.col-md-3
+  .panel.panel-primary
+    .panel-heading.text-center Suma przychodów
+    .panel-body.text-center
+      %h3
+        = @sum_earnings
+        zł
+.col-md-3
+  .panel.panel-primary
+    .panel-heading.text-center Bilans zysków/strat
+    .panel-body.text-center
+
+      - if @sum_risk < 0
+        %h3.danger
+          = @sum_risk
+          zł
+      - else
+        %h3.success
+          = @sum_risk

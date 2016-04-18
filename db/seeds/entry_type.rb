@@ -1,5 +1,3 @@
-EntryType.destroy_all
-ActiveRecord::Base.connection.reset_pk_sequence!('entry_types')
 KIND = %w(Bilet Karnet).freeze
 10.times do
     EntryType.create!(

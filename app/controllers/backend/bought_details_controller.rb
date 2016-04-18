@@ -1,4 +1,5 @@
 class Backend::BoughtDetailsController < BackendController
+    load_and_authorize_resource
     before_action :set_entry_type, only: [:index, :new, :create]
     # GET backend/bought_details
     # GET backend/bought_details.json
@@ -21,27 +22,27 @@ class Backend::BoughtDetailsController < BackendController
         else
             @bought_detail.cost = @bought_detail.entry_type.price
         end
-        Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
+        Stripe.api_key = ENV['STRIPE_SECRET_KEY']
         token = params[:stripeToken]
 
         begin
-          charge = Stripe::Charge.create(
-            amount: (@bought_detail.entry_type.price * 100).floor,
-            currency: "pln",
-            card: token
-          )
+            charge = Stripe::Charge.create(
+                amount: (@bought_detail.entry_type.price * 100).floor,
+                currency: 'pln',
+                card: token
+            )
 
-          if @bought_detail.save
-            flash[:notice] = "Dziękujemy za zakup!"
-            redirect_to backend_entry_type_bought_details_path(@entry_type), notice: flash[:notice]
-          else
-            flash[:danger] = @bought_detail.errors.full_messages
-            render :new, notice: flash[:danger]
-          end
+            if @bought_detail.save
+                flash[:notice] = "Dziękujemy za zakup!"
+                redirect_to backend_entry_type_bought_details_path(@entry_type), notice: flash[:notice]
+            else
+                flash[:danger] = @bought_detail.errors.full_messages
+                render :new, notice: flash[:danger]
+            end
 
         rescue Stripe::CardError => e
-          flash[:danger] = e.message
-          render :new
+            flash[:danger] = e.message
+            render :new
         end
     end
 

@@ -6,6 +6,9 @@ class ApplicationController < ActionController::Base
     helper_method :current_manager, :current_client, :current_lifeguard, :current_trainer, :current_receptionist,
                   :require_manager!, :require_client!, :require_lifeguard!, :require_trainer!, :require_receptionist!
 
+    rescue_from CanCan::AccessDenied do |exception|
+        redirect_to root_path, alert: exception.message
+    end
     def account_url
         return new_person_session_path unless person_signed_in?
         case current_person.class.name
@@ -35,6 +38,10 @@ class ApplicationController < ActionController::Base
     end
 
     private
+
+    def current_ability
+        @current_ability ||= Ability.new(current_person)
+    end
 
     def current_manager
         @current_manager ||= current_person if person_signed_in? && current_person.class.name == 'Manager'

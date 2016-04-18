@@ -26,17 +26,28 @@
 #  profile_image_updated_at   :datetime
 #
 
-require 'test_helper'
+require "rails_helper"
 
-class PersonTest < ActiveSupport::TestCase
-    def setup
-        @person = Person.new(pesel: '98563201478', first_name: 'Roberto',
-        last_name: 'Mancini', date_of_birth: '1990-03-21',
-        email: 'lukas@example.com', type: 'Manager', salary: "6500.00",
-        hiredate: "2016-03-12", password: "qazwsx12")
-    end
+describe Person do
+  it "has a valid factory" do
+    expect(FactoryGirl.build(:person)).to be_valid
+  end
+  it "is invalid without a first_name" do
+    expect(FactoryGirl.build(:person, first_name: nil)).to_not be_valid
+  end
+  it "is invalid without a last_name" do
+    expect(FactoryGirl.build(:person, last_name: nil)).to_not be_valid
+  end
+  it "is invalid without a date_of_birth" do
+    expect(FactoryGirl.build(:person, date_of_birth: nil)).to_not be_valid
+  end
+  it "is invalid without a email" do
+    expect(FactoryGirl.build(:person, email: nil)).to_not be_valid
+  end
+  describe "uniqueness" do
+    subject { FactoryGirl.build(:person)}
+    it { should validate_uniqueness_of(:email).case_insensitive }
+    it { should validate_uniqueness_of(:pesel).case_insensitive}
+  end
 
-    test "should be valid" do
-      assert @person.valid?
-    end
 end

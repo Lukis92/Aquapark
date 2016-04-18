@@ -28,11 +28,12 @@ Please feel free to use a different markup language if you do not plan to run
 <tt>rake doc:app</tt>.
 
 == Errors to fix:
-
-*brak wyświetlanych błędów podczas nie powodzenia w logowaniu(
 *nie znika alert po paru sekundach
 
 == Fixed errors:
+*brak checkboxu Logowanie - zapamiętaj mnie
+*logo Pure Space przesunięte za bardzo do dołu
+*brak wyświetlanych błędów podczas nie powodzenia w logowaniu
 *nie działające górne menu na ekranie logowania (naprawione)
 *widok cennika - strona główna
 *footer

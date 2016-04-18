@@ -26,17 +26,17 @@
 #  profile_image_updated_at   :datetime
 #
 
-require 'test_helper'
-
-class PersonTest < ActiveSupport::TestCase
-    def setup
-        @person = Person.new(pesel: '98563201478', first_name: 'Roberto',
-        last_name: 'Mancini', date_of_birth: '1990-03-21',
-        email: 'lukas@example.com', type: 'Manager', salary: "6500.00",
-        hiredate: "2016-03-12", password: "qazwsx12")
-    end
-
-    test "should be valid" do
-      assert @person.valid?
+FactoryGirl.define do
+    TYPES = %w(Manager, Lifeguard, Client, Receptionist, Trainer).freeze
+    factory :person do
+        pesel { Faker::Number.number(11) }
+        first_name { Faker::Name.first_name }
+        last_name { Faker::Name.last_name }
+        date_of_birth { Faker::Time.between('1970-01-01', '2000-12-31') }
+        email { Faker::Internet.email }
+        password { Faker::Internet.password }
+        type { TYPES.sample }
+        salary { Faker::Number.decimal(4, 2) }
+        hiredate { Faker::Time.between('2016-01-01', '2016-04-30') }
     end
 end

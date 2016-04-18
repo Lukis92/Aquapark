@@ -26,13 +26,31 @@
 .fix {
     margin-top: 50px;
 }
-// .alert.alert-danger {
-//     margin-top: 100px;
-// }
+
+.fix-brand {
+  margin-top: -9px;
+}
+
+/* font color for statistic page */
+.success {
+  color: #00C851;
+}
+.danger {
+  color: #ff4444;
+}
+/*********************************/
+
+.clickable{
+    cursor: pointer;
+}
+
 .error-box {
     margin-top: 100px;
 }
 /**********/
+.resize {
+  padding-top: 300px;
+}
 .input .date .required .client_date_of_birth {
     display: inline-block;
     width: 30%;

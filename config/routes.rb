@@ -27,7 +27,7 @@ Rails.application.routes.draw do
                 resources :work_schedules, only: [:edit, :show, :update]
             end
         end
-
+        resources :statistics, only: [:index]
         [:managers, :clients, :receptionists, :trainers, :lifeguards].each do |type|
             get type, to: 'people#' + type.to_s
         end

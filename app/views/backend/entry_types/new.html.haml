@@ -2,6 +2,6 @@
   = errors_for(@entry_type)
   = f.input :kind, as: :radio_buttons, collection: EntryType::KIND
   = f.input :kind_details
-  = f.input :description, as: :text
+  = f.input :description, as: :text, input_html: {class: "materialize-textarea"}
   = f.input :price
-  = f.button :submit
+  = f.button :submit, class: "btn btn-primary"
