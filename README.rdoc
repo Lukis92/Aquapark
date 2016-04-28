@@ -28,12 +28,17 @@ Please feel free to use a different markup language if you do not plan to run
 <tt>rake doc:app</tt>.
 
 == Errors to fix:
+*możliwość kupna karnetu tylko w okresie nie niezajętym przez poprzedni
 *nie znika alert po paru sekundach
 
 == Fixed errors:
-*brak checkboxu Logowanie - zapamiętaj mnie
-*logo Pure Space przesunięte za bardzo do dołu
-*brak wyświetlanych błędów podczas nie powodzenia w logowaniu
-*nie działające górne menu na ekranie logowania (naprawione)
-*widok cennika - strona główna
-*footer
+- usuwanie bought_details
+- przejscie z entry_types do histori zakupu danej wejściówki
+- wyświetlanie entry_types/1/bought_details wszystkich entry_types o id 1
+- zmiana z date na datetime w bought_data
+- naparawa sortowania w bought_detail
+- sprawdzenie czy istnieją zakupy dla bought_details(dodany warunek)
+- poprawa widoku kupna biletu/karnetu usunięcie przycisku więcej i przerzucenie opisów do następnej podstrony
+- naprawa routingu dla vacations
+- dodanie widoku dla nadchodzących obecnych i archiwalnych urlopów
+- usunięcie niepotrzebnych tabel z bazy

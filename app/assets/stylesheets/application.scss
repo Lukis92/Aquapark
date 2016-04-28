@@ -26,36 +26,34 @@
 .fix {
     margin-top: 50px;
 }
-
 .fix-brand {
-  margin-top: -9px;
+    margin-top: -9px;
 }
-
 /* font color for statistic page */
 .success {
-  color: #00C851;
+    color: #00C851;
 }
 .danger {
-  color: #ff4444;
+    color: #ff4444;
 }
 /*********************************/
-
-.clickable{
+.clickable {
     cursor: pointer;
 }
-
 .error-box {
     margin-top: 100px;
 }
-/**********/
+/*********************************/
+ .card-content {
+   min-height: 511px;
+ }
 .resize {
-  padding-top: 300px;
+    padding-top: 300px;
 }
 .input .date .required .client_date_of_birth {
     display: inline-block;
     width: 30%;
 }
-
 .container {
     padding-top: 10px;
 }
@@ -109,21 +107,18 @@
 #contact {
     padding-bottom: 100px;
 }
+.item.active {
+    height: auto;
+}
 .item {
-    height: 400px;
+    height: auto;
 }
 #carousel1 {
     margin-top: 100px;
 }
 /* Main carousel on top page */
 .carous1 {
-    height: 380px;
-}
-.carousel-inner img {
-    width: 100%;
-    /* Set width to 100% */
-    margin: auto;
-    min-height: 200px;
+    height: auto;
 }
 /***************************/
 /* Hide the carousel text when the screen is less than 600 pixels wide */

@@ -10,16 +10,16 @@
 #
 
 class EntryType < ActiveRecord::Base
-#**VALIDATIONS*******************************************************#
-validates :kind, presence: true
-validates :kind_details, presence: true
-validates :description, presence: true, allow_blank: true
-validates :price, presence: true
-#########################################################################
+  KIND = %w(Bilet Karnet).freeze
 
-#**ASSOCIATIONS**********#
-has_many :bought_details
-#************************#
-KIND = ['Bilet', 'Karnet']
+  # **VALIDATIONS*******************************************************#
+  validates :kind, presence: true
+  validates :kind_details, presence: true
+  validates :description, presence: true, allow_blank: true
+  validates :price, presence: true
+  #########################################################################
 
+  # **ASSOCIATIONS**********#
+  has_many :bought_details
+  # ************************#
 end

@@ -11,66 +11,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160411103915) do
+ActiveRecord::Schema.define(version: 20160428103121) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "backend_payments", force: :cascade do |t|
-    t.float    "amount"
-    t.integer  "responseCode"
-    t.string   "responseMessage"
-    t.string   "xref"
-    t.float    "amountReceived"
-    t.string   "transactionID"
-    t.string   "cardNumberMask"
-    t.string   "cardTypeCode"
-    t.string   "cardType"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-  end
-
   create_table "bought_details", force: :cascade do |t|
-    t.date    "bought_data",                           null: false
-    t.date    "end_on",                                null: false
-    t.integer "entry_type_id"
-    t.integer "person_id"
-    t.date    "start_on"
-    t.decimal "cost",          precision: 5, scale: 2, null: false
+    t.datetime "bought_data",                           null: false
+    t.date     "end_on",                                null: false
+    t.integer  "entry_type_id"
+    t.integer  "person_id"
+    t.date     "start_on"
+    t.decimal  "cost",          precision: 5, scale: 2, null: false
   end
 
   add_index "bought_details", ["entry_type_id"], name: "index_bought_details_on_entry_type_id", using: :btree
   add_index "bought_details", ["person_id"], name: "index_bought_details_on_person_id", using: :btree
-
-  create_table "carts", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "contacts", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "entry_types", force: :cascade do |t|
     t.string  "kind",                                 null: false
     t.string  "kind_details",                         null: false
     t.text    "description"
     t.decimal "price",        precision: 5, scale: 2, null: false
-  end
-
-  create_table "payments", force: :cascade do |t|
-    t.float    "amount"
-    t.integer  "responseCode"
-    t.string   "responseMessage"
-    t.string   "xref"
-    t.float    "amountReceived"
-    t.string   "transactionID"
-    t.string   "cardNumberMask"
-    t.string   "cardTypeCode"
-    t.string   "cardType"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
   end
 
   create_table "people", force: :cascade do |t|
@@ -100,6 +62,16 @@ ActiveRecord::Schema.define(version: 20160411103915) do
   add_index "people", ["email"], name: "index_people_on_email", unique: true, using: :btree
   add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true, using: :btree
 
+  create_table "vacations", force: :cascade do |t|
+    t.date    "start_at",                  null: false
+    t.date    "end_at",                    null: false
+    t.boolean "free",      default: false, null: false
+    t.text    "reason"
+    t.integer "person_id"
+  end
+
+  add_index "vacations", ["person_id"], name: "index_vacations_on_person_id", using: :btree
+
   create_table "work_schedules", force: :cascade do |t|
     t.time     "start_time",  null: false
     t.time     "end_time",    null: false
@@ -113,4 +85,5 @@ ActiveRecord::Schema.define(version: 20160411103915) do
 
   add_foreign_key "bought_details", "entry_types"
   add_foreign_key "bought_details", "people"
+  add_foreign_key "vacations", "people"
 end

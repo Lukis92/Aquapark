@@ -1,7 +1,7 @@
 class Backend::PeopleController < BackendController
+    helper_method :sort_column, :sort_direction, :sort_bought
     before_action :set_person, only: [:edit, :edit_profile, :update, :destroy, :show, :remove_photo, :bought_history]
     # before_action :set_current_person
-    helper_method :sort_column, :sort_direction
 
     def index
         respond_to do |format|
@@ -71,16 +71,11 @@ class Backend::PeopleController < BackendController
     end
 
     def bought_history
-      @bought_history = BoughtDetail.where(person_id: @person)
-      @last_bought = BoughtDetail.where(person_id: @person).order('bought_data').last
+        @bought_history = BoughtDetail.order(sort_bought + ' ' + sort_direction).where(person_id: @person).paginate(page: params[:page], per_page: 20)
+        @last_bought = BoughtDetail.where(person_id: @person).order('bought_data').last
     end
 
     private
-
-    def person_params
-        params.require(:person).permit(:pesel, :first_name, :last_name, :date_of_birth,
-                                       :email, :profile_image, :salary, :hiredate, :password, :password_confirmation, :current_password, :remember_me, :roles, :roles_mask)
-    end
 
     def set_person
         @person = Person.find(params[:id])
@@ -88,5 +83,22 @@ class Backend::PeopleController < BackendController
 
     def set_current_person
         @current_person = current_person
+    end
+
+    def sort_bought
+        BoughtDetail.column_names.include?(params[:sort]) ? params[:sort] : 'end_on'
+    end
+
+    def sort_column
+        Person.column_names.include?(params[:sort]) ? params[:sort] : 'first_name'
+    end
+
+    def sort_direction
+        %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
+    end
+
+    def person_params
+        params.require(:person).permit(:pesel, :first_name, :last_name, :date_of_birth,
+                                       :email, :profile_image, :salary, :hiredate, :password, :password_confirmation, :current_password, :remember_me, :roles, :roles_mask)
     end
 end

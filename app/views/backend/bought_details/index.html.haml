@@ -4,36 +4,36 @@
     .card-panel
       .blue-text.text-darken-2
         %i.fa.fa-info-circle
-        Jesteś na stronie historii wszystkich dokonanych tranzakcji.
+        Jesteś na stronie historii wszystkich dokonanych tranzakcji dla poniższej wejściówki.
 .row
   .col-md-6
-    %ul.collection
-      %li.collection-item
-        %h5 Ostatni zakup:
-      %li.collection-item
-        %p
-          Data:
-          = @last_bought.bought_data unless @bought_details.blank?
-        %p
-          Rodzaj:
-          = @last_bought.entry_type.kind
-        %p
-          Cena:
-          = @last_bought.entry_type.price
-          zł
-%table.table
+  - unless @last_bought.blank?
+      %ul.collection
+        %li.collection-item
+          %h5 Ostatni zakup:
+        %li.collection-item
+          %p
+            Data:
+            = @last_bought.bought_data.strftime('%d.%m.%y %H:%M') unless @bought_details.blank?
+          %p
+            Rodzaj:
+            = @last_bought.entry_type.kind
+          %p
+            Cena:
+            = @last_bought.entry_type.price
+            zł
+%table.table.table-striped.table-bordered.table-list.pretty
   %thead
     %tr
       %th
-        Data zakupu
+        %em.fa.fa-cog
+        Zarządzanie
       %th
-        Bilet/Karnet
+        = sortable 'bought_data', 'Data zakupu'
       %th
-        Cena
+        = sortable 'start_on', 'Data ważności od'
       %th
-        Data ważności od
-      %th
-        Data ważności do
+        = sortable 'end_on', 'Data ważności do'
       %th
         Aktywny?
       %th
@@ -42,12 +42,11 @@
     - @bought_details.each do |bought|
       %tr
         %td
-          = bought.bought_data unless bought.bought_data.blank?
+          = link_to backend_entry_type_bought_detail_path(@entry_type, bought), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+            %i.btn.btn-danger
+              %i.fa.fa-trash
         %td
-          = bought.entry_type.kind unless bought.entry_type.blank?
-        %td
-          = bought.entry_type.price
-          zł
+          = bought.bought_data.strftime('%d.%m.%y %H:%M') unless bought.bought_data.blank?
         %td
           = bought.start_on unless bought.end_on.blank?
         %td
@@ -58,4 +57,6 @@
           - else
             %i.fa.fa-times
         %td
-          = bought.person.fullName unless bought.person.blank?
+          = bought.person.full_name unless bought.person.blank?
+
+= will_paginate @bought_details, renderer: BootstrapPagination::Rails

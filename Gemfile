@@ -26,11 +26,12 @@ group :doc do
 end
 
 group :development, :test do
-    # Call 'byebug' anywhere in the code to stop execution
+    # Call 'byebug' anywhere in the occode to stop execution
     # and get a debugger console
     gem 'byebug'
     gem 'foreman' # Manage Procfile-based applications
     gem 'rspec-rails', '~> 3.0' # RSpec for Rails-3+
+    gem 'polishgeeks-dev-tools' # Rails code and documentation quality assurance
 end
 
 group :development do
@@ -63,12 +64,6 @@ gem 'mail_form' # send e-mail straight from forms in Rails.
 gem 'stripe' # stripe Ruby bindings
 gem 'jquery-ui-rails' # jQuery UI for the Rails asset pipeline
 gem 'factory_girl_rails' # A library for setting up Ruby objects as test data.
-gem 'rolify' #Role management library with resource scoping
-group :test do
-    gem 'rails_best_practices'
-    gem 'traceroute' # helps you find the dead routes and actions
-    gem 'rubocop', require: false
-    gem 'rubycritic', require: false
-    gem 'shoulda-matchers', '~> 3.1' # Collection of testing matchers extracted from Shoulda
-    gem 'test-unit'
-end
+gem 'rolify' # Role management library with resource scoping
+gem 'html_truncator', '~>0.2' # truncate an HTML string
+gem 'pg_search' # Easy finders for Rails.

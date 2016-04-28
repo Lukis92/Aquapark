@@ -4,7 +4,7 @@
     .card-panel
       .blue-text.text-darken-2
         %i.fa.fa-info-circle
-        Jesteś na stronie historii wszystkich dokonanych tranzakcji.
+        Jesteś na stronie historii wszystkich dokonanych przez Ciebie tranzakcji.
 .row
   .col-md-6
     - unless @last_bought.blank?
@@ -14,7 +14,7 @@
         %li.collection-item
           %p
             Data:
-            = @last_bought.bought_data unless @last_bought.blank?
+            = @last_bought.bought_data.strftime('%d.%m.%y %H:%M') unless @last_bought.blank?
           %p
             Rodzaj:
             = @last_bought.entry_type.kind
@@ -25,28 +25,26 @@
     - else
       .alert.alert-info
         Brak zakupów.
-%table.table
+%table.table.table-striped.table-bordered.table-list.pretty
   %thead
     %tr
       %th
-        Data zakupu
+        = sortable 'bought_data', 'Data zakupu'
       %th
         Bilet/Karnet
       %th
-        Cena
+        = sortable 'price', 'Cena'
       %th
-        Data ważności od
+        = sortable 'start_on', 'Data ważności od'
       %th
-        Data ważności do
+        = sortable 'end_on', 'Data ważności do'
       %th
         Aktywny?
-      %th
-        Klient
   %tbody
     - @bought_history.each do |bought|
       %tr
         %td
-          = bought.bought_data unless bought.bought_data.blank?
+          = bought.bought_data.strftime('%d.%m.%y %H:%M') unless bought.bought_data.blank?
         %td
           = bought.entry_type.kind unless bought.entry_type.blank?
         %td
@@ -61,5 +59,4 @@
             %i.fa.fa-check
           - else
             %i.fa.fa-times
-        %td
-          = bought.person.fullName unless bought.person.blank?
+= will_paginate @bought_history, renderer: BootstrapPagination::Rails

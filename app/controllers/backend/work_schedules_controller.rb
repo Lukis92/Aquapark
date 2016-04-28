@@ -60,7 +60,7 @@ class Backend::WorkSchedulesController < BackendController
     end
 
     def show
-        # code
+        @vacation = Vacation.all.where(person_id: @person.id).first
     end
 
     private

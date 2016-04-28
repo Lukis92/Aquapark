@@ -1,5 +1,5 @@
 %h1 Grafik pracy wszystkich pracowników
-%table.table.table-striped.table-bordered.table-list
+%table.table.table-striped.table-bordered.table-list.pretty
   %thead
     %tr
       %th
@@ -29,7 +29,7 @@
         %td
           = work.end_time.strftime("%H:%M")
         %td
-          = work.person.try(:fullName)
+          = work.person.try(:full_name)
         %td
           - if work.person.type == "Manager"
             %i.btn.btn-danger

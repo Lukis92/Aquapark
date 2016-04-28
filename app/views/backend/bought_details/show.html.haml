@@ -14,7 +14,7 @@
       %li.collection-item
         %p
           Data:
-          = @last_bought.bought_data unless @last_bought.blank?
+          = @last_bought.bought_data.strftime('%d.%m.%y %H:%M') unless @last_bought.blank?
         %p
           Rodzaj:
           = @entry_type.kind
@@ -43,7 +43,7 @@
     - @bought_details.each do |bought|
       %tr
         %td
-          = bought.bought_data unless bought.bought_data.blank?
+          = bought.bought_data.strftime('%d.%m.%y %H:%M') unless bought.bought_data.blank?
         %td
           = bought.entry_type.kind unless bought.entry_type.blank?
         %td
@@ -59,4 +59,4 @@
           - else
             %i.fa.fa-times
         %td
-          = bought.person.fullName unless bought.person.blank?
+          = bought.person.full_name unless bought.person.blank?

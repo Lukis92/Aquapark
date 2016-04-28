@@ -17,12 +17,20 @@
         %li.collection-item
           %b
             Aktualnie kupujesz:
-            = @entry_type.kind
+          = @entry_type.kind
+        %li.collection-item
+          %b
+            Szczegóły:
+          = @entry_type.kind_details
+        %li.collection-item
+          %b
+            Opis:
+          = @entry_type.description
         %li.collection-item
           %b
             Cena:
-            = @entry_type.price
-            zł / miesiąc
+          = @entry_type.price
+          zł / miesiąc
   .row
     .col-md-5
       #stripe_error.alert.alert-danger{:style => "display:none"}

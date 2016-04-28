@@ -1,5 +1,5 @@
 class Backend::EntryTypesController < BackendController
-    before_action :set_entry_type, only: [:edit, :update, :destroy]
+    before_action :set_entry_type, only: [:edit, :update, :destroy, :show_details]
     before_action :set_current_person
 
     # GET backend/entry_types
@@ -49,6 +49,11 @@ class Backend::EntryTypesController < BackendController
       @tickets = EntryType.where(kind: "Bilet")
       @passes = EntryType.where(kind: "Karnet")
     end
+
+    def show_details
+
+    end
+
     # DELETE backend/entry_types/1
     # DELETE backend/entry_types/1.json
     def destroy

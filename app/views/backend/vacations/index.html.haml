@@ -1,0 +1,54 @@
+%h1 Urlopy
+%p
+  Obecnie w bazie posiadamy
+  = Vacation.count
+  zarejestrowanych urlopów.
+
+= link_to new_backend_vacation_path do
+  .btn.btn-info.waves-effect.waves-light
+    %i.fa.fa-plus
+    Dodaj urlop
+- unless @vacations.blank?
+  %table.table.table-striped.table-bordered.table-list.pretty
+    %thead
+      %tr
+        %th
+          %em.fa.fa-cog
+          Zarządzanie
+        %th
+          = sortable "start_at", "Data rozpoczęcia"
+        %th
+          = sortable "end_at", "Data zakończenia"
+        %th
+          = sortable "free", "Płatny?"
+        %th
+          = sortable "reason", "Powód"
+        %th
+          = sortable "person_id", "Pracownik"
+    %tbody
+      - @vacations.each do |vacation|
+        %tr
+          %td
+            = link_to edit_backend_vacation_path(vacation) do
+              %i.btn.btn-default
+                %i.fa.fa-pencil
+            = link_to backend_vacation_path(vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+              %i.btn.btn-danger
+                %i.fa.fa-trash
+          %td
+            = vacation.start_at
+          %td
+            = vacation.end_at
+          %td
+            - if vacation.free
+              %i.fa.fa-check
+            - else
+              %i.fa.fa-times
+          %td
+            = vacation.reason
+          %td
+            = vacation.person.full_name unless vacation.person.blank?
+  = will_paginate @vacations, renderer: BootstrapPagination::Rails
+- else
+  .alert.alert-info
+    Brak urlopów.

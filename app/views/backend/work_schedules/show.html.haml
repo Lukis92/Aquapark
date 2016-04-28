@@ -1,11 +1,15 @@
 -@work_schedule
 %h1 Pracownik
 %h2
-  = @person.fullName
+  = @person.full_name
 = link_to new_backend_work_schedule_path(@person) do
   %i.btn.btn-success
     %i.fa.fa-plus
     Dodaj grafik
+
+-if @person.vacations.present?
+  Najbliższy urlop:
+  = @vacation.start_at
 %btn.btn-primary
 %table.table
   %thead

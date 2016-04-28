@@ -108,6 +108,8 @@ pl:
           attributes:
             days:
               blank: jest wymagane
+            bought_data:
+              blank: jest wymagane
   mail_form:
     attributes:
       contact:

@@ -9,17 +9,17 @@
 .divider-new
   Bilety
 .row
-  #carousel-multi-item.carousel.slide.multiitem-car
+  #carousel-multi-item1.carousel.slide.multiitem-car
     .text-center
-      %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "prev", :href => "#carousel-multi-item", :role => "button"}
+      %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "prev", :href => "#carousel-multi-item1", :role => "button"}
         %i.material-icons keyboard_arrow_left
-      %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "next", :href => "#carousel-multi-item", :role => "button"}
+      %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "next", :href => "#carousel-multi-item1", :role => "button"}
         %i.material-icons keyboard_arrow_right
     / Indicators
     %ol.carousel-indicators
-      %li.active{"data-slide-to" => "0", "data-target" => "#carousel-multi-item"}
-      %li{"data-slide-to" => "1", "data-target" => "#carousel-multi-item"}
-      %li{"data-slide-to" => "2", "data-target" => "#carousel-multi-item"}
+      %li.active{"data-slide-to" => "0", "data-target" => "#carousel-multi-item1"}
+      %li{"data-slide-to" => "1", "data-target" => "#carousel-multi-item1"}
+      %li{"data-slide-to" => "2", "data-target" => "#carousel-multi-item1"}
     / Wrapper for slides
     .carousel-inner
       - groups = @tickets.in_groups_of(4, false)
@@ -37,9 +37,9 @@
                         = field.price
                         ZŁ
                       %p
-                        = field.kind_details
+                        = HTML_Truncator.truncate(field.kind_details, 20)
                       %p
-                        = field.description
+                        = HTML_Truncator.truncate(field.description, 20)
                     / Buttons
                     .card-action.text-center
                       = link_to new_backend_entry_type_bought_detail_path(field), data: { no_turbolink: true} do
@@ -58,9 +58,9 @@
                         = field.price
                         ZŁ
                       %p
-                        = field.kind_details
+                        = HTML_Truncator.truncate(field.kind_details, 20)
                       %p
-                        = field.description
+                        = HTML_Truncator.truncate(field.description, 20)
                     / Buttons
                     .card-action.text-center
                       = link_to new_backend_entry_type_bought_detail_path(field), data: {no_turbolink: true} do
@@ -97,9 +97,9 @@
                         = field.price
                         ZŁ
                       %p
-                        = field.kind_details
+                        = HTML_Truncator.truncate(field.kind_details, 20)
                       %p
-                        = field.description
+                        = HTML_Truncator.truncate(field.description, 20)
                     / Buttons
                     .card-action.text-center
                       = link_to new_backend_entry_type_bought_detail_path(field), data: { no_turbolink: true}  do
@@ -111,20 +111,24 @@
               - group.each do |field|
                 .col-md-3
                   .card.hoverable.primary-color-dark
-                    .card-content
+                    .card-content.white-text
                       %h5
                         = field.kind
                       %h4.blue-text
                         = field.price
                         ZŁ
                       %p
-                        = field.kind_details
+                        = HTML_Truncator.truncate(field.kind_details, 20)
                       %p
-                        = field.description
+                        = HTML_Truncator.truncate(field.description, 20)
                     / Buttons
                     .card-action.text-center
                       = link_to new_backend_entry_type_bought_detail_path(field), data: {no_turbolink: true} do
                         .fa.fa-shopping-cart
                         Kup Teraz
-    / /.Buttons
-  / Image Card
+
+:javascript
+  $(document).ready(function(){
+      $('[data-toggle="popover"]').popover({animation: true, delay: {show: 100, hide: 100}});
+      $('[data-toggle="tooltip"]').tooltip({animation: true, delay: {show: 300, hide: 300}});
+  });

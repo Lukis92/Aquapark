@@ -34,7 +34,7 @@
         - else
           %li
             = link_to backend_person_path(current_person.id) do
-              = current_person.fullName
+              = current_person.full_name
           %li
             = link_to destroy_person_session_path, method: :delete do
               %i.fa.fa-sign-out
