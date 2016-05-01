@@ -41,6 +41,7 @@ group :development do
     # the background. Read more: https://github.com/rails/spring
     gem 'spring'
     gem 'figaro' # Simple Rails app configuration
+    gem 'i18n-debug' # i18n-debug translations
 end
 
 gem 'haml-rails' # HAML templating.

@@ -21,17 +21,17 @@ Rails.application.routes.draw do
 
     resources :work_schedules, only: [:index, :new, :create]
     resources :vacations, except: [:show]
-
     resources :people do
       member do
         delete 'remove_photo'
         get 'bought_history'
-        resources :work_schedules, only: [:edit, :show, :update]
-        resources :vacations, only: [:new, :create, :update] do
+        resources :work_schedules
+        resources :vacations, only: [:new, :create] do
           collection do
             get 'list', to: 'vacations#list'
           end
         end
+        resources :individual_trainings
       end
     end
     resources :statistics, only: [:index]

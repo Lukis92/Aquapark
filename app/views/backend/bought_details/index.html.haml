@@ -8,20 +8,20 @@
 .row
   .col-md-6
   - unless @last_bought.blank?
-      %ul.collection
-        %li.collection-item
-          %h5 Ostatni zakup:
-        %li.collection-item
-          %p
-            Data:
-            = @last_bought.bought_data.strftime('%d.%m.%y %H:%M') unless @bought_details.blank?
-          %p
-            Rodzaj:
-            = @last_bought.entry_type.kind
-          %p
-            Cena:
-            = @last_bought.entry_type.price
-            zł
+    %ul.collection
+      %li.collection-item
+        %h5 Ostatni zakup:
+      %li.collection-item
+        %p
+          Data:
+          = @last_bought.bought_data.strftime('%d.%m.%y %H:%M') unless @bought_details.blank?
+        %p
+          Rodzaj:
+          = @last_bought.entry_type.kind
+        %p
+          Cena:
+          = @last_bought.entry_type.price
+          zł
 %table.table.table-striped.table-bordered.table-list.pretty
   %thead
     %tr

@@ -54,6 +54,13 @@
         = link_to backend_work_schedule_path(@person), class: "btn btn-primary" do
           %i.fa.fa-calendar
           Harmonogram pracy
+        - if @current_person.type == 'Manager'
+          = link_to "Przydziel urlop", controller: "backend/vacations", action: "new", class: "btn btn-primary" do
+            %i.fa.fa-plane
+            -# Przydziel urlop
+          -# = link_to list_backend_vacations_path(@person), class: "btn btn-primary" do
+          -#   %i.fa.fa-plane
+          -#   Przydziel urlop
   .panel-footer
     %a.btn.btn-sm.btn-primary{"data-original-title" => "Broadcast Message", "data-toggle" => "tooltip", :type => "button"}
       %i.glyphicon.glyphicon-envelope

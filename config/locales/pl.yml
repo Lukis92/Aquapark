@@ -133,6 +133,29 @@ pl:
               blank: jest wymagane
             content:
               blank: jest wymagane
+  simple_form:
+    labels:
+      defaults:
+        credit_card: Numer karty płatniczej
+        card_code: Kod CVV
+        start_on: Data rozpoczęcia
+        start_time: Godzina od
+        end_time: Godzina do
+        day_of_week: Dzień tygodnia
+      vacation:
+        start_at: Data od
+        end_at: Data do
+        free: Darmowy?
+        reason: Powód
+  helpers:
+    submit:
+      bought_detail:
+        create: Zapłać
+      work_schedule:
+        create: Dodaj grafik
+        update: Zapisz
+      vacation:
+        create: Dodaj urlop
   # Views:
   views:
     devise:

@@ -7,10 +7,11 @@
       = f.input :end_at
     .col-md-12
       = f.input :free, as: :boolean
-      = f.input :person_id, label: "Pracownik", :collection => @employees.map{|e| [e.full_name, e.id]}, prompt: "Wybierz pracownika"
+      = f.input :person_id, label: "Pracownik", :collection => @employees.map{|e| [e.employee_full_name_type, e.id]}, prompt: "Wybierz pracownika"
     .col-md-12.input-field
       = f.input :reason, as: :text, input_html: {class: "materialize-textarea"}
-    = f.button :submit, class: "btn btn-primary"
+    .col-md-6
+      = f.button :submit, class: "btn btn-primary"
 :javascript
   $(document).ready(function () {
       $('select').material_select();

@@ -12,6 +12,12 @@
         = @employees
 .col-md-3
   .panel.panel-primary
+    .panel-heading.text-center Zarejestrowani klienci
+    .panel-body.text-center
+      %h3
+        = @clients
+.col-md-3
+  .panel.panel-primary
     .panel-heading.text-center Suma płac pracowników
     .panel-body.text-center
       %h3
@@ -36,3 +42,9 @@
       - else
         %h3.success
           = @sum_risk
+.col-md-3
+  .panel.panel-primary
+    .panel-heading.text-center Ilość pracowników na urlopie
+    .panel-body.text-center
+      %h3
+        = @current_vacations

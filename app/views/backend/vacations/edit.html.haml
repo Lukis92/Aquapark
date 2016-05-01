@@ -9,7 +9,8 @@
       = f.input :free, as: :boolean
     .col-md-12.input-field
       = f.input :reason, as: :text, input_html: {class: "materialize-textarea"}
-    = f.button :submit, class: "btn btn-primary"
+    .col-md-6
+      = f.button :submit, class: "btn btn-primary"
 :javascript
   $(document).ready(function () {
       $('select').material_select();

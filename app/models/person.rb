@@ -73,4 +73,8 @@ class Person < ActiveRecord::Base
   def full_name
     "#{first_name} #{last_name}"
   end
+
+  def employee_full_name_type
+    "#{first_name} #{last_name} | #{type}"
+  end
 end

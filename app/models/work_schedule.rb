@@ -12,6 +12,11 @@
 #
 
 class WorkSchedule < ActiveRecord::Base
+
+  # **ASSOCIATIONS**********#
+  belongs_to :person
+  # ************************#
+
   # **VALIDATIONS***************************#
   validates :start_time, presence: true
   validates :end_time, presence: true
@@ -21,19 +26,16 @@ class WorkSchedule < ActiveRecord::Base
   validate :person_existing
   # ****************************************#
 
-  # **ASSOCIATIONS**********#
-  belongs_to :person
-  # ************************#
-
   DAYS = %w(Poniedziałek Wtorek Środa Czwartek Piątek Sobota Niedziela).freeze
   # **METHODS***************************************************#
   def start_must_be_before_end_time
-    errors.add(:start_time, 'must be before end time') unless
+    errors.add(:start_time, 'musi być przed godziną zakończenia pracy') unless
       start_time < end_time
-    private
   end
 
   def person_existing
     errors.add(:person_id, :missing) if person.blank?
   end
+
+  # ************************************************************#
 end

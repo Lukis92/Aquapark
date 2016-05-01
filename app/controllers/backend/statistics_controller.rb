@@ -10,5 +10,8 @@ class Backend::StatisticsController < BackendController
         @sum_salaries = Person.sum(:salary)
         @sum_earnings = EntryType.joins(:bought_details).sum(:price)
         @sum_risk = @sum_earnings - @sum_salaries
+
+        #vacations
+        @current_vacations = Vacation.all.where(['start_at < ?', Date.today]).where(['end_at > ?', Date.today]).count
     end
 end

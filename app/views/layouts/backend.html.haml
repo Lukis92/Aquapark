@@ -11,8 +11,6 @@
     %link{:href => "http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "https://fonts.googleapis.com/icon?family=Material+Icons", :rel => "stylesheet"}
     %script{:src => "https://code.jquery.com/jquery-2.2.2.min.js", :type => "text/javascript"}
-    %script{:src => "https://code.jquery.com/jquery-2.1.4.min.js", :type => "text/javascript"}
-    %script{:src => "http://mdbootstrap.com/mdbcdn/mdb.min.js", :type => "text/javascript"}
 
     /jquery.min.js
     %script{:src => "https://googledrive.com/host/0B3yx98FbxNb4ZEVLZUJjYWNMTnc/", :type => "text/javascript"}
@@ -52,9 +50,9 @@
                   Profil
               %li.divider
               %li
-              = link_to destroy_person_session_path, method: :delete do
-                %i.fa.fa-sign-out
-                Wyloguj
+                = link_to destroy_person_session_path, method: :delete do
+                  %i.fa.fa-sign-out
+                  Wyloguj
     = render 'layouts/messages'
     .container-fluid
       .row

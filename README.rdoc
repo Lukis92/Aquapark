@@ -29,16 +29,18 @@ Please feel free to use a different markup language if you do not plan to run
 
 == Errors to fix:
 *możliwość kupna karnetu tylko w okresie nie niezajętym przez poprzedni
-*nie znika alert po paru sekundach
+*Brak informacji o pomyślnym zarejestrowaniu konta
+*http://localhost:3000/backend/people/1/vacations/new w liście pracowników powinien być domyślnie użytkownik o id 1
 
 == Fixed errors:
-- usuwanie bought_details
-- przejscie z entry_types do histori zakupu danej wejściówki
-- wyświetlanie entry_types/1/bought_details wszystkich entry_types o id 1
-- zmiana z date na datetime w bought_data
-- naparawa sortowania w bought_detail
-- sprawdzenie czy istnieją zakupy dla bought_details(dodany warunek)
-- poprawa widoku kupna biletu/karnetu usunięcie przycisku więcej i przerzucenie opisów do następnej podstrony
-- naprawa routingu dla vacations
-- dodanie widoku dla nadchodzących obecnych i archiwalnych urlopów
-- usunięcie niepotrzebnych tabel z bazy
+- naprawienie biały background przy hover effect
+- dodanie walidacji start_at_must_be_before_end_at w vacations
+- dodanie walidacji  validate_start_at w vacations tylko dla akcji create
+- naprawienie znikającego buttona przy formularzu new w vacations po wyświetleniu błędów
+- poprawienie listy pracowników dodając typ pracownika
+- przetłumaczenie formularza w bought_details/new, wspomagając się i18n-debug
+- naprawienie widoku work_schedule - show i index
+- naprawienie edycji i usuwania work_schedule
+- naprawienie widoku dla work_schedule w przypadku braku przypisanego do niego pracownika
+- dodanie walidacji do daty rozpoczęcia urlopu wcześniej niż dzień dzisiejszy
+- dodanie tłumaczenia dla vacations/new

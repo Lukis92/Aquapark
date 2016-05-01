@@ -1,6 +1,7 @@
 class Backend::VacationsController < BackendController
   before_action :set_vacation, only: [:edit, :update, :destroy]
   before_action :set_person, only: [:list]
+  before_action :set_employees, only: [:new, :create]
   helper_method :sort_column, :sort_direction
   # GET backend/vacations
   # GET backend/vacations.json
@@ -14,7 +15,6 @@ class Backend::VacationsController < BackendController
   # GET backend/vacations/new
   def new
     @vacation = Vacation.new
-    @employees = Person.all.where.not(type: 'Client')
   end
 
   # POST backend/vacations
@@ -87,5 +87,9 @@ class Backend::VacationsController < BackendController
 
   def set_person
     @person = Person.find(params[:id])
+  end
+
+  def set_employees
+    @employees = Person.all.where.not(type: 'Client')
   end
 end
