@@ -1,10 +1,12 @@
-%h1 Rodzaje wszystkich wejściówek
+%h3 Rodzaje wszystkich wejściówek
 = link_to new_backend_entry_type_path do
   .btn.btn-info.waves-effect.waves-light
     %i.fa.fa-plus
     Dodaj bilet/karnet
-
-%table.table.table-striped.table-bordered.table-list
+%br
+.col-md-6
+  = render 'shared/searchbar'
+%table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   %thead
     %tr
       %th
@@ -28,7 +30,7 @@
           = link_to backend_entry_type_path(entry), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
             .btn.btn-danger
               %i.fa.fa-trash
-          = link_to backend_entry_type_bought_details_path(entry) do
+          = link_to backend_entry_type_bought_details_path(entry), data: { no_turbolink: true } do
             .btn.btn-warning
               %i.fa.fa-history
         %td

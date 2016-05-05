@@ -30,7 +30,10 @@
           %b
             Cena:
           = @entry_type.price
-          zł / miesiąc
+          - if @entry_type.kind == 'Karnet'
+            zł / miesiąc
+          - else
+            zł
   .row
     .col-md-5
       #stripe_error.alert.alert-danger{:style => "display:none"}

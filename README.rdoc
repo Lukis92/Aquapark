@@ -28,19 +28,16 @@ Please feel free to use a different markup language if you do not plan to run
 <tt>rake doc:app</tt>.
 
 == Errors to fix:
-*możliwość kupna karnetu tylko w okresie nie niezajętym przez poprzedni
-*Brak informacji o pomyślnym zarejestrowaniu konta
 *http://localhost:3000/backend/people/1/vacations/new w liście pracowników powinien być domyślnie użytkownik o id 1
-
+*footer nie jest przykejony do dołu strony, wystaje w login page.
 == Fixed errors:
-- naprawienie biały background przy hover effect
-- dodanie walidacji start_at_must_be_before_end_at w vacations
-- dodanie walidacji  validate_start_at w vacations tylko dla akcji create
-- naprawienie znikającego buttona przy formularzu new w vacations po wyświetleniu błędów
-- poprawienie listy pracowników dodając typ pracownika
-- przetłumaczenie formularza w bought_details/new, wspomagając się i18n-debug
-- naprawienie widoku work_schedule - show i index
-- naprawienie edycji i usuwania work_schedule
-- naprawienie widoku dla work_schedule w przypadku braku przypisanego do niego pracownika
-- dodanie walidacji do daty rozpoczęcia urlopu wcześniej niż dzień dzisiejszy
-- dodanie tłumaczenia dla vacations/new
+- dodanie informacji o pomyślnym zarejestrowaniu konta
+- poprawa widoku cennika biletów, karnetów na stronie głównej
+- naprawa niedziałających skryptów js
+- dodanie wyszukiwarki do bought_history, people, clients, trainers, lifeguards, work_schedules
+- rozwiązanie problemu z nie działającą wyszukiwarką; dodanie do linków data: { no_turbolink: true }
+- możliwość kupna karnetu tylko w okresie nie niezajętym przez poprzedni
+- naprawienie pola Aktywny? w widoku bought_history; zmiana na metodę active?
+- naprawa carousel(punkty) dla Kup Bilet/Karnet
+- naprawa widoku bought_detail/new dla biletu/karnetu
+- dodanie sortowanie po day_of_week('Poniedziałek', 'Wtorek'...)

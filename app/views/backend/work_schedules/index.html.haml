@@ -1,6 +1,8 @@
-%h3 Grafik pracy wszystkich pracowników
+%h3 Grafik pracy pracowników
 
-%table.table.table-striped.table-bordered.table-list.pretty
+.col-md-6
+  = render 'shared/searchbar'
+%table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   %thead
     %tr
       %th
@@ -45,4 +47,4 @@
             - else
               %i.btn.btn-info
                 = work.person.type
-    = will_paginate @work_schedules, renderer: BootstrapPagination::Rails
+= will_paginate @work_schedules, renderer: BootstrapPagination::Rails

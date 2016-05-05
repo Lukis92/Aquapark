@@ -4,10 +4,10 @@
     %h4 Wybierz interesujący Cię rodzaj wejściówki.
     .col-md-12
       #tab.btn-group{"data-toggle" => "buttons-radio"}
-        %a.btn.btn-large.btn-success.btn-xlg{"data-toggle" => "tab", :href => "#tickets"}
+        %a.btn.btn-large.btn-success.btn-xlg{"data-toggle" => "tab", href: "#tickets"}
           %i.fa.fa-ticket
           Bilety
-          %a.btn.btn-large.btn-primary.btn-xlg{"data-toggle" => "tab", :href => "#passes"}
+          %a.btn.btn-large.btn-primary.btn-xlg{"data-toggle" => "tab", href: "#passes"}
             %i.fa.fa-clipboard
             Karnety
 
@@ -16,15 +16,18 @@
           %br
           #carousel-multi-item.carousel.slide.multiitem-car
             .text-center
-              %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "prev", :href => "#carousel-multi-item", :role => "button"}
+              %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "prev", href: "#carousel-multi-item", role: "button"}
                 %i.material-icons keyboard_arrow_left
-              %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "next", :href => "#carousel-multi-item", :role => "button"}
+              %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "next", href: "#carousel-multi-item", role: "button"}
                 %i.material-icons keyboard_arrow_right
             / Indicators
             %ol.carousel-indicators
-              %li.active{"data-slide-to" => "0", "data-target" => "#carousel-multi-item"}
-              %li{"data-slide-to" => "1", "data-target" => "#carousel-multi-item"}
-              %li{"data-slide-to" => "2", "data-target" => "#carousel-multi-item"}
+              - groups = @tickets.in_groups_of(3, false)
+              - groups.each_with_index do |group, i|
+                - if i == 0
+                  %li.active{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item"}
+                - else
+                  %li{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item"}
             / Wrapper for slides
             .carousel-inner
               - groups = @tickets.in_groups_of(3, false)
@@ -49,29 +52,17 @@
                                 %li
                                   %p
                                     %i.fa.fa-check.green-text
-                                    = field.kind_details
+                                    = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
                                 %li
                                   %p
                                     %i.fa.fa-check.green-text
-                                    = field.description
-                                %li
-                                  %p
-                                    %i.fa.fa-times.green-text
-                                    Darmowy zestaw ręczników
-                                %li
-                                  %p
-                                    %i.fa.fa-times.red-text
-                                    Płatna sauna
-                                %li
-                                  %p
-                                    %i.fa.fa-times.red-text
-                                    Brak dostępu do jacuzii
-                              %hr
-                                / CTA
-                                = link_to new_backend_entry_type_bought_detail_path(field) do
-                                  .btn.btn-danger.btn-etc.waves-effect.waves-light
-                                    .fa.fa-shopping-cart
-                                    Kup teraz
+                                    = HTML_Truncator.truncate(field.description, 180, length_in_chars: true)
+                            %hr
+                            / CTA
+                            = link_to new_backend_entry_type_bought_detail_path(field) do
+                              .btn.btn-danger.btn-etc.waves-effect.waves-light
+                                .fa.fa-shopping-cart
+                                Kup teraz
                 - else
                   .item
                     .row.text-center
@@ -92,43 +83,34 @@
                                 %li
                                   %p
                                     %i.fa.fa-check.green-text
-                                    = field.kind_details
+                                    = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
                                 - if field.description
                                   %li
                                     %p
                                       %i.fa.fa-check.green-text
-                                      = field.description
-                                %li
-                                  %p
-                                    %i.fa.fa-times.green-text
-                                    Darmowy zestaw ręczników
-                                %li
-                                  %p
-                                    %i.fa.fa-times.red-text
-                                    Płatna sauna
-                                %li
-                                  %p
-                                    %i.fa.fa-times.red-text
-                                    Brak dostępu do jacuzii
-                              %hr
-                                / CTA
-                                = link_to new_backend_entry_type_bought_detail_path(field) do
-                                  .btn.btn-danger.btn-etc.waves-effect.waves-light
-                                    .fa.fa-shopping-cart
-                                    Kup teraz
+                                      = HTML_Truncator.truncate(field.description, 180, length_in_chars: true)
+                            %hr
+                            / CTA
+                            = link_to new_backend_entry_type_bought_detail_path(field) do
+                              .btn.btn-danger.btn-etc.waves-effect.waves-light
+                                .fa.fa-shopping-cart
+                                Kup teraz
         #passes.tab-pane
           %br
-          #carousel-multi-item.carousel.slide.multiitem-car
+          #carousel-multi-item1.carousel.slide.multiitem-car
             .text-center
-              %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "prev", :href => "#carousel-multi-item", :role => "button"}
+              %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "prev", href: "#carousel-multi-item1", role: "button"}
                 %i.material-icons keyboard_arrow_left
-              %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "next", :href => "#carousel-multi-item", :role => "button"}
+              %a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "next", href: "#carousel-multi-item1", role: "button"}
                 %i.material-icons keyboard_arrow_right
             / Indicators
             %ol.carousel-indicators
-              %li.active{"data-slide-to" => "0", "data-target" => "#carousel-multi-item"}
-              %li{"data-slide-to" => "1", "data-target" => "#carousel-multi-item"}
-              %li{"data-slide-to" => "2", "data-target" => "#carousel-multi-item"}
+              - groups = @passes.in_groups_of(3, false)
+              - groups.each_with_index do |group, i|
+                - if i == 0
+                  %li.active{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item1"}
+                - else
+                  %li{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item1"}
             / Wrapper for slides
             .carousel-inner
               - groups = @passes.in_groups_of(3, false)
@@ -153,28 +135,16 @@
                                 %li
                                   %p
                                     %i.fa.fa-check.green-text
-                                    = field.kind_details
+                                    = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
                                 %li
                                   %p
                                     %i.fa.fa-check.green-text
-                                    = field.description
-                                %li
-                                  %p
-                                    %i.fa.fa-times.green-text
-                                    Darmowy zestaw ręczników
-                                %li
-                                  %p
-                                    %i.fa.fa-times.red-text
-                                    Płatna sauna
-                                %li
-                                  %p
-                                    %i.fa.fa-times.red-text
-                                    Brak dostępu do jacuzii
-                              %hr
-                                = link_to new_backend_entry_type_bought_detail_path(field) do
-                                  .btn.btn-danger.btn-etc.waves-effect.waves-light
-                                    .fa.fa-shopping-cart
-                                    Kup teraz
+                                    = HTML_Truncator.truncate(field.description, 180, length_in_chars: true)
+                            %hr
+                            = link_to new_backend_entry_type_bought_detail_path(field) do
+                              .btn.btn-danger.btn-etc.waves-effect.waves-light
+                                .fa.fa-shopping-cart
+                                Kup teraz
                 - else
                   .item
                     .row.text-center
@@ -195,27 +165,15 @@
                                 %li
                                   %p
                                     %i.fa.fa-check.green-text
-                                    = field.kind_details
+                                    = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
                                 - if field.description
                                   %li
                                     %p
                                       %i.fa.fa-check.green-text
-                                      = field.description
-                                %li
-                                  %p
-                                    %i.fa.fa-times.green-text
-                                    Darmowy zestaw ręczników
-                                %li
-                                  %p
-                                    %i.fa.fa-times.red-text
-                                    Płatna sauna
-                                %li
-                                  %p
-                                    %i.fa.fa-times.red-text
-                                    Brak dostępu do jacuzii
-                              %hr
-                                / CTA
-                                = link_to new_backend_entry_type_bought_detail_path(field) do
-                                  .btn.btn-danger.btn-etc.waves-effect.waves-light
-                                    .fa.fa-shopping-cart
-                                    Kup teraz
+                                      = HTML_Truncator.truncate(field.description, 180, length_in_chars: true)
+                            %hr
+                            / CTA
+                            = link_to new_backend_entry_type_bought_detail_path(field) do
+                              .btn.btn-danger.btn-etc.waves-effect.waves-light
+                                .fa.fa-shopping-cart
+                                Kup teraz

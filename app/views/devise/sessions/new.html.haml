@@ -1,11 +1,7 @@
 .container.fix
   %h2.text-center Logowanie
   = simple_form_for(resource, as: resource_name, url: person_session_path) do |f|
-    .row
-      - if alert
-        .alert.alert-danger
-          = alert
-          %button.close{"aria-hidden" => "true", "data-dismiss" => "alert", :type => "button"} &times;
+    = render 'layouts/messages'
     .form-inputs
       .input-field
         = f.input :email, required: false, autofocus: true

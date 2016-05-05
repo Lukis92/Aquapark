@@ -1,10 +1,5 @@
 Rails.application.routes.draw do
   devise_for :people, controllers: { sessions: 'devise/sessions' }, skip: [:registrations]
-
-  devise_for :managers, skip: :sessions
-  devise_for :receptionists, skip: :sessions
-  devise_for :lifeguards, skip: :sessions
-  devise_for :trainers, skip: :sessions
   devise_for :clients, skip: :sessions
 
   resources 'contacts', only: [:new, :create]
@@ -39,5 +34,10 @@ Rails.application.routes.draw do
     [:managers, :clients, :receptionists, :trainers, :lifeguards].each do |type|
       get type, to: 'people#' + type.to_s
     end
+
+    devise_for :managers, skip: :sessions
+    devise_for :receptionists, skip: :sessions
+    devise_for :lifeguards, skip: :sessions
+    devise_for :trainers, skip: :sessions
   end
 end

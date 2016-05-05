@@ -22,14 +22,18 @@ class BoughtDetail < ActiveRecord::Base
 
   validate :timeline
 
-  def expired?
-    (Date.today - end_on).to_i <= 0
+  # def expired?
+  #   (Date.today - end_on).to_i <= 0
+  # end
+
+  def active?
+    (Date.today - start_on).to_i >= 0 && (Date.today - end_on).to_i <= 0
   end
 
   private
 
   def timeline
-    if person.bought_details.where('start_on > ?', start_on).count > 0 &&
+    if entry_type.kind == 'Karnet' && person.bought_details.where('start_on > ?', start_on).count > 0 &&
        person.bought_details.where('end_on < ?', end_on).count > 0
       errors.add(:start_on, 'Masz już aktywny karnet w tym okresie.')
     end

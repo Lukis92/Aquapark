@@ -64,9 +64,9 @@
                 %b Wejściówki
             %ul.nav.nav-pills.nav-stacked
               %li{class: current_page?(backend_entry_types_path) && 'active'}
-                = link_to "Bilety/Karnety", backend_entry_types_path
+                = link_to "Bilety/Karnety", backend_entry_types_path, data: { no_turbolink: true }
               %li{class: current_page?(bought_history_backend_person_path(@current_person)) && 'active'}
-                = link_to "Moja historia Zakupów", bought_history_backend_person_path(@current_person)
+                = link_to "Moja historia Zakupów", bought_history_backend_person_path(@current_person), data: { no_turbolink: true }
               %li{class: current_page?(bought_list_backend_entry_types_path) && 'active'}
                 = link_to "Kup Bilet/Karnet",  bought_list_backend_entry_types_path, action: :show, data: {no_turbolink: true}
             %h5
@@ -75,22 +75,22 @@
                 %b Zarejestrowane osoby
             %ul.nav.nav-pills.nav-stacked
               %li{class: current_page?(backend_people_path) && 'active'}
-                = link_to "Użytkownicy", backend_people_path
+                = link_to "Użytkownicy", backend_people_path, data: { no_turbolink: true }
               %li{class: current_page?(backend_clients_path) && 'active'}
-                = link_to "Klienci", backend_clients_path
+                = link_to "Klienci", backend_clients_path, data: { no_turbolink: true }
               %li{class: current_page?(backend_receptionists_path) && 'active'}
-                = link_to "Recepcjoniści", backend_receptionists_path
+                = link_to "Recepcjoniści", backend_receptionists_path, data: { no_turbolink: true }
               %li{class: current_page?(backend_trainers_path) && 'active'}
-                = link_to "Trenerzy", backend_trainers_path
+                = link_to "Trenerzy", backend_trainers_path, data: { no_turbolink: true }
               %li{class: current_page?(backend_lifeguards_path) && 'active'}
-                = link_to "Ratownicy", backend_lifeguards_path
+                = link_to "Ratownicy", backend_lifeguards_path, data: { no_turbolink: true }
             %h5
               %i.fa.fa-calendar
               %small
                 %b Harmonogram pracy
             %ul.nav.nav-pills.nav-stacked
               %li{class: current_page?(backend_work_schedules_path) && 'active'}
-                = link_to "Grafik pracy", backend_work_schedules_path
+                = link_to "Grafik pracy", backend_work_schedules_path, data: { no_turbolink: true }
               %li{class: current_page?(backend_work_schedule_path(@current_person)) && 'active'}
                 = link_to "Mój grafik pracy", backend_work_schedule_path(@current_person) if @current_person.present?
               %li{class: current_page?(new_backend_work_schedule_path) && 'active'}

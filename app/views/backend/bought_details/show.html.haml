@@ -1,4 +1,4 @@
-%h1 Historia zakupów wejściówki:
+%h3 Historia zakupów wejściówki:
 %h5
 .row
   .col-md-6
@@ -54,7 +54,7 @@
         %td
           = bought.end_on unless bought.end_on.blank?
         %td
-          - if bought.expired?
+          - if bought.active?
             %i.fa.fa-check
           - else
             %i.fa.fa-times

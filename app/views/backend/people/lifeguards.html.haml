@@ -3,7 +3,9 @@
   Obecnie w bazie posiadamy
   = Lifeguard.count
   zarejestrowanych ratowników.
-%table.table.pretty.table-hover
+.col-md-6
+  = render 'shared/searchbar'
+%table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   %thead
     %tr
       %th

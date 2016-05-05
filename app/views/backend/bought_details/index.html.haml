@@ -1,4 +1,4 @@
-%h1 Historia zakupów
+%h3 Historia zakupów
 .row
   .col-md-6
     .card-panel
@@ -22,7 +22,9 @@
           Cena:
           = @last_bought.entry_type.price
           zł
-%table.table.table-striped.table-bordered.table-list.pretty
+.col-md-6
+  = render 'shared/searchbar'
+%table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   %thead
     %tr
       %th
@@ -52,7 +54,7 @@
         %td
           = bought.end_on unless bought.end_on.blank?
         %td
-          - if bought.expired?
+          - if bought.active?
             %i.fa.fa-check
           - else
             %i.fa.fa-times

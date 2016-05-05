@@ -49,9 +49,10 @@ before_action :configure_account_update_params, only: [:update]
   # end
 
   # The path used after sign up.
-  # def after_sign_up_path_for(resource)
-  #   super(resource)
-  # end
+  def after_sign_up_path_for(resource)
+    super(resource)
+    flash[:success] = "Zarejestrowano konto pomyślnie."
+  end
 
   # The path used after sign up for inactive accounts.
   # def after_inactive_sign_up_path_for(resource)
@@ -59,13 +60,13 @@ before_action :configure_account_update_params, only: [:update]
   # end
 
 
-  # private
+  private
   # def sign_up_params
-  #   params.require(:person).permit(:pesel, :first_name, :last_name, :date_of_birth, :email, :profile_image, :password, :password_confirmation)
+  #   params.require(:client).permit(:pesel, :first_name, :last_name, :date_of_birth, :email, :profile_image, :password, :password_confirmation)
   #   #code
   # end
   #
   # def account_update_params
-  #  params.require(:person).permit(:pesel, :first_name, :last_name, :date_of_birth, :email, :profile_image, :current_password)
+  #  params.require(:client).permit(:pesel, :first_name, :last_name, :date_of_birth, :email, :profile_image, :current_password)
   # end
 end

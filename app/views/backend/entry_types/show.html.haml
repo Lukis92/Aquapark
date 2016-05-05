@@ -1,4 +1,4 @@
-%h2.section-title.st-blue Cennik
+%h3.section-title.st-blue Cennik
 .row
   .col-md-6
     .card-panel
@@ -17,9 +17,12 @@
         %i.material-icons keyboard_arrow_right
     / Indicators
     %ol.carousel-indicators
-      %li.active{"data-slide-to" => "0", "data-target" => "#carousel-multi-item1"}
-      %li{"data-slide-to" => "1", "data-target" => "#carousel-multi-item1"}
-      %li{"data-slide-to" => "2", "data-target" => "#carousel-multi-item1"}
+      - groups = @tickets.in_groups_of(3, false)
+      - groups.each_with_index do |group, i|
+        - if i == 0
+          %li.active{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item1"}
+        - else
+          %li{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item1"}
     / Wrapper for slides
     .carousel-inner
       - groups = @tickets.in_groups_of(4, false)
@@ -77,9 +80,12 @@
         %i.material-icons keyboard_arrow_right
     / Indicators
     %ol.carousel-indicators
-      %li.active{"data-slide-to" => "0", "data-target" => "#carousel-multi-item"}
-      %li{"data-slide-to" => "1", "data-target" => "#carousel-multi-item"}
-      %li{"data-slide-to" => "2", "data-target" => "#carousel-multi-item"}
+      - groups = @passes.in_groups_of(3, false)
+      - groups.each_with_index do |group, i|
+        - if i == 0
+          %li.active{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item"}
+        - else
+          %li{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item"}
     / Wrapper for slides
     .carousel-inner
       - groups = @passes.in_groups_of(4, false)

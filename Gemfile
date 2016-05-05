@@ -67,4 +67,3 @@ gem 'jquery-ui-rails' # jQuery UI for the Rails asset pipeline
 gem 'factory_girl_rails' # A library for setting up Ruby objects as test data.
 gem 'rolify' # Role management library with resource scoping
 gem 'html_truncator', '~>0.2' # truncate an HTML string
-gem 'pg_search' # Easy finders for Rails.

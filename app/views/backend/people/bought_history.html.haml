@@ -1,4 +1,4 @@
-%h1 Historia zakupów
+%h3 Historia zakupów
 .row
   .col-md-6
     .card-panel
@@ -25,7 +25,10 @@
     - else
       .alert.alert-info
         Brak zakupów.
-%table.table.table-striped.table-bordered.table-list.pretty
+.col-md-6
+  = render 'shared/searchbar'
+
+%table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   %thead
     %tr
       %th
@@ -51,11 +54,11 @@
           = bought.entry_type.price
           zł
         %td
-          = bought.start_on unless bought.end_on.blank?
+          = bought.start_on.strftime('%d.%m.%y') unless bought.end_on.blank?
         %td
-          = bought.end_on unless bought.end_on.blank?
+          = bought.end_on.strftime('%d.%m.%y') unless bought.end_on.blank?
         %td
-          - if bought.expired?
+          - if bought.active?
             %i.fa.fa-check
           - else
             %i.fa.fa-times
