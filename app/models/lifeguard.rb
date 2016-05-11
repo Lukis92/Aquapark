@@ -27,5 +27,5 @@
 #
 
 class Lifeguard < Person
-  #code
+  # code
 end

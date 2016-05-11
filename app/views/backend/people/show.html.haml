@@ -4,11 +4,11 @@
       = @person.full_name
   .panel-body
     .row
-      .col-md-3.col-lg-3{:align => "center"}
+      .col-md-3
         %img.img-circle.img-responsive
           = image_tag @person.profile_image.url(:medium)
 
-      .col-md-9.col-lg-9
+      .col-md-9
         %table.table.table-user-information
           %tbody
             %tr
@@ -51,23 +51,21 @@
         = link_to bought_history_backend_person_path(@person), class: "btn btn-primary" do
           %i.fa.fa-shopping-cart
           Zakupione bilety/karnety
-        = link_to backend_work_schedule_path(@person), class: "btn btn-primary" do
-          %i.fa.fa-calendar
-          Harmonogram pracy
-        - if @current_person.type == 'Manager'
-          = link_to "Przydziel urlop", controller: "backend/vacations", action: "new", class: "btn btn-primary" do
+        - unless @person.type == 'Client'
+          = link_to backend_work_schedule_path(@person), class: "btn btn-primary" do
+            %i.fa.fa-calendar
+            Harmonogram pracy
+        - if @current_person.type == 'Manager' && @person.type != 'Client'
+          = link_to new_backend_vacations_path(@person), data: { no_turbolink: true },  class: "btn btn-primary" do
             %i.fa.fa-plane
-            -# Przydziel urlop
-          -# = link_to list_backend_vacations_path(@person), class: "btn btn-primary" do
-          -#   %i.fa.fa-plane
-          -#   Przydziel urlop
+            Przydziel urlop
   .panel-footer
     %a.btn.btn-sm.btn-primary{"data-original-title" => "Broadcast Message", "data-toggle" => "tooltip", :type => "button"}
       %i.glyphicon.glyphicon-envelope
     %i.pull-right
-      = link_to edit_backend_person_path(@person), class: "btn btn-sm btn-warning" do
+      = link_to edit_backend_person_path(@person), class: "btn btn-sm btn-warning", data: {no_turbolink: true} do
         %i.fa.fa-pencil-square
         Edytuj
-      = link_to backend_people_path, method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "btn btn-sm btn-danger" do
+      = link_to backend_person_path(@person), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "btn btn-sm btn-danger" do
         %i.fa.fa-trash
         Usuń

@@ -1,10 +1,10 @@
-%h1 Urlopy
+%h5 Urlopy
 %p
   Obecnie w bazie posiadamy
   = Vacation.count
   zarejestrowanych urlopów.
 
-= link_to new_backend_vacation_path do
+= link_to new_backend_vacation_path, data: { no_turbolink: true } do
   .btn.btn-info.waves-effect.waves-light
     %i.fa.fa-plus
     Dodaj urlop
@@ -29,7 +29,7 @@
       - @vacations.each do |vacation|
         %tr
           %td
-            = link_to edit_backend_vacation_path(vacation) do
+            = link_to edit_backend_vacation_path(vacation), data: { no_turbolink: true } do
               %i.btn.btn-default
                 %i.fa.fa-pencil
             = link_to backend_vacation_path(vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do

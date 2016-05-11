@@ -1,13 +1,17 @@
 class Backend::BoughtDetailsController < BackendController
   helper_method :sort_column, :sort_direction
   before_action :set_entry_type, only: [:index, :new, :create]
-  before_action :set_bought_detail, only: [:edit, :destroy, :activate, :deactivate]
+  before_action :set_bought_detail,
+                only: [:edit, :destroy, :activate, :deactivate]
   before_action :curr_person, only: [:create]
   # GET backend/bought_details
   # GET backend/bought_details.json
   def index
-    @bought_details = BoughtDetail.order(sort_column + ' ' + sort_direction).where(entry_type_id: @entry_type).paginate(page: params[:page], per_page: 20)
-    @last_bought = BoughtDetail.where(entry_type_id: @entry_type).order('bought_data').last
+    @bought_details = BoughtDetail.order(sort_column + ' ' + sort_direction)
+                                  .where(entry_type_id: @entry_type)
+                                  .paginate(page: params[:page], per_page: 20)
+    @last_bought = BoughtDetail.where(entry_type_id: @entry_type)
+                               .order('bought_data').last
   end
 
   # GET backend/bought_details/new
@@ -18,9 +22,10 @@ class Backend::BoughtDetailsController < BackendController
   def create
     @bought_detail = BoughtDetail.new(bought_detail_params)
     @bought_detail.entry_type = @entry_type
-    @bought_detail.person = current_person
+    @bought_detail.person = @curr_person
     if @bought_detail.entry_type.kind == 'Karnet'
-      @bought_detail.cost = @bought_detail.entry_type.price * (@bought_detail.days.to_i / 30).floor
+      @bought_detail.cost = @bought_detail.entry_type.price *
+                            (@bought_detail.days.to_i / 30).floor
     else
       @bought_detail.cost = @bought_detail.entry_type.price
     end
@@ -36,7 +41,8 @@ class Backend::BoughtDetailsController < BackendController
 
       if @bought_detail.save
         flash[:notice] = "Dziękujemy za zakup!"
-        redirect_to bought_history_backend_person_path(@curr_person), notice: flash[:notice]
+        redirect_to bought_history_backend_person_path(@curr_person),
+                    notice: flash[:notice]
       else
         flash[:danger] = @bought_detail.errors.full_messages
         render :new, notice: flash[:danger]
@@ -53,7 +59,10 @@ class Backend::BoughtDetailsController < BackendController
   def destroy
     @bought_detail.destroy
     respond_to do |format|
-      format.html { redirect_to backend_entry_type_bought_details_path, notice: 'Pomyślnie usunięto.' }
+      format.html do
+        redirect_to backend_entry_type_bought_details_path,
+                    notice: 'Pomyślnie usunięto.'
+      end
       format.json { head :no_content }
     end
   end
@@ -80,8 +89,10 @@ class Backend::BoughtDetailsController < BackendController
     %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  # only allow the white list through.
   def bought_detail_params
-    params.require(:bought_detail).permit(:bought_data, :start_on, :end_on, :entry_type_id, :days, :person_id, :credit_card, :card_code)
+    params.require(:bought_detail).permit(:bought_data, :start_on, :end_on,
+                                          :entry_type_id, :days, :person_id,
+                                          :credit_card, :card_code)
   end
 end

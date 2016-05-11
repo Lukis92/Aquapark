@@ -17,7 +17,7 @@
         %i.material-icons keyboard_arrow_right
     / Indicators
     %ol.carousel-indicators
-      - groups = @tickets.in_groups_of(3, false)
+      - groups = @tickets.in_groups_of(4, false)
       - groups.each_with_index do |group, i|
         - if i == 0
           %li.active{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item1"}
@@ -33,7 +33,7 @@
               - group.each do |field|
                 .col-md-3
                   .card.hoverable.success-color-dark
-                    .card-content.white-text
+                    #price-card.card-content.white-text
                       %h5
                         = field.kind
                       %h4.blue-text
@@ -54,7 +54,7 @@
               - group.each do |field|
                 .col-md-3
                   .card.hoverable.success-color-dark
-                    .card-content.white-text
+                    #price-card.card-content.white-text
                       %h5
                         = field.kind
                       %h4.blue-text
@@ -80,7 +80,7 @@
         %i.material-icons keyboard_arrow_right
     / Indicators
     %ol.carousel-indicators
-      - groups = @passes.in_groups_of(3, false)
+      - groups = @passes.in_groups_of(4, false)
       - groups.each_with_index do |group, i|
         - if i == 0
           %li.active{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item"}
@@ -96,7 +96,7 @@
               - group.each do |field|
                 .col-md-3
                   .card.hoverable.primary-color-dark
-                    .card-content.white-text
+                    #price-card.card-content.white-text
                       %h5
                         = field.kind
                       %h4.blue-text
@@ -117,7 +117,7 @@
               - group.each do |field|
                 .col-md-3
                   .card.hoverable.primary-color-dark
-                    .card-content.white-text
+                    #price-card.card-content.white-text
                       %h5
                         = field.kind
                       %h4.blue-text

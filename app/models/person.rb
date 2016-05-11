@@ -27,11 +27,28 @@
 #
 
 class Person < ActiveRecord::Base
+  include PgSearch
+  PgSearch.multisearch_options = { using: { tsearch: { prefix: true } } }
+  multisearchable against: [:first_name, :last_name]
+  PgSearch::Multisearch.rebuild(Person)
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   self.table_name = 'people'
+
+  # **ASSOCIATIONS**********#
+  has_many :work_schedules, dependent: :destroy
+  has_many :bought_details, dependent: :destroy
+  has_many :vacations, dependent: :destroy
+  has_many :individual_trainings_as_trainer,
+           class_name: 'IndividualTraining',
+           foreign_key: 'trainer_id'
+  has_many :individual_trainings_as_client,
+           class_name: 'IndividualTraining',
+           foreign_key: 'client_id'
+
+  ##########################
 
   # **VALIDATIONS*******************************************************#
   validates :pesel, presence: true,
@@ -43,38 +60,28 @@ class Person < ActiveRecord::Base
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
                     format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }
-  has_attached_file :profile_image, styles: { medium: '300x300>', thumb: '100x100>' },
+  has_attached_file :profile_image, styles: { medium: '300x300>',
+                                              thumb: '100x100>' },
                                     default_url: 'http://www.mediafire.com/convkey/2d40/jkaqkubtfktr7w3zg.jpg',
                                     storage: :s3,
                                     bucket: 'aquapark-project'
-  validates_attachment_content_type :profile_image, content_type: /\Aimage\/.*\Z/
+  validates_attachment_content_type :profile_image,
+                                    content_type: /\Aimage\/.*\Z/
   #########################################################################
-
-  # **ASSOCIATIONS**********#
-  has_many :work_schedules
-  has_many :bought_details
-  has_many :vacations
-  ##########################
-
-  # **USER_ROLES***********
-  ROLES = { 0 => :guest, 1 => :client, 2 => :receptionist, 3 => :lifeguard, 4 => :trainer, 5 => :manager }.freeze
-
-  attr_reader :role
-
-  # def initialize(role_id = 0)
-  #   @role = ROLES.has_key?(role_id.to_i) ? ROLES[role_id.to_i] : ROLES[0]
-  # end
-
-  def role?(role_name)
-    role == role_name
-  end
 
   # **METHODS*********************#
   def full_name
     "#{first_name} #{last_name}"
   end
 
-  def employee_full_name_type
+  def age
+    Date.today.strftime('%Y').to_i - date_of_birth.strftime('%Y').to_i -
+      ((Date.today.strftime('%m').to_i > date_of_birth.strftime('%m').to_i ||
+      (Date.today.strftime('%m').to_i == date_of_birth.strftime('%m').to_i &&
+      Date.today.strftime('%d').to_i >= date_of_birth.strftime('%d').to_i)) ? 0 : 1)
+  end
+
+  def person_full_name_type
     "#{first_name} #{last_name} | #{type}"
   end
 end

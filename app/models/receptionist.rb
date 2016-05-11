@@ -27,5 +27,4 @@
 #
 
 class Receptionist < Person
-
 end

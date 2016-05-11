@@ -21,27 +21,27 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 
 group :doc do
-    # bundle exec rake doc:rails generates the API under doc/api.
-    gem 'sdoc', '~> 0.4.0', require: false
+  # bundle exec rake doc:rails generates the API under doc/api.
+  gem 'sdoc', '~> 0.4.0', require: false
 end
 
 group :development, :test do
-    # Call 'byebug' anywhere in the occode to stop execution
-    # and get a debugger console
-    gem 'byebug'
-    gem 'foreman' # Manage Procfile-based applications
-    gem 'rspec-rails', '~> 3.0' # RSpec for Rails-3+
-    gem 'polishgeeks-dev-tools' # Rails code and documentation quality assurance
+  # Call 'byebug' anywhere in the occode to stop execution
+  # and get a debugger console
+  gem 'byebug'
+  gem 'foreman' # Manage Procfile-based applications
+  gem 'rspec-rails', '~> 3.0' # RSpec for Rails-3+
+  gem 'polishgeeks-dev-tools' # Rails code and documentation quality assurance
 end
 
 group :development do
-    # Access an IRB console on exception pages or by using <%= console %> in views
-    gem 'web-console', '~> 2.0'
-    # Spring speeds up development by keeping your application running in
-    # the background. Read more: https://github.com/rails/spring
-    gem 'spring'
-    gem 'figaro' # Simple Rails app configuration
-    gem 'i18n-debug' # i18n-debug translations
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console', '~> 2.0'
+  # Spring speeds up development by keeping your application running in
+  # the background. Read more: https://github.com/rails/spring
+  gem 'spring'
+  gem 'figaro' # Simple Rails app configuration
+  gem 'i18n-debug' # i18n-debug translations
 end
 
 gem 'haml-rails' # HAML templating.
@@ -67,3 +67,6 @@ gem 'jquery-ui-rails' # jQuery UI for the Rails asset pipeline
 gem 'factory_girl_rails' # A library for setting up Ruby objects as test data.
 gem 'rolify' # Role management library with resource scoping
 gem 'html_truncator', '~>0.2' # truncate an HTML string
+gem 'pg_search' # PostgreSQL's full text search
+gem 'rubocop', require: false
+gem 'rails_best_practices' # a code metric tool for rails projects

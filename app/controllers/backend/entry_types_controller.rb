@@ -6,8 +6,9 @@ class Backend::EntryTypesController < BackendController
   # GET backend/entry_types.json
   def index
     respond_to do |format|
-      format.html { @entry_types = EntryType.paginate(page: params[:page], per_page: 20) }
-      format.json { @entry_types = EntryType.all }
+      format.html do
+        @entry_types = EntryType.paginate(page: params[:page], per_page: 20)
+      end
     end
   end
 
@@ -22,11 +23,12 @@ class Backend::EntryTypesController < BackendController
     @entry_type = EntryType.new(entry_type_params)
     respond_to do |format|
       if @entry_type.save
-        format.html { redirect_to backend_entry_types_path, notice: 'Pomyślnie dodano.' }
-        format.json { render :show, status: :created, location: @entry_type }
+        format.html do
+          redirect_to backend_entry_types_path,
+                      notice: 'Pomyślnie dodano.'
+        end
       else
         format.html { render :new }
-        format.json { render json: @entry_type.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -36,12 +38,13 @@ class Backend::EntryTypesController < BackendController
   def update
     respond_to do |format|
       if @entry_type.update(entry_type_params)
-        format.html { redirect_to backend_entry_types_path, notice: 'Pomyślnie zaktualizowano.' }
-        format.json { render :show, status: :ok, location: @entry_type }
+        format.html do
+          redirect_to backend_entry_types_path,
+                      notice: 'Pomyślnie zaktualizowano.'
+        end
       else
         format.html { render :edit }
-        format.json { render json: @entry_type.errors, status: :unprocessable_entity }
-        end
+      end
     end
   end
 
@@ -58,8 +61,9 @@ class Backend::EntryTypesController < BackendController
   def destroy
     @entry_type.destroy
     respond_to do |format|
-      format.html { redirect_to backend_entry_types_path, notice: 'Pomyślnie usunięto.' }
-      format.json { head :no_content }
+      format.html do
+        redirect_to backend_entry_types_path, notice: 'Pomyślnie usunięto.'
+      end
     end
   end
 

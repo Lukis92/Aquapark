@@ -110,6 +110,12 @@ pl:
               blank: jest wymagane
             bought_data:
               blank: jest wymagane
+        training_cost:
+          attributes:
+            duration:
+              blank: jest wymagane
+            cost:
+              blank: jest wymagane
   mail_form:
     attributes:
       contact:
@@ -147,6 +153,26 @@ pl:
         end_at: Data do
         free: Darmowy?
         reason: Powód
+      person:
+        first_name: Imię
+        last_name: Nazwisko
+        date_of_birth: Data urodzenia
+        profile_image: Zdjęcie profilowe
+        salary: Wynagrodzenie
+        password_confirmation: Powtórz hasło
+        current_password: Obecne gasło
+      client:
+        profile_image: Zdjęcie profilowe
+      backend_receptionist:
+        first_name: Imię
+        last_name: Nazwisko
+        date_of_birth: Data urodzenia
+        profile_image: Zdjęcie profilowe
+        salary: Wynagrodzenie
+        password_confirmation: Powtórz hasło
+      training_cost:
+        duration: Czas trwania (min.)
+        cost: Koszt
   helpers:
     submit:
       bought_detail:
@@ -156,6 +182,9 @@ pl:
         update: Zapisz
       vacation:
         create: Dodaj urlop
+      training_cost:
+        create: Dodaj cennik
+        update: Zapisz
   # Views:
   views:
     devise:

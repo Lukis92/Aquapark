@@ -16,15 +16,14 @@
         = f.input :email, required: true
       .file-field.input-field
       = f.input :profile_image, as: :file
+      - unless @current_person.blank?
+        .input-field
+          = f.input :salary
       .input-field
         = f.input :password, required: true, hint: ("minimum #{@minimum_password_length} znaków" if @minimum_password_length)
       .input-field
         = f.input :password_confirmation, required: true
       .form-actions
-        = f.button :submit, "Zarejestruj się", class: "btn btn-info"
-  = render "devise/shared/links"
-
-:javascript
-  $(document).ready(function () {
-            $('select').material_select();
-        });
+        = f.button :submit, "Zarejestruj", class: "btn btn-info"
+  - if @current_person.blank?
+    = render "devise/shared/links"

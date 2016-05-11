@@ -1,15 +1,3 @@
-= simple_form_for([:backend, @work_schedule], as: :work_schedule, url: {action: "create"}) do |f|
-  = errors_for(@work_schedule)
-  .row
-    .col-md-3
-      = f.input :start_time
-    .col-md-3
-      = f.input :end_time
-  = f.input :day_of_week, collection: WorkSchedule::DAYS, include_blank: 'Wybierz dzień tygodnia'
-  = f.input :person_id, label: "Pracownik", :collection => @employees.map{|e| [e.employee_full_name_type, e.id]}, prompt: "Wybierz pracownika"
-  = f.button :submit, class: "btn btn-primary"
+%h5 Dodawanie harmonogramu pracy
 
-:javascript
-  $(document).ready(function () {
-      $('select').material_select();
-  });
+= render 'form'

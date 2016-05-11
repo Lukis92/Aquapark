@@ -12,19 +12,18 @@
 #
 
 class BoughtDetail < ActiveRecord::Base
+  # **ASSOCIATIONS**********#
   belongs_to :entry_type
   belongs_to :person
+  # ************************#
+  # **VALIDATIONS***************************#
   before_validation :set_bought_data, :set_start_on, :set_end_on
   validates :bought_data, presence: true
   validates :cost, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }
   validate :validate_start_on
-  attr_accessor :credit_card, :card_code, :days
-
   validate :timeline
-
-  # def expired?
-  #   (Date.today - end_on).to_i <= 0
-  # end
+  # ****************************************#
+  attr_accessor :credit_card, :card_code, :days
 
   def active?
     (Date.today - start_on).to_i >= 0 && (Date.today - end_on).to_i <= 0
@@ -33,8 +32,15 @@ class BoughtDetail < ActiveRecord::Base
   private
 
   def timeline
-    if entry_type.kind == 'Karnet' && person.bought_details.where('start_on > ?', start_on).count > 0 &&
-       person.bought_details.where('end_on < ?', end_on).count > 0
+    if (entry_type.kind == 'Karnet') &&
+       ((person.bought_details.where('start_on <= ?', start_on).count > 0 &&
+          person.bought_details.where('end_on >= ?', end_on).count > 0) ||
+       (person.bought_details.where('start_on <= ?', start_on).count > 0 &&
+        person.bought_details.where('end_on <= ?', end_on).count > 0 &&
+        person.bought_details.where('end_on >= ?', start_on).count > 0) ||
+       (person.bought_details.where('start_at >= ?', start_on).count > 0 &&
+       person.bought_details.where('start_on <= ?', end_on).count > 0 &&
+       person.bought_details.where('end_on >= ?', end_on).count > 0))
       errors.add(:start_on, 'Masz już aktywny karnet w tym okresie.')
     end
   end
@@ -58,9 +64,8 @@ class BoughtDetail < ActiveRecord::Base
 
   def validate_start_on
     if start_on < Date.today
-      errors.add(:bought_details, "Czas rozpoczęcia nie może być wcześniejszy niż dzisiejsza data.")
+      errors.add(:bought_details,
+                 "Czas rozpoczęcia jest wcześniejszy niż dzisiejsza data.")
     end
   end
 end
-# 2016-04-28 - 2016-05-05
-# 2016-05-29 - 2016-06-05

@@ -16,6 +16,7 @@ class Backend::StatisticsController < BackendController
                               .where(['end_on >= ?', Date.today]).count
     @today_tickets = EntryType.joins(:bought_details).where(kind: 'Bilet')
                               .where(['bought_data = ?', Date.today]).count
-    @current_vacations = Vacation.all.where(['start_at <= ?', Date.today]).where(['end_at >= ?', Date.today]).count
+    @current_vacations = Vacation.all.where(['start_at <= ?', Date.today])
+                                 .where(['end_at >= ?', Date.today]).count
   end
 end

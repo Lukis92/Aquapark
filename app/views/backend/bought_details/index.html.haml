@@ -20,7 +20,7 @@
           = @last_bought.entry_type.kind
         %p
           Cena:
-          = @last_bought.entry_type.price
+          = number_with_precision(@last_bought.entry_type.price, precision: 2)
           zł
 .col-md-6
   = render 'shared/searchbar'

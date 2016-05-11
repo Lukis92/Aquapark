@@ -1,2 +1,4 @@
-module Backend::RegistrationsHelper
+module Backend
+  module RegistrationsHelper
+  end
 end

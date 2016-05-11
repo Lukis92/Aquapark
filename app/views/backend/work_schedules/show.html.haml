@@ -2,14 +2,14 @@
 %h3 Pracownik
 %h4
   = @person.full_name
-= link_to new_backend_work_schedule_path(@person) do
+= link_to new_backend_work_schedules_path(@person), data: { no_turbolink: true } do
   %i.btn.btn-success
     %i.fa.fa-plus
     Dodaj grafik
 
--if @person.vacations.present?
+-if @nearest_vacation.present?
   Najbliższy urlop:
-  = @vacation.start_at
+  = @nearest_vacation.start_at
 
 %table.table.table-striped.table-bordered.table-list
   %thead
@@ -27,7 +27,7 @@
     - @person.work_schedules.each do |work|
       %tr
         %td
-          = link_to edit_backend_work_schedule_path(work) do
+          = link_to edit_backend_work_schedule_path(work), data: { no_turbolink: true } do
             %i.btn.btn-default
               %i.fa.fa-pencil
           = link_to backend_work_schedule_path(work), method: :delete, data: {confirm: 'Jesteś pewny/a?'} do

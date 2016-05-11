@@ -27,5 +27,4 @@
 #
 
 class Client < Person
-
 end

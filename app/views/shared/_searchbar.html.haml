@@ -1,5 +1,6 @@
-.row
-  .input-field.col-md-6
-    %i.material-icons.prefix search
-    %input#system-search{:type => "text"}/
-    %label{:for => "icon_prefix"} Szukaj
+= form_tag search_backend_people_path, method: :get do
+  .input-group.col-md-12
+    = text_field_tag :search, params[:search], class: "search-query", placeholder: "Szukaj..."
+    %span.input-group-btn
+      %button.btn.btn-danger{:type => "submit"}
+        %i.glyphicon.glyphicon-search

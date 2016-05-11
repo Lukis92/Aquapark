@@ -27,16 +27,16 @@
 #
 
 FactoryGirl.define do
-    TYPES = %w(Manager, Lifeguard, Client, Receptionist, Trainer).freeze
-    factory :person do
-        pesel { Faker::Number.number(11) }
-        first_name { Faker::Name.first_name }
-        last_name { Faker::Name.last_name }
-        date_of_birth { Faker::Time.between('1970-01-01', '2000-12-31') }
-        email { Faker::Internet.email }
-        password { Faker::Internet.password }
-        type { TYPES.sample }
-        salary { Faker::Number.decimal(4, 2) }
-        hiredate { Faker::Time.between('2016-01-01', '2016-04-30') }
-    end
+  TYPES = %w(Manager, Lifeguard, Client, Receptionist, Trainer).freeze
+  factory :person do
+    pesel { Faker::Number.number(11) }
+    first_name { Faker::Name.first_name }
+    last_name { Faker::Name.last_name }
+    date_of_birth { Faker::Time.between('1970-01-01', '2000-12-31') }
+    email { Faker::Internet.email }
+    password { Faker::Internet.password }
+    type { TYPES.sample }
+    salary { Faker::Number.decimal(4, 2) }
+    hiredate { Faker::Time.between('2016-01-01', '2016-04-30') }
+  end
 end

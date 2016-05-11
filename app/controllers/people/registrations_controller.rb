@@ -1,6 +1,7 @@
+# Controller For  Client registration actions by devise gem
 class Client::RegistrationsController < Devise::RegistrationsController
-before_action :configure_sign_up_params, only: [:create]
-before_action :configure_account_update_params, only: [:update]
+  before_action :configure_sign_up_params, only: [:create]
+  before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
   def new
@@ -59,14 +60,16 @@ before_action :configure_account_update_params, only: [:update]
   #   super(resource)
   # end
 
+  # private
 
-  private
   # def sign_up_params
-  #   params.require(:client).permit(:pesel, :first_name, :last_name, :date_of_birth, :email, :profile_image, :password, :password_confirmation)
+  #   params.require(:client).permit(:pesel, :first_name, :last_name,
+  # :date_of_birth, :email, :profile_image, :password, :password_confirmation)
   #   #code
   # end
   #
   # def account_update_params
-  #  params.require(:client).permit(:pesel, :first_name, :last_name, :date_of_birth, :email, :profile_image, :current_password)
+  #  params.require(:client).permit(:pesel, :first_name, :last_name,
+  # :date_of_birth, :email, :profile_image, :current_password)
   # end
 end

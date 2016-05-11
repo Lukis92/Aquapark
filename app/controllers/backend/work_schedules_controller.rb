@@ -1,10 +1,10 @@
 class Backend::WorkSchedulesController < BackendController
   before_action :set_work_schedule, only: [:edit, :update, :destroy]
-  before_action :select_employee, only: [:new, :edit]
   helper_method :sort_column, :sort_direction
-  before_action :set_person, only: [:show]
-  before_action :set_employees, only: [:new, :create, :edit, :update]
-  before_action :set_current_person
+  before_action :set_person, only: [:show, :new]
+  before_action :set_employees
+
+  @@person_id = 0
 
   # GET backend/work_schedules
   # GET backend/work_schedules.json
@@ -12,30 +12,39 @@ class Backend::WorkSchedulesController < BackendController
     respond_to do |format|
       format.html do
         @work_schedules = WorkSchedule.order("CASE day_of_week
-                WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa' THEN 3
-                WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5 WHEN 'Sobota' THEN 6
-                WHEN 'Niedziela' THEN 7 END").order(sort_column + ' ' + sort_direction).paginate(page: params[:page], per_page: 20)
+                WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa'
+                THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
+                WHEN 'Sobota' THEN 6
+                WHEN 'Niedziela' THEN 7 END")
+                                      .order(sort_column + ' ' + sort_direction)
+                                      .paginate(page: params[:page],
+                                                per_page: 20)
       end
-      format.json { @work_schedules = WorkSchedule.all }
     end
   end
 
   # GET backend/work_schedules/new
   def new
     @work_schedule = WorkSchedule.new
+    @@person_id = @person.id unless @person.blank?
   end
 
   # POST backend/work_schedules
   # POST backend/work_schedules.json
   def create
     @work_schedule = WorkSchedule.new(work_schedule_params)
+    @work_schedule.person_id = @@person_id unless @@person_id == 0 &&
+                                                  @work_schedule.person_id
+                                                                .present?
     respond_to do |format|
       if @work_schedule.save
-        format.html { redirect_to backend_work_schedules_path, notice: 'Pomyślnie dodano.' }
+        format.html do
+          redirect_to backend_work_schedules_path,
+                      notice: 'Pomyślnie dodano.'
+        end
         format.json { render :show, status: :created, location: @work_schedule }
       else
         format.html { render :new }
-        format.json { render json: @work_schedule.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -45,12 +54,13 @@ class Backend::WorkSchedulesController < BackendController
   def update
     respond_to do |format|
       if @work_schedule.update(work_schedule_params)
-        format.html { redirect_to backend_work_schedules_path, notice: 'Pomyślnie zaktualizowano.' }
-        format.json { render :show, status: :ok, location: @work_schedule }
+        format.html do
+          redirect_to backend_work_schedules_path,
+                      notice: 'Pomyślnie zaktualizowano.'
+        end
       else
         format.html { render :edit }
-        format.json { render json: @work_schedule.errors, status: :unprocessable_entity }
-        end
+      end
     end
   end
 
@@ -60,18 +70,20 @@ class Backend::WorkSchedulesController < BackendController
     @work_schedule.destroy
     respond_to do |format|
       format.html { redirect_to :back, notice: 'Pomyślnie usunięto.' }
-      format.json { head :no_content }
     end
   end
 
   def show
-    @vacation = Vacation.all.where(person_id: @person.id).first
+    # @vacation = Vacation.all.where(person_id: @person.id).first unless
+    @nearest_vacation = Vacation.where(person_id: @person.id)
+                                .where(['start_at > ?', Date.today]).first
   end
 
   private
 
   def work_schedule_params
-    params.require(:work_schedule).permit(:start_time, :end_time, :day_of_week, :person_id)
+    params.require(:work_schedule)
+          .permit(:start_time, :end_time, :day_of_week, :person_id)
   end
 
   def set_work_schedule
@@ -79,7 +91,7 @@ class Backend::WorkSchedulesController < BackendController
   end
 
   def set_person
-    @person = Person.find(params[:id])
+    @person = Person.find(params[:id]) unless params[:id].blank?
   end
 
   def set_employees
@@ -90,12 +102,12 @@ class Backend::WorkSchedulesController < BackendController
     @current_person = current_person
   end
 
-  def select_employee
-    @employee = Person.where.not(type: 'Client')
-  end
-
   def sort_column
-    WorkSchedule.column_names.include?(params[:sort]) ? params[:sort] : 'day_of_week'
+    if WorkSchedule.column_names.include?(params[:sort])
+      params[:sort]
+    else
+      'day_of_week'
+    end
   end
 
   def sort_direction

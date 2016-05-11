@@ -27,5 +27,5 @@
 #
 
 class Manager < Person
-  #code
+  # code
 end

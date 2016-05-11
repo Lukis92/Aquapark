@@ -12,7 +12,6 @@
 #
 
 class WorkSchedule < ActiveRecord::Base
-
   # **ASSOCIATIONS**********#
   belongs_to :person
   # ************************#
@@ -24,6 +23,7 @@ class WorkSchedule < ActiveRecord::Base
   validates :day_of_week, presence: true
   validate :start_must_be_before_end_time
   validate :person_existing
+
   # ****************************************#
 
   DAYS = %w(Poniedziałek Wtorek Środa Czwartek Piątek Sobota Niedziela).freeze

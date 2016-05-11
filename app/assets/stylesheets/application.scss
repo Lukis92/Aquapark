@@ -130,22 +130,22 @@
 }
 // /* Height for price cards in main page depend on width of browser */
 @media (min-width: 892px) and (max-width: 1080px) {
-  .card-content {
+  #price-card.card-content {
     min-height: 635px;
   }
 }
 @media (min-width: 692px) and (max-width: 892px) {
-  .card-content {
+  #price-card.card-content {
     min-height: 843px;
   }
 }
 @media (min-width: 1080px) {
-  .card-content {
+  #price-card.card-content {
     min-height: 400px;
   }
 }
 @media (min-width: 0px) and (max-width: 692px) {
-  .card-content {
+  #price-card.card-content {
     min-height: 0;
   }
 }

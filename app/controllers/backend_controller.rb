@@ -1,11 +1,13 @@
+# Controller for backend pages
 class BackendController < ApplicationController
-    before_action :set_current_person
+  before_action :set_current_person
+  layout 'backend'
+  def show
+  end
 
-    def show
-    end
+  private
 
-    private
-    def set_current_person
-        @current_person = current_person
-    end
+  def set_current_person
+    @current_person = current_person
+  end
 end

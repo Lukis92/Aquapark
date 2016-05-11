@@ -1,0 +1,36 @@
+.col-md-6
+  %h5
+    Trener
+    = @trainer.full_name
+
+  %h6
+    Harmonogram pracy:
+
+  .col-md-6
+    %table.table.table-striped.table-bordered.table-list
+      %thead
+        %tr
+          %th Dzień tygodnia
+          %th Godzina od
+          %th Godzina do
+      %tbody
+        - @trainer.work_schedules.each do |tw|
+          %tr
+            %td
+              = tw.day_of_week
+            %td
+              = tw.start_time.strftime("%H:%M")
+            %td
+              = tw.end_time.strftime("%H:%M")
+
+.col-md-6
+  = simple_form_for([:backend, @individual_training]) do |f|
+    = errors_for(@individual_training)
+    = f.input :day, label: "Dzień tygodnia",
+      collection: @trainer.work_schedules.map{ |tw| [tw.day_of_week, tw.id] },
+      prompt: "Wybierz dzień tygodnia"
+    = f.input :duration, label: "Czas trwania" ,
+      collection: @training_costs.map{ |tc| [tc.duration, tc.id] },
+      prompt: 'Wybierz czas trwania treningu'
+    = f.input :start_on
+    = f.button :submit, class: "btn btn-primary"

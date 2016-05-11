@@ -6,6 +6,9 @@
         %i.fa.fa-info-circle
         Jesteś na stronie wszystkich urlopów.
 
+= link_to new_backend_vacations_path(@person), class: 'btn btn-primary', data: { no_turbolink: true } do
+  %i.fa.fa-plus
+  Poproś o urlop
 .row
   .col-md-6
     - unless @nearest_vacation.blank?
@@ -20,9 +23,7 @@
           %p
             Data:
             = @nearest_vacation.start_at
-    - else
-      .alert.alert-info
-        Brak w najbliższym czasie urlopu.
+
     - unless @current_vacation.blank?
       %ul.collection
         %li.collection-item
@@ -30,10 +31,53 @@
         %li.collection-item
           %p
             Już za
-            = @vac_days
+            = @end_vacation
             dni wracasz do pracy!
           %p
             Wykorzystaj ten czas dobrze :)
+%h5.divider-new Obecny urlop
+- unless @current_vacation.blank?
+  %table.table.table-striped.table-bordered.table-list.pretty
+    %thead
+      %tr
+        %th
+          %em.fa.fa-cog
+          Zarządzanie
+        %th
+          = sortable "start_at", "Data rozpoczęcia"
+        %th
+          = sortable "end_at", "Data zakończenia"
+        %th
+          = sortable "free", "Płatny?"
+        %th
+          = sortable "reason", "Powód"
+    %tbody
+      %tr
+        %td
+          = link_to edit_backend_vacation_path(@current_vacation), data: { no_turbolink: true } do
+            %i.btn.btn-default
+              %i.fa.fa-pencil
+          = link_to backend_vacation_path(@current_vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+            %i.btn.btn-danger
+              %i.fa.fa-trash
+        %td
+          = @current_vacation.start_at
+        %td
+          = @current_vacation.end_at
+        %td
+          - if @current_vacation.free
+            %i.fa.fa-check
+          - else
+            %i.fa.fa-times
+        %td
+          = @current_vacation.reason
+- else
+  .row
+    .col-md-4.col-md-offset-4
+      .card-panel.teal.text-center
+        %span.white-text
+          Brak urlopów.
+
 %h5.divider-new Nadchodzące Urlopy
 - unless @nearest_vacations.blank?
   %table.table.table-striped.table-bordered.table-list.pretty
@@ -54,7 +98,7 @@
       - @nearest_vacations.each do |vacation|
         %tr
           %td
-            = link_to edit_backend_vacation_path(vacation) do
+            = link_to edit_backend_vacation_path(vacation), data: { no_turbolink: true } do
               %i.btn.btn-default
                 %i.fa.fa-pencil
             = link_to backend_vacation_path(vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
@@ -73,8 +117,11 @@
             = vacation.reason
   = will_paginate @nearest_vacations, renderer: BootstrapPagination::Rails
 - else
-  .alert.alert-info
-    Brak urlopów.
+  .row
+    .col-md-4.col-md-offset-4
+      .card-panel.teal.text-center
+        %span.white-text
+          Brak urlopów.
 %h5.divider-new Archiwalne Urlopy
 - unless @old_vacations.blank?
   %table.table.table-striped.table-bordered.table-list.pretty
@@ -95,7 +142,7 @@
       - @old_vacations.each do |vacation|
         %tr
           %td
-            = link_to edit_backend_vacation_path(vacation) do
+            = link_to edit_backend_vacation_path(vacation), data: { no_turbolink: true } do
               %i.btn.btn-default
                 %i.fa.fa-pencil
             = link_to backend_vacation_path(vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
@@ -112,7 +159,10 @@
               %i.fa.fa-times
           %td
             = vacation.reason
-  = will_paginate @vacations, renderer: BootstrapPagination::Rails
+  = will_paginate @old_vacations, renderer: BootstrapPagination::Rails
 - else
-  .alert.alert-info
-    Brak urlopów.
+  .row
+    .col-md-4.col-md-offset-4
+      .card-panel.teal.text-center
+        %span.white-text
+          Brak urlopów.

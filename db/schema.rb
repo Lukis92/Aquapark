@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160429085520) do
+ActiveRecord::Schema.define(version: 20160511122347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,9 +36,17 @@ ActiveRecord::Schema.define(version: 20160429085520) do
   end
 
   create_table "individual_trainings", force: :cascade do |t|
-    t.decimal  "cost",             precision: 7, scale: 2, null: false
-    t.datetime "date_of_training",                         null: false
+    t.datetime "date_of_training", null: false
+    t.integer  "client_id"
+    t.integer  "trainer_id"
+    t.time     "start_on",         null: false
+    t.time     "end_on",           null: false
+    t.integer  "training_cost_id"
   end
+
+  add_index "individual_trainings", ["client_id"], name: "index_individual_trainings_on_client_id", using: :btree
+  add_index "individual_trainings", ["trainer_id"], name: "index_individual_trainings_on_trainer_id", using: :btree
+  add_index "individual_trainings", ["training_cost_id"], name: "index_individual_trainings_on_training_cost_id", using: :btree
 
   create_table "people", force: :cascade do |t|
     t.string   "pesel",                                                           null: false
@@ -67,6 +75,21 @@ ActiveRecord::Schema.define(version: 20160429085520) do
   add_index "people", ["email"], name: "index_people_on_email", unique: true, using: :btree
   add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true, using: :btree
 
+  create_table "pg_search_documents", force: :cascade do |t|
+    t.text     "content"
+    t.integer  "searchable_id"
+    t.string   "searchable_type"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "pg_search_documents", ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id", using: :btree
+
+  create_table "training_costs", force: :cascade do |t|
+    t.integer "duration",                         null: false
+    t.decimal "cost",     precision: 5, scale: 2
+  end
+
   create_table "vacations", force: :cascade do |t|
     t.date    "start_at",                  null: false
     t.date    "end_at",                    null: false
@@ -90,5 +113,6 @@ ActiveRecord::Schema.define(version: 20160429085520) do
 
   add_foreign_key "bought_details", "entry_types"
   add_foreign_key "bought_details", "people"
+  add_foreign_key "individual_trainings", "training_costs"
   add_foreign_key "vacations", "people"
 end

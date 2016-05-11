@@ -26,28 +26,27 @@
 #  profile_image_updated_at   :datetime
 #
 
-require "rails_helper"
+require 'rails_helper'
 
 describe Person do
-  it "has a valid factory" do
+  it 'has a valid factory' do
     expect(FactoryGirl.build(:person)).to be_valid
   end
-  it "is invalid without a first_name" do
+  it 'is invalid without a first_name' do
     expect(FactoryGirl.build(:person, first_name: nil)).to_not be_valid
   end
-  it "is invalid without a last_name" do
+  it 'is invalid without a last_name' do
     expect(FactoryGirl.build(:person, last_name: nil)).to_not be_valid
   end
-  it "is invalid without a date_of_birth" do
+  it 'is invalid without a date_of_birth' do
     expect(FactoryGirl.build(:person, date_of_birth: nil)).to_not be_valid
   end
-  it "is invalid without a email" do
+  it 'is invalid without a email' do
     expect(FactoryGirl.build(:person, email: nil)).to_not be_valid
   end
-  describe "uniqueness" do
-    subject { FactoryGirl.build(:person)}
+  describe 'uniqueness' do
+    subject { FactoryGirl.build(:person) }
     it { should validate_uniqueness_of(:email).case_insensitive }
-    it { should validate_uniqueness_of(:pesel).case_insensitive}
+    it { should validate_uniqueness_of(:pesel).case_insensitive }
   end
-
 end

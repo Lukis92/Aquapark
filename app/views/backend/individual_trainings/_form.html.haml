@@ -1,0 +1,8 @@
+= simple_form_for([:backend, @individual_training], as: :individual_training) do |f|
+  = errors_for(@individual_training)
+  = f.input :client_id, label: "Klient", :collection => @clients.map{|c| [c.person_full_name_type, c.id]}, prompt: "Wybierz klienta"
+  = f.input :trainer_id, label: "Trener", :collection => @trainers.map{|c| [c.person_full_name_type, c.id]}, prompt: "Wybierz trenera"
+  = f.input :cost
+  = f.input :date_of_training
+  = f.hidden_field :trainer_id, value: params[:trainer_id]
+  = f.button :submit, class: "btn btn-primary"
