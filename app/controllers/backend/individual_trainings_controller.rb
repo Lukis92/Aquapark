@@ -4,7 +4,7 @@ class Backend::IndividualTrainingsController < BackendController
   before_action :set_trainers
   before_action :set_trainer, only: [:new]
 
-  @@trainer = 0
+  @@trainer_id = 0
   def index
     @individual_trainings = IndividualTraining.paginate(page: params[:page],
                                                         per_page: 20)
@@ -13,15 +13,20 @@ class Backend::IndividualTrainingsController < BackendController
   # GET backend/individual_trainings/new
   def new
     @individual_training = IndividualTraining.new
-    @@trainer = @trainer
+    @individual_trainings = IndividualTraining.all
+    @individual_training.trainer = @trainer
+    @@trainer_id = @trainer.id
     @training_costs = TrainingCost.all
   end
 
   # POST backend/individual_trainings
   def create
     @individual_training = IndividualTraining.new(individual_training_params)
-    @individual_training.trainer = @@trainer
-
+    @individual_training.trainer_id = @@trainer_id unless @@trainer_id == 0
+    @individual_training.trainer = Person.find(@@trainer_id) unless @@trainer_id == 0
+    @individual_training.client = current_person
+    @trainer = Person.find(@@trainer_id)
+    @training_costs = TrainingCost.all
     respond_to do |format|
       if @individual_training.save
         format.html { redirect_to :back, notice: 'Pomyślnie dodano.' }
@@ -42,6 +47,18 @@ class Backend::IndividualTrainingsController < BackendController
     end
   end
 
+  def show
+    @individual_trainings = IndividualTraining.where(client_id: params[:id])
+    @nearest_training = IndividualTraining.where(client_id: params[:id])
+                                          .where(['date_of_training >= ?',
+                                            Date.today]).first
+    @days = 0
+
+    unless @nearest_training.blank?
+      @days = (@nearest_training.date_of_training - Date.today).to_i
+    end
+  end
+
   # DELETE backend/individual_trainings/1
   # DELETE backend/individual_trainings/1.json
   def destroy
@@ -57,19 +74,12 @@ class Backend::IndividualTrainingsController < BackendController
                       .paginate(page: params[:page], per_page: 20)
   end
 
-  def choose_date
-    @trainer = Person.find(params[:trainer_id])
-    @individual_training = IndividualTraining.new
-    @individual_training.trainer = @trainer
-    raise 'Dupa'
-  end
-
   private
 
   def individual_training_params
     params.require(:individual_training)
           .permit(:cost, :date_of_training, :start_on, :end_on, :client_id,
-                  :trainer_id, :duration, :day)
+                  :trainer_id, :training_cost_id, :duration, :day)
   end
 
   def set_individual_training
@@ -85,6 +95,6 @@ class Backend::IndividualTrainingsController < BackendController
   end
 
   def set_trainer
-    @trainer = Person.find(params[:trainer_id])
+    @trainer = Person.find(params[:trainer_id]) unless params[:trainer_id].blank?
   end
 end

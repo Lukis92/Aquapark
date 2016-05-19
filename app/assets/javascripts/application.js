@@ -13,9 +13,12 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
+//= require bootstrap-wysihtml5
+//= require bootstrap-wysihtml5/locales
 //= require bootstrap-sprockets
 //= require turbolinks
 //= require_tree .
+
 
 //alert disappear after few seconds
 window.setTimeout(function() {

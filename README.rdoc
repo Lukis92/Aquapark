@@ -34,23 +34,16 @@ Please feel free to use a different markup language if you do not plan to run
 *dodac do vacation pole akcepted, aby manager mógł akceptować lub odrzucać urlopy
 *nie działa multisearch pg_search
 *Dostępne dni na trening
+*klikając w szukaj i wstecz wyskakuje info pomyślnie usunięto
 *rozjeżdza się widok biletów, karnetów na drugim monitorze
-== Fixed errors:
-- dodanie nazwy do routing vacations/new, naprawa linków
-- usunięcie wszystkich select-javascripts na podstronach; dodanie jednego pliku select.js
-- naprawa layoutu dla rejestracji recepcjonisty
-- naprawa widoku błędów dla edycji danych użytkownika
-- spolszczenie widoku rejestracji recepcjonisty i edycji profilu
-- naprawa usuwania użytkownika, z widoku profilu, dodanie kaskadowości do people
-- dodanie dwóch kluczy obcych do individual_trainings(trainer_id, client_id)
-- dodawanie/update indywidualnych treningów, przerobienie na jeden wspólny form
-- naprawione podwójne zera
-- nie działa dodawanie urlopu - brak person_id, rozwiązane za pomocą zmiennej klasowej
-- http://localhost:3000/backend/people/1/vacations/new w liście pracowników powinien być domyślnie użytkownik o id 1
-- niemożność dodawania urlopu w trakcie trwania jakiegoś innego
-- naprawa pobierania id, gdy nie ma go w path
-- sprawdzic bought_details_controller @bought_detail.person
-- żle wyliczone kołka w bought_list
-- strona choose_trainer
-- zredukowanie 500 błędów do 99 w rubocop
-- dodanie CRUD do nowo powstałej tabeli training_costs
+== What's done:
+- walidacja indywidualnego treningu dot. dnia pracy trenera i wybranego dnia
+- walidacja indywidualnego treninfu dot. nachodzenia zajęć na siebie
+- kalendarz dla trenerów dot. ich individualnych treningów.
+- strona Moje treningi
+- CRUD dla strony aktualności
+- edytor wysig dla strony aktualności
+- i18n dla formularza aktualności
+- zablokowanie możliwości edytowania cudzego profilu oprócz menagerowi.
+- zablokowanie możliwości wyświetlania profili oprócz menagerowi i recepcjoniście.
+- przetłumaczenie w widoku work_schedules ról

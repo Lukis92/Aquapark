@@ -1,0 +1,29 @@
+%h5 Moje treningi indywidualne
+.row
+  .col-md-6
+    - unless @nearest_training.blank?
+      %ul.collection
+        %li.collection-item
+          %h5 Najbliższy trening:
+        %li.collection-item
+          %p
+            Już za
+            = @days
+            dni!
+          %p
+            Data:
+            = @nearest_training.date_of_training.strftime("%d.%m.%Yr.")
+          %p
+            Godzina:
+            = @nearest_training.start_on.strftime("%H:%M")
+            |
+            Czas trwania:
+            = @nearest_training.training_cost.duration
+            min.
+= month_calendar attribute: :date_of_training, events: @individual_trainings do |date_of_training, trainings|
+  = date_of_training.strftime("%d")
+  %br
+  - trainings.each do |training|
+    = training.start_on.strftime("%H:%M")
+    = training.end_on.strftime("%H:%M")
+    = training.trainer.full_name

@@ -17,7 +17,11 @@
       %th
         Data
       %th
-        Godzina
+        Godzina rozpoczęcia
+      %th
+        Godzina zakończenia
+      %th
+        Czas trwania
   %tbody
     - @individual_trainings.each do |training|
       %tr
@@ -29,7 +33,7 @@
             %i.btn.btn-danger
               %i.fa.fa-trash
         %td
-          = number_with_precision(training.cost, precision: 2)
+          = number_with_precision(training.training_cost.cost, precision: 2)
           zł
         %td
           = training.client.try(:full_name)
@@ -37,6 +41,12 @@
           = training.trainer.try(:full_name)
         %td
           = training.date_of_training.strftime('%d.%m.%y')
+          r.
         %td
-          = training.date_of_training.strftime('%H:%M')
+          = training.start_on.strftime('%H:%M')
+        %td
+          = training.end_on.strftime('%H:%M')
+        %td
+          = training.training_cost.duration
+          min.
 = will_paginate @individual_trainings, renderer: BootstrapPagination::Rails unless @individual_trainings.blank?

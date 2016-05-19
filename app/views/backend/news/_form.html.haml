@@ -1,0 +1,16 @@
+.col-md-10
+  = simple_form_for([:backend, @news], as: :news) do |f|
+    = errors_for(@news)
+    .row
+      .input-field
+        = f.input :title
+      .form-group
+        = f.input :content, input_html: {class: "materialize-textarea2"}, as: :wysihtml5, wysihtml5: { locale: "pl-PL"}
+
+      /.input-field
+      -# = f.input :content, input_html: { class: 'materialize-textarea' }
+      = f.select :scope, [['Wszyscy', 'wszyscy'], ['Pracownicy', 'pracownicy'],
+                          ['Ratownicy', 'ratownicy'], ['Trenerzy', 'trenerzy'],
+                          ['Recepcjoniści', 'recepcjoniści'],
+                          ['Klienci', 'klienci']]
+    = f.button :submit, class: "btn btn-primary"

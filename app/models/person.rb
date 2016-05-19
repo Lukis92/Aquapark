@@ -47,7 +47,8 @@ class Person < ActiveRecord::Base
   has_many :individual_trainings_as_client,
            class_name: 'IndividualTraining',
            foreign_key: 'client_id'
-
+  has_many :news
+  has_many :likes, dependent: :destroy
   ##########################
 
   # **VALIDATIONS*******************************************************#
@@ -57,9 +58,10 @@ class Person < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :date_of_birth, presence: true
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
-                    format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }
+                    format: { with: VALID_EMAIL_REGEX }
   has_attached_file :profile_image, styles: { medium: '300x300>',
                                               thumb: '100x100>' },
                                     default_url: 'http://www.mediafire.com/convkey/2d40/jkaqkubtfktr7w3zg.jpg',
@@ -67,6 +69,7 @@ class Person < ActiveRecord::Base
                                     bucket: 'aquapark-project'
   validates_attachment_content_type :profile_image,
                                     content_type: /\Aimage\/.*\Z/
+  validate :profile_image_size
   #########################################################################
 
   # **METHODS*********************#
@@ -83,5 +86,11 @@ class Person < ActiveRecord::Base
 
   def person_full_name_type
     "#{first_name} #{last_name} | #{type}"
+  end
+
+  def profile_image_size
+    if profile_image > 5.megabytes
+      erros.add(:profile_image, "powinno ważyć mniej niż 5MB")
+    end
   end
 end

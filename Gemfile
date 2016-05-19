@@ -70,3 +70,9 @@ gem 'html_truncator', '~>0.2' # truncate an HTML string
 gem 'pg_search' # PostgreSQL's full text search
 gem 'rubocop', require: false
 gem 'rails_best_practices' # a code metric tool for rails projects
+gem 'momentjs-rails', '>= 2.9.0' # JavaScript library
+gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails',
+                            branch: 'master', submodules: true
+gem 'validates_overlap' # Gem for Rails 3 and 4, that helps validate overlap
+gem 'simple_calendar', '~> 2.0' # A wonderfully simple calendar gem for Rails
+gem 'bootstrap-wysihtml5-rails', github: 'nerian/bootstrap-wysihtml5-rails'

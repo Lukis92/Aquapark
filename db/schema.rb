@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160511122347) do
+ActiveRecord::Schema.define(version: 20160519113802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,17 +36,39 @@ ActiveRecord::Schema.define(version: 20160511122347) do
   end
 
   create_table "individual_trainings", force: :cascade do |t|
-    t.datetime "date_of_training", null: false
-    t.integer  "client_id"
-    t.integer  "trainer_id"
-    t.time     "start_on",         null: false
-    t.time     "end_on",           null: false
-    t.integer  "training_cost_id"
+    t.date    "date_of_training", null: false
+    t.integer "client_id"
+    t.integer "trainer_id"
+    t.time    "end_on",           null: false
+    t.integer "training_cost_id"
+    t.time    "start_on",         null: false
   end
 
   add_index "individual_trainings", ["client_id"], name: "index_individual_trainings_on_client_id", using: :btree
   add_index "individual_trainings", ["trainer_id"], name: "index_individual_trainings_on_trainer_id", using: :btree
   add_index "individual_trainings", ["training_cost_id"], name: "index_individual_trainings_on_training_cost_id", using: :btree
+
+  create_table "likes", force: :cascade do |t|
+    t.boolean  "like"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "person_id"
+    t.integer  "news_id"
+  end
+
+  add_index "likes", ["news_id"], name: "index_likes_on_news_id", using: :btree
+  add_index "likes", ["person_id"], name: "index_likes_on_person_id", using: :btree
+
+  create_table "news", force: :cascade do |t|
+    t.string   "title",      null: false
+    t.text     "content",    null: false
+    t.string   "scope",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "person_id"
+  end
+
+  add_index "news", ["person_id"], name: "index_news_on_person_id", using: :btree
 
   create_table "people", force: :cascade do |t|
     t.string   "pesel",                                                           null: false

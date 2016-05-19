@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   root 'home#index'
 
   namespace :backend do
-    root 'people#index'
+    root 'news#index'
     resources :entry_types do
       resources :bought_details
       collection do
@@ -20,10 +20,15 @@ Rails.application.routes.draw do
     devise_for :lifeguards, skip: :sessions
     devise_for :trainers, skip: :sessions
 
+    resources :news do
+      member do
+        post 'like'
+      end
+    end
     resources :work_schedules, only: [:index, :new, :create]
     resources :trainers, only: [:index]
     resources :vacations, except: [:show]
-    resources :individual_trainings, except: [:show]
+    resources :individual_trainings
     resources :training_costs
     resources :people do
       collection do
@@ -37,6 +42,7 @@ Rails.application.routes.draw do
         resources :individual_trainings, only: [:choose_trainer] do
           collection do
             get 'choose_trainer'
+            get 'show', as: 'show'
           end
         end
 

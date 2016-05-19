@@ -1,13 +1,14 @@
 class Backend::WorkSchedulesController < BackendController
   before_action :set_work_schedule, only: [:edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
-  before_action :set_person, only: [:show, :new]
+  before_action :set_person, only: [:show]
+  before_action :manager_person, only: [:edit, :destroy]
+  before_action :set_rule_to_display_work_schedules, only: [:index, :show]
   before_action :set_employees
 
   @@person_id = 0
 
   # GET backend/work_schedules
-  # GET backend/work_schedules.json
   def index
     respond_to do |format|
       format.html do
@@ -30,7 +31,6 @@ class Backend::WorkSchedulesController < BackendController
   end
 
   # POST backend/work_schedules
-  # POST backend/work_schedules.json
   def create
     @work_schedule = WorkSchedule.new(work_schedule_params)
     @work_schedule.person_id = @@person_id unless @@person_id == 0 &&
@@ -50,7 +50,6 @@ class Backend::WorkSchedulesController < BackendController
   end
 
   # PATCH/PUT backend/work_schedules/1
-  # PATCH/PUT backend/work_schedules/1.json
   def update
     respond_to do |format|
       if @work_schedule.update(work_schedule_params)
@@ -65,7 +64,6 @@ class Backend::WorkSchedulesController < BackendController
   end
 
   # DELETE backend/work_schedules/1
-  # DELETE backend/work_schedules/1.json
   def destroy
     @work_schedule.destroy
     respond_to do |format|
@@ -91,7 +89,7 @@ class Backend::WorkSchedulesController < BackendController
   end
 
   def set_person
-    @person = Person.find(params[:id]) unless params[:id].blank?
+    @person = Person.find(params[:id])
   end
 
   def set_employees
@@ -110,7 +108,24 @@ class Backend::WorkSchedulesController < BackendController
     end
   end
 
+
   def sort_direction
     %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+
+  # Ability to edit and destroy work schedules
+  def manager_person
+    unless current_person.type == 'Manager'
+      flash[:danger] = "Nie masz uprawnień do tej sekcji."
+      redirect_to backend_root_path
+    end
+  end
+
+  # Ability to select schedules
+  def set_rule_to_display_work_schedules
+    unless current_person.type == 'Manager' || current_person.type == 'Receptionist'
+      flash[:danger] = "Nie masz uprawnień do tej sekcji."
+      redirect_to backend_root_path
+    end
   end
 end

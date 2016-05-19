@@ -17,7 +17,10 @@
 @import "reset.scss";
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "bootstrap-wysihtml5/bootstrap3-wysihtml5";
 @import "font-awesome";
+@import "simple_calendar";
+
 
 #frontend {
   background-image: url("http://www.mediafire.com/convkey/2899/3bll4f4ua739s29zg.jpg");
@@ -48,6 +51,12 @@
 // .card-content {
 //   min-height: 511px;
 // }
+.simple-calendar {
+  .has-events {
+    background-color: #2a9ef4;
+    color: #fff;
+  }
+}
 .resize {
   padding-top: 300px;
 }

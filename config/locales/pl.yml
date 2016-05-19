@@ -25,6 +25,10 @@ pl:
       - :month
       - :year
     month_names: [~, Styczeń, Luty, Marzec, Kwiecień, Maj, Czerwiec, Lipiec, Sierpień, Wrzesień, Październik, Listopad, Grudzień]
+    day_names: [Poniedziałek, Wtorek, Środa, Czwartek, Piątek, Sobota, Niedziela]
+    abbr_day_names: [Pon., Wt., Śr., Czw., Piąt., Sob., Niedz.]
+    formats:
+      default: "%d %B %Y"
   # ActiveRecord:
   activerecord:
     attributes:
@@ -116,6 +120,10 @@ pl:
               blank: jest wymagane
             cost:
               blank: jest wymagane
+        individual_training:
+          attributes:
+            start_on:
+              overlap: trening nachodzi na inny
   mail_form:
     attributes:
       contact:
@@ -173,6 +181,11 @@ pl:
       training_cost:
         duration: Czas trwania (min.)
         cost: Koszt
+      individual_training:
+        date_of_training: Data treningu
+      news:
+        title: Tytuł
+        content: Treść
   helpers:
     submit:
       bought_detail:
@@ -184,6 +197,12 @@ pl:
         create: Dodaj urlop
       training_cost:
         create: Dodaj cennik
+        update: Zapisz
+      individual_training:
+        create: Zapisz na trening
+        update: Zapisz
+      news:
+        create: Dodaj wiadomość
         update: Zapisz
   # Views:
   views:

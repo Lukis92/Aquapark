@@ -40,11 +40,17 @@
           - unless work.person.nil?
             - if work.person.type == "Manager"
               %i.btn.btn-danger
-                = work.person.type
+                Kierownik
             - elsif work.person.type == "Client"
               %i.btn.btn-warning
-                = work.person.type
-            - else
+                Klient
+            - elsif work.person.type == "Trainer"
               %i.btn.btn-info
-                = work.person.type
+                Trener
+            - elsif work.person.type == "Lifeguard"
+              %i.btn.btn-info
+                Ratownik
+            - elsif work.person.type == "Receptionist"
+              %i.btn.btn-info
+                Recepcjonista
 = will_paginate @work_schedules, renderer: BootstrapPagination::Rails

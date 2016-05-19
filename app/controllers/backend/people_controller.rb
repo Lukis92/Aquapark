@@ -2,6 +2,8 @@ class Backend::PeopleController < BackendController
   helper_method :sort_column, :sort_direction, :sort_bought
   before_action :set_person, only: [:edit, :edit_profile, :update, :destroy,
                                     :show, :remove_photo, :bought_history]
+  before_action :require_same_person, only: [:edit, :update]
+  before_action :set_rule_to_display_profile, only: [:show]
   # before_action :set_current_person
 
   def search
@@ -142,5 +144,20 @@ class Backend::PeopleController < BackendController
                                    :salary, :hiredate, :password,
                                    :password_confirmation, :current_password,
                                    :remember_me, :roles, :roles_mask)
+  end
+
+  def require_same_person
+    if current_person != @person && current_person.type != 'Manager'
+      flash[:danger] = "Możesz edytować tylko własny profil."
+      redirect_to backend_person_path(current_person)
+    end
+  end
+
+  def set_rule_to_display_profile
+    if current_person != @person && current_person.type != 'Manager' &&
+       current_person.type != 'Receptionist'
+        flash[:danger] = "Możesz wyświetlać tylko własny profil."
+        redirect_to backend_person_path(current_person)
+    end
   end
 end

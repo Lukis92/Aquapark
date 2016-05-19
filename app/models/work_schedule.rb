@@ -37,5 +37,10 @@ class WorkSchedule < ActiveRecord::Base
     errors.add(:person_id, :missing) if person.blank?
   end
 
+  def next_n_days(amount, day_of_week)
+    (Date.today...Date.today+7*amount).select do |d|
+      d.wday == day_of_week
+    end
+  end
   # ************************************************************#
 end

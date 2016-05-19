@@ -75,7 +75,7 @@ class Backend::VacationsController < BackendController
                                 .where(['end_at >= ?', Date.today]).first
     @all_vacations = Vacation.all
     @nearest_vacations = Vacation.where(person_id: @person.id)
-                                 .where(['start_at > ?', Date.today])
+                                 .where(['start_at >= ?', Date.today])
                                  .order(:start_at)
                                  .paginate(page: params[:page], per_page: 20)
     @nearest_vacation = @nearest_vacations.first
