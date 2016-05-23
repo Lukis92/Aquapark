@@ -8,4 +8,6 @@
   = f.input :day_of_week, collection: WorkSchedule::DAYS, include_blank: 'Wybierz dzień tygodnia'
   - if @person.blank?
     = f.input :person_id, label: "Pracownik", collection: @employees.map{|e| [e.person_full_name_type, e.id]}, prompt: "Wybierz pracownika"
+  - else
+    = f.input :person_id, as: :hidden, input_html: { value: @person.id }
   = f.button :submit, class: "btn btn-primary"

@@ -8,18 +8,19 @@
     %link{:href => "http://fonts.googleapis.com/css?family=Andada&subset=latin,latin-ext", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "https://fonts.googleapis.com/icon?family=Material+Icons", :rel => "stylesheet"}
-    %script{:src => "//code.jquery.com/jquery-1.10.2.min.js", :type => "text/javascript"}
-
-    /jquery.min.js
-    /%script{:src => "https://googledrive.com/host/0B3yx98FbxNb4ZEVLZUJjYWNMTnc/", :type => "text/javascript"}
     /mdb.css
     %link{:href => "https://googledrive.com/host/0B3yx98FbxNb4STVleGxYZTZnOEE/", :rel => "stylesheet"}
     /mdb.min.css
     %link{:href => "https://googledrive.com/host/0B3yx98FbxNb4U2RwYi1udXE0MzA/", :rel => "stylesheet"}
+    %script{:src => "//code.jquery.com/jquery-1.10.2.min.js", :type => "text/javascript"}
     /mdb.min.js
     %script{:src => "https://googledrive.com/host/0B3yx98FbxNb4TVBMRWdIZjBSQkE/", :type => "text/javascript"}
-  %body
+    /%script{:src => "https://code.jquery.com/jquery-2.2.4.js", :type => "text/javascript"}
   %body#frontend{"data-spy" => "scroll", "data-target" => ".navbar"}
     = render '/layouts/navbar'
     = yield
-    = render '/layouts/footer'
+    - if current_page?(new_person_session_path)
+      .navbar-fixed-bottom
+        = render '/layouts/footer'
+    - else
+      = render 'layouts/footer'

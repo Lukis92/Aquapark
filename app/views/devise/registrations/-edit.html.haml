@@ -21,3 +21,8 @@
     = f.input :current_password, autocomplete: "off"
   .form-actions
     = f.button :submit, "Zapisz", class: "btn btn-info"
+
+%h3 Zamknij konto
+%p
+  #{link_to "Zamknij konto", registration_path(resource_name), data: { confirm: "Jesteś pewny/a?" }, method: :delete}
+= link_to "Back", :back

@@ -1,11 +1,13 @@
 class Backend::PeopleController < BackendController
   helper_method :sort_column, :sort_direction, :sort_bought
-  before_action :set_person, only: [:edit, :edit_profile, :update, :destroy,
-                                    :show, :remove_photo, :bought_history]
-  before_action :require_same_person, only: [:edit, :update]
-  before_action :set_rule_to_display_profile, only: [:show]
-  # before_action :set_current_person
-
+  before_action :set_person
+  before_action :set_rule_to_edit_client_profile, only: [:edit, :update,
+                                                         :destroy, :show]
+  # before_action :require_same_user, only: [:show, :bought_history]
+  before_action :require_receptionist, only: [:index, :edit, :update, :clients,
+                                              :receptionists, :lifeguards,
+                                              :trainers]
+  before_action :person_exists, only: [:show]
   def search
     if params[:search].present?
       @people = PgSearch.multisearch(params[:search])
@@ -14,58 +16,29 @@ class Backend::PeopleController < BackendController
   end
 
   def index
-    respond_to do |format|
-      format.html do
-        @people = Person.order(sort_column + ' ' + sort_direction)
-                        .paginate(page: params[:page], per_page: 20)
-      end
-      format.json { @people = Person.all }
-    end
-  end
-
-  def managers
-    @managers = Manager.all
+    @people = Person.order(sort_column + ' ' + sort_direction)
+                    .paginate(page: params[:page], per_page: 20)
   end
 
   def clients
-    respond_to do |format|
-      format.html do
-        @clients = Client.order(sort_column + ' ' + sort_direction)
-                         .paginate(page: params[:page], per_page: 10)
-      end
-      format.json { @clients = Client.all }
-    end
+    @clients = Client.order(sort_column + ' ' + sort_direction)
+                     .paginate(page: params[:page], per_page: 20)
   end
 
   def receptionists
-    respond_to do |format|
-      format.html do
-        @receptionists = Receptionist.order(sort_column + ' ' + sort_direction)
-                                     .paginate(page: params[:page],
-                                               per_page: 10)
-      end
-      format.json { @receptionists = Receptionist.all }
-    end
-  end
-
-  def trainers
-    respond_to do |format|
-      format.html do
-        @trainers = Trainer.order(sort_column + ' ' + sort_direction)
-                           .paginate(page: params[:page], per_page: 10)
-      end
-      format.json { @trainers = Trainer.all }
-    end
+    @receptionists = Receptionist.order(sort_column + ' ' + sort_direction)
+                                 .paginate(page: params[:page],
+                                           per_page: 10)
   end
 
   def lifeguards
-    respond_to do |format|
-      format.html do
-        @lifequards = Lifeguard.order(sort_column + ' ' + sort_direction)
-                               .paginate(page: params[:page], per_page: 10)
-      end
-      format.json { @lifequards = Lifeguard.all }
-    end
+    @lifequards = Lifeguard.order(sort_column + ' ' + sort_direction)
+                           .paginate(page: params[:page], per_page: 10)
+  end
+
+  def trainers
+    @trainers = Trainer.order(sort_column + ' ' + sort_direction)
+                       .paginate(page: params[:page], per_page: 10)
   end
 
   def update
@@ -76,13 +49,8 @@ class Backend::PeopleController < BackendController
           redirect_to backend_person_path(@person),
                       notice: 'Pomyślnie zaktualizowano.'
         end
-        format.json { render :show_profile, status: :ok, location: @person }
       else
         format.html { render :edit }
-        format.json do
-          render json: @person.errors,
-                 status: :unprocessable_entity
-        end
       end
     end
   end
@@ -94,7 +62,6 @@ class Backend::PeopleController < BackendController
         redirect_to backend_clients_path,
                     notice: 'Pomyślnie usunięto.'
       end
-      format.json { head :no_content }
     end
   end
 
@@ -119,7 +86,11 @@ class Backend::PeopleController < BackendController
   private
 
   def set_person
-    @person = Person.find(params[:id]) unless params[:id].blank?
+    begin
+      @person = Person.find(params[:id]) unless params[:id].blank?
+    rescue
+      redirect_to root_path
+    end
   end
 
   def set_current_person
@@ -147,17 +118,50 @@ class Backend::PeopleController < BackendController
   end
 
   def require_same_person
-    if current_person != @person && current_person.type != 'Manager'
+    unless current_person == @person || current_person.type == 'Manager'
       flash[:danger] = "Możesz edytować tylko własny profil."
       redirect_to backend_person_path(current_person)
     end
   end
 
-  def set_rule_to_display_profile
-    if current_person != @person && current_person.type != 'Manager' &&
-       current_person.type != 'Receptionist'
-        flash[:danger] = "Możesz wyświetlać tylko własny profil."
+  # def require_same_user
+  #   unless current_person == @person || current_person.type == 'Manager' ||
+  #          current_person.type == 'Receptionist'
+  #     flash[:danger] = "Brak dostępu. {require_same_user}"
+  #     redirect_to backend_news_index_path
+  #   end
+  # end
+
+  def require_receptionist
+    unless current_person.type == 'Receptionist' ||
+           current_person.type == 'Manager' ||
+           current_person == @person
+      flash[:danger] = "Brak dostępu.{require_receptionist}"
+      redirect_to backend_news_index_path
+    end
+  end
+
+  def set_rule_to_edit_client_profile
+    if @person.type == 'Client'
+      unless current_person == @person || current_person.type == 'Receptionist' ||
+             current_person.type == 'Manager'
+        flash[:danger] = "Brak dostępu. {set_rule_to_edit_client_profile}"
+        redirect_to backend_news_index_path
+      end
+    else
+      unless current_person == @person || current_person.type == 'Manager'
+        flash[:danger] = "Brak dostępu. {set_rule_to_edit_client_profile}"
         redirect_to backend_person_path(current_person)
+      end
+    end
+  end
+
+  def person_exists
+    if @person.blank? && curent_person.present?
+      flash[:info] = "Brak takiej osoby."
+      redirect_to backend_news_index_path
+    elsif @person.blank? && current_person.blank?
+      flash[:danger] = "Brak dostępu. {person_exists}"
     end
   end
 end

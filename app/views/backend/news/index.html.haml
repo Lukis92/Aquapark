@@ -16,12 +16,13 @@
           Napisane przez:
           = link_to n.person.full_name, backend_person_path(n.person_id)
           |
-          = n.created_at
+          = n.created_at.strftime("%d-%m-%Y")
         .hidden-xs
           %a.btn-sm-full.comm-bg.rectangle.waves-effect.waves-light
             %i.fa.fa-comments
-            %span Comments
-          %span.badge.social-counter 5
+            %span Komentarze
+          %span.badge.social-counter
+            = n.comments.count
           = link_to edit_backend_news_path(n) do
             .btn.btn-warning.waves-effect.waves-light
               %i.fa.fa-pencil-square
@@ -37,6 +38,7 @@
           = link_to like_backend_news_path(n, like: false), method: :post do
             %i.fa.fa-thumbs-o-down.fa-2x
               = n.thumbs_down_total
+          = n.scope
         .visible-xs
           %a.btn-sm.comm-bg.rectangle.waves-effect.waves-light
             %i.fa.fa-comments

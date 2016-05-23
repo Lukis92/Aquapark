@@ -12,7 +12,7 @@
             %img{:src => "http://www.mediafire.com/convkey/3ae8/l0k4388rtzm4rzkzg.jpg"}
           Pure Space
     #bs-example-navbar-collapse-1.collapse.navbar-collapse
-      %ul.nav.navbar-nav.nav-pills.smooth-scroll
+      %ul.nav.navbar-nav.nav-pills
         %li
           %a.waves-effect.waves-light{:href => "#{root_path}#carousel1" } Strona Główna
         %li
@@ -28,7 +28,7 @@
               %i.fa.fa-sign-in
               Logowanie
           %li
-            = link_to new_client_registration_path do
+            = link_to new_client_registration_path, class: { no_turbolink: true } do
               %i.fa.fa-user-plus
               Rejestracja
         - else

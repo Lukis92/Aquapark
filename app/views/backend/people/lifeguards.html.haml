@@ -1,4 +1,5 @@
-%h1 Ratownicy
+= render 'nav'
+%h5 Ratownicy
 %p
   Obecnie w bazie posiadamy
   = Lifeguard.count
@@ -45,12 +46,13 @@
         %td
           = lifeguard.last_name
         %td
-          = lifeguard.date_of_birth
+          = lifeguard.date_of_birth.strftime('%d-%m-%Y')+'r.'
         %td
           = lifeguard.email
         %td
-          = lifeguard.salary
+          = number_with_precision(lifeguard.salary, precision: 2)
+          zł
         %td
-          = lifeguard.hiredate
+          = lifeguard.hiredate.strftime('%d-%m-%Y')+'r.'
 
 = will_paginate @lifequards, renderer: BootstrapPagination::Rails

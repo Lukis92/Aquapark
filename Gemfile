@@ -1,4 +1,3 @@
-source 'https://code.stripe.com'
 source 'https://rubygems.org'
 ruby '2.2.3'
 
@@ -62,7 +61,7 @@ gem 'rails_12factor', group: :production # makes running your Rails app easier.
 gem 'faker' # a library for generating fake data.
 gem 'will_paginate-bootstrap' # bootstrap pagination
 gem 'mail_form' # send e-mail straight from forms in Rails.
-gem 'stripe' # stripe Ruby bindings
+gem 'stripe', source: 'https://code.stripe.com/' # stripe Ruby bindings
 gem 'jquery-ui-rails' # jQuery UI for the Rails asset pipeline
 gem 'factory_girl_rails' # A library for setting up Ruby objects as test data.
 gem 'rolify' # Role management library with resource scoping
@@ -76,3 +75,4 @@ gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails',
 gem 'validates_overlap' # Gem for Rails 3 and 4, that helps validate overlap
 gem 'simple_calendar', '~> 2.0' # A wonderfully simple calendar gem for Rails
 gem 'bootstrap-wysihtml5-rails', github: 'nerian/bootstrap-wysihtml5-rails'
+gem 'rails-timeago', '~> 2.0' # helper for time tags

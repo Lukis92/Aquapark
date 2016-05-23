@@ -8,14 +8,16 @@
 #  free      :boolean          default(FALSE), not null
 #  reason    :text
 #  person_id :integer
+#  accepted  :boolean          default(FALSE)
 #
 
 class Vacation < ActiveRecord::Base
+  include ActiveModel::Dirty
   # **ASSOCIATIONS**********#
   belongs_to :person
   # ************************#
   # **VALIDATIONS***************************#
-  validates_presence_of :start_at, :end_at
+  validates_presence_of :start_at, :end_at, :person_id
   validate :validate_start_at, on: :create
   validate :start_at_must_be_before_end_at
   validate :timeline
@@ -24,15 +26,17 @@ class Vacation < ActiveRecord::Base
   private
 
   def timeline
-    if (person.vacations.where('start_at <= ?', start_at).count > 0 &&
-       person.vacations.where('end_at >= ?', end_at).count > 0) ||
-       (person.vacations.where('start_at <= ?', start_at).count > 0 &&
-        person.vacations.where('end_at <= ?', end_at).count > 0 &&
-        person.vacations.where('end_at >= ?', start_at).count > 0) ||
-       (person.vacations.where('start_at >= ?', start_at).count > 0 &&
-       person.vacations.where('start_at <= ?', end_at).count > 0 &&
-       person.vacations.where('end_at >= ?', end_at).count > 0)
-      errors.add(:start_at, 'Masz już aktywny urlop w tym okresie.')
+    if self.start_at_changed? || self.end_at_changed? || self.person_id_changed?
+      if (person.vacations.where('start_at <= ?', start_at).count > 0 &&
+         person.vacations.where('end_at >= ?', end_at).count > 0) ||
+         (person.vacations.where('start_at <= ?', start_at).count > 0 &&
+          person.vacations.where('end_at <= ?', end_at).count > 0 &&
+          person.vacations.where('end_at >= ?', start_at).count > 0) ||
+         (person.vacations.where('start_at >= ?', start_at).count > 0 &&
+         person.vacations.where('start_at <= ?', end_at).count > 0 &&
+         person.vacations.where('end_at >= ?', end_at).count > 0)
+        errors.add(:start_at, 'Masz już urlop w tym okresie.')
+      end
     end
   end
 

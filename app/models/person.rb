@@ -52,6 +52,7 @@ class Person < ActiveRecord::Base
   ##########################
 
   # **VALIDATIONS*******************************************************#
+  before_save { self.email = email.downcase }
   validates :pesel, presence: true,
                     length: { is: 11 },
                     uniqueness: true
@@ -70,6 +71,7 @@ class Person < ActiveRecord::Base
   validates_attachment_content_type :profile_image,
                                     content_type: /\Aimage\/.*\Z/
   validate :profile_image_size
+
   #########################################################################
 
   # **METHODS*********************#
@@ -89,8 +91,10 @@ class Person < ActiveRecord::Base
   end
 
   def profile_image_size
-    if profile_image > 5.megabytes
-      erros.add(:profile_image, "powinno ważyć mniej niż 5MB")
+    unless profile_image.blank?
+      if profile_image.size > 5.megabytes
+        erros.add(:profile_image, "powinno ważyć mniej niż 5MB")
+      end
     end
   end
 end

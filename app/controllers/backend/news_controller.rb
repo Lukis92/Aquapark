@@ -1,9 +1,11 @@
 class Backend::NewsController < BackendController
   before_action :set_news, only: [:edit, :update, :show, :destroy, :like]
+  before_action :set_visibility, only: [:index]
+  before_action :set_rule_to_display_news, only: [:show]
   # GET backend/news
   def index
-    @news = News.paginate(page: params[:page], per_page: 5)
-	end
+    @news = @news.paginate(page: params[:page], per_page: 5)
+  end
 
   # GET backend/news/new
   def new
@@ -53,6 +55,7 @@ class Backend::NewsController < BackendController
   end
 
   def show
+    @comment = Comment.new
   end
 
   # DELETE backend/news/1
@@ -71,5 +74,45 @@ class Backend::NewsController < BackendController
 
   def news_params
     params.require(:news).permit(:title, :content, :scope)
+  end
+
+  def set_visibility
+    if current_person.type == 'Manager'
+      @news = News.where(scope: %w(wszyscy ratownicy trenerzy
+                                   recepcjoniści klienci))
+    elsif current_person.type == 'Receptionist'
+      @news = News.where(scope: %w(recepcjonisci klienci))
+    elsif current_person.type == 'Lifeguard'
+      @news = News.where(scope: 'ratownicy')
+    elsif current_person.type == 'Trainer'
+      @news = News.where(scope: 'trenerzy')
+    elsif current_person.type == 'Client'
+      @news = News.where(scope: 'klienci')
+    end
+  end
+
+  def set_rule_to_display_news
+    unless current_person.type == 'Manager'
+      unless @news.scope == 'klienci' && (current_person.type == 'Client' ||
+                                          current_person.type == 'Receptionist')
+        flash[:danger] = "Brak dostępu."
+        redirect_to backend_news_index_path(@news)
+      end
+
+      unless @news.scope == 'trenerzy' && (current_person.type == 'Trainer')
+        flash[:danger] = "Brak dostępu."
+        redirect_to backend_news_index_path(@news)
+      end
+
+      unless @news.scope == 'ratownicy' && (current_person.type == 'Lifeguard')
+        flash[:danger] = "Brak dostępu."
+        redirect_to backend_news_index_path(@news)
+      end
+
+      unless @news.scope == 'recepcjoniści' && (current_person.type == 'Receptionist')
+        flash[:danger] = "Brak dostępu."
+        redirect_to backend_news_index_path(@news)
+      end
+    end
   end
 end

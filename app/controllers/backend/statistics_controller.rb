@@ -1,4 +1,5 @@
 class Backend::StatisticsController < BackendController
+  before_action :require_manager, only: [:index]
   def index
     @all_people = Person.all.count
     @employees = Person.all.where.not(type: 'Client').count
@@ -18,5 +19,14 @@ class Backend::StatisticsController < BackendController
                               .where(['bought_data = ?', Date.today]).count
     @current_vacations = Vacation.all.where(['start_at <= ?', Date.today])
                                  .where(['end_at >= ?', Date.today]).count
+  end
+
+  private
+
+  def require_manager
+    unless current_person.type == 'Manager'
+      flash[:danger] = "Brak dostępu"
+      redirect_to backend_news_index_path
+    end
   end
 end

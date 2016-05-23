@@ -1,0 +1,2 @@
+module Backend::CommentsHelper
+end

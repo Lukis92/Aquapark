@@ -3,31 +3,43 @@ Rails.application.routes.draw do
                       skip: [:registrations]
   devise_for :clients, skip: :sessions
 
+  authenticated :clients, lambda {|u| u.type == "Client"}do
+  end
+  authenticated :managers, lambda {|u| u.type == "Manager"}do
+  end
   resources 'contacts', only: [:new, :create]
   root 'home#index'
 
   namespace :backend do
     root 'news#index'
+
+    devise_for :receptionists, :managers, :lifeguards, :trainers,
+               skip: :sessions, controllers: {registrations: 'devise/registrations'}
+
     resources :entry_types do
       resources :bought_details
       collection do
         get 'bought_list', to: 'entry_types#show'
       end
     end
-
-    devise_for :receptionists, skip: :sessions
-    devise_for :managers, skip: :sessions
-    devise_for :lifeguards, skip: :sessions
-    devise_for :trainers, skip: :sessions
+    get 'trainers', to: 'people#trainers'
 
     resources :news do
       member do
         post 'like'
       end
+      resources :comments
     end
     resources :work_schedules, only: [:index, :new, :create]
     resources :trainers, only: [:index]
-    resources :vacations, except: [:show]
+    resources :vacations, except: [:show] do
+      collection do
+        get 'requests'
+      end
+      member do
+        post 'accept'
+      end
+    end
     resources :individual_trainings
     resources :training_costs
     resources :people do
@@ -48,7 +60,7 @@ Rails.application.routes.draw do
 
         resources :trainers do
           resources :individual_trainings do
-              get 'new', to: '#individual_trainings#choose_date'
+            get 'new', to: '#individual_trainings#choose_date'
           end
         end
         resources :work_schedules do
@@ -66,7 +78,7 @@ Rails.application.routes.draw do
     end
     resources :statistics, only: [:index]
     # /das/dsa/users?kind=client|manager|
-    [:managers, :clients, :receptionists, :trainers, :lifeguards].each do |type|
+    [:managers, :clients, :receptionists, :lifeguards].each do |type|
       get type, to: 'people#' + type.to_s
     end
   end

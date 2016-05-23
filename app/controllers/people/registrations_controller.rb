@@ -1,17 +1,17 @@
 # Controller For  Client registration actions by devise gem
-class Client::RegistrationsController < Devise::RegistrationsController
+class Clients::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
   before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
-  def new
-    super
-  end
+  # def new
+  #   super
+  # end
 
   # POST /resource
-  def create
-    super
-  end
+  # def create
+  #   super
+  # end
 
   # GET /resource/edit
   # def edit
@@ -60,16 +60,24 @@ class Client::RegistrationsController < Devise::RegistrationsController
   #   super(resource)
   # end
 
-  # private
+  protected
 
-  # def sign_up_params
-  #   params.require(:client).permit(:pesel, :first_name, :last_name,
-  # :date_of_birth, :email, :profile_image, :password, :password_confirmation)
-  #   #code
-  # end
-  #
-  # def account_update_params
-  #  params.require(:client).permit(:pesel, :first_name, :last_name,
-  # :date_of_birth, :email, :profile_image, :current_password)
-  # end
+  def update_resource(resource, params)
+    resource.update_without_password(params)
+  end
+
+  private
+
+  def sign_up_params
+    params.require(:client).permit(:pesel, :first_name, :last_name,
+                                   :date_of_birth, :email, :profile_image,
+                                   :password, :password_confirmation)
+  end
+
+  def account_update_params
+    params.require(:client).permit(:pesel, :first_name, :last_name,
+                                   :date_of_birth, :email, :profile_image,
+                                   :password, :password_confirmation,
+                                   :current_password)
+  end
 end

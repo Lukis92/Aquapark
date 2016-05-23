@@ -1,7 +1,8 @@
 class Backend::EntryTypesController < BackendController
   before_action :set_entry_type, only: [:edit, :update, :destroy, :show_details]
   before_action :set_current_person
-
+  before_action :receptionist_access, only: [:new, :edit, :update, :destroy]
+  before_action :employee_access, only: [:index]
   # GET backend/entry_types
   # GET backend/entry_types.json
   def index
@@ -79,5 +80,29 @@ class Backend::EntryTypesController < BackendController
 
   def set_current_person
     @current_person = current_person
+  end
+
+  def receptionist_access
+    unless current_person.type == 'Receptionist'
+      flash[:danger] = "Brak dostępu."
+      redirect_to backend_news_index_path
+    end
+  end
+
+  def employee_access
+    if current_person.type == 'Client'
+      flash[:danger] = "Brak dostępu."
+      redirect_to backend_news_index_path
+    end
+  end
+
+  def require_same_user
+    unless current_person.type == 'Receptionist' ||
+           current_person.type == 'Manager'
+      unless current_person != @person
+        flash[:danger] = "Brak dostępu,"
+        redirect_to backend_news_index_path
+      end
+    end
   end
 end

@@ -1,4 +1,5 @@
-%h3 Zarejestrowane osoby
+= render 'nav'
+%h5 Wszyscy
 %p
   Obecnie w bazie posiadamy
   = Person.count
@@ -41,7 +42,7 @@
         %td
           = person.last_name
         %td
-          = person.date_of_birth
+          = person.date_of_birth.strftime('%d-%m-%Y')+'r.'
         %td
           = person.email
 

@@ -29,6 +29,9 @@ pl:
     abbr_day_names: [Pon., Wt., Śr., Czw., Piąt., Sob., Niedz.]
     formats:
       default: "%d %B %Y"
+  time:
+    formats:
+      default: "%d-%m-%Y"
   # ActiveRecord:
   activerecord:
     attributes:
@@ -186,6 +189,8 @@ pl:
       news:
         title: Tytuł
         content: Treść
+      comment:
+        body: Treść
   helpers:
     submit:
       bought_detail:
@@ -203,6 +208,9 @@ pl:
         update: Zapisz
       news:
         create: Dodaj wiadomość
+        update: Zapisz
+      comment:
+        create: Dodaj komentarz
         update: Zapisz
   # Views:
   views:

@@ -17,6 +17,8 @@
 //= require bootstrap-wysihtml5/locales
 //= require bootstrap-sprockets
 //= require turbolinks
+//= require rails-timeago-all
+//= require locales/jquery.timeago.pl.js
 //= require_tree .
 
 
@@ -53,20 +55,9 @@ $(document).ready(function() {
         });
         $lightbox.find('.close').removeClass('hidden');
     });
-
+    $(document).ready(function () {
+                $('select').material_select();
+            });
     //Smooth Scrolling
-    // $(function() {
-    // $('a[href*="#"]:not([href="#"])').click(function() {
-    //   if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-    //     var target = $(this.hash);
-    //     target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-    //     if (target.length) {
-    //       $('html, body').animate({
-    //         scrollTop: target.offset().top
-    //       }, 1000);
-    //       return false;
-    //     }
-    //   }
-    // });
-    // });
+
 });

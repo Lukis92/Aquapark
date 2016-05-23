@@ -1,0 +1,11 @@
+%ul.nav.nav-tabs.tabs-5
+  %li{class: current_page?(backend_people_path) && 'active' }
+    = link_to 'Wszyscy', backend_people_path
+  %li{class: current_page?(backend_receptionists_path) && 'active' }
+    = link_to 'Recepcjoniści', backend_receptionists_path
+  %li{class: current_page?(backend_clients_path) && 'active' }
+    = link_to 'Klienci', backend_clients_path
+  %li{class: current_page?(backend_trainers_path) && 'active' }
+    = link_to 'Trenerzy', backend_trainers_path
+  %li{class: current_page?(backend_lifeguards_path) && 'active' }
+    = link_to 'Ratownicy', backend_lifeguards_path

@@ -14,6 +14,7 @@
 class News < ActiveRecord::Base
   belongs_to :person
   has_many :likes
+  has_many :comments
   validates_presence_of :title, :content, :scope
   default_scope -> { order(updated_at: :desc) }
 

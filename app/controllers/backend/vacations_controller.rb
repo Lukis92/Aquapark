@@ -1,7 +1,7 @@
 class Backend::VacationsController < BackendController
-  before_action :set_vacation, only: [:edit, :update, :destroy]
+  before_action :set_vacation, only: [:edit, :update, :accept, :destroy]
   helper_method :sort_column, :sort_direction
-  before_action :set_person, only: [:new, :create, :list]
+  before_action :set_person
   before_action :set_employees
 
   # GET backend/vacations
@@ -19,14 +19,12 @@ class Backend::VacationsController < BackendController
   # GET backend/vacations/new
   def new
     @vacation = Vacation.new
-    @@person_id = @person.id unless @person.blank?
   end
 
   # POST backend/vacations
   # POST backend/vacations.json
   def create
     @vacation = Vacation.new(vacation_params)
-    @vacation.person_id = @@person_id unless @@person_id == 0
     respond_to do |format|
       if @vacation.save
         format.html do
@@ -66,13 +64,35 @@ class Backend::VacationsController < BackendController
     end
   end
 
+  def requests
+    @un_vacations = Vacation.where(accepted: :false)
+                            .paginate(page: params[:page], per_page: 20)
+  end
+
+  def accept
+    begin
+      @vacation.update!(accepted: true)
+    rescue ActiveRecord::RecordInvalid => invalid
+      puts invalid.record.errors
+    end
+    if @vacation.valid?
+      redirect_to :back, notice: 'Zaakceptowano.'
+    else
+      redirect_to :back, danger: 'Coś poszło nie tak.'
+    end
+  end
+
   def list
     @old_vacations = Vacation.where(person_id: @person.id)
                              .where(['end_at < ?', Date.today])
                              .paginate(page: params[:page], per_page: 20)
     @current_vacation = Vacation.where(person_id: @person.id)
                                 .where(['start_at <= ?', Date.today])
-                                .where(['end_at >= ?', Date.today]).first
+                                .where(['end_at >= ?', Date.today])
+                                .where(['accepted = ?', true]).first
+    @unapproved_vacations = Vacation.where(person_id: @person.id)
+                                    .where(['accepted = ?', false])
+                                    .paginate(page: params[:page], per_page: 20)
     @all_vacations = Vacation.all
     @nearest_vacations = Vacation.where(person_id: @person.id)
                                  .where(['start_at >= ?', Date.today])
@@ -98,7 +118,7 @@ class Backend::VacationsController < BackendController
 
   def vacation_params
     params.require(:vacation)
-          .permit(:start_at, :end_at, :free, :reason, :person_id)
+          .permit(:start_at, :end_at, :free, :reason, :person_id, :accepted)
   end
 
   def sort_column

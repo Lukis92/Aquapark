@@ -1,4 +1,4 @@
-%h3 Historia zakupów wejściówki:
+f%h3 Historia zakupów wejściówki:
 %h5
 .row
   .col-md-6
@@ -13,8 +13,9 @@
         %h5 Ostatni zakup:
       %li.collection-item
         %p
-          Data:
-          = @last_bought.bought_data.strftime('%d.%m.%y %H:%M') unless @last_bought.blank?
+          = unless @last_bought.blank?
+            Data:
+            = @last_bought.bought_data.strftime('%d.%m.%y %H:%M')
         %p
           Rodzaj:
           = @entry_type.kind

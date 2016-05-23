@@ -5,6 +5,7 @@
     = stylesheet_link_tag    'application', media: 'all'
     = javascript_include_tag "application"
     = javascript_include_tag 'https://js.stripe.com/v2'
+    = timeago_script_tag
     = csrf_meta_tags
     = tag :meta, name: 'stripe-key', content: ENV['STRIPE_PUBLIC_KEY']
     %link{ href: 'http://fonts.googleapis.com/css?family=Andada&subset=latin,latin-ext', rel: 'stylesheet', type: 'text/css' }
@@ -57,7 +58,6 @@
                 = link_to destroy_person_session_path, method: :delete do
                   %i.fa.fa-sign-out
                   Wyloguj
-    = render 'layouts/messages'
     .container-fluid
       .row
         .col-md-2
@@ -80,14 +80,6 @@
             %ul.nav.nav-pills.nav-stacked
               %li{class: current_page?(backend_people_path) && 'active'}
                 = link_to "Użytkownicy", backend_people_path, data: { no_turbolink: true }
-              %li{class: current_page?(backend_clients_path) && 'active'}
-                = link_to "Klienci", backend_clients_path, data: { no_turbolink: true }
-              %li{class: current_page?(backend_receptionists_path) && 'active'}
-                = link_to "Recepcjoniści", backend_receptionists_path, data: { no_turbolink: true }
-              %li{class: current_page?(backend_trainers_path) && 'active'}
-                = link_to "Trenerzy", backend_trainers_path, data: { no_turbolink: true }
-              %li{class: current_page?(backend_lifeguards_path) && 'active'}
-                = link_to "Ratownicy", backend_lifeguards_path, data: { no_turbolink: true }
             %h5
               %i.fa.fa-calendar
               %small
@@ -113,4 +105,5 @@
               %li{class: current_page?(backend_training_costs_path) && 'active'}
                 = link_to 'Koszty treningów', backend_training_costs_path
         .col-md-10
+          = render 'layouts/messages'
           = yield

@@ -4,26 +4,33 @@
     = f.error_notification
     .form-inputs
       .input-field
-        = f.input :pesel, required: true, autofocus: true
+        = f.input :pesel, required: true, autofocus: true, input_html: {length: 11, maxlength: 11}
       .input-field
-        = f.input :first_name, required: true
+        = f.input :first_name, required: true, input_html: {length: 30, maxlength: 30}
       .input-field
-        = f.input :last_name, required: true
+        = f.input :last_name, required: true, input_html: {length: 60, maxlength: 60}
       .row
         .col-md-5
-          = f.input :date_of_birth, required: true, start_year: Date.today.year - 100, end_year: Date.today.year - 13
+          = f.input :date_of_birth, required: true, start_year: Date.today.year - 100, end_year: Date.today.year - 13,
+
       .input-field
-        = f.input :email, required: true
+        = f.input :email, required: true, input_html: {length: 254, maxlength: 254}
       .file-field.input-field
       = f.input :profile_image, as: :file
       - unless @current_person.blank?
         .input-field
           = f.input :salary
       .input-field
-        = f.input :password, required: true, hint: ("minimum #{@minimum_password_length} znaków" if @minimum_password_length)
+        = f.input :password, required: true, hint: ("minimum #{@minimum_password_length} znaków " if @minimum_password_length), input_html: {length: 50, maxlength: 50}
       .input-field
-        = f.input :password_confirmation, required: true
+        = f.input :password_confirmation, required: true, input_html: {length: 50, maxlength: 50}
       .form-actions
-        = f.button :submit, "Zarejestruj", class: "btn btn-info"
+        = f.button :submit, "Zarejestruj", class: "btn btn-info btn-block"
   - if @current_person.blank?
     = render "devise/shared/links"
+
+:javascript
+  $(document).ready(function () {
+    $('select').material_select();
+    $('input#input_text, textarea#textarea1').characterCounter();
+  });

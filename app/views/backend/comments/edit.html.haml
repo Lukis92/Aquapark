@@ -1,0 +1,4 @@
+%h5 Edycja komentarza
+= simple_form_for([:backend, @news, @comment]) do |f|
+  = f.input :body, input_html: {class: 'materialize-textarea'}
+  = f.button :submit, class: "btn btn-success"

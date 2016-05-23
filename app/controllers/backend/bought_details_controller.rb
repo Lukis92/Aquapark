@@ -63,7 +63,6 @@ class Backend::BoughtDetailsController < BackendController
         redirect_to backend_entry_type_bought_details_path,
                     notice: 'Pomyślnie usunięto.'
       end
-      format.json { head :no_content }
     end
   end
 
@@ -94,5 +93,9 @@ class Backend::BoughtDetailsController < BackendController
     params.require(:bought_detail).permit(:bought_data, :start_on, :end_on,
                                           :entry_type_id, :days, :person_id,
                                           :credit_card, :card_code)
+  end
+
+  def method
+    # code
   end
 end

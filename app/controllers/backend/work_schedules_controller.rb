@@ -6,7 +6,6 @@ class Backend::WorkSchedulesController < BackendController
   before_action :set_rule_to_display_work_schedules, only: [:index, :show]
   before_action :set_employees
 
-  @@person_id = 0
 
   # GET backend/work_schedules
   def index
@@ -27,15 +26,12 @@ class Backend::WorkSchedulesController < BackendController
   # GET backend/work_schedules/new
   def new
     @work_schedule = WorkSchedule.new
-    @@person_id = @person.id unless @person.blank?
   end
 
   # POST backend/work_schedules
   def create
     @work_schedule = WorkSchedule.new(work_schedule_params)
-    @work_schedule.person_id = @@person_id unless @@person_id == 0 &&
-                                                  @work_schedule.person_id
-                                                                .present?
+
     respond_to do |format|
       if @work_schedule.save
         format.html do

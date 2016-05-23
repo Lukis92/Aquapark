@@ -1,4 +1,5 @@
-%h1 Trenerzy
+= render 'nav'
+%h5 Trenerzy
 %p
   Obecnie w bazie posiadamy
   = Receptionist.count
@@ -45,12 +46,13 @@
         %td
           = trainer.last_name
         %td
-          = trainer.date_of_birth
+          = trainer.date_of_birth.strftime('%d-%m-%Y')+'r.'
         %td
           = trainer.email
         %td
-          = trainer.salary
+          = number_with_precision(trainer.salary, precision: 2)
+          zł
         %td
-          = trainer.hiredate
+          = trainer.hiredate.strftime('%d-%m-%Y')+'r.'
 
 = will_paginate @trainers, renderer: BootstrapPagination::Rails

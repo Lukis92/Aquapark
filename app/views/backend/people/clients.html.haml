@@ -1,4 +1,5 @@
-%h3 Klienci
+= render 'nav'
+%h5 Klienci
 %p
   Obecnie w bazie posiadamy
   = Client.count
@@ -41,7 +42,7 @@
         %td
           = person.last_name
         %td
-          = person.date_of_birth
+          = person.date_of_birth.strftime('%d-%m-%Y')+'r.'
         %td
           = person.email
 = will_paginate @clients, renderer: BootstrapPagination::Rails

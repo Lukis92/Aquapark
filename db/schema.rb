@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160519113802) do
+ActiveRecord::Schema.define(version: 20160523105300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,17 @@ ActiveRecord::Schema.define(version: 20160519113802) do
 
   add_index "bought_details", ["entry_type_id"], name: "index_bought_details_on_entry_type_id", using: :btree
   add_index "bought_details", ["person_id"], name: "index_bought_details_on_person_id", using: :btree
+
+  create_table "comments", force: :cascade do |t|
+    t.text     "body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "person_id"
+    t.integer  "news_id"
+  end
+
+  add_index "comments", ["news_id"], name: "index_comments_on_news_id", using: :btree
+  add_index "comments", ["person_id"], name: "index_comments_on_person_id", using: :btree
 
   create_table "entry_types", force: :cascade do |t|
     t.string  "kind",                                 null: false
@@ -118,6 +129,7 @@ ActiveRecord::Schema.define(version: 20160519113802) do
     t.boolean "free",      default: false, null: false
     t.text    "reason"
     t.integer "person_id"
+    t.boolean "accepted",  default: false
   end
 
   add_index "vacations", ["person_id"], name: "index_vacations_on_person_id", using: :btree

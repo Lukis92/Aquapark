@@ -1,4 +1,4 @@
-= link_to :back do
+= link_to backend_news_index_path do
   .btn.btn-primary.waves-effect.waves-light
     %i.fa.fa-chevron-left
     Wróć
@@ -11,13 +11,9 @@
         Napisane przez:
         = link_to @news.person.full_name, backend_person_path(@news.person_id)
         |
-        = @news.created_at
+        = @news.created_at.strftime('%d-%m-%Y | %H:%M')
       / Social Counter
       .hidden-xs
-        %a.btn-sm-full.comm-bg.rectangle.waves-effect.waves-light
-          %i.fa.fa-comments
-          %span Comments
-        %span.badge.social-counter 5
         = link_to edit_backend_news_path(@news) do
           .btn.btn-warning.waves-effect.waves-light
             %i.fa.fa-pencil-square
@@ -34,4 +30,21 @@
       %hr/
       %p.text-left
         = @news.content.html_safe
-/ /.Post row
+
+    .card-panel.reply-section.hoverable
+      .row
+        %h5.text-center Zostaw komentarz
+        %hr/
+        = simple_form_for([:backend, @news, @comment]) do |f|
+          .input-field
+            = f.input :body, input_html: { class: "materialize-textarea" }
+            = f.button :submit, class: "btn btn-primary"
+
+.row
+  .card-panel.horizontal-listing.no-padding.comments-section
+    %h5.text-center.title
+      Komentarze
+      %i.btn.btn-border-danger.btn-rounded.waves-effect
+        = @news.comments.count
+    %hr/
+    = render @news.comments
