@@ -14,7 +14,7 @@
     /%script{ src: 'https://code.jquery.com/jquery-2.2.2.min.js', type: 'text/javascript' }
 
     /jquery.min.js
-    /%script{ src: 'https://googledrive.com/host/0B3yx98FbxNb4ZEVLZUJjYWNMTnc/', type: 'text/javascript' }
+    %script{ src: 'https://googledrive.com/host/0B3yx98FbxNb4ZEVLZUJjYWNMTnc/', type: 'text/javascript' }
     /mdb.css
     %link{ href: 'https://googledrive.com/host/0B3yx98FbxNb4STVleGxYZTZnOEE/', rel: 'stylesheet' }
     /mdb.min.css
@@ -67,6 +67,7 @@
               %small
                 %b Wejściówki
             %ul.nav.nav-pills.nav-stacked
+              -# - if manager_signed_in? or current_receptionist_signed_in?
               %li{class: current_page?(backend_entry_types_path) && 'active'}
                 = link_to "Bilety/Karnety", backend_entry_types_path, data: { no_turbolink: true }
               %li{class: current_page?(bought_history_backend_person_path(@current_person)) && 'active'}
@@ -104,6 +105,13 @@
                 = link_to 'Moje treningi', show_backend_individual_trainings_path(@current_person)
               %li{class: current_page?(backend_training_costs_path) && 'active'}
                 = link_to 'Koszty treningów', backend_training_costs_path
+            %h5
+              %i.fa.fa-object-group
+              %small
+                %b Zajęcia grupowe
+            %ul.nav.nav-pills.nav-stacked
+              %li{class: current_page?(backend_activities_path) && 'active'}
+                = link_to 'Zajęcia grupowe', backend_activities_path
         .col-md-10
           = render 'layouts/messages'
           = yield

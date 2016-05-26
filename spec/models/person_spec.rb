@@ -24,6 +24,7 @@
 #  profile_image_content_type :string
 #  profile_image_file_size    :integer
 #  profile_image_updated_at   :datetime
+#  activity_id                :integer
 #
 
 require 'rails_helper'
@@ -49,4 +50,5 @@ describe Person do
     it { should validate_uniqueness_of(:email).case_insensitive }
     it { should validate_uniqueness_of(:pesel).case_insensitive }
   end
+
 end

@@ -1,10 +1,10 @@
 SCOPE = %w(wszyscy pracownicy ratownicy trenerzy recepcjoniści klienci).freeze
-30.times do
+60.times do
   News.create!(
     title: Faker::Lorem.sentence,
     content: Faker::Lorem.paragraph(40, true, 40),
     scope: SCOPE.sample,
-    person_id: Faker::Number.between(52, 112)
+    person_id: Faker::Number.between(53, 73)
   )
 end
 p "Created #{News.count} news"

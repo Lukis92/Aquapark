@@ -38,7 +38,7 @@ class BoughtDetail < ActiveRecord::Base
        (person.bought_details.where('start_on <= ?', start_on).count > 0 &&
         person.bought_details.where('end_on <= ?', end_on).count > 0 &&
         person.bought_details.where('end_on >= ?', start_on).count > 0) ||
-       (person.bought_details.where('start_at >= ?', start_on).count > 0 &&
+       (person.bought_details.where('start_on >= ?', start_on).count > 0 &&
        person.bought_details.where('start_on <= ?', end_on).count > 0 &&
        person.bought_details.where('end_on >= ?', end_on).count > 0))
       errors.add(:start_on, 'Masz już aktywny karnet w tym okresie.')

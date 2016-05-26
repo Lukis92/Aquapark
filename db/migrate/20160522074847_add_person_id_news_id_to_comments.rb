@@ -1,9 +1,9 @@
 class AddPersonIdNewsIdToComments < ActiveRecord::Migration
   def change
-    add_column :comments, :person_id, :integer
-    add_index :comments, :person_id
+    add_reference :comments, :person, index: true
+    add_foreign_key :comments, :people
 
-    add_column :comments, :news_id, :integer
-    add_index :comments, :news_id
+    add_reference :comments, :news, index: true
+    add_foreign_key :comments, :news
   end
 end

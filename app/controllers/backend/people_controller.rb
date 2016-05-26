@@ -8,12 +8,6 @@ class Backend::PeopleController < BackendController
                                               :receptionists, :lifeguards,
                                               :trainers]
   before_action :person_exists, only: [:show]
-  def search
-    if params[:search].present?
-      @people = PgSearch.multisearch(params[:search])
-                        .paginate(page: params[:page], per_page: 10)
-    end
-  end
 
   def index
     @people = Person.order(sort_column + ' ' + sort_direction)
@@ -42,26 +36,25 @@ class Backend::PeopleController < BackendController
   end
 
   def update
-    respond_to do |format|
-      if @person.update_with_password(person_params)
-        sign_in(current_person, bypass: true)
-        format.html do
-          redirect_to backend_person_path(@person),
-                      notice: 'Pomyślnie zaktualizowano.'
-        end
-      else
-        format.html { render :edit }
-      end
+    if @person.update_with_password(person_params)
+      sign_in(current_person, bypass: true)
+      redirect_to backend_person_path(@person),
+                  notice: 'Pomyślnie zaktualizowano.'
+    else
+      render :edit
     end
   end
 
   def destroy
     @person.destroy
-    respond_to do |format|
-      format.html do
-        redirect_to backend_clients_path,
-                    notice: 'Pomyślnie usunięto.'
-      end
+    redirect_to backend_clients_path, notice: 'Pomyślnie usunięto.'
+  end
+
+  # GET backend/people/search
+  def search
+    if params[:query].present?
+      @people = Person.text_search(params[:query])
+                      .paginate(page: params[:page], per_page: 10)
     end
   end
 
@@ -86,11 +79,9 @@ class Backend::PeopleController < BackendController
   private
 
   def set_person
-    begin
-      @person = Person.find(params[:id]) unless params[:id].blank?
-    rescue
-      redirect_to root_path
-    end
+    @person = Person.find(params[:id]) unless params[:id].blank?
+  rescue
+    redirect_to root_path
   end
 
   def set_current_person
@@ -114,7 +105,7 @@ class Backend::PeopleController < BackendController
                                    :date_of_birth, :email, :profile_image,
                                    :salary, :hiredate, :password,
                                    :password_confirmation, :current_password,
-                                   :remember_me, :roles, :roles_mask)
+                                   :remember_me)
   end
 
   def require_same_person
@@ -158,7 +149,7 @@ class Backend::PeopleController < BackendController
 
   def person_exists
     if @person.blank? && curent_person.present?
-      flash[:info] = "Brak takiej osoby."
+      flash[:info] = 'Brak takiej osoby.'
       redirect_to backend_news_index_path
     elsif @person.blank? && current_person.blank?
       flash[:danger] = "Brak dostępu. {person_exists}"

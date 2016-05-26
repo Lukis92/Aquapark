@@ -1,0 +1,59 @@
+= render 'shared/w_ch_searchbar'
+%table.table.table-striped.table-bordered.table-list.pretty.table-list-search
+  %thead
+    %tr
+      %th
+        %em.fa.fa-cog
+        Zarządzanie
+      %th
+        = sortable "day_of_week", "Dzień tygodnia"
+      %th
+        = sortable "start_time", "Czas od"
+      %th
+        = sortable "end_time", "Czas do"
+      %th
+        Pracownik
+      %th
+        Rola
+  %tbody
+    - unless @work_schedules.blank?
+      - @work_schedules.each do |work|
+        %tr
+          %td
+            = link_to edit_backend_work_schedule_path(work), data: { no_turbolink: true } do
+              %i.btn.btn-default
+                %i.fa.fa-pencil
+            = link_to backend_work_schedule_path(work), method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
+              %i.btn.btn-danger
+                %i.fa.fa-trash
+          %td
+            = work.day_of_week
+          %td
+            = work.start_time.strftime("%H:%M")
+          %td
+            = work.end_time.strftime("%H:%M")
+          %td
+            = work.person.try(:full_name) unless work.person.nil?
+          %td
+            - unless work.person.nil?
+              - if work.person.type == "Manager"
+                %i.btn.btn-danger
+                  Kierownik
+              - elsif work.person.type == "Client"
+                %i.btn.btn-warning
+                  Klient
+              - elsif work.person.type == "Trainer"
+                %i.btn.btn-info
+                  Trener
+              - elsif work.person.type == "Lifeguard"
+                %i.btn.btn-info
+                  Ratownik
+              - elsif work.person.type == "Receptionist"
+                %i.btn.btn-info
+                  Recepcjonista
+      = will_paginate @work_schedules, renderer: BootstrapPagination::Rails
+    - else
+      %tr
+        %td{colspan: '6'}
+          .text-center
+            Brak rezultatów.

@@ -27,36 +27,42 @@ Things you may want to cover:
 Please feel free to use a different markup language if you do not plan to run
 <tt>rake doc:app</tt>.
 
-== Errors to fix:
-*wyszukiwarka nie działa dla wielu stron np. dla Juliusz Karwowski
-*wyszukiwarka przestaje działać gdy przechodzę do następnej podstrony i próbuję coś w niej wyszukać
-*nie działa multisearch pg_search
+== TODO:
 *Dostępne dni na trening
-*klikając w szukaj i wstecz wyskakuje info pomyślnie usunięto
 *rozjeżdza się widok biletów, karnetów na drugim monitorze
 * brak zabezpieczenia dla destroy
 * jak usuwam konto to usuwając pokazuje komunikat brak dostępu
+* Gdy wybieramy pracownika w work_schedule, to spolścić type
+* Wyświetlanie planu zajęć dla poszczególnych stref basenowych
+* przesunąć przycisk active w activities/edit
+* dla managera podgląd kto dał like/dislike dla news
 == What's done:
-- ustawienie wyświetlnych aktualności dla poszczególnych grup użytkowników
-- zabezpieczenie przed niepowołanym otwarciem aktualności przez osobę
-- dodac do vacation pole akcepted, aby manager mógł akceptować lub odrzucać urlopy
-- uproszczenie vacations_controller dla person_id(dodanie hidden_field do form)
-- uproszczenie widoku wszystkich zarejestrowanych, usunięcie niepotrzebnych
-  jsonów i metod.
-- zabezpieczenie przed nie powołanym dostępem do backend/work_schedule
-- zabezpieczenie edycji wejściówek(tylko recepcjoniści i manager)
-- zabezpieczenie wejścia na bought_history(tylko właściciel, recep., manag.)
-- zabezpieczenie wejścia na statistics(tylko właściciel)
-- poprawienie widoków w backend/people(zakładki, widok płacy, dat)
-- zabezpieczenie widoku danych użytkowników(require_receptionist)
-- downcase dla email
-- uproszczenie routingu devise_for dla employees
-- zoptymalizowanie ApplicationController, dodanie dynamicznych metod current_,
-  authenticate, _signed_in?
-- brak zabezpieczenia dla nie zalogowanego, próbującego przejść na /backend
-- nie działa dodawanie zdjęcia profilowego przy rejestracji(rozwiązanie:
-  devise_parameter_sanitizer.for)
-- footer nie jest przykejony do dołu strony, wystaje w login page.(rozwiązanie:
-  current_page w application.html.haml)
-- dodanie CRUDA dla comments, dotyczących news
-- naprawienie żródła stripe w Gemfile
+- klikając w szukaj i wstecz wyskakuje info pomyślnie usunięto
+- wyszukiwarka osób
+- wyszukiwarka work_schedules
+- wyszukiwarka entry_types
+- wyszukiwarka individual_trainings
+- usunąć @@trainer_id w individual_trainings
+- usunąć wszelkie respond_to, format i jsony
+- przerzucić niżej metody search w controllerach
+- poprawienie wyglądu wyszukiwarek
+- dodanie możliwości wyszkiwania części tekstu(rozw: prefix: true)
+- strzałki przy dropdown listach(rozwiązanie: uncomment jquery.min.js)
+- naprawiony klucz obcy person_id w work_schedules
+- naprawiony klucz obcy client_id, trainer_id w individual_trainings
+- naprawiony klucz obcy person_id w news
+- naprawiony klucz obcy person_id, news_id w likes
+- naprawiony klucz obcy person_id, news_id w comments
+- dodanie tabeli activity oraz relacji many_to_many do people
+- stworzenie tabeli activities_people
+- dodanie brakujących tabel do seed:destroy_all
+- dodanie osób dla testów w seeds
+- dodanie fakeowych danych do comments
+- dodanie fakeowych danych do bought_details(konieczne zakomentowanie walidacji)
+- dodanie fakeowych danych do training_costs
+- dodanie fakeowych danych do activities
+- wyszukiwarka dla activities
+== HEROKU ==
+- ukrycie kluczy w secret.yml
+- ustawienie secret_key_base dla production
+- usunięcie kolidujących migracji

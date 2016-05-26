@@ -1,23 +1,205 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
+---
 en:
-  hello: "Hello world"
+  activerecord:
+    attributes:
+      client:
+        current_password: Obecne hasło
+        date_of_birth: Data Urodzenia
+        email: E-mail
+        first_name: Imię
+        last_name: Nazwisko
+        password: Hasło
+        password_confirmation: Powtórz hasło
+      person:
+        email: E-mail
+        password: Hasło
+        remember_me: Zapamiętaj mnie
+    errors:
+      messages:
+        record_invalid: Nieprawidłowy rekord
+      models:
+        bought_detail:
+          attributes:
+            bought_data:
+              blank: jest wymagane
+            days:
+              blank: jest wymagane
+        client:
+          attributes:
+            current_password:
+              blank: pole Obecne hasło jest wymagane
+            date_of_birth:
+              blank: pole Data urodzenia jest wymagane
+            email:
+              blank: pole Email jest wymagane
+              taken: Taki email istnieje już w bazie
+            first_name:
+              blank: Pole Imię jest wymagane
+            last_name:
+              blank: Pole Nazwisko jest wymagane
+            password:
+              blank: Pole Hasło jest wymagane
+            pesel:
+              blank: pole Pesel jest wymagane
+              taken: Taki pesel istnieje już w bazie
+              wrong_length: Pesel musi posiadać 11 cyfr
+        entry_type:
+          attributes:
+            kind:
+              blank: jest wymagane
+            kind_details:
+              blank: jest wymagane
+            price:
+              blank: jest wymagane
+        individual_training:
+          attributes:
+            start_on:
+              overlap: trening nachodzi na inny
+        manager:
+          attributes:
+            password_confirmation:
+              confirmation: Potwierdź hasło
+        person:
+          attributes:
+            current_password:
+              blank: pole Obecne hasło jest wymagane
+            date_of_birth:
+              blank: pole Data urodzenia jest wymagane
+            email:
+              blank: pole Email jest wymagane
+              invalid: email jest nieprawidłowy
+              taken: Taki email istnieje już w bazie
+            first_name:
+              blank: Pole Imię jest wymagane
+            last_name:
+              blank: Pole Nazwisko jest wymagane
+            password:
+              blank: Pole Hasło jest wymagane
+            pesel:
+              blank: pole Pesel jest wymagane
+              taken: Taki pesel istnieje już w bazie
+              wrong_length: Pesel musi posiadać 11 cyfr
+        training_cost:
+          attributes:
+            cost:
+              blank: jest wymagane
+            duration:
+              blank: jest wymagane
+        work_schedule:
+          attributes:
+            day_of_week:
+              blank: Pole Dzień tygodnia jest wymagany
+              taken: jest już zajęty
+            person_id:
+              missing: jest wymagane
+  date:
+    abbr_day_names: '["Pon.", "Wt.", "Śr.", "Czw.", "Piąt.", "Sob.", "Niedz."]'
+    day_names: '["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"]'
+    formats:
+      default: "%d %B %Y"
+    month_names: '[nil, "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"]'
+    order: "[:day, :month, :year]"
+  errors:
+    messages:
+      not_saved: Not saved
+  hello: Hello world
+  helpers:
+    submit:
+      bought_detail:
+        create: Zapłać
+      comment:
+        create: Dodaj komentarz
+        update: Zapisz
+      individual_training:
+        create: Zapisz na trening
+        update: Zapisz
+      news:
+        create: Dodaj wiadomość
+        update: Zapisz
+      training_cost:
+        create: Dodaj cennik
+        update: Zapisz
+      vacation:
+        create: Dodaj urlop
+      work_schedule:
+        create: Dodaj grafik
+        update: Zapisz
+  mail_form:
+    attributes:
+      contact:
+        content: Treść
+        email: Email
+        first_name: Imię
+        last_name: Nazwisko
+        subject: Temat
+    errors:
+      models:
+        contact:
+          attributes:
+            content:
+              blank: jest wymagane
+            email:
+              blank: jest wymagane
+              invalid: jest nieprawidłowy
+            first_name:
+              blank: jest wymagane
+            last_name:
+              blank: jest wymagane
+            subject:
+              blank: jest wymagane
+  simple_form:
+    labels:
+      backend_receptionist:
+        date_of_birth: Data urodzenia
+        first_name: Imię
+        last_name: Nazwisko
+        password_confirmation: Powtórz hasło
+        profile_image: Zdjęcie profilowe
+        salary: Wynagrodzenie
+      client:
+        profile_image: Zdjęcie profilowe
+      comment:
+        body: Treść
+      defaults:
+        card_code: Kod CVV
+        credit_card: Numer karty płatniczej
+        day_of_week: Dzień tygodnia
+        end_time: Godzina do
+        start_on: Data rozpoczęcia
+        start_time: Godzina od
+      individual_training:
+        date_of_training: Data treningu
+      news:
+        content: Treść
+        title: Tytuł
+      person:
+        current_password: Obecne gasło
+        date_of_birth: Data urodzenia
+        first_name: Imię
+        last_name: Nazwisko
+        password_confirmation: Powtórz hasło
+        profile_image: Zdjęcie profilowe
+        salary: Wynagrodzenie
+      training_cost:
+        cost: Koszt
+        duration: Czas trwania (min.)
+      vacation:
+        end_at: Data do
+        free: Darmowy?
+        reason: Powód
+        start_at: Data od
+  time:
+    formats:
+      default: "%d-%m-%Y"
+  views:
+    devise:
+      shared:
+        didnt_receive_confirmation_instructions: Nie otrzymałeś instrukcji aktywacji?
+        didnt_receive_unlock_instructions: Nie otrzymałeś instrukcji odblokowania konta?
+        forgot_password: Zapomniałeś hasła?
+        links: Links
+        sign_in: Logowanie
+        sign_up: Rejestracja
+  will_paginate:
+    next_label: Następna
+    previous_label: Poprzednia

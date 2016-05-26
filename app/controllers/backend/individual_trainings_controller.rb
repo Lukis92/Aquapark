@@ -2,9 +2,10 @@ class Backend::IndividualTrainingsController < BackendController
   before_action :set_individual_training, only: [:edit, :update, :destroy]
   before_action :set_clients
   before_action :set_trainers
-  before_action :set_trainer, only: [:new]
+  before_action :set_trainer, only: [:new, :create]
+  before_action :set_client, only: [:new, :create]
+  before_action :set_training_cost, only: [:new, :create]
 
-  @@trainer_id = 0
   def index
     @individual_trainings = IndividualTraining.paginate(page: params[:page],
                                                         per_page: 20)
@@ -14,36 +15,24 @@ class Backend::IndividualTrainingsController < BackendController
   def new
     @individual_training = IndividualTraining.new
     @individual_trainings = IndividualTraining.all
-    @individual_training.trainer = @trainer
-    @@trainer_id = @trainer.id
-    @training_costs = TrainingCost.all
   end
 
   # POST backend/individual_trainings
   def create
     @individual_training = IndividualTraining.new(individual_training_params)
-    @individual_training.trainer_id = @@trainer_id unless @@trainer_id == 0
-    @individual_training.trainer = Person.find(@@trainer_id) unless @@trainer_id == 0
-    @individual_training.client = current_person
-    @trainer = Person.find(@@trainer_id)
-    @training_costs = TrainingCost.all
-    respond_to do |format|
-      if @individual_training.save
-        format.html { redirect_to :back, notice: 'Pomyślnie dodano.' }
-      else
-        format.html { render :new }
-      end
+    if @individual_training.save
+      redirect_to :back, notice: 'Pomyślnie dodano.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT backend/individual_trainings/1
   def update
-    respond_to do |format|
-      if @individual_training.update(individual_training_params)
-        format.html { redirect_to :back, notice: 'Pomyślnie zaktualizowano.' }
-      else
-        format.html { render :edit }
-      end
+    if @individual_training.update(individual_training_params)
+      redirect_to :back, notice: 'Pomyślnie zaktualizowano.'
+    else
+      render :edit
     end
   end
 
@@ -51,7 +40,7 @@ class Backend::IndividualTrainingsController < BackendController
     @individual_trainings = IndividualTraining.where(client_id: params[:id])
     @nearest_training = IndividualTraining.where(client_id: params[:id])
                                           .where(['date_of_training >= ?',
-                                            Date.today]).first
+                                                  Date.today]).first
     @days = 0
 
     unless @nearest_training.blank?
@@ -63,15 +52,22 @@ class Backend::IndividualTrainingsController < BackendController
   # DELETE backend/individual_trainings/1.json
   def destroy
     @individual_training.destroy
-    respond_to do |format|
-      format.html { redirect_to :back, notice: 'Pomyślnie usunięto.' }
-    end
+    redirect_to :back, notice: 'Pomyślnie usunięto.'
   end
 
   def choose_trainer
     @trainers = Person.includes(:work_schedules).where(type: 'Trainer')
                       .where.not(work_schedules: { person_id: nil })
                       .paginate(page: params[:page], per_page: 20)
+  end
+
+  # GET backend/individual_trainings/search
+  def search
+    if params[:query].present?
+      @individual_trainings = IndividualTraining.text_search(params[:query])
+                                                .paginate(page: params[:page],
+                                                          per_page: 20)
+    end
   end
 
   private
@@ -95,6 +91,14 @@ class Backend::IndividualTrainingsController < BackendController
   end
 
   def set_trainer
-    @trainer = Person.find(params[:trainer_id]) unless params[:trainer_id].blank?
+    @trainer = Trainer.find(params[:trainer_id]) unless params[:trainer_id].blank?
+  end
+
+  def set_client
+    @client = Person.find(params[:id]) unless params[:id].blank?
+  end
+
+  def set_training_cost
+    @training_costs = TrainingCost.all
   end
 end

@@ -58,12 +58,8 @@ class Backend::BoughtDetailsController < BackendController
   # DELETE backend/work_schedules/1.json
   def destroy
     @bought_detail.destroy
-    respond_to do |format|
-      format.html do
-        redirect_to backend_entry_type_bought_details_path,
-                    notice: 'Pomyślnie usunięto.'
-      end
-    end
+    redirect_to backend_entry_type_bought_details_path,
+                notice: 'Pomyślnie usunięto.'
   end
 
   private
@@ -93,9 +89,5 @@ class Backend::BoughtDetailsController < BackendController
     params.require(:bought_detail).permit(:bought_data, :start_on, :end_on,
                                           :entry_type_id, :days, :person_id,
                                           :credit_card, :card_code)
-  end
-
-  def method
-    # code
   end
 end

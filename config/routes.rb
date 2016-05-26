@@ -3,10 +3,7 @@ Rails.application.routes.draw do
                       skip: [:registrations]
   devise_for :clients, skip: :sessions
 
-  authenticated :clients, lambda {|u| u.type == "Client"}do
-  end
-  authenticated :managers, lambda {|u| u.type == "Manager"}do
-  end
+
   resources 'contacts', only: [:new, :create]
   root 'home#index'
 
@@ -20,6 +17,7 @@ Rails.application.routes.draw do
       resources :bought_details
       collection do
         get 'bought_list', to: 'entry_types#show'
+        get 'search'
       end
     end
     get 'trainers', to: 'people#trainers'
@@ -30,7 +28,16 @@ Rails.application.routes.draw do
       end
       resources :comments
     end
-    resources :work_schedules, only: [:index, :new, :create]
+    resources :work_schedules, only: [:index, :new, :create] do
+      collection do
+        get 'search'
+      end
+    end
+    resources :activities do
+      collection do
+        get 'search'
+      end
+    end
     resources :trainers, only: [:index]
     resources :vacations, except: [:show] do
       collection do
@@ -40,7 +47,11 @@ Rails.application.routes.draw do
         post 'accept'
       end
     end
-    resources :individual_trainings
+    resources :individual_trainings do
+      collection do
+        get 'search'
+      end
+    end
     resources :training_costs
     resources :people do
       collection do

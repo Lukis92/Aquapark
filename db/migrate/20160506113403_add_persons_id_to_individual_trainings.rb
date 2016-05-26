@@ -1,9 +1,9 @@
 class AddPersonsIdToIndividualTrainings < ActiveRecord::Migration
   def change
-    add_column :individual_trainings, :client_id, :integer
-    add_index :individual_trainings, :client_id
+    add_reference :individual_trainings, :client, index: true
+    add_reference :individual_trainings, :trainer, index: true
 
-    add_column :individual_trainings, :trainer_id, :integer
-    add_index :individual_trainings, :trainer_id
+    add_foreign_key :individual_trainings, :people, column: :client_id
+    add_foreign_key :individual_trainings, :people, column: :trainer_id
   end
 end

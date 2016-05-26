@@ -1,8 +1,3 @@
-
--# %h5.section-title.st-blue
--#   2 krok
--#   %small Wybór dnia tygodnia
--#
 .col-md-6
   %h5
     Trener
@@ -44,5 +39,6 @@
     = f.input :training_cost_id, label: "Czas trwania" ,
       collection: @training_costs.map{ |tc| [tc.duration, tc.id] },
       prompt: 'Wybierz czas trwania treningu'
-    -# = f.input :start_on
+    = f.input :trainer_id, as: :hidden, input_html: { value: @trainer.id }
+    = f.input :client_id, as: :hidden, input_html: { value: @client.id }
     = f.button :submit, class: "btn btn-primary"

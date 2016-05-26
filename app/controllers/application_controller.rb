@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
     end if person_signed_in?
   end
 
+
   def after_sign_in_path_for(resource)
     stored_location_for(resource) || account_url
   end

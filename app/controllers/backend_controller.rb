@@ -7,7 +7,7 @@ class BackendController < ApplicationController
   end
 
   # to get various helper method like "current_user" and "authenticate_user"
-  %w(Manager Receptionist Client Lifeguard Trainer).each do |k|
+  %w(Manager Receptionist Lifeguard Trainer).each do |k|
     define_method "current_#{k.underscore}" do
       current_person if current_person.is_a?(k.constantize)
     end
@@ -20,6 +20,7 @@ class BackendController < ApplicationController
       !send("current_#{k.underscore}").nil?
     end
   end
+
   private
 
   def require_person

@@ -5,15 +5,9 @@ class Backend::VacationsController < BackendController
   before_action :set_employees
 
   # GET backend/vacations
-  # GET backend/vacations.json
   def index
-    respond_to do |format|
-      format.html do
-        @vacations = Vacation.order(sort_column + ' ' + sort_direction)
-                             .paginate(page: params[:page], per_page: 20)
-      end
-      format.json { @vacations = Vacation.all }
-    end
+    @vacations = Vacation.order(sort_column + ' ' + sort_direction)
+                         .paginate(page: params[:page], per_page: 20)
   end
 
   # GET backend/vacations/new
@@ -22,46 +16,28 @@ class Backend::VacationsController < BackendController
   end
 
   # POST backend/vacations
-  # POST backend/vacations.json
   def create
     @vacation = Vacation.new(vacation_params)
-    respond_to do |format|
-      if @vacation.save
-        format.html do
-          redirect_to backend_vacations_path,
-                      notice: 'Pomyślnie dodano.'
-        end
-      else
-        format.html { render :new }
-      end
+    if @vacation.save
+      redirect_to backend_vacations_path, notice: 'Pomyślnie dodano.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT backend/vacations/1
-  # PATCH/PUT backend/vacations/1.json
   def update
-    respond_to do |format|
-      if @vacation.update(vacation_params)
-        format.html do
-          redirect_to backend_vacations_path,
-                      notice: 'Pomyślnie zaktualizowano.'
-        end
-      else
-        format.html { render :edit }
-      end
+    if @vacation.update(vacation_params)
+      redirect_to backend_vacations_path, notice: 'Pomyślnie zaktualizowano.'
+    else
+      render :edit
     end
   end
 
   # DELETE backend/vacations/1
-  # DELETE backend/vacations/1.json
   def destroy
     @vacation.destroy
-    respond_to do |format|
-      format.html do
-        redirect_to backend_vacations_path,
-                    notice: 'Pomyślnie usunięto.'
-      end
-    end
+    redirect_to backend_vacations_path, notice: 'Pomyślnie usunięto.'
   end
 
   def requests

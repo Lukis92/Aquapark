@@ -16,31 +16,22 @@ class Backend::NewsController < BackendController
   def create
     @news = News.new(news_params)
     @news.person = Person.find(current_person)
-    respond_to do |format|
       if @news.save
-        format.html do
           redirect_to backend_news_index_path,
                       notice: 'Pomyślnie dodano.'
-        end
-        format.json { render :show, status: :created, location: @news }
       else
-        format.html { render :new }
+        render :new
       end
-    end
   end
 
   # PATCH/PUT backend/news/1
   def update
-    respond_to do |format|
       if @news.update(news_params)
-        format.html do
           redirect_to backend_news_index_path,
                       notice: 'Pomyślnie zaktualizowano.'
-        end
       else
-        format.html { render :edit }
+        render :edit
       end
-    end
   end
 
   def like
@@ -61,9 +52,7 @@ class Backend::NewsController < BackendController
   # DELETE backend/news/1
   def destroy
     @news.destroy
-    respond_to do |format|
-      format.html { redirect_to :back, notice: 'Pomyślnie usunięto.' }
-    end
+    redirect_to :back, notice: 'Pomyślnie usunięto.'
   end
 
   private

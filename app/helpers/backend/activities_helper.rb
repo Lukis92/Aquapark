@@ -1,0 +1,2 @@
+module Backend::ActivitiesHelper
+end

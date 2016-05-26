@@ -3,14 +3,10 @@ class Backend::EntryTypesController < BackendController
   before_action :set_current_person
   before_action :receptionist_access, only: [:new, :edit, :update, :destroy]
   before_action :employee_access, only: [:index]
+
   # GET backend/entry_types
-  # GET backend/entry_types.json
   def index
-    respond_to do |format|
-      format.html do
-        @entry_types = EntryType.paginate(page: params[:page], per_page: 20)
-      end
-    end
+    @entry_types = EntryType.paginate(page: params[:page], per_page: 20)
   end
 
   # GET backend/entry_types/new
@@ -19,33 +15,21 @@ class Backend::EntryTypesController < BackendController
   end
 
   # POST backend/entry_types
-  # POST backend/entry_types.json
   def create
     @entry_type = EntryType.new(entry_type_params)
-    respond_to do |format|
-      if @entry_type.save
-        format.html do
-          redirect_to backend_entry_types_path,
-                      notice: 'Pomyślnie dodano.'
-        end
-      else
-        format.html { render :new }
-      end
+    if @entry_type.save
+      redirect_to backend_entry_types_path, notice: 'Pomyślnie dodano.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT backend/entry_types/1
-  # PATCH/PUT backend/entry_types/1.json
   def update
-    respond_to do |format|
-      if @entry_type.update(entry_type_params)
-        format.html do
-          redirect_to backend_entry_types_path,
-                      notice: 'Pomyślnie zaktualizowano.'
-        end
-      else
-        format.html { render :edit }
-      end
+    if @entry_type.update(entry_type_params)
+      redirect_to backend_entry_types_path, notice: 'Pomyślnie zaktualizowano.'
+    else
+      render :edit
     end
   end
 
@@ -58,13 +42,16 @@ class Backend::EntryTypesController < BackendController
   end
 
   # DELETE backend/entry_types/1
-  # DELETE backend/entry_types/1.json
   def destroy
     @entry_type.destroy
-    respond_to do |format|
-      format.html do
-        redirect_to backend_entry_types_path, notice: 'Pomyślnie usunięto.'
-      end
+    redirect_to backend_entry_types_path, notice: 'Pomyślnie usunięto.'
+  end
+
+  # GET backend/entry_types/search
+  def search
+    if params[:query].present?
+      @entry_types = EntryType.text_search(params[:query])
+                              .paginate(page: params[:page], per_page: 20)
     end
   end
 

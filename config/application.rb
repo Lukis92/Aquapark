@@ -31,6 +31,6 @@ module Aquapark
     config.assets.initialize_on_precompile = false
 
     # Autoload files under /lib
-    config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths << "#{Rails.root}/lib"
   end
 end

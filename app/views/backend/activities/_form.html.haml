@@ -1,0 +1,17 @@
+= simple_form_for([:backend, @activity]) do |f|
+  = errors_for(@activity)
+  .row
+    .input-field
+      = f.input :name
+    .input-field
+      = f.input :description, input_html: {class:'materialize-textarea'}
+    = f.input :active
+    = f.input :date
+    = f.input :start_on
+    = f.input :end_on
+    .input-field
+      = f.select :pool_zone, [['A', 'A'], ['B', 'B'], ['C', 'C'], ['D', 'D'],
+      ['E', 'E'], ['F', 'F']], prompt: 'Wybierz strefę', required: true
+    .input-field
+      = f.input :max_people
+    = f.button :submit, class: "btn btn-primary"

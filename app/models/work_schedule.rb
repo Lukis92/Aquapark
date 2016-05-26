@@ -26,6 +26,15 @@ class WorkSchedule < ActiveRecord::Base
 
   # ****************************************#
 
+  include PgSearch
+  pg_search_scope :search, against: [:start_time, :end_time, :day_of_week],
+                           associated_against: {
+                             person: [:first_name, :last_name]
+                           },
+                           using: {
+                             tsearch: { prefix: true }
+                           }
+
   DAYS = %w(Poniedziałek Wtorek Środa Czwartek Piątek Sobota Niedziela).freeze
   # **METHODS***************************************************#
   def start_must_be_before_end_time
@@ -38,9 +47,18 @@ class WorkSchedule < ActiveRecord::Base
   end
 
   def next_n_days(amount, day_of_week)
-    (Date.today...Date.today+7*amount).select do |d|
+    (Date.today...Date.today + 7 * amount).select do |d|
       d.wday == day_of_week
     end
   end
+
+  def self.text_search(query)
+    if query.present?
+      search(query)
+    else
+      all
+    end
+  end
+
   # ************************************************************#
 end

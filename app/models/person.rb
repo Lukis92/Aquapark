@@ -24,13 +24,10 @@
 #  profile_image_content_type :string
 #  profile_image_file_size    :integer
 #  profile_image_updated_at   :datetime
+#  activity_id                :integer
 #
 
 class Person < ActiveRecord::Base
-  include PgSearch
-  PgSearch.multisearch_options = { using: { tsearch: { prefix: true } } }
-  multisearchable against: [:first_name, :last_name]
-  PgSearch::Multisearch.rebuild(Person)
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -49,6 +46,10 @@ class Person < ActiveRecord::Base
            foreign_key: 'client_id'
   has_many :news
   has_many :likes, dependent: :destroy
+  has_and_belongs_to_many :activities
+  has_many :activities_as_trainer,
+            class_name: 'Activity',
+            foreign_key: 'trainer_id'
   ##########################
 
   # **VALIDATIONS*******************************************************#
@@ -74,6 +75,13 @@ class Person < ActiveRecord::Base
 
   #########################################################################
 
+  include PgSearch
+  pg_search_scope :search, against: [:pesel, :first_name, :last_name,
+                                     :date_of_birth, :email, :salary,
+                                     :hiredate],
+                           using: {
+                             tsearch: { prefix: true }
+                           }
   # **METHODS*********************#
   def full_name
     "#{first_name} #{last_name}"
@@ -95,6 +103,14 @@ class Person < ActiveRecord::Base
       if profile_image.size > 5.megabytes
         erros.add(:profile_image, "powinno ważyć mniej niż 5MB")
       end
+    end
+  end
+
+  def self.text_search(query)
+    if query.present?
+      search(query)
+    else
+      all
     end
   end
 end

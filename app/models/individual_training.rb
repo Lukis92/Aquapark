@@ -23,6 +23,16 @@ class IndividualTraining < ActiveRecord::Base
   validates :start_on, :end_on, overlap: true
   # ****************************************#
 
+  include PgSearch
+  pg_search_scope :search, against: [:date_of_training, :end_on, :start_on],
+                           associated_against:
+                           { trainer: [:first_name, :last_name],
+                             client: [:first_name, :last_name],
+                             training_cost: [:duration] },
+                           using: {
+                             tsearch: { prefix: true }
+                           }
+
   attr_accessor :duration, :day
   def available_day
     @days = WorkSchedule.where(id: :trainer_id)
@@ -55,9 +65,9 @@ class IndividualTraining < ActiveRecord::Base
       end
     end
 
-  def overlap?(x,y)
-    (x.start_on - y.end_on) * (y.start_on - x.end_on) >= 0
-  end
+    def overlap?(x, y)
+      (x.start_on - y.end_on) * (y.start_on - x.end_on) >= 0
+    end
 
     # if trainer.individual_trainings_as_trainer.any? do |ti|
     #   ti.date_of_training == date_of_training
@@ -75,6 +85,14 @@ class IndividualTraining < ActiveRecord::Base
     #           .where('start_on > ?', start_on).count > 0 ||
     #    trainer.individual_trainings_as_trainer
     #           .where('end_on < ?', start_on).count > 0
+  end
+
+  def self.text_search(query)
+    if query.present?
+      search(query)
+    else
+      all
+    end
   end
 
   def set_end_on

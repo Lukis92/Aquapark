@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.2.3'
+ruby '2.3.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5.1'
@@ -31,6 +31,9 @@ group :development, :test do
   gem 'foreman' # Manage Procfile-based applications
   gem 'rspec-rails', '~> 3.0' # RSpec for Rails-3+
   gem 'polishgeeks-dev-tools' # Rails code and documentation quality assurance
+  gem 'database_cleaner' # Strategies for cleaning databases in Ruby.
+  gem 'capybara' # Acceptance test framework for web applications
+  gem 'shoulda-matchers', require: false
 end
 
 group :development do
@@ -69,10 +72,8 @@ gem 'html_truncator', '~>0.2' # truncate an HTML string
 gem 'pg_search' # PostgreSQL's full text search
 gem 'rubocop', require: false
 gem 'rails_best_practices' # a code metric tool for rails projects
-gem 'momentjs-rails', '>= 2.9.0' # JavaScript library
-gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails',
-                            branch: 'master', submodules: true
 gem 'validates_overlap' # Gem for Rails 3 and 4, that helps validate overlap
 gem 'simple_calendar', '~> 2.0' # A wonderfully simple calendar gem for Rails
 gem 'bootstrap-wysihtml5-rails', github: 'nerian/bootstrap-wysihtml5-rails'
 gem 'rails-timeago', '~> 2.0' # helper for time tags
+gem 'i18n-tasks', '~> 0.9.5' # Manage translation for Ruby i18n

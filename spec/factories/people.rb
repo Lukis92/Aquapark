@@ -24,6 +24,7 @@
 #  profile_image_content_type :string
 #  profile_image_file_size    :integer
 #  profile_image_updated_at   :datetime
+#  activity_id                :integer
 #
 
 FactoryGirl.define do
@@ -36,7 +37,17 @@ FactoryGirl.define do
     email { Faker::Internet.email }
     password { Faker::Internet.password }
     type { TYPES.sample }
+  end
+
+  trait :manager do
+    pesel { Faker::Number.number(11) }
+    first_name { Faker::Name.first_name }
+    last_name { Faker::Name.last_name }
+    date_of_birth { Faker::Time.between('1970-01-01', '2000-12-31') }
+    email { Faker::Internet.email }
+    password { Faker::Internet.password }
     salary { Faker::Number.decimal(4, 2) }
     hiredate { Faker::Time.between('2016-01-01', '2016-04-30') }
+    type { TYPES.sample }
   end
 end

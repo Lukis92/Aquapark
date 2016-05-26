@@ -15,33 +15,27 @@ class Backend::TrainingCostsController < BackendController
   def create
     @training_cost = TrainingCost.new(training_cost_params)
 
-    respond_to do |format|
-      if @training_cost.save
-        format.html { redirect_to backend_training_costs_path, notice: 'Pomyślnie dodano.' }
-      else
-        format.html { render :new }
-      end
+    if @training_cost.save
+      redirect_to backend_training_costs_path, notice: 'Pomyślnie dodano.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT backend/training_costs/1
   def update
-    respond_to do |format|
-      if @training_cost.update(training_cost_params)
-        format.html { redirect_to backend_training_costs_path, notice: 'Pomyślnie zaktualizowano.' }
-      else
-        format.html { render :edit }
-      end
+    if @training_cost.update(training_cost_params)
+      redirect_to backend_training_costs_path,
+                  notice: 'Pomyślnie zaktualizowano.'
+    else
+      render :edit
     end
   end
 
   # DELETE backend/training_costs/1
-  # DELETE backend/training_costs/1.json
   def destroy
     @training_cost.destroy
-    respond_to do |format|
-      format.html { redirect_to :back, notice: 'Pomyślnie usunięto.' }
-    end
+    redirect_to :back, notice: 'Pomyślnie usunięto.'
   end
 
   private

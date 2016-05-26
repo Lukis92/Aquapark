@@ -11,10 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160523105300) do
+ActiveRecord::Schema.define(version: 20160526090102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "activities", force: :cascade do |t|
+    t.string  "name",        limit: 20, null: false
+    t.text    "description"
+    t.boolean "active",                 null: false
+    t.date    "date"
+    t.time    "start_on",               null: false
+    t.time    "end_on",                 null: false
+    t.string  "pool_zone",   limit: 1,  null: false
+    t.integer "max_people"
+  end
+
+  create_table "activities_people", id: false, force: :cascade do |t|
+    t.integer "activity_id", null: false
+    t.integer "person_id",   null: false
+  end
+
+  add_index "activities_people", ["activity_id", "person_id"], name: "index_activities_people_on_activity_id_and_person_id", using: :btree
+  add_index "activities_people", ["person_id", "activity_id"], name: "index_activities_people_on_person_id_and_activity_id", using: :btree
 
   create_table "bought_details", force: :cascade do |t|
     t.datetime "bought_data",                           null: false
@@ -48,11 +67,11 @@ ActiveRecord::Schema.define(version: 20160523105300) do
 
   create_table "individual_trainings", force: :cascade do |t|
     t.date    "date_of_training", null: false
-    t.integer "client_id"
-    t.integer "trainer_id"
     t.time    "end_on",           null: false
     t.integer "training_cost_id"
     t.time    "start_on",         null: false
+    t.integer "client_id"
+    t.integer "trainer_id"
   end
 
   add_index "individual_trainings", ["client_id"], name: "index_individual_trainings_on_client_id", using: :btree
@@ -103,8 +122,10 @@ ActiveRecord::Schema.define(version: 20160523105300) do
     t.string   "profile_image_content_type"
     t.integer  "profile_image_file_size"
     t.datetime "profile_image_updated_at"
+    t.integer  "activity_id"
   end
 
+  add_index "people", ["activity_id"], name: "index_people_on_activity_id", using: :btree
   add_index "people", ["email"], name: "index_people_on_email", unique: true, using: :btree
   add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true, using: :btree
 
@@ -147,6 +168,15 @@ ActiveRecord::Schema.define(version: 20160523105300) do
 
   add_foreign_key "bought_details", "entry_types"
   add_foreign_key "bought_details", "people"
+  add_foreign_key "comments", "news"
+  add_foreign_key "comments", "people"
+  add_foreign_key "individual_trainings", "people", column: "client_id"
+  add_foreign_key "individual_trainings", "people", column: "trainer_id"
   add_foreign_key "individual_trainings", "training_costs"
+  add_foreign_key "likes", "news"
+  add_foreign_key "likes", "people"
+  add_foreign_key "news", "people"
+  add_foreign_key "people", "activities"
   add_foreign_key "vacations", "people"
+  add_foreign_key "work_schedules", "people"
 end

@@ -1,0 +1,55 @@
+= render 'shared/it_searchbar'
+%table.table.table-striped.table-bordered.table-list.pretty.table-list-search
+  %thead
+    %tr
+      %th
+        %em.fa.fa-cog
+        Zarządzanie
+      %th
+        Koszt
+      %th
+        Klient
+      %th
+        Trener
+      %th
+        Data
+      %th
+        Godzina rozpoczęcia
+      %th
+        Godzina zakończenia
+      %th
+        Czas trwania
+  %tbody
+    - unless @individual_trainings.blank?
+      - @individual_trainings.each do |training|
+        %tr
+          %td
+            = link_to edit_backend_individual_training_path(training), data: { no_turbolink: true } do
+              %i.btn.btn-default
+                %i.fa.fa-pencil
+            = link_to backend_individual_training_path(training), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+              %i.btn.btn-danger
+                %i.fa.fa-trash
+          %td
+            = number_with_precision(training.training_cost.cost, precision: 2)
+            zł
+          %td
+            = training.client.try(:full_name)
+          %td
+            = training.trainer.try(:full_name)
+          %td
+            = training.date_of_training.strftime('%d.%m.%y')
+            r.
+          %td
+            = training.start_on.strftime('%H:%M')
+          %td
+            = training.end_on.strftime('%H:%M')
+          %td
+            = training.training_cost.duration
+            min.
+      = will_paginate @individual_trainings, renderer: BootstrapPagination::Rails unless @individual_trainings.blank?
+    - else
+      %tr
+        %td{colspan: '8'}
+          .text-center
+            Brak rezultatów.

@@ -1,0 +1,45 @@
+.col-md-6
+  = render 'shared/et_searchbar'
+%table.table.table-striped.table-bordered.table-list.pretty.table-list-search
+  %thead
+    %tr
+      %th
+        %em.fa.fa-cog
+        Zarządzanie
+      %th
+        Bilet/Karnet
+      %th
+        Szczegóły
+      %th
+        Opis
+      %th
+        Cena
+  %tbody
+    - unless @entry_types.blank?
+      - @entry_types.each do |entry|
+        %tr
+          %td{:align => "center"}
+            = link_to edit_backend_entry_type_path(entry) do
+              .btn.btn-default
+                %i.fa.fa-pencil
+            = link_to backend_entry_type_path(entry), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+              .btn.btn-danger
+                %i.fa.fa-trash
+            = link_to backend_entry_type_bought_details_path(entry), data: { no_turbolink: true } do
+              .btn.btn-warning
+                %i.fa.fa-history
+          %td
+            = entry.kind
+          %td
+            = entry.kind_details
+          %td
+            = entry.description
+          %td
+            = entry.price
+            zł
+      = will_paginate @entry_types, renderer: BootstrapPagination::Rails
+    - else
+      %tr
+        %td{colspan: '6'}
+          .text-center
+            Brak rezultatów.
