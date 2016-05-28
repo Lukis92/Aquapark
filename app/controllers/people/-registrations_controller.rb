@@ -1,5 +1,6 @@
 # Controller For  Client registration actions by devise gem
 class Client::RegistrationsController < Devise::RegistrationsController
+  # include ApplicationHelper
   before_action :configure_sign_up_params, only: [:create]
   before_action :configure_account_update_params, only: [:update]
 
@@ -9,9 +10,9 @@ class Client::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    super
+  end
 
   # GET /resource/edit
   # def edit
@@ -52,11 +53,10 @@ class Client::RegistrationsController < Devise::RegistrationsController
   # The path used after sign up.
   def after_sign_up_path_for(resource)
     super(resource)
-    flash[:success] = "Zarejestrowano konto pomyślnie."
+    # redirect_to new_person_session, notice: "Zarejestrowano konto pomyślnie."
   end
 
   def after_sign_in_path_for(resource)
-    #code
   end
   # The path used after sign up for inactive accounts.
   # def after_inactive_sign_up_path_for(resource)

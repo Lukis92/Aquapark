@@ -84,22 +84,22 @@ class Backend::NewsController < BackendController
     unless current_person.type == 'Manager'
       unless @news.scope == 'klienci' && (current_person.type == 'Client' ||
                                           current_person.type == 'Receptionist')
-        flash[:danger] = "Brak dostępu."
+        flash[:danger] = "Brak dostępu. {set_rule_to_display_news}"
         redirect_to backend_news_index_path(@news)
       end
 
       unless @news.scope == 'trenerzy' && (current_person.type == 'Trainer')
-        flash[:danger] = "Brak dostępu."
+        flash[:danger] = "Brak dostępu. {set_rule_to_display_news}"
         redirect_to backend_news_index_path(@news)
       end
 
       unless @news.scope == 'ratownicy' && (current_person.type == 'Lifeguard')
-        flash[:danger] = "Brak dostępu."
+        flash[:danger] = "Brak dostępu. {set_rule_to_display_news}"
         redirect_to backend_news_index_path(@news)
       end
 
       unless @news.scope == 'recepcjoniści' && (current_person.type == 'Receptionist')
-        flash[:danger] = "Brak dostępu."
+        flash[:danger] = "Brak dostępu. {set_rule_to_display_news}"
         redirect_to backend_news_index_path(@news)
       end
     end

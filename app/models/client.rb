@@ -25,6 +25,7 @@
 #  profile_image_file_size    :integer
 #  profile_image_updated_at   :datetime
 #  activity_id                :integer
+#  last_seen                  :datetime
 #
 
 class Client < Person

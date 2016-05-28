@@ -1,0 +1,28 @@
+%h2
+  Edycja profilu
+= simple_form_for(@person, :url => person_session_path) do |f|
+  = form_errors_for @person
+  .form-group
+    = f.input :pesel, required: true, autofocus: true, class: "form-control"
+  .form-group
+    = f.input :first_name, required: true
+  .form-group
+    = f.input :last_name, required: true
+  = f.input :date_of_birth, required: true, start_year: Date.today.year - 100, end_year: Date.today.year - 13
+  .form-group
+    = f.input :email, required: true
+  .form-group
+    = f.input :profile_image, as: :file
+  .form-group
+    = f.input :password, required: true, hint: ("minimum #{@minimum_password_length} znaków" if @minimum_password_length)
+  .form-group
+    = f.input :password_confirmation, required: true
+  .form-group
+    = f.input :current_password, autocomplete: "off"
+  .form-actions
+    = f.button :submit, "Zapisz", class: "btn btn-info"
+
+%h3 Zamknij konto
+%p
+  #{link_to "Zamknij konto", registration_path(resource_name), data: { confirm: "Jesteś pewny/a?" }, method: :delete}
+= link_to "Back", :back

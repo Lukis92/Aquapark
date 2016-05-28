@@ -1,5 +1,5 @@
 class People::SessionsController < Devise::SessionsController
-  def create
-    #code
+  def new
+    super
   end
 end

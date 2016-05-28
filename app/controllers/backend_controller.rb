@@ -1,6 +1,5 @@
 # Controller for backend pages
 class BackendController < ApplicationController
-  before_action :require_person
   before_action :set_current_person
   layout 'backend'
   def show
@@ -15,7 +14,6 @@ class BackendController < ApplicationController
     define_method "authenticate_#{k.underscore}!" do |_opts = {}|
       send("current_#{k.underscore}") || not_authorized
     end
-
     define_method "#{k.underscore}_signed_in?" do
       !send("current_#{k.underscore}").nil?
     end
@@ -24,8 +22,10 @@ class BackendController < ApplicationController
   private
 
   def require_person
-    unless current_person.present?
-      flash[:danger] = 'Brak dostępu.'
+    unless current_manager.present? || current_client.present? ||
+      current_receptionist.present? || current_lifeguard.present? ||
+      current_trainer.present?
+      flash[:danger] = 'Brak dostępu. {require_person}'
       redirect_to root_path
     end
   end

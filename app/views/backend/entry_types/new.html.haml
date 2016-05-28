@@ -1,7 +1,2 @@
-= simple_form_for([:backend, @entry_type], as: :entry_type, url: {action: "create"}) do |f|
-  = errors_for(@entry_type)
-  = f.input :kind, as: :radio_buttons, collection: EntryType::KIND
-  = f.input :kind_details
-  = f.input :description, as: :text, input_html: {class: "materialize-textarea"}
-  = f.input :price
-  = f.button :submit, class: "btn btn-primary"
+%h5 Dodawanie wejściówki
+= render 'form'

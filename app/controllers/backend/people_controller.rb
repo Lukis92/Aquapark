@@ -3,10 +3,10 @@ class Backend::PeopleController < BackendController
   before_action :set_person
   before_action :set_rule_to_edit_client_profile, only: [:edit, :update,
                                                          :destroy, :show]
-  # before_action :require_same_user, only: [:show, :bought_history]
-  before_action :require_receptionist, only: [:index, :edit, :update, :clients,
-                                              :receptionists, :lifeguards,
-                                              :trainers]
+  before_action :require_same_user, only: [:show, :bought_history]
+  # before_action :require_receptionist, only: [:index, :edit, :update, :clients,
+  #                                             :receptionists, :lifeguards,
+  #                                             :trainers]
   before_action :person_exists, only: [:show]
 
   def index
@@ -46,8 +46,13 @@ class Backend::PeopleController < BackendController
   end
 
   def destroy
-    @person.destroy
-    redirect_to backend_clients_path, notice: 'Pomyślnie usunięto.'
+    if @person == current_person
+      @person.destroy
+      redirect_to root_path, notice: 'Pomyślnie usunięto.'
+    else
+      @person.destroy
+      redirect_to :back, notice: 'Pomyślnie usunięto.'
+    end
   end
 
   # GET backend/people/search
@@ -115,13 +120,13 @@ class Backend::PeopleController < BackendController
     end
   end
 
-  # def require_same_user
-  #   unless current_person == @person || current_person.type == 'Manager' ||
-  #          current_person.type == 'Receptionist'
-  #     flash[:danger] = "Brak dostępu. {require_same_user}"
-  #     redirect_to backend_news_index_path
-  #   end
-  # end
+  def require_same_user
+    unless current_person == @person || current_person.type == 'Manager' ||
+           current_person.type == 'Receptionist'
+      flash[:danger] = "Brak dostępu. {require_same_user}"
+      redirect_to backend_news_index_path
+    end
+  end
 
   def require_receptionist
     unless current_person.type == 'Receptionist' ||

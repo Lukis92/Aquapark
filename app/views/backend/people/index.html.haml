@@ -26,13 +26,13 @@
     - @people.each do |person|
       %tr
         %td
-          = link_to backend_person_path(person) do
+          = link_to backend_person_path(person), title: 'Profil' do
             %i.btn.btn-success
               %i.fa.fa-user
-          = link_to edit_backend_person_path(person) do
+          = link_to edit_backend_person_path(person), title: 'Edytuj' do
             %i.btn.btn-default
               %i.fa.fa-pencil
-          = link_to backend_person_path(person), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+          = link_to backend_person_path(person), title: 'Usuń', method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
             %i.btn.btn-danger
               %i.fa.fa-trash
         %td

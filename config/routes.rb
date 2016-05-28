@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   devise_for :people, controllers: { sessions: 'devise/sessions' },
                       skip: [:registrations]
-  devise_for :clients, skip: :sessions
-
+  devise_for :clients, skip: :sessions,
+                       controllers: { registrations: 'devise/registrations' }
 
   resources 'contacts', only: [:new, :create]
   root 'home#index'
@@ -10,8 +10,9 @@ Rails.application.routes.draw do
   namespace :backend do
     root 'news#index'
 
-    devise_for :receptionists, :managers, :lifeguards, :trainers,
-               skip: :sessions, controllers: {registrations: 'devise/registrations'}
+    devise_for :people, :manager, :receptionists, :lifeguards, :trainers,
+               skip: :sessions,
+               controllers: { registrations: 'backend/registrations' }
 
     resources :entry_types do
       resources :bought_details

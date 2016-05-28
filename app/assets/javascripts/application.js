@@ -55,9 +55,10 @@ $(document).ready(function() {
         });
         $lightbox.find('.close').removeClass('hidden');
     });
-    $(document).ready(function () {
-                $('select').material_select();
-            });
-    //Smooth Scrolling
+  //Nice dropdown
+  $('select').material_select();
+
+  //count character in forms
+  $('input#input_text, textarea#textarea1').characterCounter();
 
 });

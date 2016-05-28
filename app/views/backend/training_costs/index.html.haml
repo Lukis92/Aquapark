@@ -19,10 +19,10 @@
     - @training_costs.each do |tc|
       %tr
         %td
-          = link_to edit_backend_training_cost_path(tc), data: { no_turbolink: true } do
+          = link_to edit_backend_training_cost_path(tc), title: 'Edytuj', data: { no_turbolink: true } do
             %i.btn.btn-default
               %i.fa.fa-pencil
-          = link_to backend_training_cost_path(tc), method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
+          = link_to backend_training_cost_path(tc), title: 'Usuń', method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
             %i.btn.btn-danger
               %i.fa.fa-trash
         %td

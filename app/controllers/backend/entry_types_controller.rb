@@ -70,24 +70,23 @@ class Backend::EntryTypesController < BackendController
   end
 
   def receptionist_access
-    unless current_person.type == 'Receptionist'
-      flash[:danger] = "Brak dostępu."
+    unless current_receptionist || current_manager
+      flash[:danger] = "Brak dostępu. {receptionist_access}"
       redirect_to backend_news_index_path
     end
   end
 
   def employee_access
-    if current_person.type == 'Client'
-      flash[:danger] = "Brak dostępu."
+    if current_client == 'Client'
+      flash[:danger] = "Brak dostępu. {employee_access}"
       redirect_to backend_news_index_path
     end
   end
 
   def require_same_user
-    unless current_person.type == 'Receptionist' ||
-           current_person.type == 'Manager'
+    unless current_receptionist || current_manager
       unless current_person != @person
-        flash[:danger] = "Brak dostępu,"
+        flash[:danger] = "Brak dostępu. {require_same_user}"
         redirect_to backend_news_index_path
       end
     end

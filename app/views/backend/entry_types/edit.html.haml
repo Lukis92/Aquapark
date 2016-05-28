@@ -1,8 +1,2 @@
-%h1 Edycja wejściówek
-= simple_form_for([:backend, @entry_type], as: :entry_type, url: {action: "update"}) do |f|
-  = errors_for(@entry_type)
-  = f.input :kind, collection: EntryType::KIND, include_blank: 'Wybierz rodzaj wejściówki'
-  = f.input :kind_details
-  = f.input :description, as: :text, input_html: {class: "materialize-textarea"}
-  = f.input :price
-  = f.button :submit, class: "btn btn-info"
+%h5 Edycja wejściówki
+= render 'form'

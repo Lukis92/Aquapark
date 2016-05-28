@@ -70,11 +70,12 @@ class Backend::VacationsController < BackendController
                                     .where(['accepted = ?', false])
                                     .paginate(page: params[:page], per_page: 20)
     @all_vacations = Vacation.all
-    @nearest_vacations = Vacation.where(person_id: @person.id)
+    @nearest_un_vacations = Vacation.where(person_id: @person.id)
                                  .where(['start_at >= ?', Date.today])
+                                 .where(['accepted = ?', false])
                                  .order(:start_at)
                                  .paginate(page: params[:page], per_page: 20)
-    @nearest_vacation = @nearest_vacations.first
+    @nearest_vacation = @nearest_vacations.first unless @nearest_vacations.nil?
     @days = 0
     # count days to end of current vacation
     unless @current_vacation.blank?

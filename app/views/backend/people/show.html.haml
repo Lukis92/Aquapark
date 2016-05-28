@@ -45,7 +45,7 @@
               %tr
                 %td Zarejestrowany jako:
                 %td
-                  = @person.type
+                  = @person.translate_type
         %br
 
         = link_to bought_history_backend_person_path(@person), class: "btn btn-primary" do
@@ -60,8 +60,14 @@
             %i.fa.fa-plane
             Przydziel urlop
   .panel-footer
-    %a.btn.btn-sm.btn-primary{"data-original-title" => "Broadcast Message", "data-toggle" => "tooltip", :type => "button"}
-      %i.glyphicon.glyphicon-envelope
+    -# %a.btn.btn-sm.btn-primary{"data-original-title" => "Broadcast Message", "data-toggle" => "tooltip", :type => "button"}
+    -#   %i.glyphicon.glyphicon-envelope
+    - if @person.online?
+      .btn.btn-border-success.waves-effect
+        ONLINE
+    - else
+      .btn.btn-border-danger.waves-effect
+        OFFLINE
     %i.pull-right
       = link_to edit_backend_person_path(@person), class: "btn btn-sm btn-warning", data: {no_turbolink: true} do
         %i.fa.fa-pencil-square

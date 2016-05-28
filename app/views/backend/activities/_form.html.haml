@@ -5,7 +5,8 @@
       = f.input :name
     .input-field
       = f.input :description, input_html: {class:'materialize-textarea'}
-    = f.input :active
+    .checkbox-fix
+      = f.input :active
     = f.input :date
     = f.input :start_on
     = f.input :end_on

@@ -29,40 +29,33 @@ Please feel free to use a different markup language if you do not plan to run
 
 == TODO:
 *Dostępne dni na trening
-*rozjeżdza się widok biletów, karnetów na drugim monitorze
-* brak zabezpieczenia dla destroy
-* jak usuwam konto to usuwając pokazuje komunikat brak dostępu
-* Gdy wybieramy pracownika w work_schedule, to spolścić type
+* rozjeżdza się widok biletów, karnetów na drugim monitorze
 * Wyświetlanie planu zajęć dla poszczególnych stref basenowych
-* przesunąć przycisk active w activities/edit
 * dla managera podgląd kto dał like/dislike dla news
+* Uporządkować backend dla każdej grupy użytkowników
+* gdy wyskoczy błąd walidacyjny w logowaniu to footer leci na góre
+* przetestować, jak usuwamy pracownika to z nim też usuwa się work_schedule
 == What's done:
-- klikając w szukaj i wstecz wyskakuje info pomyślnie usunięto
-- wyszukiwarka osób
-- wyszukiwarka work_schedules
-- wyszukiwarka entry_types
-- wyszukiwarka individual_trainings
-- usunąć @@trainer_id w individual_trainings
-- usunąć wszelkie respond_to, format i jsony
-- przerzucić niżej metody search w controllerach
-- poprawienie wyglądu wyszukiwarek
-- dodanie możliwości wyszkiwania części tekstu(rozw: prefix: true)
-- strzałki przy dropdown listach(rozwiązanie: uncomment jquery.min.js)
-- naprawiony klucz obcy person_id w work_schedules
-- naprawiony klucz obcy client_id, trainer_id w individual_trainings
-- naprawiony klucz obcy person_id w news
-- naprawiony klucz obcy person_id, news_id w likes
-- naprawiony klucz obcy person_id, news_id w comments
-- dodanie tabeli activity oraz relacji many_to_many do people
-- stworzenie tabeli activities_people
-- dodanie brakujących tabel do seed:destroy_all
-- dodanie osób dla testów w seeds
-- dodanie fakeowych danych do comments
-- dodanie fakeowych danych do bought_details(konieczne zakomentowanie walidacji)
-- dodanie fakeowych danych do training_costs
-- dodanie fakeowych danych do activities
-- wyszukiwarka dla activities
-== HEROKU ==
-- ukrycie kluczy w secret.yml
-- ustawienie secret_key_base dla production
-- usunięcie kolidujących migracji
+- rejestracja pracownika
+- walidacja formularza rejestracji pracownika, i18n
+- dodanie metody online sprawdzającej czy dany użytkownik jest zalogowany
+- usunąć kopertę z profilu
+- zmiana przekierowania po zalogowaniu się z dowolnego konta, brak błędu
+- brak zabezpieczenia dla destroy
+- i18n typ osoby w profilu
+- zmiana tytułu w nagłówku backend - Klient - Panel itp.
+- jak usuwam konto to usuwając pokazuje komunikat brak dostępu
+- dodanie favicon dla front i backend panel
+- błąd z require_receptionist w momencie logowania klienta
+- dodano maksymalny zakres dla salary(4 cyfry)
+- dodano minimalną ilość znaków dla first_name, last_name
+- walidacja first_name, last_name(tylko litery)
+- Gdy wybieramy pracownika w work_schedule, to spolścić type
+- przesunąć przycisk active w activities/edit
+- Niezatwierdzone urlopy usunąć z nadchodzących urlopów
+- poprawić w rejestracji pracowników Recpcjonista
+- oznaczenia do przycisków(hover opis);(work_schedules, entry_types, people)
+- _form dla entry_type, uproszczenie formularza
+- uzupełniona walidacja dla entry_types form
+- zabezpieczenie przed niepowołanym wejściem na podstrony entry_types
+- naprawienie działanie metod current...(dodanie ich do applicationhelper)

@@ -25,6 +25,7 @@
 #  profile_image_file_size    :integer
 #  profile_image_updated_at   :datetime
 #  activity_id                :integer
+#  last_seen                  :datetime
 #
 
 class Person < ActiveRecord::Base
@@ -48,19 +49,25 @@ class Person < ActiveRecord::Base
   has_many :likes, dependent: :destroy
   has_and_belongs_to_many :activities
   has_many :activities_as_trainer,
-            class_name: 'Activity',
-            foreign_key: 'trainer_id'
+           class_name: 'Activity',
+           foreign_key: 'trainer_id'
   ##########################
 
   # **VALIDATIONS*******************************************************#
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
+  DECIMAL_REGEX = /\A\d+(?:\.\d{0,2})?\z/
+  ONLY_LETTERS = /\A[a-zA-Z]+\z/
+
   before_save { self.email = email.downcase }
   validates :pesel, presence: true,
                     length: { is: 11 },
-                    uniqueness: true
-  validates :first_name, presence: true
-  validates :last_name, presence: true
+                    uniqueness: true,
+                    numericality: { only_integer: true }
+  validates :first_name, presence: true, length: { minimum: 3 },
+                         format: { with: ONLY_LETTERS }
+  validates :last_name, presence: true, length: { minimum: 3 },
+                        format: { with: ONLY_LETTERS }
   validates :date_of_birth, presence: true
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
                     format: { with: VALID_EMAIL_REGEX }
@@ -72,7 +79,8 @@ class Person < ActiveRecord::Base
   validates_attachment_content_type :profile_image,
                                     content_type: /\Aimage\/.*\Z/
   validate :profile_image_size
-
+  validates :salary, format: { with: DECIMAL_REGEX },
+                     numericality: { greater_than: 0, less_than: 9999 }
   #########################################################################
 
   include PgSearch
@@ -94,8 +102,16 @@ class Person < ActiveRecord::Base
       Date.today.strftime('%d').to_i >= date_of_birth.strftime('%d').to_i)) ? 0 : 1)
   end
 
+  def online?
+    if current_sign_in_at.nil?
+      false
+    else
+      current_sign_in_at + 2.hours > 5.minutes.ago
+    end
+  end
+
   def person_full_name_type
-    "#{first_name} #{last_name} | #{type}"
+    "#{first_name} #{last_name} | #{translate_type}"
   end
 
   def profile_image_size
@@ -104,6 +120,17 @@ class Person < ActiveRecord::Base
         erros.add(:profile_image, "powinno ważyć mniej niż 5MB")
       end
     end
+  end
+
+  TYPES_IN_PL = {
+    'Manager' => 'Kierownik',
+    'Lifeguard' => 'Ratownik',
+    'Receptionist' => 'Recepcjonista',
+    'Trainer' => 'Trener',
+    'Client' => 'Klient'
+  }.freeze
+  def translate_type
+    TYPES_IN_PL[type]
   end
 
   def self.text_search(query)

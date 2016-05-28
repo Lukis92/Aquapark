@@ -15,7 +15,12 @@
 
       .input-field
         = f.input :email, required: true, input_html: {length: 254, maxlength: 254}
+      .file-field.input-field
       = f.input :profile_image, as: :file
+      .input-field
+        = f.input :salary
+      = f.input :hiredate
+      = f.select :type, options_for_select([["Recepcjonista", "Receptionist"], ["Trener", "Trainer"], ["Ratownik", "Lifeguard"]]), prompt: 'Wybierz typ pracownika'
       .input-field
         = f.input :password, required: true, hint: ("minimum #{@minimum_password_length} znaków " if @minimum_password_length), input_html: {length: 50, maxlength: 50}
       .input-field
@@ -25,4 +30,8 @@
   - if @current_person.blank?
     = render "devise/shared/links"
 
-:javascript
+-# :javascript
+-#   $(document).ready(function () {
+-#     $('select').material_select();
+-#     $('input#input_text, textarea#textarea1').characterCounter();
+-#   });

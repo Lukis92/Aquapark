@@ -1,10 +1,13 @@
 !!!
 %html
   %head
-    %title Panel Backend
+    %title
+      = current_person.translate_type
+      \- Panel
     = stylesheet_link_tag    'application', media: 'all'
     = javascript_include_tag "application"
     = javascript_include_tag 'https://js.stripe.com/v2'
+    = favicon_link_tag 'Aquapark', href: 'http://www.mediafire.com/convkey/3ae8/l0k4388rtzm4rzkzg.jpg'
     = timeago_script_tag
     = csrf_meta_tags
     = tag :meta, name: 'stripe-key', content: ENV['STRIPE_PUBLIC_KEY']
@@ -26,7 +29,9 @@
     %nav.navbar.primary-color
       .container-fluid
         .navbar-header
-          %a.navbar-brand{href: "#"} Backend Panel
+          %a.navbar-brand{href: "#"}
+            = @current_person.translate_type
+            \- Panel
         %ul.nav.navbar-nav
           %li{class: current_page?(backend_news_index_path) && 'active'}
             = link_to 'Aktualności', backend_news_index_path
@@ -34,13 +39,8 @@
             = link_to 'Statystyki', backend_statistics_path
           %li{class: current_page?( list_backend_vacations_path(@current_person)) && 'active'}
             = link_to 'Urlop', list_backend_vacations_path(@current_person)
-          %li.dropdown
-            %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#", role: "button"}
-              Zatrudnianie
-              %i.caret
-            %ul.dropdown-menu
-              %li
-                = link_to 'Recepcjonista', new_backend_receptionist_registration_path, data: { no_turbolink: true }
+          %li{class: current_page?(new_backend_person_registration_path) && 'active'}
+            = link_to 'Rejestracja pracowników', new_backend_person_registration_path, data: { no_turbolink: true }
 
         %ul.nav.navbar-nav.navbar-right
           %li.dropdown
@@ -67,9 +67,9 @@
               %small
                 %b Wejściówki
             %ul.nav.nav-pills.nav-stacked
-              -# - if manager_signed_in? or current_receptionist_signed_in?
-              %li{class: current_page?(backend_entry_types_path) && 'active'}
-                = link_to "Bilety/Karnety", backend_entry_types_path, data: { no_turbolink: true }
+              - if current_manager or current_receptionist
+                %li{class: current_page?(backend_entry_types_path) && 'active'}
+                  = link_to "Bilety/Karnety", backend_entry_types_path, data: { no_turbolink: true }
               %li{class: current_page?(bought_history_backend_person_path(@current_person)) && 'active'}
                 = link_to "Moja historia Zakupów", bought_history_backend_person_path(@current_person), data: { no_turbolink: true }
               %li{class: current_page?(bought_list_backend_entry_types_path) && 'active'}
