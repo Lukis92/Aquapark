@@ -2,9 +2,9 @@ class Backend::IndividualTrainingsController < BackendController
   before_action :set_individual_training, only: [:edit, :update, :destroy]
   before_action :set_clients
   before_action :set_trainers
-  before_action :set_trainer, only: [:new, :create]
-  before_action :set_client, only: [:new, :create]
-  before_action :set_training_cost, only: [:new, :create]
+  before_action :set_trainer
+  before_action :set_client
+  before_action :set_training_cost
 
   def index
     @individual_trainings = IndividualTraining.paginate(page: params[:page],
@@ -99,6 +99,6 @@ class Backend::IndividualTrainingsController < BackendController
   end
 
   def set_training_cost
-    @training_costs = TrainingCost.all
+    @training_costs = TrainingCost.order(:duration)
   end
 end

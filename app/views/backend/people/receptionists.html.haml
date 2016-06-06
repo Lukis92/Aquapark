@@ -4,8 +4,7 @@
   Obecnie w bazie posiadamy
   = Receptionist.count
   zarejestrowanych recepcjonistów.
-.col-md-6
-  = render 'shared/people_searchbar'
+= render 'shared/people_searchbar'
 %table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   %thead
     %tr
@@ -46,7 +45,7 @@
         %td
           = receptionist.last_name
         %td
-          = receptionist.date_of_birth.strftime('%d-%m-%Y')+'r.'
+          = l(receptionist.date_of_birth)
         %td
           = receptionist.email
         %td
@@ -57,7 +56,7 @@
             %i.fa.fa-times
         %td
           - unless receptionist.hiredate.blank?
-            = receptionist.hiredate.strftime('%d-%m-%Y')+'r.'
+            = l(receptionist.hiredate)
           - else
             %i.fa.fa-times
 

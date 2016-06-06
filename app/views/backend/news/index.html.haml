@@ -1,8 +1,9 @@
 %h5 Aktualności
-= link_to new_backend_news_path, data: {no_turbolink: true} do
-  .btn.btn-primary.waves-effect.waves-light
-    %i.fa.fa-plus
-    Dodaj news
+- if current_manager || current_receptionist
+  = link_to new_backend_news_path, data: {no_turbolink: true} do
+    .btn.btn-primary.waves-effect.waves-light
+      %i.fa.fa-plus
+      Dodaj news
 / Post row
 - @news.each do |n|
   .row
@@ -16,21 +17,17 @@
           Napisane przez:
           = link_to n.person.full_name, backend_person_path(n.person_id)
           |
-          = n.created_at.strftime("%d-%m-%Y")
-        .hidden-xs
-          %a.btn-sm-full.comm-bg.rectangle.waves-effect.waves-light
-            %i.fa.fa-comments
-            %span Komentarze
-          %span.badge.social-counter
-            = n.comments.count
-          = link_to edit_backend_news_path(n) do
-            .btn.btn-warning.waves-effect.waves-light
-              %i.fa.fa-pencil-square
-              Edytuj
-          = link_to backend_news_path(n),  method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
-            .btn.btn-danger.waves-effect.waves-light
-              %i.fa.fa-trash
-              Usuń
+          = l(n.created_at)
+
+          - if current_manager || current_receptionist
+            = link_to edit_backend_news_path(n), data: { no_turbolink: true} do
+              .btn.btn-warning.waves-effect.waves-light
+                %i.fa.fa-pencil-square
+                Edytuj
+            = link_to backend_news_path(n),  method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+              .btn.btn-danger.waves-effect.waves-light
+                %i.fa.fa-trash
+                Usuń
           %br
           = link_to like_backend_news_path(n, like: true), method: :post do
             %i.fa.fa-thumbs-o-up.fa-2x
@@ -38,7 +35,9 @@
           = link_to like_backend_news_path(n, like: false), method: :post do
             %i.fa.fa-thumbs-o-down.fa-2x
               = n.thumbs_down_total
-          = n.scope
+          - if current_manager
+            .btn.btn-success.waves-effect.waves-light
+              = n.scope
         .visible-xs
           %a.btn-sm.comm-bg.rectangle.waves-effect.waves-light
             %i.fa.fa-comments

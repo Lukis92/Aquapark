@@ -35,27 +35,16 @@ Please feel free to use a different markup language if you do not plan to run
 * Uporządkować backend dla każdej grupy użytkowników
 * gdy wyskoczy błąd walidacyjny w logowaniu to footer leci na góre
 * przetestować, jak usuwamy pracownika to z nim też usuwa się work_schedule
+* poprawic routing people/id/work_schedules/id
+* usunąć z work_schedule created_at, updated_at
 == What's done:
-- rejestracja pracownika
-- walidacja formularza rejestracji pracownika, i18n
-- dodanie metody online sprawdzającej czy dany użytkownik jest zalogowany
-- usunąć kopertę z profilu
-- zmiana przekierowania po zalogowaniu się z dowolnego konta, brak błędu
-- brak zabezpieczenia dla destroy
-- i18n typ osoby w profilu
-- zmiana tytułu w nagłówku backend - Klient - Panel itp.
-- jak usuwam konto to usuwając pokazuje komunikat brak dostępu
-- dodanie favicon dla front i backend panel
-- błąd z require_receptionist w momencie logowania klienta
-- dodano maksymalny zakres dla salary(4 cyfry)
-- dodano minimalną ilość znaków dla first_name, last_name
-- walidacja first_name, last_name(tylko litery)
-- Gdy wybieramy pracownika w work_schedule, to spolścić type
-- przesunąć przycisk active w activities/edit
-- Niezatwierdzone urlopy usunąć z nadchodzących urlopów
-- poprawić w rejestracji pracowników Recpcjonista
-- oznaczenia do przycisków(hover opis);(work_schedules, entry_types, people)
-- _form dla entry_type, uproszczenie formularza
-- uzupełniona walidacja dla entry_types form
-- zabezpieczenie przed niepowołanym wejściem na podstrony entry_types
-- naprawienie działanie metod current...(dodanie ich do applicationhelper)
+- branie udziału w zajęciach, rezygnacja
+- wypisywanie terminów zajęć grupowych na najbliższe 4 tygodnie
+- walidacja terminów dodawania zajęć, do dnia tygodnia, godziny r/z i strefy
+  basenowej
+- naprawienie brania udziału w zajęciach oraz rezygnacja
+- podgląd listy uczestników na każde z zajęć
+- naprawione dropdownlist w Rejestracja pracowników(usunięcie :javascript w form)
+- poprawiona walidacja date_of_training_validation w indivdual_trainings
+- poprawienie przekierowania po poprawnym zarejestrowaniu konta klienta
+- wyświetlanie panelu błędów w rejestracji klienta, poprawienie metody errors_for

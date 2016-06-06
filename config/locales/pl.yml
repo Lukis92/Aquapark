@@ -4,6 +4,7 @@ pl:
     kind: Rodzaj
     kind_details: Szczegóły
     price: Cena
+    error: ' '
   activerecord:
     attributes:
       client:
@@ -18,6 +19,32 @@ pl:
         email: E-mail
         password: Hasło
         remember_me: Zapamiętaj mnie
+      work_schedule:
+        en_person_types:
+          Trener: Trainer
+          Ratownik: Lifeguard
+          Kierownik: Manager
+          Recepcjonista: Receptionist
+          Klient: Client
+        pl_person_types:
+          Trainer: Trener
+          Lifeguard: Ratownik
+          Manager: Kierownik
+          Receptionist: Recepcjonista
+          Client: Klient
+        start_time: Czas rozpoczęcia
+        end_time: Czas zakończenia
+        day_of_week: Dzień tygodnia
+        person_id: Pracownik
+      activity:
+        day_number:
+          Niedziela: 0
+          Poniedziałek: 1
+          Wtorek: 2
+          Środa: 3
+          Czwartek: 4
+          Piątek: 5
+          Sobota: 6
     errors:
       messages:
         record_invalid: Nieprawidłowy rekord
@@ -25,105 +52,109 @@ pl:
         bought_detail:
           attributes:
             bought_data:
-              blank: '- wymagane'
+              blank: wymagane
             days:
-              blank: '- wymagane'
+              blank: wymagane
         client:
           attributes:
             current_password:
-              blank: pole Obecne hasło '- wymagane'
+              blank: '- wymagane'
             date_of_birth:
-              blank: pole Data urodzenia '- wymagane'
+              blank: '- wymagane'
             email:
-              blank: pole Email '- wymagane'
+              blank: '- wymagane'
+              invalid: '- nieprawidłowy'
               taken: Taki email istnieje już w bazie
             first_name:
-              blank: Pole Imię '- wymagane'
+              blank: '- wymagane'
             last_name:
-              blank: Pole Nazwisko '- wymagane'
+              blank: '- wymagane'
             password:
-              blank: Pole Hasło '- wymagane'
+              blank: '- wymagane'
             pesel:
-              blank: pole Pesel '- wymagane'
+              blank: '- wymagane'
               taken: Taki pesel istnieje już w bazie
               wrong_length: Pesel musi posiadać 11 cyfr
         entry_type:
           attributes:
             kind:
-              blank: '- wymagane'
+              blank: wymagane
             kind_details:
-              blank: '- wymagane'
-              too_short: '- za krótkie (min. 3 znaki)'
+              blank: wymagane
+              too_short: za krótkie (min. 3 znaki)
             price:
-              blank: '- wymagane'
-              invalid: '- nieprawidłowa'
-              not_a_number: '- tylko cyfry'
-              greater_than: '- musi być dodatnia'
+              blank: wymagane
+              invalid: nieprawidłowa
+              not_a_number: tylko cyfry
+              greater_than: musi być dodatnia
         individual_training:
           attributes:
             start_on:
-              overlap: trening nachodzi na inny
+              overlap: Trening nachodzi na inny
         manager:
           attributes:
             password_confirmation:
               confirmation: Potwierdź hasło
-        person:
-          attributes:
-            current_password:
-              blank: pole Obecne hasło '- wymagane'
-            date_of_birth:
-              blank: pole Data urodzenia '- wymagane'
-            email:
-              blank: pole Email '- wymagane'
-              invalid: email jest nieprawidłowy
-              taken: Taki email istnieje już w bazie
-            first_name:
-              blank: Pole Imię '- wymagane'
-              too_short: Imię jest za krótkie (wymagane min. 3 znaki)
-              invalid: zezwolone tylko litery
-            last_name:
-              blank: Pole Nazwisko '- wymagane'
-              too_short: Nazwisko jest za krótkie (wymagane min. 3 znaki)
-              invalid: zezwolone tylko litery
-            password:
-              blank: Pole Hasło '- wymagane'
-              too_short: Hasło jest za krótkie
-            password_confirmation:
-              confirmation: Potwierdź hasło
-            pesel:
-              blank: pole Pesel '- wymagane'
-              taken: Taki pesel istnieje już w bazie
-              wrong_length: Pesel musi posiadać 11 cyfr
-              not_a_number: Pesel musi składać się tylko z cyfr
-            salary:
-              less_than: .. powinno być mniejsze niż %{count}
-              invalid: nieprawidłowy format
+        # person:
+        #   attributes:
+        #     current_password:
+        #       blank: pole Obecne hasło - wymagane
+        #     date_of_birth:
+        #       blank: pole Data urodzenia - wymagane
+        #     email:
+        #       invalid: '- nieprawidłowy'
+        #       taken: Taki email istnieje już w bazie
+        #     first_name:
+        #       blank: Pole Imię - wymagane
+        #       too_short: Imię jest za krótkie (wymagane min. 3 znaki)
+        #       invalid: zezwolone tylko litery
+        #     last_name:
+        #       blank: Pole Nazwisko - wymagane
+        #       too_short: Nazwisko jest za krótkie (wymagane min. 3 znaki)
+        #       invalid: zezwolone tylko litery
+        #     password:
+        #       blank: Pole Hasło - wymagane
+        #       too_short: Hasło jest za krótkie
+        #     password_confirmation:
+        #       confirmation: Potwierdź hasło
+        #     pesel:
+        #       blank: pole Pesel - wymagane
+        #       taken: Taki pesel istnieje już w bazie
+        #       wrong_length: Pesel musi posiadać 11 cyfr
+        #       not_a_number: Pesel musi składać się tylko z cyfr
+        #     salary:
+        #       less_than: .. powinno być mniejsze niż %{count}
+        #       invalid: nieprawidłowy format
         training_cost:
           attributes:
             cost:
-              blank: '- wymagane'
+              blank: wymagane
             duration:
-              blank: '- wymagane'
+              blank: wymagane
         work_schedule:
           attributes:
             day_of_week:
-              blank: Pole Dzień tygodnia jest wymagany
+              blank: wymagane
               taken: jest już zajęty
             person_id:
-              missing: '- wymagane'
+              missing: wymagane
+            start_time:
+              blank: wymagane
+            end_time:
+              blank: wymagane
         activity:
           attributes:
             name:
-              blank: '- wymagane'
+              blank: wymagane
             active:
-              blank: '- wymagane'
+              blank: wymagane
             pool_zone:
-              blank: '- wymagane'
+              blank: wymagane
   date:
     abbr_day_names:
     - Pon.
     - Wt.
-    - "Śr."
+    - Śr.
     - Czw.
     - Piąt.
     - Sob.
@@ -131,13 +162,13 @@ pl:
     day_names:
     - Poniedziałek
     - Wtorek
-    - "Środa"
+    - Środa
     - Czwartek
     - Piątek
     - Sobota
     - Niedziela
     formats:
-      default: "%d %B %Y"
+      default: "%d %B %Y r."
     month_names:
     -
     - Styczeń
@@ -187,6 +218,9 @@ pl:
       entry_type:
         create: Dodaj wejściówkę
         update: Zapisz
+      activities_person:
+        create: Zapisz się
+        update: Zapisz się
   mail_form:
     attributes:
       contact:
@@ -200,16 +234,16 @@ pl:
         contact:
           attributes:
             content:
-              blank: '- wymagane'
+              blank: wymagane
             email:
-              blank: '- wymagane'
+              blank: wymagane
               invalid: jest nieprawidłowy
             first_name:
-              blank: '- wymagane'
+              blank: wymagane
             last_name:
-              blank: '- wymagane'
+              blank: wymagane
             subject:
-              blank: '- wymagane'
+              blank: wymagane
   simple_form:
     labels:
       backend_person:
@@ -257,8 +291,11 @@ pl:
         description: Opis
         active: Aktywny?
         date: Data
+        start_on: Godzina rozpoczęcia
         end_on: Godzina zakończenia
+        pool_zone: Strefa basenu
         max_people: Maksymalna ilość osób
+        person_id: Trener
       entry_type:
         kind: Rodzaj
         kind_details: Szczegóły
@@ -266,7 +303,8 @@ pl:
         price: Cena
   time:
     formats:
-      default: "%d-%m-%Y"
+      default: "%d %B %Y r. | %H:%M"
+      short: "%H:%M"
   views:
     devise:
       shared:

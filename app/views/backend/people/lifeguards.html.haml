@@ -4,8 +4,8 @@
   Obecnie w bazie posiadamy
   = Lifeguard.count
   zarejestrowanych ratowników.
-.col-md-6
-  = render 'shared/people_searchbar'
+
+= render 'shared/people_searchbar'
 %table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   %thead
     %tr
@@ -46,13 +46,13 @@
         %td
           = lifeguard.last_name
         %td
-          = lifeguard.date_of_birth.strftime('%d-%m-%Y')+'r.'
+          = l(lifeguard.date_of_birth)
         %td
           = lifeguard.email
         %td
           = number_with_precision(lifeguard.salary, precision: 2)
           zł
         %td
-          = lifeguard.hiredate.strftime('%d-%m-%Y')+'r.'
+          = l(lifeguard.hiredate)
 
 = will_paginate @lifequards, renderer: BootstrapPagination::Rails

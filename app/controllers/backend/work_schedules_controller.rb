@@ -1,21 +1,34 @@
 class Backend::WorkSchedulesController < BackendController
   before_action :set_work_schedule, only: [:edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
-  before_action :set_person, only: [:show]
+  before_action :set_person, only: [:index, :show, :new]
   before_action :manager_person, only: [:edit, :destroy]
-  before_action :set_rule_to_display_work_schedules, only: [:index, :show]
+  before_action :select_rule_work_schedules, only: :index
+  before_action :manage_rule_work_schedules, only: [:edit, :update, :destroy]
+  before_action :show_rule_work_schedules, only: :show
   before_action :set_employees
 
   # GET backend/work_schedules
   def index
-    @work_schedules = WorkSchedule.order("CASE day_of_week
-            WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa'
-            THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
-            WHEN 'Sobota' THEN 6
-            WHEN 'Niedziela' THEN 7 END")
-                                  .order(sort_column + ' ' + sort_direction)
-                                  .paginate(page: params[:page],
-                                            per_page: 20)
+    if @person.blank?
+      @work_schedules = WorkSchedule.order("CASE day_of_week
+              WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa'
+              THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
+              WHEN 'Sobota' THEN 6
+              WHEN 'Niedziela' THEN 7 END")
+                                    .order(sort_column + ' ' + sort_direction)
+                                    .paginate(page: params[:page],
+                                              per_page: 20)
+    else
+      @work_schedules = WorkSchedule.where(person_id: @person.id).order("CASE day_of_week
+              WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa'
+              THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
+              WHEN 'Sobota' THEN 6
+              WHEN 'Niedziela' THEN 7 END")
+                                    .order(sort_column + ' ' + sort_direction)
+                                    .paginate(page: params[:page],
+                                              per_page: 20)
+    end
   end
 
   # GET backend/work_schedules/new
@@ -25,7 +38,11 @@ class Backend::WorkSchedulesController < BackendController
 
   # POST backend/work_schedules
   def create
-    @work_schedule = WorkSchedule.new(work_schedule_params)
+    @work_schedule = if params.key?(:work_schedule)
+                       WorkSchedule.new(work_schedule_params)
+                     else
+                       WorkSchedule.new(manage_schedule_params)
+                     end
     if @work_schedule.save
       redirect_to backend_work_schedules_path, notice: 'Pomyślnie dodano.'
     else
@@ -60,6 +77,9 @@ class Backend::WorkSchedulesController < BackendController
       @work_schedules = WorkSchedule.text_search(params[:query])
                                     .paginate(page: params[:page],
                                               per_page: 20)
+    else
+      @work_schedules = WorkSchedule.paginate(page: params[:page],
+                                              per_page: 20)
     end
   end
 
@@ -67,7 +87,12 @@ class Backend::WorkSchedulesController < BackendController
 
   def work_schedule_params
     params.require(:work_schedule)
-          .permit(:start_time, :end_time, :day_of_week, :person_id)
+          .permit(:start_time, :end_time, :day_of_week, :person_id, :created_at, :updated_at)
+  end
+
+  def manage_schedule_params
+    params.require(:manage_schedule)
+          .permit(:start_time, :end_time, :day_of_week, :person_id, :created_at, :updated_at)
   end
 
   def set_work_schedule
@@ -75,7 +100,7 @@ class Backend::WorkSchedulesController < BackendController
   end
 
   def set_person
-    @person = Person.find(params[:id])
+    @person = Person.find(params[:id]) unless params[:id].blank?
   end
 
   def set_employees
@@ -100,16 +125,30 @@ class Backend::WorkSchedulesController < BackendController
 
   # Ability to edit and destroy work schedules
   def manager_person
-    unless current_person.type == 'Manager'
-      flash[:danger] = "Nie masz uprawnień do tej sekcji."
+    unless current_manager
+      flash[:danger] = "Brak dostępu.{manager_person}"
       redirect_to backend_root_path
     end
   end
 
   # Ability to select schedules
-  def set_rule_to_display_work_schedules
-    unless current_person.type == 'Manager' || current_person.type == 'Receptionist'
-      flash[:danger] = "Nie masz uprawnień do tej sekcji."
+  def select_rule_work_schedules
+    unless current_manager
+      flash[:danger] = "Brak dostępu. {set_rule_to_display_work_schedules}"
+      redirect_to backend_root_path
+    end
+  end
+
+  def show_rule_work_schedules
+    unless current_manager || current_person == @person
+      flash[:danger] = "Brak dostępu. {show_rule_work_schedules}"
+      redirect_to backend_root_path
+    end
+  end
+
+  def manage_rule_work_schedules
+    unless current_manager
+      flash[:danger] = "Brak dostępu. {manage_rule_work_schedules}"
       redirect_to backend_root_path
     end
   end

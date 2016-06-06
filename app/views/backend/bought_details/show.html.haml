@@ -15,7 +15,7 @@ f%h3 Historia zakupów wejściówki:
         %p
           = unless @last_bought.blank?
             Data:
-            = @last_bought.bought_data.strftime('%d.%m.%y %H:%M')
+            = l(@last_bought.bought_data)
         %p
           Rodzaj:
           = @entry_type.kind
@@ -44,7 +44,7 @@ f%h3 Historia zakupów wejściówki:
     - @bought_details.each do |bought|
       %tr
         %td
-          = bought.bought_data.strftime('%d.%m.%y %H:%M') unless bought.bought_data.blank?
+          = l(bought.bought_data) unless bought.bought_data.blank?
         %td
           = bought.entry_type.kind unless bought.entry_type.blank?
         %td

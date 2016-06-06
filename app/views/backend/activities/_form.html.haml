@@ -7,12 +7,21 @@
       = f.input :description, input_html: {class:'materialize-textarea'}
     .checkbox-fix
       = f.input :active
-    = f.input :date
-    = f.input :start_on
-    = f.input :end_on
-    .input-field
-      = f.select :pool_zone, [['A', 'A'], ['B', 'B'], ['C', 'C'], ['D', 'D'],
-      ['E', 'E'], ['F', 'F']], prompt: 'Wybierz strefę', required: true
+    .col-md-6
+      .form-group
+        = f.input :start_on
+    .col-md-6
+      .form-group
+        = f.input :end_on
+    .form-group
+      = f.input :day_of_week, collection: Activity::DAYS,
+                              prompt: "Wybierz dzień tygodnia"
+    .form-group
+      = f.input :pool_zone, collection: [['A', 'A'], ['B', 'B'], ['C', 'C'],
+      ['D', 'D'], ['E', 'E'], ['F', 'F']], prompt: 'Wybierz strefę'
+    .form-group
+      = f.input :person_id, collection: @trainers.map{|t| [t.full_name, t.id]},
+                            prompt: "Wybierz trenera"
     .input-field
       = f.input :max_people
     = f.button :submit, class: "btn btn-primary"

@@ -21,15 +21,14 @@ class WorkSchedule < ActiveRecord::Base
   validates :end_time, presence: true
   validates_uniqueness_of :day_of_week, scope: :person_id
   validates :day_of_week, presence: true
-  validate :start_must_be_before_end_time
+  before_save :start_must_be_before_end_time
   validate :person_existing
-
   # ****************************************#
 
   include PgSearch
   pg_search_scope :search, against: [:start_time, :end_time, :day_of_week],
                            associated_against: {
-                             person: [:first_name, :last_name]
+                             person: [:first_name, :last_name, :type]
                            },
                            using: {
                              tsearch: { prefix: true }
@@ -38,8 +37,9 @@ class WorkSchedule < ActiveRecord::Base
   DAYS = %w(Poniedziałek Wtorek Środa Czwartek Piątek Sobota Niedziela).freeze
   # **METHODS***************************************************#
   def start_must_be_before_end_time
-    errors.add(:start_time, 'musi być przed godziną zakończenia pracy') unless
-      start_time < end_time
+    unless start_time < end_time
+      errors.add(:error, 'Czas rozpoczęcia musi być przed czasem zakończenia pracy')
+    end
   end
 
   def person_existing
@@ -53,7 +53,10 @@ class WorkSchedule < ActiveRecord::Base
   end
 
   def self.text_search(query)
-    if query.present?
+    t_query = I18n.t(:"activerecord.attributes.work_schedule.en_person_types.#{query}", default: '')
+    if t_query.present? && query.present?
+      search(t_query)
+    elsif query.present?
       search(query)
     else
       all

@@ -14,7 +14,7 @@
         %li.collection-item
           %p
             Data:
-            = @last_bought.bought_data.strftime('%d.%m.%y %H:%M') unless @last_bought.blank?
+            = l(@last_bought.bought_data) unless @last_bought.blank?
           %p
             Rodzaj:
             = @last_bought.entry_type.kind
@@ -22,42 +22,46 @@
             Cena:
             = @last_bought.entry_type.price
             zł
-    - else
-      .alert.alert-info
-        Brak zakupów.
 
-%table.table.table-striped.table-bordered.table-list.pretty.table-list-search
-  %thead
-    %tr
-      %th
-        = sortable 'bought_data', 'Data zakupu'
-      %th
-        Bilet/Karnet
-      %th
-        = sortable 'price', 'Cena'
-      %th
-        = sortable 'start_on', 'Data ważności od'
-      %th
-        = sortable 'end_on', 'Data ważności do'
-      %th
-        Aktywny?
-  %tbody
-    - @bought_history.each do |bought|
+- unless @bought_history.blank?
+  %table.table.table-striped.table-bordered.table-list.pretty.table-list-search
+    %thead
       %tr
-        %td
-          = bought.bought_data.strftime('%d.%m.%y %H:%M') unless bought.bought_data.blank?
-        %td
-          = bought.entry_type.kind unless bought.entry_type.blank?
-        %td
-          = bought.entry_type.price
-          zł
-        %td
-          = bought.start_on.strftime('%d.%m.%y') unless bought.end_on.blank?
-        %td
-          = bought.end_on.strftime('%d.%m.%y') unless bought.end_on.blank?
-        %td
-          - if bought.active?
-            %i.fa.fa-check
-          - else
-            %i.fa.fa-times
-= will_paginate @bought_history, renderer: BootstrapPagination::Rails
+        %th
+          = sortable 'bought_data', 'Data zakupu'
+        %th
+          Bilet/Karnet
+        %th
+          = sortable 'price', 'Cena'
+        %th
+          = sortable 'start_on', 'Data ważności od'
+        %th
+          = sortable 'end_on', 'Data ważności do'
+        %th
+          Aktywny?
+    %tbody
+      - @bought_history.each do |bought|
+        %tr
+          %td
+            = l(bought.bought_data) unless bought.bought_data.blank?
+          %td
+            = bought.entry_type.kind unless bought.entry_type.blank?
+          %td
+            = bought.entry_type.price
+            zł
+          %td
+            = l(bought.start_on) unless bought.end_on.blank?
+          %td
+            = l(bought.end_on) unless bought.end_on.blank?
+          %td
+            - if bought.active?
+              %i.fa.fa-check
+            - else
+              %i.fa.fa-times
+  = will_paginate @bought_history, renderer: BootstrapPagination::Rails
+- else
+  .row
+    .col-md-12
+      .card-panel.teal.text-center
+        %span.white-text
+          Brak zakupów.

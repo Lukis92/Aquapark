@@ -3,58 +3,61 @@
   Obecnie w bazie posiadamy
   = @un_vacations.count
   nie zaakceptowanych urlopów.
-
-- unless @un_vacations.blank?
-  %table.table.table-striped.table-bordered.table-list.pretty
-    %thead
-      %tr
-        %th
-          %em.fa.fa-cog
-          Zarządzanie
-        %th
-          = sortable "start_at", "Data rozpoczęcia"
-        %th
-          = sortable "end_at", "Data zakończenia"
-        %th
-          = sortable "free", "Płatny?"
-        %th
-          = sortable "reason", "Powód"
-        %th
-          = sortable "person_id", "Pracownik"
-        %th
-          Zaakceptowano?
-    %tbody
-      - @un_vacations.each do |vacation|
+.row
+  = render 'shared/v_searchbar'
+.row
+  - unless @un_vacations.blank?
+    %table.table.table-striped.table-bordered.table-list.pretty
+      %thead
         %tr
-          %td
-            = link_to edit_backend_vacation_path(vacation), title: 'Edytuj', data: { no_turbolink: true } do
-              %i.btn.btn-default
-                %i.fa.fa-pencil
-            = link_to backend_vacation_path(vacation), method: :delete, title: 'Usuń', data: { confirm: 'Jesteś pewny/a?' } do
-              %i.btn.btn-danger
-                %i.fa.fa-trash
-            = link_to accept_backend_vacation_path(vacation, accepted: true), title: 'Akceptuj', method: :post do
-              %i.btn.btn-success
-                %i.fa.fa-check-square
-          %td
-            = vacation.start_at
-          %td
-            = vacation.end_at
-          %td
-            - if vacation.free
-              %i.fa.fa-check
-            - else
-              %i.fa.fa-times
-          %td
-            = vacation.reason
-          %td
-            = vacation.person.full_name unless vacation.person.blank?
-          %td
-            - if vacation.accepted
-              %i.fa.fa-check-square-o
-            - else
-              %i.fa.fa-times-circle
-  = will_paginate @un_vacations, renderer: BootstrapPagination::Rails
-- else
-  .alert.alert-info
-    Brak urlopów.
+          %th
+            %em.fa.fa-cog
+            Zarządzanie
+          %th
+            = sortable "start_at", "Data rozpoczęcia"
+          %th
+            = sortable "end_at", "Data zakończenia"
+          %th
+            = sortable "free", "Płatny?"
+          %th
+            = sortable "reason", "Powód"
+          %th
+            = sortable "person_id", "Pracownik"
+          %th
+            Zaakceptowano?
+      %tbody
+        - @un_vacations.each do |vacation|
+          %tr
+            %td
+              = link_to edit_backend_vacation_path(vacation), title: 'Edytuj', data: { no_turbolink: true } do
+                %i.btn.btn-default
+                  %i.fa.fa-pencil
+              = link_to backend_vacation_path(vacation), method: :delete, title: 'Usuń', data: { confirm: 'Jesteś pewny/a?' } do
+                %i.btn.btn-danger
+                  %i.fa.fa-trash
+              = link_to accept_backend_vacation_path(vacation, accepted: true), title: 'Akceptuj', method: :post do
+                %i.btn.btn-success
+                  %i.fa.fa-check-square
+            %td
+              = l(vacation.start_at)
+            %td
+              = l(vacation.end_at)
+            %td
+              - if vacation.free
+                %i.fa.fa-check
+              - else
+                %i.fa.fa-times
+            %td
+              = vacation.reason
+            %td
+              = vacation.person.full_name unless vacation.person.blank?
+            %td
+              - if vacation.accepted
+                %i.fa.fa-check-square-o
+              - else
+                %i.fa.fa-times-circle
+    = will_paginate @un_vacations, renderer: BootstrapPagination::Rails
+  - else
+    .alert.alert-info.col-md-6.col-md-offset-3
+      .text-center
+        Brak urlopów.

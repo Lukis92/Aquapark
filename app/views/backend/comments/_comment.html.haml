@@ -15,7 +15,7 @@
 -#         %small
 -#           edytowano:
 -#           = timeago_tag comment.updated_at, lang: :pl
--#     - if comment.person == current_person || current_manager?
+-#     - if comment.person == current_person || current_manager
 -#       %td= link_to 'Edytuj',  edit_backend_news_comment_path(@news, comment), class: "btn btn-small btn-info"
 -#       %td= link_to 'Usuń', [:backend, @news, comment], method: :delete, class: "btn btn-small btn-danger", data: { confirm: 'Jesteś pewny/a?' }
 
@@ -35,7 +35,7 @@
       %p
         = comment.body
     .col-md-1
-      - if comment.person == current_person || current_manager?
+      - if comment.person == current_person || current_manager
         = link_to 'Edytuj', edit_backend_news_comment_path(@news, comment),
           class: "btn btn-small btn-info"
         = link_to 'Usuń', [:backend, @news, comment], method: :delete, class: "btn btn-small btn danger",

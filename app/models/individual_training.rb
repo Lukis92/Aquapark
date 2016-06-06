@@ -18,9 +18,10 @@ class IndividualTraining < ActiveRecord::Base
   belongs_to :training_cost
   # ************************#
   # **VALIDATIONS***************************#
-  before_validation :set_end_on
+  validate :set_end_on
+  validates_presence_of :start_on, :date_of_training
   validate :date_of_training_validation
-  validates :start_on, :end_on, overlap: true
+  validate :individual_training_validation
   # ****************************************#
 
   include PgSearch
@@ -55,36 +56,36 @@ class IndividualTraining < ActiveRecord::Base
   end
 
   def date_of_training_validation
-    trainer.work_schedules.any? do |ti|
+    trainer.work_schedules.each do |ti|
       if ti.day_of_week == translate_date(date_of_training)
-        unless ti.start_time <= start_on && ti.end_time <= end_on
-          errors.add(:start_on, 'Trening jest poza grafikiem pracy trenera.')
+        unless start_on >= ti.start_time && start_on <= ti.end_time &&
+               end_on >= ti.start_time && end_on <= ti.end_time
+          errors.add(:error, 'Trening jest poza grafikiem pracy trenera.')
         end
-      else
-        errors.add(:day_of_week, 'Trening jest poza grafikiem pracy trenera.')
       end
     end
+  end
 
-    def overlap?(x, y)
-      (x.start_on - y.end_on) * (y.start_on - x.end_on) >= 0
+  # def overlap?(x, y)
+  #   (x.start_on - y.end_on) * (y.start_on - x.end_on) >= 0
+  # end
+
+  def individual_training_validation
+    client.individual_trainings_as_client.each do |ci|
+      if date_of_training == ci.date_of_training
+        if (start_on..end_on).overlaps?(ci.start_on..ci.end_on)
+          errors.add(:error, 'Masz w tym czasie inny trening.')
+        end
+      end
     end
-
-    # if trainer.individual_trainings_as_trainer.any? do |ti|
-    #   ti.date_of_training == date_of_training
-    # else
-    #   errors.add(:date_of_training,
-    #   "Trening jest poza grafikiem pracy trenera.")
-    # end
-    # if trainer.individual_trainings_as_trainer
-    #           .where(translate_date('date_of_training') == date_of).count > 0
-    #   trainer.individual_trainings_as_trainer.each_with_index do |ti, index|
-    #     if translate_date(ti.date_of_training) == date_of_training
-    #     elsif (translate_date(ti.date_of_training) != date_of_training &&
-    #       index == trainers.individual_trainings_as_trainer.size - 1)
-    # if trainer.individual_trainings_as_trainer
-    #           .where('start_on > ?', start_on).count > 0 ||
-    #    trainer.individual_trainings_as_trainer
-    #           .where('end_on < ?', start_on).count > 0
+    trainer.individual_trainings_as_trainer.each do |ti|
+      if date_of_training == ti.date_of_training
+        raise 'Dupa'
+        if (start_on..end_on).overlaps?(ti.start_on..ti.end_on)
+          errors.add(:error, 'Trener ma w tym czasie inny trening.')
+        end
+      end
+    end
   end
 
   def self.text_search(query)

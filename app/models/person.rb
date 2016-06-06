@@ -24,15 +24,13 @@
 #  profile_image_content_type :string
 #  profile_image_file_size    :integer
 #  profile_image_updated_at   :datetime
-#  activity_id                :integer
-#  last_seen                  :datetime
 #
 
 class Person < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable
   self.table_name = 'people'
 
   # **ASSOCIATIONS**********#
@@ -47,26 +45,33 @@ class Person < ActiveRecord::Base
            foreign_key: 'client_id'
   has_many :news
   has_many :likes, dependent: :destroy
-  has_and_belongs_to_many :activities
-  has_many :activities_as_trainer,
-           class_name: 'Activity',
-           foreign_key: 'trainer_id'
+  # has_and_belongs_to_many :activities
+  has_many :activities_people
+  has_many :activities, through: :activities_people
+  accepts_nested_attributes_for :activities_people,
+                                reject_if: :all_blank,
+                                allow_destroy: true
+  accepts_nested_attributes_for :activities
+  # accepts_nested_attributes_for :assignments
+
+  # has_many :activities_as_trainer,
+  #          class_name: 'Activity',
+  #          foreign_key: 'trainer_id'
   ##########################
 
   # **VALIDATIONS*******************************************************#
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   DECIMAL_REGEX = /\A\d+(?:\.\d{0,2})?\z/
-  ONLY_LETTERS = /\A[a-zA-Z]+\z/
+  # ONLY_LETTERS = /\A[a-zA-Z]+\z/
 
   before_save { self.email = email.downcase }
   validates :pesel, presence: true,
                     length: { is: 11 },
-                    uniqueness: true,
-                    numericality: { only_integer: true }
-  validates :first_name, presence: true, length: { minimum: 3 },
-                         format: { with: ONLY_LETTERS }
-  validates :last_name, presence: true, length: { minimum: 3 },
-                        format: { with: ONLY_LETTERS }
+                    uniqueness: true
+  # ,
+  # numericality: { only_integer: true }
+  validates :first_name, presence: true
+  validates :last_name, presence: true
   validates :date_of_birth, presence: true
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
@@ -79,8 +84,7 @@ class Person < ActiveRecord::Base
   validates_attachment_content_type :profile_image,
                                     content_type: /\Aimage\/.*\Z/
   validate :profile_image_size
-  validates :salary, format: { with: DECIMAL_REGEX },
-                     numericality: { greater_than: 0, less_than: 9999 }
+  # validates :salary, numericality: { greater_than: 0, less_than: 9999 }
   #########################################################################
 
   include PgSearch
@@ -101,14 +105,13 @@ class Person < ActiveRecord::Base
       (Date.today.strftime('%m').to_i == date_of_birth.strftime('%m').to_i &&
       Date.today.strftime('%d').to_i >= date_of_birth.strftime('%d').to_i)) ? 0 : 1)
   end
-
-  def online?
-    if current_sign_in_at.nil?
-      false
-    else
-      current_sign_in_at + 2.hours > 5.minutes.ago
-    end
-  end
+  # def online?
+  #   if current_sign_in_at.nil?
+  #     false
+  #   else
+  #     current_sign_in_at + 2.hours > 5.minutes.ago
+  #   end
+  # end
 
   def person_full_name_type
     "#{first_name} #{last_name} | #{translate_type}"
@@ -133,9 +136,13 @@ class Person < ActiveRecord::Base
     TYPES_IN_PL[type]
   end
 
-  def self.text_search(query)
-    if query.present?
+  def self.text_search(query, querydate)
+    if query.present? && querydate.blank?
       search(query)
+    elsif query.present? && querydate.present?
+      search(query + ' ' + querydate)
+    elsif query.blank? && querydate.present?
+      search(querydate)
     else
       all
     end

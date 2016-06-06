@@ -15,6 +15,7 @@
 //= require jquery-ui
 //= require bootstrap-wysihtml5
 //= require bootstrap-wysihtml5/locales
+//= require jquery.turbolinks
 //= require bootstrap-sprockets
 //= require turbolinks
 //= require rails-timeago-all
@@ -23,11 +24,11 @@
 
 
 //alert disappear after few seconds
-window.setTimeout(function() {
-    $(".alert").fadeTo(500, 0).slideUp(500, function() {
-        $(this).remove();
-    });
-}, 10000);
+// window.setTimeout(function() {
+//     $(".alert").fadeTo(500, 0).slideUp(500, function() {
+//         $(this).remove();
+//     });
+// }, 10000);
 
 $(document).ready(function() {
     var $lightbox = $('#lightbox');
@@ -55,10 +56,14 @@ $(document).ready(function() {
         });
         $lightbox.find('.close').removeClass('hidden');
     });
-  //Nice dropdown
-  $('select').material_select();
+    //Nice dropdown
+    $('select').material_select();
 
-  //count character in forms
-  $('input#input_text, textarea#textarea1').characterCounter();
+    //count character in forms
+    $('input#input_text, textarea#textarea1').characterCounter();
 
+    $('.datepicker').pickadate({
+       selectMonths: true, // Creates a dropdown to control month
+       selectYears: 15 // Creates a dropdown of 15 years to control year
+     });
 });

@@ -1,8 +1,7 @@
--@work_schedule
 %h3 Pracownik
 %h4
   = @person.full_name
-= link_to new_backend_work_schedules_path(@person), data: { no_turbolink: true } do
+= link_to new_backend_manage_schedule_index_path(@person), data: { no_turbolink: true } do
   %i.btn.btn-success
     %i.fa.fa-plus
     Dodaj grafik
@@ -36,6 +35,6 @@
         %td
           = work.day_of_week
         %td
-          = work.start_time.strftime("%H:%M")
+          = l(work.start_time, format: :short)
         %td
-          = work.end_time.strftime("%H:%M")
+          = l(work.end_time, format: :short)

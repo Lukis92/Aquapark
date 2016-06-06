@@ -1,0 +1,10 @@
+.panel.panel-danger.copyright-wrap#copyright-wrap
+  .panel-heading
+    Wystąpiły błędy proszę poprawić:
+    %button.close{"data-dismiss" => "alert", "data-target" => "#copyright-wrap", :type => "button"}
+      %span{"aria-hidden" => "true"} ×
+      %span.sr-only Close
+  .panel-body
+    %ul
+      - object.errors.full_messages.each do |msg|
+        %li= msg

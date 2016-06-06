@@ -12,4 +12,8 @@ class TrainingCost < ActiveRecord::Base
 
   validates_presence_of :duration, :cost
   validates_uniqueness_of :duration
+
+  def full_duration
+    "#{duration} min."
+  end
 end

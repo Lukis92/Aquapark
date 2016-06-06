@@ -1,9 +1,19 @@
 %h5 Zajęcia grupowe
 
-%p
-  = link_to new_backend_activity_path, class: 'btn btn-primary', data: {no_turbolink: true} do
-    %i.fa.fa-plus
-    Dodaj zajęcia
+-# = month_calendar attribute: :date, events: @active_activities do |activity|
+-#   = activity.date.strftime("%d")
+-#   %br
+-#   - activity.each do |ac|
+-#     = ac.name
+-#     = l(ac.start_on, format: :short)
+-#     \-
+-#     = l(ac.end_on, format: :short)
+
+- unless current_client || current_trainer || current_lifeguard
+  %p
+    = link_to new_backend_activity_path, class: 'btn btn-primary', data: {no_turbolink: true} do
+      %i.fa.fa-plus
+      Dodaj zajęcia
 .col-md-6
   = render 'shared/a_searchbar'
 %table.table.table-striped.table-bordered.table-list.pretty.table-list-search
@@ -19,7 +29,9 @@
       %th
         Aktywne?
       %th
-        Data
+        Dzień tygodnia
+      -# %th
+      -#   Data
       %th
         Godzina rozpoczęcia
       %th
@@ -27,17 +39,26 @@
       %th
         Strefa basenu
       %th
+        Trener
+      %th
         Maksymalna ilość osób
   %tbody
     - @activities.each do |activity|
       %tr
         %td
-          = link_to edit_backend_activity_path(activity), data: { no_turbolink: true } do
-            %i.btn.btn-default
-              %i.fa.fa-pencil
-          = link_to backend_activity_path(activity), method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
-            %i.btn.btn-danger
-              %i.fa.fa-trash
+          - unless current_receptionist || current_manager
+            = link_to edit_backend_activity_path(activity), data: { no_turbolink: true } do
+              %i.btn.btn-default
+                %i.fa.fa-pencil
+            = link_to backend_activity_path(activity), method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
+              %i.btn.btn-danger
+                %i.fa.fa-trash
+          = link_to sign_up_backend_activity_path(activity), data: { no_turbolink: true } do
+            %i.btn.btn-success
+              %i.fa.fa-user-plus
+          = link_to preview_backend_activity_path(activity) do
+            %i.btn.btn-warning
+              %i.fa.fa-search
         %td
           = activity.name
         %td
@@ -48,14 +69,18 @@
           - else
             %i.fa.fa-times
         %td
-          = activity.date.strftime("%d-%m-%Y")+'r.'
+          = activity.day_of_week
+        -# %td
+        -#   = l(activity.date)
         %td
-          = activity.start_on.strftime("%H:%M")
+          = l(activity.start_on, format: :short)
         %td
-          = activity.end_on.strftime("%H:%M")
+          = l(activity.end_on, format: :short)
         %td
           .btn.btn-warning
             = activity.pool_zone
+        %td
+          = activity.person.full_name
         %td
           = activity.max_people
 

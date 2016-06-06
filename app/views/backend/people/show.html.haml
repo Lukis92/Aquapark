@@ -26,9 +26,9 @@
             %tr
               %td Data urodzenia:
               %td
-                = @person.date_of_birth
+                = l(@person.date_of_birth)
             %tr
-              %td Email
+              %td Email:
               %td
                 %a{:href => "mailto:#{@person.email}"}
                   = @person.email
@@ -36,12 +36,12 @@
               %tr
                 %td Zarobki
                 %td
-                  = @person.salary
+                  = number_with_precision(@person.salary, precision: 2)
                   zł
               %tr
                 %td Data zatrudnienia:
                 %td
-                  = @person.hiredate
+                  = l(@person.hiredate)
               %tr
                 %td Zarejestrowany jako:
                 %td
@@ -62,12 +62,13 @@
   .panel-footer
     -# %a.btn.btn-sm.btn-primary{"data-original-title" => "Broadcast Message", "data-toggle" => "tooltip", :type => "button"}
     -#   %i.glyphicon.glyphicon-envelope
-    - if @person.online?
+    - if @person.current_sign_in_at.present?
       .btn.btn-border-success.waves-effect
-        ONLINE
+        Ostatnie logowanie:
+        = l(@person.current_sign_in_at)
     - else
       .btn.btn-border-danger.waves-effect
-        OFFLINE
+        Brak logowania
     %i.pull-right
       = link_to edit_backend_person_path(@person), class: "btn btn-sm btn-warning", data: {no_turbolink: true} do
         %i.fa.fa-pencil-square

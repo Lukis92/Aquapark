@@ -65,15 +65,16 @@ gem 'faker' # a library for generating fake data.
 gem 'will_paginate-bootstrap' # bootstrap pagination
 gem 'mail_form' # send e-mail straight from forms in Rails.
 gem 'stripe', source: 'https://code.stripe.com/' # stripe Ruby bindings
-gem 'jquery-ui-rails' # jQuery UI for the Rails asset pipeline
 gem 'factory_girl_rails' # A library for setting up Ruby objects as test data.
 gem 'rolify' # Role management library with resource scoping
 gem 'html_truncator', '~>0.2' # truncate an HTML string
 gem 'pg_search' # PostgreSQL's full text search
 gem 'rubocop', require: false
 gem 'rails_best_practices' # a code metric tool for rails projects
-gem 'validates_overlap' # Gem for Rails 3 and 4, that helps validate overlap
+# gem 'validates_overlap' # Gem for Rails 3 and 4, that helps validate overlap
 gem 'simple_calendar', '~> 2.0' # A wonderfully simple calendar gem for Rails
 gem 'bootstrap-wysihtml5-rails', github: 'nerian/bootstrap-wysihtml5-rails'
 gem 'rails-timeago', '~> 2.0' # helper for time tags
 gem 'i18n-tasks', '~> 0.9.5' # Manage translation for Ruby i18n
+gem 'jquery-turbolinks' # fix binded events problem caused by Turbolinks
+gem 'jquery-ui-rails' # jQuery UI for the Rails asset pipeline

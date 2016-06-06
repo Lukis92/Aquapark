@@ -12,10 +12,10 @@
             dni!
           %p
             Data:
-            = @nearest_training.date_of_training.strftime("%d.%m.%Yr.")
+            = l(@nearest_training.date_of_training)
           %p
             Godzina:
-            = @nearest_training.start_on.strftime("%H:%M")
+            = l(@nearest_training.start_on, format: :short)
             |
             Czas trwania:
             = @nearest_training.training_cost.duration
@@ -24,6 +24,7 @@
   = date_of_training.strftime("%d")
   %br
   - trainings.each do |training|
-    = training.start_on.strftime("%H:%M")
-    = training.end_on.strftime("%H:%M")
+    = l(training.start_on, format: :short)
+    \-
+    = l(training.end_on, format: :short)
     = training.trainer.full_name

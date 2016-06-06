@@ -23,6 +23,15 @@ class Vacation < ActiveRecord::Base
   validate :timeline
   # ****************************************#
 
+  include PgSearch
+  pg_search_scope :search, against: [:start_at, :end_at, :reason],
+                           associated_against: {
+                             person: [:first_name, :last_name]
+                           },
+                           using: {
+                             tsearch: { prefix: true }
+                           }
+
   private
 
   def timeline
@@ -51,6 +60,18 @@ class Vacation < ActiveRecord::Base
     if end_at < start_at
       errors.add(:end_at, 'Czas rozpoczęcia musi być wcześniejszy niż czas
       zakończenia.')
+    end
+  end
+
+  def self.text_search(query, querydate)
+    if query.present? && querydate.blank?
+      search(query)
+    elsif query.present? && querydate.present?
+      search(query+' '+querydate)
+    elsif query.blank? && querydate.present?
+      search(querydate)
+    else
+      all
     end
   end
 end

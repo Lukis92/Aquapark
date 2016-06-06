@@ -19,9 +19,9 @@
             %td
               = tw.day_of_week
             %td
-              = tw.start_time.strftime("%H:%M")
+              = l(tw.start_time, format: :short)
             %td
-              = tw.end_time.strftime("%H:%M")
+              = l(tw.end_time, format: :short)
 
 .col-md-6
   = simple_form_for([:backend, @individual_training]) do |f|

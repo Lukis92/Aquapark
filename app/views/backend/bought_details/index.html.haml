@@ -14,7 +14,7 @@
       %li.collection-item
         %p
           Data:
-          = @last_bought.bought_data.strftime('%d.%m.%y %H:%M') unless @bought_details.blank?
+          = l(@last_bought.bought_data) unless @bought_details.blank?
         %p
           Rodzaj:
           = @last_bought.entry_type.kind
@@ -48,7 +48,7 @@
             %i.btn.btn-danger
               %i.fa.fa-trash
         %td
-          = bought.bought_data.strftime('%d.%m.%y %H:%M') unless bought.bought_data.blank?
+          = l(bought.bought_data) unless bought.bought_data.blank?
         %td
           = bought.start_on unless bought.end_on.blank?
         %td

@@ -1,5 +1,5 @@
 class Backend::StatisticsController < BackendController
-  before_action :require_manager, only: [:index]
+  before_action :require_manager, only: :index
   def index
     @all_people = Person.all.count
     @employees = Person.all.where.not(type: 'Client').count
@@ -24,7 +24,7 @@ class Backend::StatisticsController < BackendController
   private
 
   def require_manager
-    unless current_person.type == 'Manager'
+    unless current_manager
       flash[:danger] = "Brak dostępu"
       redirect_to backend_news_index_path
     end

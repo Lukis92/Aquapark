@@ -45,11 +45,11 @@
             - else
               %i.fa.fa-times
           %td
-            = activity.date.strftime("%d-%m-%Y")+'r.'
+            = l(activity.date)
           %td
-            = activity.start_on.strftime("%H:%M")
+            = l(activity.start_on, format: :short)
           %td
-            = activity.end_on.strftime("%H:%M")
+            = l(activity.end_on, format: :short)
           %td
             = activity.pool_zone
           %td

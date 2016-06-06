@@ -3,7 +3,7 @@ class Backend::BoughtDetailsController < BackendController
   before_action :set_entry_type, only: [:index, :new, :create]
   before_action :set_bought_detail,
                 only: [:edit, :destroy, :activate, :deactivate]
-  before_action :curr_person, only: [:create]
+  before_action :curr_person, only: :create
   # GET backend/bought_details
   # GET backend/bought_details.json
   def index

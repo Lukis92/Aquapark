@@ -4,8 +4,8 @@
   Obecnie w bazie posiadamy
   = Receptionist.count
   zarejestrowanych trenerów.
-.col-md-6
-  = render 'shared/people_searchbar'
+
+= render 'shared/people_searchbar'
 %table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   %thead
     %tr
@@ -46,13 +46,13 @@
         %td
           = trainer.last_name
         %td
-          = trainer.date_of_birth.strftime('%d-%m-%Y')+'r.'
+          = l(trainer.date_of_birth)
         %td
           = trainer.email
         %td
           = number_with_precision(trainer.salary, precision: 2)
           zł
         %td
-          = trainer.hiredate.strftime('%d-%m-%Y')+'r.'
+          = l(trainer.hiredate)
 
 = will_paginate @trainers, renderer: BootstrapPagination::Rails

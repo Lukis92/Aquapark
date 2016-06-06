@@ -12,7 +12,8 @@
       = f.input :first_name, required: true
     .form-group
       = f.input :last_name, required: true
-    = f.input :date_of_birth, required: true, start_year: Date.today.year - 100, end_year: Date.today.year - 13
+    .form-group
+      = f.input :date_of_birth, required: true, start_year: Date.today.year - 100, end_year: Date.today.year - 13
     .form-group
       = f.input :email, required: true
     .form-group

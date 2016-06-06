@@ -29,11 +29,12 @@
           %td
             = work.day_of_week
           %td
-            = work.start_time.strftime("%H:%M")
+            = l(work.start_time, format: :short)
           %td
-            = work.end_time.strftime("%H:%M")
+            = l(work.end_time, format: :short)
           %td
-            = work.person.try(:full_name) unless work.person.nil?
+            = link_to backend_person_path(work.person) do
+              = work.person.full_name
           %td
             - unless work.person.nil?
               - if work.person.type == "Manager"

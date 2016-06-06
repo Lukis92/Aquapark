@@ -8,6 +8,10 @@
   .btn.btn-info.waves-effect.waves-light
     %i.fa.fa-plus
     Dodaj urlop
+
+.row
+  = render 'shared/v_searchbar'
+
 - unless @vacations.blank?
   %table.table.table-striped.table-bordered.table-list.pretty
     %thead
@@ -38,9 +42,9 @@
               %i.btn.btn-danger
                 %i.fa.fa-trash
           %td
-            = vacation.start_at
+            = l(vacation.start_at)
           %td
-            = vacation.end_at
+            = l(vacation.end_at)
           %td
             - if vacation.free
               %i.fa.fa-check
@@ -57,5 +61,6 @@
               %i.fa.fa-times-circle
   = will_paginate @vacations, renderer: BootstrapPagination::Rails
 - else
-  .alert.alert-info
-    Brak urlopów.
+  .alert.alert-info.col-md-6.col-md-offset-3
+    .text-center
+      Brak urlopów.

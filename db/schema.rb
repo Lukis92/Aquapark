@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160526090102) do
+ActiveRecord::Schema.define(version: 20160603131427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,16 +20,20 @@ ActiveRecord::Schema.define(version: 20160526090102) do
     t.string  "name",        limit: 20, null: false
     t.text    "description"
     t.boolean "active",                 null: false
-    t.date    "date"
+    t.string  "day_of_week", limit: 20, null: false
     t.time    "start_on",               null: false
     t.time    "end_on",                 null: false
     t.string  "pool_zone",   limit: 1,  null: false
     t.integer "max_people"
+    t.integer "person_id"
   end
 
-  create_table "activities_people", id: false, force: :cascade do |t|
+  add_index "activities", ["person_id"], name: "index_activities_on_person_id", using: :btree
+
+  create_table "activities_people", force: :cascade do |t|
     t.integer "activity_id", null: false
     t.integer "person_id",   null: false
+    t.date    "date"
   end
 
   add_index "activities_people", ["activity_id", "person_id"], name: "index_activities_people_on_activity_id_and_person_id", using: :btree
@@ -37,10 +41,10 @@ ActiveRecord::Schema.define(version: 20160526090102) do
 
   create_table "bought_details", force: :cascade do |t|
     t.datetime "bought_data",                           null: false
+    t.date     "start_on"
     t.date     "end_on",                                null: false
     t.integer  "entry_type_id"
     t.integer  "person_id"
-    t.date     "start_on"
     t.decimal  "cost",          precision: 5, scale: 2, null: false
   end
 
@@ -67,11 +71,11 @@ ActiveRecord::Schema.define(version: 20160526090102) do
 
   create_table "individual_trainings", force: :cascade do |t|
     t.date    "date_of_training", null: false
-    t.time    "end_on",           null: false
-    t.integer "training_cost_id"
-    t.time    "start_on",         null: false
     t.integer "client_id"
     t.integer "trainer_id"
+    t.time    "start_on",         null: false
+    t.time    "end_on",           null: false
+    t.integer "training_cost_id"
   end
 
   add_index "individual_trainings", ["client_id"], name: "index_individual_trainings_on_client_id", using: :btree
@@ -122,22 +126,10 @@ ActiveRecord::Schema.define(version: 20160526090102) do
     t.string   "profile_image_content_type"
     t.integer  "profile_image_file_size"
     t.datetime "profile_image_updated_at"
-    t.integer  "activity_id"
   end
 
-  add_index "people", ["activity_id"], name: "index_people_on_activity_id", using: :btree
   add_index "people", ["email"], name: "index_people_on_email", unique: true, using: :btree
   add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true, using: :btree
-
-  create_table "pg_search_documents", force: :cascade do |t|
-    t.text     "content"
-    t.integer  "searchable_id"
-    t.string   "searchable_type"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-  end
-
-  add_index "pg_search_documents", ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id", using: :btree
 
   create_table "training_costs", force: :cascade do |t|
     t.integer "duration",                         null: false
@@ -166,6 +158,7 @@ ActiveRecord::Schema.define(version: 20160526090102) do
 
   add_index "work_schedules", ["person_id"], name: "index_work_schedules_on_person_id", using: :btree
 
+  add_foreign_key "activities", "people"
   add_foreign_key "bought_details", "entry_types"
   add_foreign_key "bought_details", "people"
   add_foreign_key "comments", "news"
@@ -176,7 +169,6 @@ ActiveRecord::Schema.define(version: 20160526090102) do
   add_foreign_key "likes", "news"
   add_foreign_key "likes", "people"
   add_foreign_key "news", "people"
-  add_foreign_key "people", "activities"
   add_foreign_key "vacations", "people"
   add_foreign_key "work_schedules", "people"
 end

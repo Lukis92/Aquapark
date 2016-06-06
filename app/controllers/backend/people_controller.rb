@@ -7,7 +7,7 @@ class Backend::PeopleController < BackendController
   # before_action :require_receptionist, only: [:index, :edit, :update, :clients,
   #                                             :receptionists, :lifeguards,
   #                                             :trainers]
-  before_action :person_exists, only: [:show]
+  before_action :person_exists, only: :show
 
   def index
     @people = Person.order(sort_column + ' ' + sort_direction)
@@ -57,9 +57,11 @@ class Backend::PeopleController < BackendController
 
   # GET backend/people/search
   def search
-    if params[:query].present?
-      @people = Person.text_search(params[:query])
-                      .paginate(page: params[:page], per_page: 10)
+    if params[:query].present? || params[:querydate].present?
+      @people = Person.text_search(params[:query], params[:querydate])
+                      .paginate(page: params[:page], per_page: 20)
+    else
+      @people = Person.paginate(page: params[:page], per_page: 20)
     end
   end
 
@@ -74,7 +76,8 @@ class Backend::PeopleController < BackendController
   end
 
   def bought_history
-    @bought_history = BoughtDetail.order(sort_bought + ' ' + sort_direction)
+    @bought_history = BoughtDetail.order(bought_data: :desc)
+                                  .order(sort_bought + ' ' + sort_direction)
                                   .where(person_id: @person)
                                   .paginate(page: params[:page], per_page: 20)
     @last_bought = BoughtDetail.where(person_id: @person)
@@ -110,28 +113,25 @@ class Backend::PeopleController < BackendController
                                    :date_of_birth, :email, :profile_image,
                                    :salary, :hiredate, :password,
                                    :password_confirmation, :current_password,
-                                   :remember_me)
+                                   :remember_me, activities_people: [:date])
   end
 
   def require_same_person
-    unless current_person == @person || current_person.type == 'Manager'
+    unless current_person == @person || current_manager
       flash[:danger] = "Możesz edytować tylko własny profil."
       redirect_to backend_person_path(current_person)
     end
   end
 
   def require_same_user
-    unless current_person == @person || current_person.type == 'Manager' ||
-           current_person.type == 'Receptionist'
+    unless current_person == @person || current_manager || current_receptionist
       flash[:danger] = "Brak dostępu. {require_same_user}"
       redirect_to backend_news_index_path
     end
   end
 
   def require_receptionist
-    unless current_person.type == 'Receptionist' ||
-           current_person.type == 'Manager' ||
-           current_person == @person
+    unless current_receptionist || current_manager || current_person == @person
       flash[:danger] = "Brak dostępu.{require_receptionist}"
       redirect_to backend_news_index_path
     end
@@ -139,13 +139,13 @@ class Backend::PeopleController < BackendController
 
   def set_rule_to_edit_client_profile
     if @person.type == 'Client'
-      unless current_person == @person || current_person.type == 'Receptionist' ||
-             current_person.type == 'Manager'
+      unless current_person == @person || current_receptionist ||
+             current_manager
         flash[:danger] = "Brak dostępu. {set_rule_to_edit_client_profile}"
         redirect_to backend_news_index_path
       end
     else
-      unless current_person == @person || current_person.type == 'Manager'
+      unless current_person == @person || current_manager
         flash[:danger] = "Brak dostępu. {set_rule_to_edit_client_profile}"
         redirect_to backend_person_path(current_person)
       end
@@ -158,6 +158,14 @@ class Backend::PeopleController < BackendController
       redirect_to backend_news_index_path
     elsif @person.blank? && current_person.blank?
       flash[:danger] = "Brak dostępu. {person_exists}"
+    end
+  end
+
+  def set_news
+    unless params[:id].blank?
+      @news = News.find(params[:id])
+    else
+      @news = News.find(1)
     end
   end
 end

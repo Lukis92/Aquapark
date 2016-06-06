@@ -40,12 +40,11 @@
         %td
           = training.trainer.try(:full_name)
         %td
-          = training.date_of_training.strftime('%d.%m.%y')
-          r.
+          = l(training.date_of_training)
         %td
-          = training.start_on.strftime('%H:%M')
+          = l(training.start_on, format: :short)
         %td
-          = training.end_on.strftime('%H:%M')
+          = l(training.end_on, format: :short)
         %td
           = training.training_cost.duration
           min.

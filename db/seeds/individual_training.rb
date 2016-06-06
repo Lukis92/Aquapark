@@ -5,7 +5,7 @@
     trainer_id: Faker::Number.between(92, 112),
     start_on: Faker::Time.forward(1, :morning),
     end_on: Faker::Time.forward(1, :morning),
-    training_cost: rand(1..3)
+    training_cost_id: rand(1..3)
   )
 end
 p "Created #{IndividualTraining.count} trainings"

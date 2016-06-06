@@ -32,7 +32,7 @@ class BoughtDetail < ActiveRecord::Base
   private
 
   def timeline
-    if (entry_type.kind == 'Karnet') &&
+    if (person.bought_details.where('entry_type_id = ?', entry_type.id).count > 0) &&
        ((person.bought_details.where('start_on <= ?', start_on).count > 0 &&
           person.bought_details.where('end_on >= ?', end_on).count > 0) ||
        (person.bought_details.where('start_on <= ?', start_on).count > 0 &&
@@ -41,12 +41,12 @@ class BoughtDetail < ActiveRecord::Base
        (person.bought_details.where('start_on >= ?', start_on).count > 0 &&
        person.bought_details.where('start_on <= ?', end_on).count > 0 &&
        person.bought_details.where('end_on >= ?', end_on).count > 0))
-      errors.add(:start_on, 'Masz już aktywny karnet w tym okresie.')
+      errors.add(:error, 'Masz już aktywną wejściówkę w tym okresie.')
     end
   end
 
   def set_bought_data
-    self.bought_data = Date.today
+    self.bought_data = Time.now
   end
 
   def set_start_on
@@ -64,7 +64,7 @@ class BoughtDetail < ActiveRecord::Base
 
   def validate_start_on
     if start_on < Date.today
-      errors.add(:bought_details,
+      errors.add(:error,
                  "Czas rozpoczęcia jest wcześniejszy niż dzisiejsza data.")
     end
   end

@@ -4,31 +4,23 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
-
-  # def account_url
-  #   return new_person_session_path unless person_signed_in?
-  #   case current_person.class.name
-  #   when 'Manager'
-  #     backend_managers_path
-  #   when 'Client'
-  #     backend_clients_path
-  #   when 'Receptionist'
-  #     backend_receptionists_path
-  #   when 'Lifeguard'
-  #     backend_lifeguards_path
-  #   when 'Trainer'
-  #     backend_trainers_path
-  #   end if person_signed_in?
-  # end
-
+  rescue_from ActionController::RoutingError, with: :error_render_method
 
   def after_sign_in_path_for(resource)
     stored_location_for(resource) || backend_news_index_path
   end
 
-  # def after_sign_up_path_for(resource)
-  #   redirect_to backend_news_index_path
-  # end
+  def error_render_method
+    respond_to do |type|
+      type.xml { render template: 'errors/error_404', status: 404 }
+      type.all { render nothing: true, status: 404 }
+    end
+    true
+  end
+
+  def after_sign_up_path_for(resource)
+    redirect_to new_person_session, notice: "Zarejestrowano konto pomyślnie."
+  end
 
   def logged_in?
     current_person != nil

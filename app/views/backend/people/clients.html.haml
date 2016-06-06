@@ -4,8 +4,8 @@
   Obecnie w bazie posiadamy
   = Client.count
   zarejestrowanych klientów.
-.col-md-6
-  = render 'shared/people_searchbar'
+
+= render 'shared/people_searchbar'
 %table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   %thead
     %tr
@@ -42,7 +42,7 @@
         %td
           = person.last_name
         %td
-          = person.date_of_birth.strftime('%d-%m-%Y')+'r.'
+          = l(person.date_of_birth)
         %td
           = person.email
 = will_paginate @clients, renderer: BootstrapPagination::Rails

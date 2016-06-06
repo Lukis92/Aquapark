@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :people, controllers: { sessions: 'devise/sessions' },
                       skip: [:registrations]
   devise_for :clients, skip: :sessions,
-                       controllers: { registrations: 'devise/registrations' }
+                       controllers: { registrations: 'client/registrations' }
 
   resources 'contacts', only: [:new, :create]
   root 'home#index'
@@ -23,13 +23,14 @@ Rails.application.routes.draw do
     end
     get 'trainers', to: 'people#trainers'
 
+    resources :activities_people
     resources :news do
       member do
         post 'like'
       end
       resources :comments
     end
-    resources :work_schedules, only: [:index, :new, :create] do
+    resources :work_schedules do
       collection do
         get 'search'
       end
@@ -38,17 +39,23 @@ Rails.application.routes.draw do
       collection do
         get 'search'
       end
+      member do
+        get 'sign_up'
+        get 'preview'
+      end
     end
+
     resources :trainers, only: [:index]
     resources :vacations, except: [:show] do
       collection do
         get 'requests'
+        get 'search'
       end
       member do
-        post 'accept'
+      post 'accept'
       end
     end
-    resources :individual_trainings do
+    resources :manage_trainings do
       collection do
         get 'search'
       end
@@ -71,13 +78,13 @@ Rails.application.routes.draw do
         end
 
         resources :trainers do
-          resources :individual_trainings do
-            get 'new', to: '#individual_trainings#choose_date'
-          end
+          resources :individual_trainings
+            # get 'new', to: '#individual_trainings#choose_date'
         end
-        resources :work_schedules do
+        resources :work_schedules, as: 'manage_schedule' do
           collection do
             get 'new', as: 'new'
+            get 'my_schedule', to: 'work_schedules#show', as: 'my'
           end
         end
         resources :vacations, only: [:create] do

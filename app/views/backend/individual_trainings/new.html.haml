@@ -1,44 +1,47 @@
-.col-md-6
-  %h5
-    Trener
-    = @trainer.full_name
-
-  %h6
-    Harmonogram pracy:
-
+-unless @trainer.blank?
   .col-md-6
-    %table.table.table-striped.table-bordered.table-list
-      %thead
-        %tr
-          %th Dzień tygodnia
-          %th Godzina od
-          %th Godzina do
-          %th Zajęte godziny
-      %tbody
-        - @trainer.work_schedules.each do |tw|
+    %h5
+      Trener
+      = @trainer.full_name
+
+    %h6
+      Harmonogram pracy:
+
+    .col-md-6
+      %table.table.table-striped.table-bordered.table-list
+        %thead
           %tr
-            %td
-              = tw.day_of_week
-            %td
-              = tw.start_time.strftime("%H:%M")
-            %td
-              = tw.end_time.strftime("%H:%M")
-            %td
-              - unless @trainer.individual_trainings_as_trainer.blank?
-                - @trainer.individual_trainings_as_trainer.each do |ti|
-                  = ti.start_on.strftime("%H:%M")
-                  = ti.end_on.strftime("%H:%M")
-              - else
-                Dostępny cały dzień
+            %th Dzień tygodnia
+            %th Godzina od
+            %th Godzina do
+            %th Zajęte godziny
+        %tbody
+          - @trainer.work_schedules.each do |tw|
+            %tr
+              %td
+                = tw.day_of_week
+              %td
+                = l(tw.start_time, format: :short)
+              %td
+                = l(tw.end_time, format: :short)
+              %td
+                - unless @trainer.individual_trainings_as_trainer.blank?
+                  - @trainer.individual_trainings_as_trainer.each do |ti|
+                    = l(ti.start_on, format: :short)
+                    = l(ti.end_on, format: :short)
+                - else
+                  Dostępny cały dzień
 
 .col-md-6
-  = simple_form_for([:backend, @individual_training]) do |f|
-    = errors_for(@individual_training)
-    = f.input :date_of_training, as: :date
-    = f.input :start_on
-    = f.input :training_cost_id, label: "Czas trwania" ,
-      collection: @training_costs.map{ |tc| [tc.duration, tc.id] },
-      prompt: 'Wybierz czas trwania treningu'
-    = f.input :trainer_id, as: :hidden, input_html: { value: @trainer.id }
-    = f.input :client_id, as: :hidden, input_html: { value: @client.id }
-    = f.button :submit, class: "btn btn-primary"
+  = render 'form'
+:javascript
+  $('#input_starttime').pickatime({
+        twelvehour: false
+      });
+  $('#input_endtime').pickatime({
+        twelvehour: false
+      });
+  $('.datepicker').pickadate({
+     selectMonths: true, // Creates a dropdown to control month
+     selectYears: 150 // Creates a dropdown of 15 years to control year
+   });

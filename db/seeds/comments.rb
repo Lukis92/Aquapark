@@ -5,4 +5,4 @@
     person_id: Faker::Number.between(1, 115)
   )
 end
-p "Created #{News.count} news"
+p "Created #{Comment.count} comments"
