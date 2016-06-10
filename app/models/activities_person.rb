@@ -12,6 +12,7 @@ class ActivitiesPerson < ActiveRecord::Base
   belongs_to :person
   belongs_to :activity
   validate :check_max_people
+  validates :person_id, uniqueness: { scope: [:activity_id, :date] }
   accepts_nested_attributes_for :person, reject_if: :all_blank
 
 

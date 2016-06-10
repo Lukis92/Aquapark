@@ -15,14 +15,13 @@
 #
 
 class Activity < ActiveRecord::Base
-  # has_and_belongs_to_many :people
   has_many :activities_people
   has_many :people, through: :activities_people
   belongs_to :person
-  validates_presence_of :name, :start_on, :end_on, :pool_zone
+  validates_presence_of :name, :start_on, :end_on, :day_of_week, :pool_zone
   validate :activity_exists
   include PgSearch
-  pg_search_scope :search, against: [:name, :description, :active, :date,
+  pg_search_scope :search, against: [:name, :description, :active, :day_of_week,
                                      :start_on, :end_on, :pool_zone,
                                      :max_people],
                            using: {
@@ -45,21 +44,22 @@ class Activity < ActiveRecord::Base
   end
 
   private
-    def activity_exists
-      if self.start_on_changed? || self. end_on_changed? ||
-         self.day_of_week_changed? || self.pool_zone_changed?
-        if (Activity.where('pool_zone = ?', pool_zone).count > 0 &&
-           Activity.where('day_of_week = ?', day_of_week).count > 0) &&
-           ((Activity.where('start_on <= ?', start_on).count > 0 &&
-              Activity.where('end_on >= ?', end_on).count > 0) ||
-           (Activity.where('start_on <= ?', start_on).count > 0 &&
-            Activity.where('end_on <= ?', end_on).count > 0 &&
-            Activity.where('end_on >= ?', start_on).count > 0) ||
-           (Activity.where('start_on >= ?', start_on).count > 0 &&
-           Activity.where('start_on <= ?', end_on).count > 0 &&
-           Activity.where('end_on >= ?', end_on).count > 0))
-          errors.add(:error, 'W tej strefie basenu odbywają się już zajęcia. Wybierz inne godziny.')
-        end
+
+  def activity_exists
+    if start_on_changed? || end_on_changed? ||
+       day_of_week_changed? || pool_zone_changed?
+      if (Activity.where('pool_zone = ?', pool_zone).count > 0 &&
+         Activity.where('day_of_week = ?', day_of_week).count > 0) &&
+         ((Activity.where('start_on <= ?', start_on).count > 0 &&
+            Activity.where('end_on >= ?', end_on).count > 0) ||
+         (Activity.where('start_on <= ?', start_on).count > 0 &&
+          Activity.where('end_on <= ?', end_on).count > 0 &&
+          Activity.where('end_on >= ?', start_on).count > 0) ||
+         (Activity.where('start_on >= ?', start_on).count > 0 &&
+         Activity.where('start_on <= ?', end_on).count > 0 &&
+         Activity.where('end_on >= ?', end_on).count > 0))
+        errors.add(:error, 'W tej strefie basenu odbywają się już zajęcia. Wybierz inne godziny.')
       end
     end
+  end
 end

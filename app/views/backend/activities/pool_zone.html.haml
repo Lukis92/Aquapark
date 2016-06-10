@@ -1,0 +1,103 @@
+= link_to :back do
+  .btn.btn-primary.waves-effect.waves-light
+    %i.fa.fa-chevron-left
+    Wróć
+%h5
+  Harmonogram zajęć dla strefy basenu:
+  = params[:zone]
+
+%table.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th Poniedziałek
+      %th Wtorek
+      %th Środa
+      %th Czwartek
+      %th Piątek
+      %th Sobota
+      %th Niedziela
+  %tbody
+    - unless @activities_people.blank?
+      %tr
+        - @activities_people.each do |ap|
+          %td
+            - if ap.day_of_week == 'Poniedziałek'
+              = ap.name
+              |
+              - ap.activities_people.each do |aap|
+                = l(aap.date)
+              |
+              = l(ap.start_on, format: :short)
+              \-
+              = l(ap.end_on, format: :short)
+
+          %td
+            - if ap.day_of_week == 'Wtorek'
+              = ap.name
+              |
+              - ap.activities_people.each do |aap|
+                = l(aap.date)
+              |
+              = l(ap.start_on, format: :short)
+              \-
+              = l(ap.end_on, format: :short)
+
+          %td
+            - if ap.day_of_week == 'Środa'
+              = ap.name
+              |
+              - ap.activities_people.each do |aap|
+                = l(aap.date)
+              |
+              = l(ap.start_on, format: :short)
+              \-
+              = l(ap.end_on, format: :short)
+
+          %td
+            - if ap.day_of_week == 'Czwartek'
+              = ap.name
+              |
+              - ap.activities_people.each do |aap|
+                = l(aap.date)
+              |
+              = l(ap.start_on, format: :short)
+              \-
+              = l(ap.end_on, format: :short)
+
+          %td
+            - if ap.day_of_week == 'Piątek'
+              = ap.name
+              |
+              - ap.activities_people.each do |aap|
+                = l(aap.date)
+              |
+              = l(ap.start_on, format: :short)
+              \-
+              = l(ap.end_on, format: :short)
+
+          %td
+            - if ap.day_of_week == 'Sobota'
+              = ap.name
+              |
+              - ap.activities_people.each do |aap|
+                = l(aap.date)
+              |
+              = l(ap.start_on, format: :short)
+              \-
+              = l(ap.end_on, format: :short)
+
+          %td
+            - if ap.day_of_week == 'Niedziela'
+              = ap.name
+              |
+              - ap.activities_people.each do |aap|
+                = l(aap.date)
+              |
+              = l(ap.start_on, format: :short)
+              \-
+              = l(ap.end_on, format: :short)
+    - else
+      %tr
+        %td{colspan: '7'}
+          .text-center
+            Brak zajęć.

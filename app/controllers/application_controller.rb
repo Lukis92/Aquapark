@@ -37,6 +37,8 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:sign_up)  << :salary
     devise_parameter_sanitizer.for(:sign_up)  << :hiredate
     devise_parameter_sanitizer.for(:sign_up)  << :type
+    devise_parameter_sanitizer.for(:sign_up)  << :password
+    devise_parameter_sanitizer.for(:sign_up)  << :password_confirmation
     devise_parameter_sanitizer.for(:account_update)  << :pesel
     devise_parameter_sanitizer.for(:account_update)  << :first_name
     devise_parameter_sanitizer.for(:account_update)  << :last_name
@@ -45,5 +47,7 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:account_update)  << :salary
     devise_parameter_sanitizer.for(:account_update)  << :hiredate
     devise_parameter_sanitizer.for(:account_update)  << :type
+    devise_parameter_sanitizer.for(:account_update)  << :password
+    devise_parameter_sanitizer.for(:account_update)  << :password_confirmation
   end
 end

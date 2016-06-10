@@ -3,22 +3,52 @@ class Backend::WorkSchedulesController < BackendController
   helper_method :sort_column, :sort_direction
   before_action :set_person, only: [:index, :show, :new]
   before_action :manager_person, only: [:edit, :destroy]
-  before_action :select_rule_work_schedules, only: :index
+  before_action :select_rule_work_schedules, only: [:index, :new]
   before_action :manage_rule_work_schedules, only: [:edit, :update, :destroy]
   before_action :show_rule_work_schedules, only: :show
   before_action :set_employees
-
   # GET backend/work_schedules
   def index
     if @person.blank?
-      @work_schedules = WorkSchedule.order("CASE day_of_week
-              WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa'
-              THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
-              WHEN 'Sobota' THEN 6
-              WHEN 'Niedziela' THEN 7 END")
-                                    .order(sort_column + ' ' + sort_direction)
-                                    .paginate(page: params[:page],
-                                              per_page: 20)
+      case params[:day_of_week]
+      when 'monday'
+        @work_schedules = WorkSchedule.where(day_of_week: 'Poniedziałek')
+                                      .order(sort_column + ' ' + sort_direction)
+                                      .paginate(page: params[:page], per_page: 20)
+      when 'tuesday'
+        @work_schedules = WorkSchedule.where(day_of_week: 'Wtorek')
+                                      .order(sort_column + ' ' + sort_direction)
+                                      .paginate(page: params[:page], per_page: 20)
+      when 'wednesday'
+        @work_schedules = WorkSchedule.where(day_of_week: 'Środa')
+                                      .order(sort_column + ' ' + sort_direction)
+                                      .paginate(page: params[:page], per_page: 20)
+      when 'thursday'
+        @work_schedules = WorkSchedule.where(day_of_week: 'Czwartek')
+                                      .order(sort_column + ' ' + sort_direction)
+                                      .paginate(page: params[:page], per_page: 20)
+      when 'friday'
+        @work_schedules = WorkSchedule.where(day_of_week: 'Piątek')
+                                      .order(sort_column + ' ' + sort_direction)
+                                      .paginate(page: params[:page], per_page: 20)
+      when 'saturday'
+        @work_schedules = WorkSchedule.where(day_of_week: 'Sobota')
+                                      .order(sort_column + ' ' + sort_direction)
+                                      .paginate(page: params[:page], per_page: 20)
+      when 'sunday'
+        @work_schedules = WorkSchedule.where(day_of_week: 'Niedziela')
+                                      .order(sort_column + ' ' + sort_direction)
+                                      .paginate(page: params[:page], per_page: 20)
+      else
+        @work_schedules = WorkSchedule.order("CASE day_of_week
+                WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa'
+                THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
+                WHEN 'Sobota' THEN 6
+                WHEN 'Niedziela' THEN 7 END")
+                                      .order(sort_column + ' ' + sort_direction)
+                                      .paginate(page: params[:page], per_page: 20)
+      end
+
     else
       @work_schedules = WorkSchedule.where(person_id: @person.id).order("CASE day_of_week
               WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa'
@@ -31,7 +61,6 @@ class Backend::WorkSchedulesController < BackendController
     end
   end
 
-  # GET backend/work_schedules/new
   def new
     @work_schedule = WorkSchedule.new
   end

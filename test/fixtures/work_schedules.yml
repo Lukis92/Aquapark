@@ -6,7 +6,6 @@
 #  start_time  :time             not null
 #  end_time    :time             not null
 #  day_of_week :string           not null
-#  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  person_id   :integer
 #

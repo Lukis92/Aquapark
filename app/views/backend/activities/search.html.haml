@@ -15,7 +15,7 @@
       %th
         Aktywne?
       %th
-        Data
+        Dzień tygodnia
       %th
         Godzina rozpoczęcia
       %th
@@ -45,7 +45,7 @@
             - else
               %i.fa.fa-times
           %td
-            = l(activity.date)
+            = activity.day_of_week
           %td
             = l(activity.start_on, format: :short)
           %td

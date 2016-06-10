@@ -8,17 +8,23 @@ pl:
   activerecord:
     attributes:
       client:
-        current_password: Obecne hasło
-        date_of_birth: Data Urodzenia
-        email: E-mail
         first_name: Imię
         last_name: Nazwisko
-        password: Hasło
-        password_confirmation: Powtórz hasło
-      person:
+        date_of_birth: Data urodzenia
         email: E-mail
         password: Hasło
+        type: Typ pracownika
         remember_me: Zapamiętaj mnie
+        password_confirmation: Powtórz hasło
+      person:
+        first_name: Imię
+        last_name: Nazwisko
+        date_of_birth: Data urodzenia
+        email: E-mail
+        password: Hasło
+        type: Typ pracownika
+        remember_me: Zapamiętaj mnie
+        password_confirmation: Powtórz hasło
       work_schedule:
         en_person_types:
           Trener: Trainer
@@ -36,6 +42,10 @@ pl:
         end_time: Czas zakończenia
         day_of_week: Dzień tygodnia
         person_id: Pracownik
+      individual_training:
+        start_on: Godzina rozpoczęcia
+        date_of_training: Data treningu
+        training_cost_id: Czas trwania
       activity:
         day_number:
           Niedziela: 0
@@ -45,6 +55,9 @@ pl:
           Czwartek: 4
           Piątek: 5
           Sobota: 6
+      vacation:
+        start_at: Data pd
+        end_at: Data do
     errors:
       messages:
         record_invalid: Nieprawidłowy rekord
@@ -74,7 +87,92 @@ pl:
             pesel:
               blank: '- wymagane'
               taken: Taki pesel istnieje już w bazie
-              wrong_length: Pesel musi posiadać 11 cyfr
+              wrong_length: musi posiadać 11 cyfr
+        receptionist:
+          attributes:
+            current_password:
+              blank: '- wymagane'
+            date_of_birth:
+              blank: '- wymagane'
+            email:
+              blank: '- wymagane'
+              invalid: '- nieprawidłowy'
+              taken: Taki email istnieje już w bazie
+            first_name:
+              blank: '- wymagane'
+            last_name:
+              blank: '- wymagane'
+            password:
+              blank: '- wymagane'
+            pesel:
+              blank: '- wymagane'
+              taken: Taki pesel istnieje już w bazie
+              wrong_length: musi posiadać 11 cyfr
+
+        lifeguard:
+          attributes:
+            current_password:
+              blank: '- wymagane'
+            date_of_birth:
+              blank: '- wymagane'
+            email:
+              blank: '- wymagane'
+              invalid: '- nieprawidłowy'
+              taken: Taki email istnieje już w bazie
+            first_name:
+              blank: '- wymagane'
+            last_name:
+              blank: '- wymagane'
+            password:
+              blank: '- wymagane'
+            pesel:
+              blank: '- wymagane'
+              taken: Taki pesel istnieje już w bazie
+              wrong_length: musi posiadać 11 cyfr
+        trainer:
+          attributes:
+            current_password:
+              blank: '- wymagane'
+            date_of_birth:
+              blank: '- wymagane'
+            email:
+              blank: '- wymagane'
+              invalid: '- nieprawidłowy'
+              taken: Taki email istnieje już w bazie
+            first_name:
+              blank: '- wymagane'
+            last_name:
+              blank: '- wymagane'
+            password:
+              blank: '- wymagane'
+            pesel:
+              blank: '- wymagane'
+              taken: Taki pesel istnieje już w bazie
+              wrong_length: musi posiadać 11 cyfr
+        person:
+          attributes:
+            current_password:
+              blank: '- wymagane'
+            password_confirmation:
+              blank: '- wymagane'
+            date_of_birth:
+              blank: '- wymagane'
+            email:
+              blank: '- wymagane'
+              invalid: '- nieprawidłowy'
+              taken: Taki email istnieje już w bazie
+            first_name:
+              blank: '- wymagane'
+            last_name:
+              blank: '- wymagane'
+            type:
+              blank: '- wymagane'
+            password:
+              blank: '- wymagane'
+            pesel:
+              blank: '- wymagane'
+              taken: Taki pesel istnieje już w bazie
+              wrong_length: musi posiadać 11 cyfr
         entry_type:
           attributes:
             kind:
@@ -91,40 +189,15 @@ pl:
           attributes:
             start_on:
               overlap: Trening nachodzi na inny
+              blank: wymagane
+            date_of_training:
+              blank: wymagane
+            training_cost_id:
+              blank: wymagane
         manager:
           attributes:
             password_confirmation:
               confirmation: Potwierdź hasło
-        # person:
-        #   attributes:
-        #     current_password:
-        #       blank: pole Obecne hasło - wymagane
-        #     date_of_birth:
-        #       blank: pole Data urodzenia - wymagane
-        #     email:
-        #       invalid: '- nieprawidłowy'
-        #       taken: Taki email istnieje już w bazie
-        #     first_name:
-        #       blank: Pole Imię - wymagane
-        #       too_short: Imię jest za krótkie (wymagane min. 3 znaki)
-        #       invalid: zezwolone tylko litery
-        #     last_name:
-        #       blank: Pole Nazwisko - wymagane
-        #       too_short: Nazwisko jest za krótkie (wymagane min. 3 znaki)
-        #       invalid: zezwolone tylko litery
-        #     password:
-        #       blank: Pole Hasło - wymagane
-        #       too_short: Hasło jest za krótkie
-        #     password_confirmation:
-        #       confirmation: Potwierdź hasło
-        #     pesel:
-        #       blank: pole Pesel - wymagane
-        #       taken: Taki pesel istnieje już w bazie
-        #       wrong_length: Pesel musi posiadać 11 cyfr
-        #       not_a_number: Pesel musi składać się tylko z cyfr
-        #     salary:
-        #       less_than: .. powinno być mniejsze niż %{count}
-        #       invalid: nieprawidłowy format
         training_cost:
           attributes:
             cost:
@@ -149,6 +222,14 @@ pl:
             active:
               blank: wymagane
             pool_zone:
+              blank: wymagane
+        vacation:
+          attributes:
+            start_at:
+              blank: wymagane
+            end_at:
+              blank: wymagane
+            person_id:
               blank: wymagane
   date:
     abbr_day_names:
@@ -221,6 +302,9 @@ pl:
       activities_person:
         create: Zapisz się
         update: Zapisz się
+      manage_training:
+        create: Zapisz
+        update: Zapisz
   mail_form:
     attributes:
       contact:

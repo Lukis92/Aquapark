@@ -13,13 +13,13 @@
         %em.fa.fa-cog
         Zarządzanie
       %th
-        Bilet/Karnet
+        = sortable "kind", "Bilet/Karnet"
       %th
-        Szczegóły
+        = sortable "kind_details", "Szczegóły"
       %th
-        Opis
+        = sortable "description", "Opis"
       %th
-        Cena
+        = sortable "price", "Cena"
   %tbody
     - @entry_types.each do |entry|
       %tr

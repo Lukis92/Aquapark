@@ -30,7 +30,7 @@ class Backend::NewsController < BackendController
   def update
     if @news.update(news_params)
       redirect_to backend_news_index_path,
-                  notice: 'Pomyślnie zaktualizowano.'
+                notice: 'Pomyślnie zaktualizowano.'
     else
       render :edit
     end

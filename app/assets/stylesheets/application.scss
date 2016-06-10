@@ -20,11 +20,51 @@
 @import "bootstrap-wysihtml5/bootstrap3-wysihtml5";
 @import "font-awesome";
 @import "simple_calendar";
+body,
+html {
+  height: 100%;
+}
+#wrap {
+  min-height: 100%;
+}
+#main {
+  overflow: auto;
+  padding-bottom: 350px;
+}
+body {
+  padding-top: 65px;
+}
+@media (max-width: 979px) {
+  body {
+    padding-top: 0px;
+  }
+}
+.footer {
+  position: relative;
+  margin-top: -350px;
+  /* negative value of footer height */
+  height: 350px;
+  clear: both;
+  padding-top: 20px;
+}
 #frontend {
   background-image: url("http://www.mediafire.com/convkey/2899/3bll4f4ua739s29zg.jpg");
   color: #fff;
 }
-.panel-body li{
+.login-container {
+  min-height: 600px;
+}
+.fa-check-square-o {
+  color: green;
+}
+.fa-times-circle {
+  color: red;
+}
+.fa-times {
+  color: red;
+}
+/* Change color of alert tekst messages for errors_for */
+.panel-body li {
   color: #000;
 }
 /* Fix position for container below navbar */

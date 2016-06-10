@@ -14,7 +14,7 @@
     %link{ href: 'http://fonts.googleapis.com/css?family=&&ada&subset=latin,latin-ext', rel: 'stylesheet', type: 'text/css' }
     %link{ href: 'http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext', rel: 'stylesheet', type: 'text/css' }
     %link{ href: 'https://fonts.googleapis.com/icon?family=Material+Icons', rel: 'stylesheet' }
-    /%script{ src: 'https://code.jquery.com/jquery-2.2.2.min.js', type: 'text/javascript' }
+    %script{ src: 'https://code.jquery.com/jquery-2.2.2.min.js', type: 'text/javascript' }
     /jquery.min.js
     - if @news.blank?
       - @news = News.find(1)
@@ -32,7 +32,7 @@
     %nav.navbar.primary-color
       .container-fluid
         .navbar-header
-          %a.navbar-brand{href: "#"}
+          .navbar-brand
             = @current_person.translate_type
             \- Panel
         %ul.nav.navbar-nav
@@ -101,16 +101,17 @@
                     = link_to "Grafik pracy", backend_work_schedules_path, data: { no_turbolink: true }
                 %li{class: current_page?( my_backend_manage_schedule_index_path(current_person)) && 'active'}
                   = link_to "Mój grafik pracy",  my_backend_manage_schedule_index_path(current_person) if current_person.present?
-                %li{class: current_page?(new_backend_work_schedule_path) && 'active', data: { no_turbolink: true }}
-                  = link_to "Dodaj grafik pracy", new_backend_work_schedule_path
+                - if current_manager
+                  %li{class: current_page?(new_backend_work_schedule_path) && 'active', data: { no_turbolink: true }}
+                    = link_to "Dodaj grafik pracy", new_backend_work_schedule_path
             %h5
               %i.fa.fa-child
               %small
                 %b Aktywności
             %ul.nav.nav-pills.nav-stacked
               - if current_manager || current_receptionist
-                %li{class: current_page?(backend_individual_trainings_path) && 'active'}
-                  = link_to 'Trening indywidualny', backend_individual_trainings_path, data: { no_turbolink: true }
+                %li{class: current_page?(backend_manage_trainings_path) && 'active'}
+                  = link_to 'Trening indywidualny', backend_manage_trainings_path, data: { no_turbolink: true }
               %li{class: current_page?(show_backend_individual_trainings_path(@current_person)) && 'active'}
                 = link_to 'Moje treningi', show_backend_individual_trainings_path(@current_person)
               - if current_client
@@ -125,16 +126,24 @@
             %ul.nav.nav-pills.nav-stacked
               %li{class: current_page?(backend_activities_path) && 'active'}
                 = link_to 'Zajęcia grupowe', backend_activities_path
-            %h5
-              %i.fa.fa-plane
-              %small
-                %b Urlopy
-            %ul.nav.nav-pills.nav-stacked
-              %li{class: current_page?(backend_vacations_path) && 'active'}
-                = link_to 'Wszystkie urlopy', backend_vacations_path
-            %ul.nav.nav-pills.nav-stacked
-              %li{class: current_page?( requests_backend_vacations_path) && 'active'}
-                = link_to 'Urlopy do zaakceptowania', requests_backend_vacations_path
+              - if current_trainer
+                %li{class: current_page?(new_backend_activity_path) && 'active'}
+                  = link_to 'Zaproponuj zajęcia', new_backend_activity_path
+              - unless current_client
+                %li{class: current_page?(requests_backend_activities_path) && 'active'}
+                  = link_to 'Niezaakceptowane zajęcia', requests_backend_activities_path
+            - unless current_client
+              %h5
+                %i.fa.fa-plane
+                %small
+                  %b Urlopy
+              %ul.nav.nav-pills.nav-stacked
+                %li{class: current_page?(backend_vacations_path) && 'active'}
+                  = link_to 'Wszystkie urlopy', backend_vacations_path
+
+              %ul.nav.nav-pills.nav-stacked
+                %li{class: current_page?( requests_backend_vacations_path) && 'active'}
+                  = link_to 'Urlopy do zaakceptowania', requests_backend_vacations_path
         .col-md-10
           = render 'layouts/messages'
           = yield

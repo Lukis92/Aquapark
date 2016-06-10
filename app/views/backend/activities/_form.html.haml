@@ -9,12 +9,16 @@
       = f.input :active
     .col-md-6
       .form-group
-        = f.input :start_on
+        %label{for: 'input_starttime'}* Czas rozpoczęcia
+        = f.text_field :start_on, class: 'timepicker',
+          id: 'input_starttime', id: 'input_starttime', placeholder: 'Kliknij'
     .col-md-6
       .form-group
-        = f.input :end_on
+        %label{for: 'input_endtime'}* Czas zakończenia
+        = f.text_field :end_on, class: 'timepicker', id: 'input_endtime',
+          required: true, placeholder: 'Kliknij'
     .form-group
-      = f.input :day_of_week, collection: Activity::DAYS,
+      = f.input :day_of_week, as: :select, collection: Activity::DAYS,
                               prompt: "Wybierz dzień tygodnia"
     .form-group
       = f.input :pool_zone, collection: [['A', 'A'], ['B', 'B'], ['C', 'C'],
@@ -25,3 +29,10 @@
     .input-field
       = f.input :max_people
     = f.button :submit, class: "btn btn-primary"
+:javascript
+  $('#input_starttime').pickatime({
+        twelvehour: false
+      });
+  $('#input_endtime').pickatime({
+        twelvehour: false
+      });

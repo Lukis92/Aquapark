@@ -13,8 +13,8 @@ class ContactsController < ApplicationController
                         jak najszybciej.'
     else
       # Powinienes przekazac dlaczego.
-      flash[:error] = 'Nie można wysłać wiadomości sprawdz komunikaty.'
-      render :new
+      # flash[:error] = 'Nie można wysłać wiadomości sprawdz komunikaty.'
+      render :new, error: "Nie można wysłać wiadomości sprawdz komunikaty."
     end
   end
 end

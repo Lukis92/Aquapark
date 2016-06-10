@@ -18,8 +18,8 @@ class Vacation < ActiveRecord::Base
   # ************************#
   # **VALIDATIONS***************************#
   validates_presence_of :start_at, :end_at, :person_id
-  validate :validate_start_at, on: :create
-  validate :start_at_must_be_before_end_at
+  validate :validate_start_at, on: :create, if: :start_at
+  validate :start_at_must_be_before_end_at, if: :end_at
   validate :timeline
   # ****************************************#
 
@@ -48,6 +48,7 @@ class Vacation < ActiveRecord::Base
       end
     end
   end
+
 
   def validate_start_at
     if start_at < Date.today

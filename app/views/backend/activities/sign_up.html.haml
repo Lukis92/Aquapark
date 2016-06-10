@@ -17,6 +17,8 @@
       %th
         Data
       %th
+        Godzina od/do
+      %th
         Ilość zapisanych osób / Maksymalna ilość
       %th
         Wybierz
@@ -26,11 +28,15 @@
         %td
           = l(an)
         %td
+          = l(@activity.start_on, format: :short)
+          \-
+          = l(@activity.end_on, format: :short)
+        %td
           = @activity.activities_people.where('date = ?', an).count
           \/
           = @activity.max_people
-            - if @activity.activities_people.where('date = ?', an).count > 0
-              = link_to 'Podgląd uczestników', preview_backend_activity_path(@activity)
+          - if @activity.activities_people.where('date = ?', an).count > 0
+            = link_to 'Podgląd uczestników', preview_backend_activity_path(@activity)
 
         %td
           - if @activity.activities_people.where('date = ?', an).count < @activity.max_people &&

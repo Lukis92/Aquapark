@@ -1,4 +1,5 @@
 class Backend::EntryTypesController < BackendController
+  helper_method :sort_column, :sort_direction
   before_action :set_entry_type, only: [:edit, :update, :destroy, :show_details]
   before_action :set_current_person
   before_action :receptionist_access, only: [:new, :edit, :update, :destroy]
@@ -6,7 +7,8 @@ class Backend::EntryTypesController < BackendController
 
   # GET backend/entry_types
   def index
-    @entry_types = EntryType.paginate(page: params[:page], per_page: 20)
+    @entry_types = EntryType.order(sort_column + ' ' + sort_direction)
+                            .paginate(page: params[:page], per_page: 20)
   end
 
   # GET backend/entry_types/new
@@ -34,8 +36,8 @@ class Backend::EntryTypesController < BackendController
   end
 
   def show
-    @tickets = EntryType.where(kind: 'Bilet')
-    @passes = EntryType.where(kind: 'Karnet')
+    @tickets = EntryType.order(sort_column + ' ' + sort_direction).where(kind: 'Bilet')
+    @passes = EntryType.order(sort_column + ' ' + sort_direction).where(kind: 'Karnet')
   end
 
   def show_details
@@ -50,7 +52,8 @@ class Backend::EntryTypesController < BackendController
   # GET backend/entry_types/search
   def search
     if params[:query].present?
-      @entry_types = EntryType.text_search(params[:query])
+      @entry_types = EntryType.order(sort_column + ' ' + sort_direction)
+                              .text_search(params[:query])
                               .paginate(page: params[:page], per_page: 20)
     end
   end
@@ -67,6 +70,14 @@ class Backend::EntryTypesController < BackendController
 
   def set_current_person
     @current_person = current_person
+  end
+
+  def sort_column
+    EntryType.column_names.include?(params[:sort]) ? params[:sort] : 'price'
+  end
+
+  def sort_direction
+    %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
   end
 
   def receptionist_access

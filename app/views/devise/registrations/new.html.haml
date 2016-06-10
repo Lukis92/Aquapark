@@ -13,7 +13,8 @@
       .row
         .col-md-5
           %label{for: "datepicker"} Data urodzenia
-          = f.text_field :date_of_birth, required: true, class: 'datepicker', start_year: Date.today.year - 100, end_year: Date.today.year - 13
+          = f.text_field :date_of_birth, required: true, class: 'datepicker',
+                          placeholder: 'Kliknij'
       .input-field
         = f.input :email, required: true, input_html: {length: 254, maxlength: 254}
       = f.input :profile_image, as: :file

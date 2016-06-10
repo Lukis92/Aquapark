@@ -1,25 +1,7 @@
-.row
-  .col-md-6
-    %ul.collection
-      %li.collection-item
-        %h5
-          Treningi
-      %li.collection-item
-        %h6
-          %b
-            Klient:
-          = @client.full_name
-          %br
-          %b
-            Trener:
-          = @trainer.full_name
-          %br
-          %b
-            Odbyli ze sobą już
-          = @individual_trainings.count
-          treningi
+%h5 Wszystkie indywidualne treningi klientów
+
 .col-md-6
-  = render 'shared/it_searchbar'
+  -# = render 'shared/it_searchbar'
 %table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   %thead
     %tr
@@ -41,13 +23,13 @@
       %th
         Czas trwania
   %tbody
-    - @individual_trainings.each do |training|
+    - @manage_trainings.each do |training|
       %tr
         %td
-          = link_to edit_backend_individual_training_path(training), data: { no_turbolink: true } do
+          = link_to edit_backend_manage_training_path(training), title: 'Edytuj', data: { no_turbolink: true } do
             %i.btn.btn-default
               %i.fa.fa-pencil
-          = link_to backend_individual_training_path(training), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+          = link_to backend_manage_training_path(training), title: 'Usuń', method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
             %i.btn.btn-danger
               %i.fa.fa-trash
         %td
@@ -68,4 +50,4 @@
         %td
           = training.training_cost.duration
           min.
-= will_paginate @individual_trainings, renderer: BootstrapPagination::Rails unless @individual_trainings.blank?
+= will_paginate @manage_trainings, renderer: BootstrapPagination::Rails unless @individual_trainings.blank?

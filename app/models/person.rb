@@ -48,10 +48,6 @@ class Person < ActiveRecord::Base
   # has_and_belongs_to_many :activities
   has_many :activities_people
   has_many :activities, through: :activities_people
-  accepts_nested_attributes_for :activities_people,
-                                reject_if: :all_blank,
-                                allow_destroy: true
-  accepts_nested_attributes_for :activities
   # accepts_nested_attributes_for :assignments
 
   # has_many :activities_as_trainer,
@@ -70,9 +66,12 @@ class Person < ActiveRecord::Base
                     uniqueness: true
   # ,
   # numericality: { only_integer: true }
+  validates :type, presence: true
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :date_of_birth, presence: true
+  validates :password, presence: true
+  validates :password_confirmation, presence: true
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
                     format: { with: VALID_EMAIL_REGEX }

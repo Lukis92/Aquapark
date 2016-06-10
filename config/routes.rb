@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   devise_for :people, controllers: { sessions: 'devise/sessions' },
                       skip: [:registrations]
   devise_for :clients, skip: :sessions,
@@ -38,10 +39,14 @@ Rails.application.routes.draw do
     resources :activities do
       collection do
         get 'search'
+        get 'pool_zone'
+        get 'requests'
       end
       member do
         get 'sign_up'
         get 'preview'
+        post 'activate'
+        post 'deactivate'
       end
     end
 
@@ -55,7 +60,16 @@ Rails.application.routes.draw do
       post 'accept'
       end
     end
+    #Manage individual_trainings
     resources :manage_trainings do
+      collection do
+        get 'search'
+      end
+    end
+
+    #Manage vacations
+    resources :manage_vacations, only: [:new, :create, :edit, :update]
+    resources :individual_trainings, only: [:show, :edit, :search] do
       collection do
         get 'search'
       end
@@ -79,7 +93,6 @@ Rails.application.routes.draw do
 
         resources :trainers do
           resources :individual_trainings
-            # get 'new', to: '#individual_trainings#choose_date'
         end
         resources :work_schedules, as: 'manage_schedule' do
           collection do

@@ -1,62 +1,172 @@
-.col-md-3
-  .panel.panel-primary
-    .panel-heading.text-center Liczba wszystkich użytkowników
-    .panel-body.text-center
-      %h3
-        = @all_people
-.col-md-3
-  .panel.panel-primary
-    .panel-heading.text-center Ilość wszystkich pracowników
-    .panel-body.text-center
-      %h3
-        = @employees
-.col-md-3
-  .panel.panel-primary
-    .panel-heading.text-center Zarejestrowani klienci
-    .panel-body.text-center
-      %h3
-        = @clients
-.col-md-3
-  .panel.panel-primary
-    .panel-heading.text-center Suma płac pracowników
-    .panel-body.text-center
-      %h3
-        = @sum_salaries
-        zł
-.col-md-3
-  .panel.panel-primary
-    .panel-heading.text-center Suma przychodów
-    .panel-body.text-center
-      %h3
-        = @sum_earnings
-        zł
-.col-md-3
-  .panel.panel-primary
-    .panel-heading.text-center Bilans zysków/strat
-    .panel-body.text-center
-
-      - if @sum_risk < 0
-        %h3.danger
-          = @sum_risk
+.row
+  .divider-new
+    Osoby
+  .col-md-3
+    .panel.panel-primary
+      .panel-heading.text-center Liczba wszystkich użytkowników
+      .panel-body.text-center
+        %h3
+          = @all_people
+  .col-md-3
+    .panel.panel-primary
+      .panel-heading.text-center Ilość wszystkich pracowników
+      .panel-body.text-center
+        %h3
+          = @employees
+  .col-md-3
+    .panel.panel-primary
+      .panel-heading.text-center Zarejestrowani klienci
+      .panel-body.text-center
+        %h3
+          = @clients
+  .col-md-3
+    .panel.panel-primary
+      .panel-heading.text-center Zarejestrowani trenerzy
+      .panel-body.text-center
+        %h3
+          = @trainers
+  .col-md-3
+    .panel.panel-primary
+      .panel-heading.text-center Zarejestrowani recepcjoniści
+      .panel-body.text-center
+        %h3
+          = @receptionists
+  .col-md-3
+    .panel.panel-primary
+      .panel-heading.text-center Zarejestrowani ratownicy
+      .panel-body.text-center
+        %h3
+          = @lifeguards
+  .col-md-3
+    .panel.panel-primary
+      .panel-heading.text-center Zatrudnieni pracownicy w tym miesiącu
+      .panel-body.text-center
+        %h3
+          = @month_registered
+  .col-md-3
+    .panel.panel-primary
+      .panel-heading.text-center Zatrudnieni pracownicy w tym roku
+      .panel-body.text-center
+        %h3
+          = @year_registered
+.row
+  .divider-new
+    Finansowe aspekty
+  .col-md-3
+    .panel.panel-warning
+      .panel-heading.text-center Suma płac pracowników
+      .panel-body.text-center
+        %h3
+          = @sum_salaries
           zł
-      - else
-        %h3.success
-          = @sum_risk
-.col-md-3
-  .panel.panel-primary
-    .panel-heading.text-center Ilość pracowników na urlopie
-    .panel-body.text-center
-      %h3
-        = @current_vacations
-.col-md-3
-  .panel.panel-primary
-    .panel-heading.text-center Ilość aktywnych karnetów
-    .panel-body.text-center
-      %h3
-        = @active_passes
-.col-md-3
-  .panel.panel-primary
-    .panel-heading.text-center Ilość biletów kupionych dzisiaj
-    .panel-body.text-center
-      %h3
-        = @today_tickets
+  .col-md-3
+    .panel.panel-warning
+      .panel-heading.text-center Suma przychodów
+      .panel-body.text-center
+        %h3
+          = @sum_earnings
+          zł
+  .col-md-3
+    .panel.panel-warning
+      .panel-heading.text-center Bilans zysków/strat
+      .panel-body.text-center
+
+        - if @sum_risk < 0
+          %h3.danger
+            = @sum_risk
+            zł
+        - else
+          %h3.success
+            = @sum_risk
+  .col-md-3
+    .panel.panel-warning
+      .panel-heading.text-center Ilość aktywnych karnetów
+      .panel-body.text-center
+        %h3
+          = @active_passes
+  .col-md-3
+    .panel.panel-warning
+      .panel-heading.text-center Ilość nieużytych biletów
+      .panel-body.text-center
+        %h3
+          = @active_tickets
+  .col-md-3
+    .panel.panel-warning
+      .panel-heading.text-center Kwota zarobiona z biletów
+      .panel-body.text-center
+        %h3
+          = @sum_earnings_tickets
+          zł
+  .col-md-3
+    .panel.panel-warning
+      .panel-heading.text-center Kwota zarobiona z karnetów
+      .panel-body.text-center
+        %h3
+          = @sum_earnings_passes
+          zł
+  .col-md-3
+    .panel.panel-warning
+      .panel-heading.text-center Kwota zarobiona z treningów indywidualnych
+      .panel-body.text-center
+        %h3
+          = @sum_earnings_trainings
+          zł
+.row
+  .divider-new
+    Zatrudnienie
+  .col-md-3
+    .panel.panel-info
+      .panel-heading.text-center Najbardziej zapracowany pracownik
+      .panel-body.text-center
+        %h4
+          = @most.full_name
+  .col-md-3
+    .panel.panel-info
+      .panel-heading.text-center Najmniej zapracowany pracownik
+      .panel-body.text-center
+        %h4
+          = @least.full_name
+  .col-md-3
+    .panel.panel-info
+      .panel-heading.text-center Ilość osób bez grafiku pracy
+      .panel-body.text-center
+        %h3
+          = @person_without_work
+  .col-md-3
+    .panel.panel-info
+      .panel-heading.text-center Najwcześniej zatrudniony
+      .panel-body.text-center
+        %h4
+          = @earliest_worker.full_name
+          = I18n.t(:"activerecord.attributes.work_schedule.pl_person_types.#{@earliest_worker.type}")
+          -# = @earliest_worker.type
+  .col-md-3
+    .panel.panel-info
+      .panel-heading.text-center Ostatnio zatrudniony
+      .panel-body.text-center
+        %h4
+          = @last_worker.full_name
+          = I18n.t(:"activerecord.attributes.work_schedule.pl_person_types.#{@last_worker.type}")
+  .col-md-3
+    .panel.panel-info
+      .panel-heading.text-center Najwięcej zarabia
+      .panel-body.text-center
+        %h4
+          = @biggest_salary.full_name
+          = @biggest_salary.salary
+          zł
+  .col-md-3
+    .panel.panel-info
+      .panel-heading.text-center Najmniej zarabia
+      .panel-body.text-center
+        %h4
+          = @smallest_salary.full_name
+          = @smallest_salary.salary
+          zł
+  .col-md-3
+    .panel.panel-info
+      .panel-heading.text-center Średnie zarobki
+      .panel-body.text-center
+        %h3
+          = number_with_precision(@avg_salaries, precision: 2)
+          zł

@@ -4,7 +4,7 @@
     .row
       .col-md-3
         %label{for: 'input_starttime'}* Godzina od
-        = f.text_field :start_time, label: 'Czas rozpoczęcia', required: true,
+        = f.text_field :start_time, required: true,
           class: 'timepicker', id: 'input_starttime', placeholder: 'Kliknij'
       .col-md-3
         %label{for: 'input_endtime'}* Godzina do
@@ -13,7 +13,7 @@
     = f.input :day_of_week, include_blank: "Wybierz dzień tygodnia", collection: WorkSchedule::DAYS
     = f.input :person_id, required: true, as: :hidden, input_html: { value: @person.id }
     = f.button :submit, class: "btn btn-primary"
-    
+
 - else
   = simple_form_for([:backend, @work_schedule], as: :work_schedule) do |f|
     = errors_for(@work_schedule)

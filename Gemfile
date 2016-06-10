@@ -53,7 +53,7 @@ gem 'bootstrap-sass', '~> 3.3.6'
 gem 'sprockets', '~> 3.0' # Rack-based asset packaging system
 gem 'font-awesome-rails' # font-awesome font for rails
 gem 'lightbox-bootstrap-rails' # lightbox for Bootstrap 3
-gem 'bcrypt' # password hashing algorithm
+gem 'bcrypt' # password hashing algorithmp
 gem 'simple_form' # forms made easy for Rails!
 gem 'annotate' # annotate Rails classes with schema and routes info
 gem 'better_errors' # better error page for Rack apps

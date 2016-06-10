@@ -1,38 +1,68 @@
 -unless @trainer.blank?
-  .col-md-6
-    %h5
-      Trener
-      = @trainer.full_name
-
-    %h6
-      Harmonogram pracy:
-
+  .row
     .col-md-6
+      %h5
+        Trener
+        = @trainer.full_name
+
+      %h6
+        Harmonogram pracy:
+.row
+  .col-md-12
+    %table.table.table-striped.table-bordered.table-list
+      %thead
+        %tr
+          %th Dzień tygodnia
+          %th Najbliższe daty dla dnia tygodnia
+          %th Godzina od
+          %th Godzina do
+      %tbody
+        - @trainer.work_schedules.each do |tw|
+          %tr
+            %td
+              = tw.day_of_week
+            %td
+              - next_n_days(4, tw.day_of_week).each_with_index do |n, i|
+                - unless i == next_n_days(4, tw.day_of_week).size - 1
+                  = l(n)+' | '
+                - else
+                  = l(n)
+            %td
+              = l(tw.start_time, format: :short)
+            %td
+              = l(tw.end_time, format: :short)
+.row
+  .col-md-12
+    %h5 Grafik treningów
+    - unless @trainer.individual_trainings_as_trainer.blank?
       %table.table.table-striped.table-bordered.table-list
         %thead
           %tr
-            %th Dzień tygodnia
-            %th Godzina od
-            %th Godzina do
-            %th Zajęte godziny
+            %th Data treningu
+            %th Treningi
         %tbody
-          - @trainer.work_schedules.each do |tw|
+          - trainings = @trainer.individual_trainings_as_trainer.where('date_of_training >= ?', Date.today).group_by(&:date_of_training)
+          - trainings.keys.each do |ti|
             %tr
               %td
-                = tw.day_of_week
+                = l(ti)
               %td
-                = l(tw.start_time, format: :short)
-              %td
-                = l(tw.end_time, format: :short)
-              %td
-                - unless @trainer.individual_trainings_as_trainer.blank?
-                  - @trainer.individual_trainings_as_trainer.each do |ti|
-                    = l(ti.start_on, format: :short)
-                    = l(ti.end_on, format: :short)
-                - else
-                  Dostępny cały dzień
+                - @trainer.individual_trainings_as_trainer.each_with_index do |tit, i|
+                  - if tit.date_of_training == ti
+                    - unless i == @trainer.individual_trainings_as_trainer.size - 1
+                      = l(tit.start_on, format: :short)
+                      \-
+                      = l(tit.end_on, format: :short)
+                      |
+                    - else
+                      = l(tit.start_on, format: :short)
+                      \-
+                      = l(tit.end_on, format: :short)
+    - else
+      .alert.alert-info.col-md-6
+        Dostępny cały dzień
 
-.col-md-6
+.col-md-12
   = render 'form'
 :javascript
   $('#input_starttime').pickatime({

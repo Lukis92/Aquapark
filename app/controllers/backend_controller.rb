@@ -1,5 +1,6 @@
 # Controller for backend pages
 class BackendController < ApplicationController
+  before_action :require_person
   before_action :set_current_person
   layout 'backend'
   def show
@@ -25,7 +26,7 @@ class BackendController < ApplicationController
     unless current_manager.present? || current_client.present? ||
            current_receptionist.present? || current_lifeguard.present? ||
            current_trainer.present?
-      flash[:danger] = 'Brak dostępu. {require_person}'
+      flash[:danger] = 'Musisz być zalogowany'
       redirect_to root_path
     end
   end

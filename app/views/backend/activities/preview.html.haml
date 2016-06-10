@@ -31,13 +31,14 @@
             \/
             = @activity.max_people
           %td
-            - @activity.activities_people.where('date = ?', ap.date).each_with_index do |a, i|
-              - unless i == @activity.activities_people.size - 1
-                = link_to backend_person_path(a.person.id) do
-                  = a.person.full_name+', '
-              - else
-                = link_to backend_person_path(a.person.id) do
-                  = a.person.full_name
+            - if @activity.activities_people.present?
+              - @activity.activities_people.where('date = ?', ap.date).each_with_index do |a, i|
+                - unless i == @activity.activities_people.size - 1
+                  = link_to backend_person_path(a.person.id) do
+                    = a.person.full_name+', '
+                - else
+                  = link_to backend_person_path(a.person.id) do
+                    = a.person.full_name
 - else
   .alert.alert-info
     Brak uczestników

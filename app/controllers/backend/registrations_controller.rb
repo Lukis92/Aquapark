@@ -26,4 +26,27 @@ class Backend::RegistrationsController < Devise::RegistrationsController
   def set_person
     @current_person = current_person
   end
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.for(:sign_up)  << :pesel
+    devise_parameter_sanitizer.for(:sign_up)  << :first_name
+    devise_parameter_sanitizer.for(:sign_up)  << :last_name
+    devise_parameter_sanitizer.for(:sign_up)  << :date_of_birth
+    devise_parameter_sanitizer.for(:sign_up)  << :profile_image
+    devise_parameter_sanitizer.for(:sign_up)  << :salary
+    devise_parameter_sanitizer.for(:sign_up)  << :hiredate
+    devise_parameter_sanitizer.for(:sign_up)  << :type
+    devise_parameter_sanitizer.for(:sign_up)  << :password
+    devise_parameter_sanitizer.for(:sign_up)  << :password_confirmation
+    devise_parameter_sanitizer.for(:account_update)  << :pesel
+    devise_parameter_sanitizer.for(:account_update)  << :first_name
+    devise_parameter_sanitizer.for(:account_update)  << :last_name
+    devise_parameter_sanitizer.for(:account_update)  << :date_of_birth
+    devise_parameter_sanitizer.for(:account_update)  << :profile_image
+    devise_parameter_sanitizer.for(:account_update)  << :salary
+    devise_parameter_sanitizer.for(:account_update)  << :hiredate
+    devise_parameter_sanitizer.for(:account_update)  << :type
+    devise_parameter_sanitizer.for(:account_update)  << :password
+    devise_parameter_sanitizer.for(:account_update)  << :password_confirmation
+  end
 end

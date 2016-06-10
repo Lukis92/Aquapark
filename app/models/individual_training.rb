@@ -18,12 +18,12 @@ class IndividualTraining < ActiveRecord::Base
   belongs_to :training_cost
   # ************************#
   # **VALIDATIONS***************************#
-  validate :set_end_on
-  validates_presence_of :start_on, :date_of_training
-  validate :date_of_training_validation
+  validates_presence_of :start_on, :date_of_training, :training_cost_id
+  validate :set_end_on, if: :start_on && :training_cost_id
+  validate :date_of_training_validation, if: :date_of_training
   validate :individual_training_validation
   # ****************************************#
-
+  attr_accessor :credit_card, :card_code
   include PgSearch
   pg_search_scope :search, against: [:date_of_training, :end_on, :start_on],
                            associated_against:
@@ -56,6 +56,9 @@ class IndividualTraining < ActiveRecord::Base
   end
 
   def date_of_training_validation
+    if date_of_training < Date.today
+      errors.add(:error, 'Nie możesz ustalać terminu treningu wcześniej niż dzień dzisiejszy.')
+    end
     trainer.work_schedules.each do |ti|
       if ti.day_of_week == translate_date(date_of_training)
         unless start_on >= ti.start_time && start_on <= ti.end_time &&
@@ -65,10 +68,6 @@ class IndividualTraining < ActiveRecord::Base
       end
     end
   end
-
-  # def overlap?(x, y)
-  #   (x.start_on - y.end_on) * (y.start_on - x.end_on) >= 0
-  # end
 
   def individual_training_validation
     client.individual_trainings_as_client.each do |ci|
@@ -80,7 +79,6 @@ class IndividualTraining < ActiveRecord::Base
     end
     trainer.individual_trainings_as_trainer.each do |ti|
       if date_of_training == ti.date_of_training
-        raise 'Dupa'
         if (start_on..end_on).overlaps?(ti.start_on..ti.end_on)
           errors.add(:error, 'Trener ma w tym czasie inny trening.')
         end
@@ -97,7 +95,9 @@ class IndividualTraining < ActiveRecord::Base
   end
 
   def set_end_on
-    training = TrainingCost.where(id: training_cost_id).first
-    self.end_on = start_on + training.duration.minutes
+    unless training_cost_id.blank?
+      training = TrainingCost.where(id: training_cost_id).first
+      end_on = start_on + training.duration.minutes
+    end
   end
 end

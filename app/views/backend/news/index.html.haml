@@ -36,8 +36,27 @@
             %i.fa.fa-thumbs-o-down.fa-2x
               = n.thumbs_down_total
           - if current_manager
-            .btn.btn-success.waves-effect.waves-light
-              = n.scope
+            %h5
+              .label.label-success
+                = n.scope
+            -# #tab.btn-group{"data-toggle" => "buttons-radio"}
+            -#   %a.btn.btn-success{"data-toggle" => "tab", href: "#likes"}
+            -#     %i.fa.fa-ticket
+            -#     Podgląd
+            -#
+            -# .tab-content
+            -#   #likes.tab-pane
+            -#     = render 'likes'
+            -# .col-md-12
+            -#   .panel-group
+            -#     .panel.panel-link
+            -#       .panel-heading
+            -#         %h4.panel-title
+            -#           %a{"data-toggle" => "collapse", :href => "#collapse1"} Podgląd likeów
+            -#       #collapse1.panel-collapse.collapse
+            -#         .panel-body Panel Body
+            -#         .panel-footer Panel Footer
+
         .visible-xs
           %a.btn-sm.comm-bg.rectangle.waves-effect.waves-light
             %i.fa.fa-comments

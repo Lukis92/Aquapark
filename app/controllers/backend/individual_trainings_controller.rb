@@ -1,7 +1,5 @@
 class Backend::IndividualTrainingsController < BackendController
   before_action :set_individual_training, only: [:edit, :update, :destroy]
-  before_action :set_clients
-  before_action :set_trainers
   before_action :set_trainer
   before_action :set_client
   before_action :set_training_cost
@@ -20,10 +18,31 @@ class Backend::IndividualTrainingsController < BackendController
   # POST backend/individual_trainings
   def create
     @individual_training = IndividualTraining.new(individual_training_params)
-    if @individual_training.save
-      redirect_to :back, notice: 'Pomyślnie dodano.'
+    if current_client
+      Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+      token = params[:stripeToken]
+        begin
+          charge = Stripe::Charge.create(
+            amount: (@individual_training.training_cost.cost * 100).floor,
+            currency: 'pln',
+            card: token
+          )
+          if @individual_training.save
+            redirect_to :back, notice: 'Pomyślnie dodano.'
+          else
+            flash[:danger] = @individual_training.errors.full_messages
+            render :new, notice: flash[:danger]
+          end
+        rescue Stripe::CardError => e
+          flash[:danger] = e.message
+          render :new
+        end
     else
-      render :new
+      if @individual_training.save
+        redirect_to :back, notice: 'Pomyślnie dodano.'
+      else
+        render :new
+      end
     end
   end
 
@@ -49,7 +68,6 @@ class Backend::IndividualTrainingsController < BackendController
   end
 
   # DELETE backend/individual_trainings/1
-  # DELETE backend/individual_trainings/1.json
   def destroy
     @individual_training.destroy
     redirect_to :back, notice: 'Pomyślnie usunięto.'
@@ -75,19 +93,12 @@ class Backend::IndividualTrainingsController < BackendController
   def individual_training_params
     params.require(:individual_training)
           .permit(:cost, :date_of_training, :start_on, :end_on, :client_id,
-                  :trainer_id, :training_cost_id, :duration, :day)
+                  :trainer_id, :training_cost_id, :duration, :day, :credit_card,
+                  :card_code)
   end
 
   def set_individual_training
     @individual_training = IndividualTraining.find(params[:id])
-  end
-
-  def set_clients
-    @clients = Person.where(type: 'Client')
-  end
-
-  def set_trainers
-    @trainers = Person.where(type: 'Trainer')
   end
 
   def set_trainer

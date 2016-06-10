@@ -10,9 +10,10 @@
     %table.table.table-striped.table-bordered.table-list.pretty
       %thead
         %tr
-          %th
-            %em.fa.fa-cog
-            Zarządzanie
+          - if current_manager
+            %th
+              %em.fa.fa-cog
+              Zarządzanie
           %th
             = sortable "start_at", "Data rozpoczęcia"
           %th
@@ -28,16 +29,17 @@
       %tbody
         - @un_vacations.each do |vacation|
           %tr
-            %td
-              = link_to edit_backend_vacation_path(vacation), title: 'Edytuj', data: { no_turbolink: true } do
-                %i.btn.btn-default
-                  %i.fa.fa-pencil
-              = link_to backend_vacation_path(vacation), method: :delete, title: 'Usuń', data: { confirm: 'Jesteś pewny/a?' } do
-                %i.btn.btn-danger
-                  %i.fa.fa-trash
-              = link_to accept_backend_vacation_path(vacation, accepted: true), title: 'Akceptuj', method: :post do
-                %i.btn.btn-success
-                  %i.fa.fa-check-square
+            - if current_manager
+              %td
+                = link_to edit_backend_vacation_path(vacation), title: 'Edytuj', data: { no_turbolink: true } do
+                  %i.btn.btn-default
+                    %i.fa.fa-pencil
+                = link_to backend_vacation_path(vacation), method: :delete, title: 'Usuń', data: { confirm: 'Jesteś pewny/a?' } do
+                  %i.btn.btn-danger
+                    %i.fa.fa-trash
+                = link_to accept_backend_vacation_path(vacation, accepted: true), title: 'Akceptuj', method: :post do
+                  %i.btn.btn-success
+                    %i.fa.fa-check-square
             %td
               = l(vacation.start_at)
             %td
@@ -48,9 +50,10 @@
               - else
                 %i.fa.fa-times
             %td
-              = vacation.reason
+              = HTML_Truncator.truncate(vacation.reason, 40)
             %td
-              = vacation.person.full_name unless vacation.person.blank?
+              = link_to backend_person_path(vacation.person) do
+                = vacation.person.full_name unless vacation.person.blank?
             %td
               - if vacation.accepted
                 %i.fa.fa-check-square-o

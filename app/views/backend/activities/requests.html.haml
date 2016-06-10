@@ -1,0 +1,66 @@
+%h5 Zajęcia czekające na zatwierdzenie
+
+.col-md-6
+  = render 'shared/a_searchbar'
+%table.table.table-striped.table-bordered.table-list.pretty.table-list-search
+  %thead
+    %tr
+      %th
+        %em.fa.fa-cog
+        Zarządzanie
+      %th
+        Nazwa
+      %th
+        Opis
+      %th
+        Aktywne?
+      %th
+        Dzień tygodnia
+      %th
+        Godzina rozpoczęcia
+      %th
+        Godzina zakończenia
+      %th
+        Strefa basenu
+      %th
+        Trener
+      %th
+        Maksymalna ilość osób
+  %tbody
+    - @activity_requests.each do |activity|
+      %tr
+        %td
+          - if current_receptionist || current_manager
+            = link_to edit_backend_activity_path(activity), title: 'Edytuj', data: { no_turbolink: true } do
+              %i.btn.btn-default
+                %i.fa.fa-pencil
+            = link_to activate_backend_activity_path(activity, active: true), title: 'Aktywuj', method: :post do
+              %i.btn.btn-success
+                %i.fa.fa-calendar-plus-o
+
+        %td
+          = activity.name
+        %td
+          = activity.description
+        %td
+          - if activity.active?
+            %i.fa.fa-check
+          - else
+            %i.fa.fa-times
+        %td
+          = activity.day_of_week
+        %td
+          = l(activity.start_on, format: :short)
+        %td
+          = l(activity.end_on, format: :short)
+        %td
+          = link_to pool_zone_backend_activities_path(zone: activity.pool_zone) do
+            .btn.btn-warning
+              = activity.pool_zone
+        %td
+          = link_to backend_person_path(activity.person) do
+            = activity.person.full_name
+        %td
+          = activity.max_people
+
+= will_paginate @activity_requests, renderer: BootstrapPagination::Rails

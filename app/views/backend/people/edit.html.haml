@@ -13,7 +13,9 @@
     .form-group
       = f.input :last_name, required: true
     .form-group
-      = f.input :date_of_birth, required: true, start_year: Date.today.year - 100, end_year: Date.today.year - 13
+      %label{for: "datepicker"}* Data urodzenia
+      = f.text_field :date_of_birth, required: true, class: 'datepicker',
+                     placeholder: 'Kliknij'
     .form-group
       = f.input :email, required: true
     .form-group
@@ -22,7 +24,9 @@
       .form-group
         = f.input :salary, required: true
       .form-group
-        = f.input :hiredate, required: true
+        %label{for: "datepicker"}* Data zatrudnienia
+        = f.text_field :hiredate, required: true, class: 'datepicker',
+                       placeholder: 'Kliknij'
     .form-group
       %i (zostaw puste, jeżeli nie chcesz zmieniać)
       = f.input :password, hint: ("minimum #{@minimum_password_length} znaków" if @minimum_password_length)
@@ -37,3 +41,8 @@
         = link_to remove_photo_backend_person_path(@person), method: :delete, data: {confirm: 'Czy na pewno?'}, class: "btn btn-sm btn-danger" do
           %i.fa.fa-trash-o
           Usuń zdjęcie profilowe
+:javascript
+  $('.datepicker').pickadate({
+     selectMonths: true, // Creates a dropdown to control month
+     selectYears: 150 // Creates a dropdown of 15 years to control year
+   });
