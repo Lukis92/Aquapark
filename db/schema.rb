@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160607212234) do
+ActiveRecord::Schema.define(version: 20160613105344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,8 +43,8 @@ ActiveRecord::Schema.define(version: 20160607212234) do
     t.datetime "bought_data",                           null: false
     t.date     "start_on"
     t.date     "end_on",                                null: false
-    t.integer  "entry_type_id"
-    t.integer  "person_id"
+    t.integer  "entry_type_id",                         null: false
+    t.integer  "person_id",                             null: false
     t.decimal  "cost",          precision: 5, scale: 2, null: false
   end
 
@@ -83,11 +83,9 @@ ActiveRecord::Schema.define(version: 20160607212234) do
   add_index "individual_trainings", ["training_cost_id"], name: "index_individual_trainings_on_training_cost_id", using: :btree
 
   create_table "likes", force: :cascade do |t|
-    t.boolean  "like"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "person_id"
-    t.integer  "news_id"
+    t.boolean "like"
+    t.integer "person_id", null: false
+    t.integer "news_id",   null: false
   end
 
   add_index "likes", ["news_id"], name: "index_likes_on_news_id", using: :btree
@@ -99,7 +97,7 @@ ActiveRecord::Schema.define(version: 20160607212234) do
     t.string   "scope",      null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "person_id"
+    t.integer  "person_id",  null: false
   end
 
   add_index "news", ["person_id"], name: "index_news_on_person_id", using: :btree
@@ -131,6 +129,13 @@ ActiveRecord::Schema.define(version: 20160607212234) do
   add_index "people", ["email"], name: "index_people_on_email", unique: true, using: :btree
   add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true, using: :btree
 
+  create_table "products", force: :cascade do |t|
+    t.string   "name"
+    t.decimal  "price",      precision: 12, scale: 2
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
   create_table "training_costs", force: :cascade do |t|
     t.integer "duration",                         null: false
     t.decimal "cost",     precision: 5, scale: 2
@@ -139,20 +144,19 @@ ActiveRecord::Schema.define(version: 20160607212234) do
   create_table "vacations", force: :cascade do |t|
     t.date    "start_at",                  null: false
     t.date    "end_at",                    null: false
-    t.boolean "free",      default: false, null: false
+    t.boolean "free",      default: false
     t.text    "reason"
-    t.integer "person_id"
+    t.integer "person_id",                 null: false
     t.boolean "accepted",  default: false
   end
 
   add_index "vacations", ["person_id"], name: "index_vacations_on_person_id", using: :btree
 
   create_table "work_schedules", force: :cascade do |t|
-    t.time     "start_time",  null: false
-    t.time     "end_time",    null: false
-    t.string   "day_of_week", null: false
-    t.datetime "updated_at",  null: false
-    t.integer  "person_id"
+    t.time    "start_time",  null: false
+    t.time    "end_time",    null: false
+    t.string  "day_of_week", null: false
+    t.integer "person_id",   null: false
   end
 
   add_index "work_schedules", ["person_id"], name: "index_work_schedules_on_person_id", using: :btree

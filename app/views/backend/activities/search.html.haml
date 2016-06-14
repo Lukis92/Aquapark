@@ -23,18 +23,36 @@
       %th
         Strefa basenu
       %th
+        Trener
+      %th
         Maksymalna ilość osób
   %tbody
     - unless @activities.blank?
       - @activities.each do |activity|
         %tr
           %td
-            = link_to edit_backend_activity_path(activity), data: { no_turbolink: true } do
-              %i.btn.btn-default
-                %i.fa.fa-pencil
-            = link_to backend_activity_path(activity), method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
-              %i.btn.btn-danger
-                %i.fa.fa-trash
+            - if current_receptionist || current_manager
+              = link_to edit_backend_activity_path(activity), title: 'Edytuj', data: { no_turbolink: true } do
+                %i.btn.btn-default
+                  %i.fa.fa-pencil
+              = link_to backend_activity_path(activity), title: 'Usuń', method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
+                %i.btn.btn-danger
+                  %i.fa.fa-trash
+              - if activity.active
+                - if current_receptionist || current_manager
+                  = link_to deactivate_backend_activity_path(activity, active: false), title: 'Deaktywuj', method: :post do
+                    %i.btn.btn-danger
+                      %i.fa.fa-calendar-minus-o
+              - unless activity.active
+                = link_to activate_backend_activity_path(activity, active: true), title: 'Aktywuj', method: :post do
+                  %i.btn.btn-success
+                    %i.fa.fa-calendar-plus-o
+            = link_to sign_up_backend_activity_path(activity), title: 'Dołącz', data: { no_turbolink: true } do
+              %i.btn.btn-success
+                %i.fa.fa-user-plus
+            = link_to preview_backend_activity_path(activity), title: 'Lista uczestników' do
+              %i.btn.btn-warning
+                %i.fa.fa-search
           %td
             = activity.name
           %td
@@ -51,7 +69,12 @@
           %td
             = l(activity.end_on, format: :short)
           %td
-            = activity.pool_zone
+            = link_to pool_zone_backend_activities_path(zone: activity.pool_zone) do
+              .btn.btn-warning
+                = activity.pool_zone
+          %td
+            = link_to backend_person_path(activity.person) do
+              = activity.person.full_name
           %td
             = activity.max_people
       = will_paginate @activities, renderer: BootstrapPagination::Rails

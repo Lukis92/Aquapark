@@ -39,7 +39,7 @@
         = simple_form_for([:backend, @news, @comment]) do |f|
           .input-field
             = f.input :body, input_html: { class: "materialize-textarea" }
-            = f.button :submit, class: "btn btn-primary"
+          = f.button :submit, class: "btn btn-primary"
 
 .row
   .card-panel.horizontal-listing.no-padding.comments-section

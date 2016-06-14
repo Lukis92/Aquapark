@@ -6,8 +6,7 @@
 #  start_time  :time             not null
 #  end_time    :time             not null
 #  day_of_week :string           not null
-#  updated_at  :datetime         not null
-#  person_id   :integer
+#  person_id   :integer          not null
 #
 
 class WorkSchedule < ActiveRecord::Base
@@ -18,8 +17,7 @@ class WorkSchedule < ActiveRecord::Base
   # **VALIDATIONS***************************#
   validates :start_time, presence: true
   validates :end_time, presence: true
-  validates_uniqueness_of :day_of_week, scope: :person_id
-  validates :day_of_week, presence: true
+  validates :day_of_week, uniqueness: { scope: :person_id, allow_blank: false }
   before_save :start_must_be_before_end_time
   validate :person_existing
   # ****************************************#

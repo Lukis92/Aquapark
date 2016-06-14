@@ -73,6 +73,7 @@ gem 'rubocop', require: false
 gem 'rails_best_practices' # a code metric tool for rails projects
 # gem 'validates_overlap' # Gem for Rails 3 and 4, that helps validate overlap
 gem 'simple_calendar', '~> 2.0' # A wonderfully simple calendar gem for Rails
+#gem 'summernote-rails'
 gem 'bootstrap-wysihtml5-rails', github: 'nerian/bootstrap-wysihtml5-rails'
 gem 'rails-timeago', '~> 2.0' # helper for time tags
 gem 'i18n-tasks', '~> 0.9.5' # Manage translation for Ruby i18n

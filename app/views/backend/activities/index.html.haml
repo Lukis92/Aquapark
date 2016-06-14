@@ -1,14 +1,5 @@
 %h5 Zajęcia grupowe
 
--# = month_calendar attribute: :date, events: @active_activities do |activity|
--#   = activity.date.strftime("%d")
--#   %br
--#   - activity.each do |ac|
--#     = ac.name
--#     = l(ac.start_on, format: :short)
--#     \-
--#     = l(ac.end_on, format: :short)
-
 - unless current_client || current_trainer || current_lifeguard
   %p
     = link_to new_backend_activity_path, class: 'btn btn-primary', data: {no_turbolink: true} do
@@ -17,7 +8,6 @@
 .col-md-6
   = render 'shared/a_searchbar'
 .row
-  %h5.divider-new Poniedziałek
   %table.table.table-striped.table-bordered.table-list.pretty.table-list-search
     %thead
       %tr

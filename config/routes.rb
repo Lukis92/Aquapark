@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   namespace :backend do
     root 'news#index'
 
+    resources :products
     devise_for :people, :manager, :receptionists, :lifeguards, :trainers,
                skip: :sessions,
                controllers: { registrations: 'backend/registrations' }

@@ -4,10 +4,10 @@
 #
 #  id            :integer          not null, primary key
 #  bought_data   :datetime         not null
-#  end_on        :date             not null
-#  entry_type_id :integer
-#  person_id     :integer
 #  start_on      :date
+#  end_on        :date             not null
+#  entry_type_id :integer          not null
+#  person_id     :integer          not null
 #  cost          :decimal(5, 2)    not null
 #
 
@@ -63,7 +63,7 @@ class BoughtDetail < ActiveRecord::Base
   end
 
   def validate_start_on
-    if start_on < Date.today
+    if start_on < Date.today && entry_type == 'Karnet'
       errors.add(:error,
                  "Czas rozpoczęcia jest wcześniejszy niż dzisiejsza data.")
     end

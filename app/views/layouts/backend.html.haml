@@ -14,12 +14,12 @@
     %link{ href: 'http://fonts.googleapis.com/css?family=&&ada&subset=latin,latin-ext', rel: 'stylesheet', type: 'text/css' }
     %link{ href: 'http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext', rel: 'stylesheet', type: 'text/css' }
     %link{ href: 'https://fonts.googleapis.com/icon?family=Material+Icons', rel: 'stylesheet' }
-    %script{ src: 'https://code.jquery.com/jquery-2.2.2.min.js', type: 'text/javascript' }
     /jquery.min.js
-    - if @news.blank?
-      - @news = News.find(1)
-    - unless current_page?(new_backend_news_path) || current_page?(edit_backend_news_path(@news))
-      %script{ src: 'https://googledrive.com/host/0B3yx98FbxNb4ZEVLZUJjYWNMTnc/', type: 'text/javascript' }
+    -# - if @news.blank?
+    -#   - @news = News.find(1)
+    - unless current_page?(new_backend_news_path) || current_page?(edit_backend_news_path(News.last))
+      %script{ src: 'https://code.jquery.com/jquery-3.0.0.min.js', type: 'text/javascript' }
+
     /mdb.css
     %link{ href: 'https://googledrive.com/host/0B3yx98FbxNb4STVleGxYZTZnOEE/', rel: 'stylesheet' }
     /mdb.min.css
@@ -99,8 +99,9 @@
                 - if current_manager
                   %li{class: current_page?(backend_work_schedules_path) && 'active'}
                     = link_to "Grafik pracy", backend_work_schedules_path, data: { no_turbolink: true }
-                %li{class: current_page?( my_backend_manage_schedule_index_path(current_person)) && 'active'}
-                  = link_to "Mój grafik pracy",  my_backend_manage_schedule_index_path(current_person) if current_person.present?
+                - unless current_client || current_manager
+                  %li{class: current_page?( my_backend_manage_schedule_index_path(current_person)) && 'active'}
+                    = link_to "Mój grafik pracy",  my_backend_manage_schedule_index_path(current_person) if current_person.present?
                 - if current_manager
                   %li{class: current_page?(new_backend_work_schedule_path) && 'active', data: { no_turbolink: true }}
                     = link_to "Dodaj grafik pracy", new_backend_work_schedule_path
@@ -132,7 +133,7 @@
               - unless current_client
                 %li{class: current_page?(requests_backend_activities_path) && 'active'}
                   = link_to 'Niezaakceptowane zajęcia', requests_backend_activities_path
-            - unless current_client
+            - if current_manager
               %h5
                 %i.fa.fa-plane
                 %small

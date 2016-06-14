@@ -6,7 +6,7 @@ class Backend::NewsController < BackendController
   before_action :creation_news_rules, only: :new
   # GET backend/news
   def index
-    @news = News.paginate(page: params[:page], per_page: 5)
+    @news = @news.paginate(page: params[:page], per_page: 5)
   end
 
   # GET backend/news/new
@@ -30,7 +30,7 @@ class Backend::NewsController < BackendController
   def update
     if @news.update(news_params)
       redirect_to backend_news_index_path,
-                notice: 'Pomyślnie zaktualizowano.'
+                  notice: 'Pomyślnie zaktualizowano.'
     else
       render :edit
     end
@@ -72,13 +72,13 @@ class Backend::NewsController < BackendController
       @news = News.where(scope: %w(wszyscy ratownicy trenerzy
                                    recepcjoniści klienci))
     elsif current_receptionist
-      @news = News.where(scope: %w(recepcjonisci klienci))
+      @news = News.where(scope: %w(wszyscy pracownicy recepcjonisci klienci))
     elsif current_lifeguard
-      @news = News.where(scope: 'ratownicy')
+      @news = News.where(scope: %w(wszyscy pracownicy ratownicy))
     elsif current_trainer
-      @news = News.where(scope: 'trenerzy')
+      @news = News.where(scope: %w(wszyscy pracownicy trenerzy))
     elsif current_client
-      @news = News.where(scope: 'klienci')
+      @news = News.where(scope: %w(wszyscy klienci))
     end
   end
 
@@ -99,22 +99,25 @@ class Backend::NewsController < BackendController
   def display_news_rules
     unless current_manager
       if current_client
-        unless @news.scope == 'klienci'
+        unless @news.scope == 'klienci' || @news.scope == 'wszyscy'
           flash[:danger] = "Brak dostępu. {display_news_rules}"
           redirect_to backend_news_index_path
         end
       elsif current_receptionist
-        unless @news.scope == 'recepcjonisci'
+        unless @news.scope == 'recepcjonisci' || @news.scope == 'pracownicy' ||
+               @news.scope == 'wszyscy'
           flash[:danger] = "Brak dostępu. {display_news_rules}"
           redirect_to backend_news_index_path
         end
       elsif current_trainer
-        unless @news.scope == 'trenerzy'
+        unless @news.scope == 'trenerzy' || @news.scope == 'pracownicy' ||
+               @news.scope == 'wszyscy'
           flash[:danger] = "Brak dostępu. {display_news_rules}"
           redirect_to backend_news_index_path
         end
       elsif current_lifeguard
-        unless @news.scope == 'ratownicy'
+        unless @news.scope == 'ratownicy' || @news.scope == 'pracownicy' ||
+               @news.scope == 'wszyscy'
           flash[:danger] = "Brak dostępu. {display_news_rules}"
           redirect_to backend_news_index_path
         end

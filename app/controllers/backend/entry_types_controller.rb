@@ -61,7 +61,7 @@ class Backend::EntryTypesController < BackendController
   private
 
   def entry_type_params
-    params.require(:entry_type).permit(:kind, :kind_details, :price)
+    params.require(:entry_type).permit(:kind, :kind_details, :description, :price)
   end
 
   def set_entry_type

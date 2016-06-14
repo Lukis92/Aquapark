@@ -42,26 +42,9 @@
               = work.person.full_name
           %td
             - type = I18n.t(:"activerecord.attributes.work_schedule.pl_person_types.#{work.person.type}")
-            - if work.person.type = 'Receptionist'
-              = link_to backend_receptionists_path do
-                %i.btn.btn-info
-                  = type
-            - elsif work.person.type = 'Lifeguard'
-              = link_to backend_lifeguards_path do
-                %i.btn.btn-info
-                  = type
-            - elsif work.person.type = 'Client'
-              = link_to backend_clients_path do
-                %i.btn.btn-info
-                  = type
-            - elsif work.person.type = 'Trainer'
-              = link_to backend_trainers_path do
-                %i.btn.btn-info
-                  = type
-            - elsif work.person.type = 'Client'
-              = link_to backend_clients_path do
-                %i.btn.btn-info
-                  = type
+            %h5
+              %i.label.label-info
+                = type
 
   = will_paginate @work_schedules, renderer: BootstrapPagination::Rails
 

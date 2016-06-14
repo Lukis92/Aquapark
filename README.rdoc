@@ -1,4 +1,4 @@
-== README
+nnnnn== README
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
@@ -34,41 +34,24 @@ Please feel free to use a different markup language if you do not plan to run
 * dodać link w news podgląd kto dał lajka
 * dodać gwiazdkę przy dacie urodzenia clients/sign_up
 * dodać dla managera strony z bought_details/index
-* nie działa activities/new - heroku
 * dodać opis zasięg news/new
-* dodać gwiazdkę do aktywny? dzień tygodnia, trener w activities/new
 * usunąć grafik pracy dla managera, jest on wszechobecny :D
 * dodać przydzielanie indywidualnych treningów
+* ograniczyć rozmiar dodawanych zdjęć profilowych
 == What's done:
-- branie udziału w zajęciach, rezygnacja
-- wypisywanie terminów zajęć grupowych na najbliższe 4 tygodnie
-- walidacja terminów dodawania zajęć, do dnia tygodnia, godziny r/z i strefy
-  basenowej
-- naprawienie brania udziału w zajęciach oraz rezygnacja
-- podgląd listy uczestników na każde z zajęć
-- gdy wyskoczy błąd walidacyjny w logowaniu to footer leci na góre
-- naprawione dropdownlist w Rejestracja pracowników(usunięcie :javascript w form)
-- poprawiona walidacja date_of_training_validation w indivdual_trainings
-- poprawienie przekierowania po poprawnym zarejestrowaniu konta klienta
-- wyświetlanie panelu błędów w rejestracji klienta, poprawienie metody errors_for
-- strona individual_trainings/new
-- wprowadzenie płatności dla indywidualnych treningów
-- backend/people/109/vacations/new nie działa
-- widok recepcjonisty:
-  - dodać truncate do powód w vacations/request, index itp.
-  - usunąc button dodaj grafik w my_schedule,
-  - usunąć zarządzanie w urlopy do zaakceptowania, oraz wszystkie urlopy
-  - dodać link do pracownika w vacations/requests, index
-  - usunąć z work_schedule created_at, updated_at
-  - widok recepcjonisty: usunąć zarządzanie w vacation/lis
-- przetestować, jak usuwamy pracownika to z nim też usuwa się vacations
-- sortowanie entry_types
-- Dostępne dni na trening
-- poprawic routing people/id/work_schedules/idt
-- uniemożliwić recepcjoniście dodawanie grafiku pracy samemu sobie
-- Wyświetlanie planu zajęć dla poszczególnych stref basenowych
-- klient powinnien widzieć tylko aktywne zajęcia grupowe
-- require person dla backend
-- naprawiony footer
-- validacja ustalania terminu treningu wcześniej niż dzień dzisiejszy
-Add payment option for individual training, modyfi errors_for, update statistic_page, validation for activitiy
+- activities/new - heroku
+- activities/search - heroku
+- tłumaczenie i18n błędów, form activities
+- usunąć z work_schedules updated_at
+- usunąć z likes created_at, updated_at
+- przy dodawaniu biletu z poziomu kierownika, opis nie zapisuje się w bazie.
+- możliwosć dodania wielu dni w tygodniu dla work_schedules - naprawione
+- usunięcie możliwości poproszenia o urlop dla innej osoby
+- Brak dostępu. {display_news_rules}, gdy próbuje wejść w news jako ratownik
+- Naprawiona widoczność news dla poszczególnych grup pracowników
+- w activities_people date required
+- nie działa activities/new - heroku
+- brak widoku błędów gdy próbujemy dodać pusty komentarz w news
+- dodać te same ikony w activity search co activity index
+- przy dezaktywacji zajęć usuwamy wszystkich uczestników zapisanych na przyszłe
+  daty

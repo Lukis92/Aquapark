@@ -2,12 +2,10 @@
 #
 # Table name: likes
 #
-#  id         :integer          not null, primary key
-#  like       :boolean
-#  created_at :datetime
-#  updated_at :datetime
-#  person_id  :integer
-#  news_id    :integer
+#  id        :integer          not null, primary key
+#  like      :boolean
+#  person_id :integer          not null
+#  news_id   :integer          not null
 #
 
 class Like < ActiveRecord::Base

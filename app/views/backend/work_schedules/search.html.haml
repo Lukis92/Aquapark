@@ -37,21 +37,10 @@
               = work.person.full_name
           %td
             - unless work.person.nil?
-              - if work.person.type == "Manager"
-                %i.btn.btn-danger
-                  Kierownik
-              - elsif work.person.type == "Client"
-                %i.btn.btn-warning
-                  Klient
-              - elsif work.person.type == "Trainer"
-                %i.btn.btn-info
-                  Trener
-              - elsif work.person.type == "Lifeguard"
-                %i.btn.btn-info
-                  Ratownik
-              - elsif work.person.type == "Receptionist"
-                %i.btn.btn-info
-                  Recepcjonista
+              - type = I18n.t(:"activerecord.attributes.work_schedule.pl_person_types.#{work.person.type}")
+              %h5
+                %i.label.label-info
+                  = type
       = will_paginate @work_schedules, renderer: BootstrapPagination::Rails
     - else
       %tr

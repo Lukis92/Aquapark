@@ -50,9 +50,9 @@ class Person < ActiveRecord::Base
   has_many :activities, through: :activities_people
   # accepts_nested_attributes_for :assignments
 
-  # has_many :activities_as_trainer,
-  #          class_name: 'Activity',
-  #          foreign_key: 'trainer_id'
+  has_many :activities_as_trainer,
+           class_name: 'Activity',
+           foreign_key: 'trainer_id'
   ##########################
 
   # **VALIDATIONS*******************************************************#

@@ -1,7 +1,7 @@
 %h5 Cennik Treningów Indywidualnych
 
 - if current_manager || current_receptionist
-  = link_to new_backend_training_cost_path, data: { no_turbolink: true } do
+  = link_to new_backend_training_cost_path, remote: true, data: { no_turbolink: true } do
     %i.btn.btn-primary
       %i.fa.fa-plus
       Dodaj
@@ -22,10 +22,10 @@
       %tr
         - if current_manager || current_receptionist
           %td
-            = link_to edit_backend_training_cost_path(tc), title: 'Edytuj', data: { no_turbolink: true } do
+            = link_to edit_backend_training_cost_path(tc), remote: true, title: 'Edytuj', data: { no_turbolink: true } do
               %i.btn.btn-default
                 %i.fa.fa-pencil
-            = link_to backend_training_cost_path(tc), title: 'Usuń', method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
+            = link_to backend_training_cost_path(tc), remote: true, title: 'Usuń', method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
               %i.btn.btn-danger
                 %i.fa.fa-trash
         %td
@@ -34,5 +34,6 @@
         %td
           = tc.cost
           zł
+
 
 = will_paginate @training_costs, renderer: BootstrapPagination::Rails

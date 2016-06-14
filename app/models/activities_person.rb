@@ -4,7 +4,7 @@
 #
 #  activity_id :integer          not null
 #  person_id   :integer          not null
-#  date        :date
+#  date        :date             not null
 #  id          :integer          not null, primary key
 #
 

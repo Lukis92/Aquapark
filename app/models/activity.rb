@@ -11,14 +11,14 @@
 #  end_on      :time             not null
 #  pool_zone   :string(1)        not null
 #  max_people  :integer
-#  person_id   :integer
+#  person_id   :integer          not null
 #
 
 class Activity < ActiveRecord::Base
   has_many :activities_people
   has_many :people, through: :activities_people
   belongs_to :person
-  validates_presence_of :name, :start_on, :end_on, :day_of_week, :pool_zone
+  validates_presence_of :name, :start_on, :end_on, :day_of_week, :pool_zone, :person_id
   validate :activity_exists
   include PgSearch
   pg_search_scope :search, against: [:name, :description, :active, :day_of_week,

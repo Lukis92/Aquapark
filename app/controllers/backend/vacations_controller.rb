@@ -4,7 +4,7 @@ class Backend::VacationsController < BackendController
   before_action :set_person, except: :accept
   before_action :set_employees
   before_action :manage_rule_vacations, only: [:edit, :update, :destroy]
-  before_action :select_rule_own_vacations, only: :list
+  before_action :select_rule_own_vacations, only: [:list, :new]
   before_action :select_rule_vacations, only: :index
   # GET backend/vacations
   def index

@@ -5,9 +5,9 @@
 #  id        :integer          not null, primary key
 #  start_at  :date             not null
 #  end_at    :date             not null
-#  free      :boolean          default(FALSE), not null
+#  free      :boolean          default(FALSE)
 #  reason    :text
-#  person_id :integer
+#  person_id :integer          not null
 #  accepted  :boolean          default(FALSE)
 #
 

@@ -19,79 +19,63 @@
   %tbody
     - unless @activities_people.blank?
       %tr
-        - @activities_people.each do |ap|
-          %td
+        %td
+          - @activities_people.each do |ap|
             - if ap.day_of_week == 'Poniedziałek'
               = ap.name
               |
-              - ap.activities_people.each do |aap|
-                = l(aap.date)
-              |
               = l(ap.start_on, format: :short)
               \-
               = l(ap.end_on, format: :short)
-
-          %td
+        %td
+          - @activities_people.each do |ap|
             - if ap.day_of_week == 'Wtorek'
               = ap.name
               |
-              - ap.activities_people.each do |aap|
-                = l(aap.date)
-              |
               = l(ap.start_on, format: :short)
               \-
               = l(ap.end_on, format: :short)
 
-          %td
+        %td
+          - @activities_people.each do |ap|
             - if ap.day_of_week == 'Środa'
               = ap.name
               |
-              - ap.activities_people.each do |aap|
-                = l(aap.date)
-              |
               = l(ap.start_on, format: :short)
               \-
               = l(ap.end_on, format: :short)
 
-          %td
+        %td
+          - @activities_people.each do |ap|
             - if ap.day_of_week == 'Czwartek'
               = ap.name
               |
-              - ap.activities_people.each do |aap|
-                = l(aap.date)
-              |
               = l(ap.start_on, format: :short)
               \-
               = l(ap.end_on, format: :short)
 
-          %td
+        %td
+          - @activities_people.each do |ap|
             - if ap.day_of_week == 'Piątek'
               = ap.name
               |
-              - ap.activities_people.each do |aap|
-                = l(aap.date)
-              |
               = l(ap.start_on, format: :short)
               \-
               = l(ap.end_on, format: :short)
 
-          %td
+        %td
+          - @activities_people.each do |ap|
             - if ap.day_of_week == 'Sobota'
               = ap.name
               |
-              - ap.activities_people.each do |aap|
-                = l(aap.date)
-              |
               = l(ap.start_on, format: :short)
               \-
               = l(ap.end_on, format: :short)
 
-          %td
+        %td
+          - @activities_people.each do |ap|
             - if ap.day_of_week == 'Niedziela'
               = ap.name
-              |
-              - ap.activities_people.each do |aap|
-                = l(aap.date)
               |
               = l(ap.start_on, format: :short)
               \-

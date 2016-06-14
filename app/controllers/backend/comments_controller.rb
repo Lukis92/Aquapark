@@ -9,7 +9,8 @@ class Backend::CommentsController < BackendController
       redirect_to backend_news_path(@news),
                   notice: "Komentarz pomyślnie dodano"
     else
-      redirect_to :back, danger: "Komentarz nie został dodany."
+      flash[:danger] = "Komentarz nie został dodany. Wymagana treść, minimum 5 znaków."
+      redirect_to :back
     end
   end
 

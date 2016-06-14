@@ -45,6 +45,10 @@ class Backend::ActivitiesController < BackendController
 
   def deactivate
     @activity.update!(active: false)
+    @activities_people = ActivitiesPerson.where(activity_id: @activity).where('date >= ?', Date.today)
+    @activities_people.each do |ap|
+      ap.destroy
+    end
     redirect_to :back, notice: 'Deaktywowano.'
   end
 
@@ -54,8 +58,7 @@ class Backend::ActivitiesController < BackendController
   end
 
   def pool_zone
-    @activities_people = Activity.joins(:activities_people)
-                                 .where(activities: { pool_zone: @zone })
+    @activities_people = Activity.where(activities: { pool_zone: @zone, active: true }).order(start_on: :asc)
     @act_people = ActivitiesPerson.where(activity_id: :activity_id)
                                   .includes(:activity).includes(:activities_people)
   end

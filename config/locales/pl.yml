@@ -47,6 +47,12 @@ pl:
         date_of_training: Data treningu
         training_cost_id: Czas trwania
       activity:
+        name: Nazwa
+        start_on: Czas rozpoczęcia
+        end_on: Czas zakończenia
+        day_of_week: Dzień tygodnia
+        pool_zone: Strefa basenu
+        person_id: Trener
         day_number:
           Niedziela: 0
           Poniedziałek: 1
@@ -62,6 +68,10 @@ pl:
       messages:
         record_invalid: Nieprawidłowy rekord
       models:
+        news:
+          attributes:
+            title:
+              blank: wymagane
         bought_detail:
           attributes:
             bought_data:
@@ -223,6 +233,14 @@ pl:
               blank: wymagane
             pool_zone:
               blank: wymagane
+            start_on:
+              blank: wymagane
+            end_on:
+              blank: wymagane
+            day_of_week:
+              blank: wymagane
+            person_id:
+              blank: wymagane
         vacation:
           attributes:
             start_at:
@@ -290,6 +308,10 @@ pl:
         update: Zapisz
       vacation:
         create: Dodaj urlop
+        update: Zapisz
+      manage_schedule:
+        create: Dodaj grafik
+        update: Zapisz
       work_schedule:
         create: Dodaj grafik
         update: Zapisz
