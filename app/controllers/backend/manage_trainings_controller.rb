@@ -55,7 +55,12 @@ class Backend::ManageTrainingsController < BackendController
   end
 
   def set_manage_training
-    @manage_training = IndividualTraining.find(params[:id])
+    begin
+      @manage_training = IndividualTraining.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      flash[:danger] = 'Nie istnieje trening o takim id.'
+      redirect_to backend_news_index_path
+    end
   end
 
   def set_training_cost

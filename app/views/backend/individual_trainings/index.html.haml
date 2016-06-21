@@ -1,24 +1,10 @@
+%h5 Treningi indywidualne klientów.
+%p
+  Obecnie w bazie posiadamy
+  = IndividualTraining.count
+  zarejestrowanych treningów.
+
 .row
-  .col-md-6
-    %ul.collection
-      %li.collection-item
-        %h5
-          Treningi
-      %li.collection-item
-        %h6
-          %b
-            Klient:
-          = @client.full_name
-          %br
-          %b
-            Trener:
-          = @trainer.full_name
-          %br
-          %b
-            Odbyli ze sobą już
-          = @individual_trainings.count
-          treningi
-.col-md-6
   = render 'shared/it_searchbar'
 %table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   %thead
@@ -44,14 +30,14 @@
     - @individual_trainings.each do |training|
       %tr
         %td
-          = link_to edit_backend_individual_training_path(training), data: { no_turbolink: true } do
+          = link_to edit_backend_trainer_individual_training_path(@client, @trainer, training), data: { no_turbolink: true } do
             %i.btn.btn-default
               %i.fa.fa-pencil
           = link_to backend_individual_training_path(training), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
             %i.btn.btn-danger
               %i.fa.fa-trash
         %td
-          = number_with_precision(training.training_cost.cost, precision: 2)
+          = training.training_cost.cost.nice
           zł
         %td
           = link_to backend_person_path(training.client) do

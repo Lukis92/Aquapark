@@ -35,32 +35,27 @@ class Vacation < ActiveRecord::Base
   private
 
   def timeline
-    if self.start_at_changed? || self.end_at_changed? || self.person_id_changed?
-      if (person.vacations.where('start_at <= ?', start_at).count > 0 &&
-         person.vacations.where('end_at >= ?', end_at).count > 0) ||
-         (person.vacations.where('start_at <= ?', start_at).count > 0 &&
-          person.vacations.where('end_at <= ?', end_at).count > 0 &&
-          person.vacations.where('end_at >= ?', start_at).count > 0) ||
-         (person.vacations.where('start_at >= ?', start_at).count > 0 &&
-         person.vacations.where('start_at <= ?', end_at).count > 0 &&
-         person.vacations.where('end_at >= ?', end_at).count > 0)
-        errors.add(:start_at, 'Masz już urlop w tym okresie.')
+    if start_at_changed? || end_at_changed? || person_id_changed?
+      overlapping_vacations = person.vacations.where('vacations.id != ?', id)
+      ol_vacations = overlapping_vacations.where('((start_at <= :start_at AND end_at >= :end_at) OR
+                                       (start_at <= :start_at AND end_at <= :end_at AND end_at >= :start_at) OR
+                                       (start_at >= :start_at AND start_at <= :end_at AND end_at >= :end_at))',
+                                  start_at: start_at, end_at: end_at)
+      if ol_vacations.exists?
+        errors.add(:base, 'Masz już urlop w tym okresie.')
       end
     end
   end
 
-
   def validate_start_at
     if start_at < Date.today
-      errors.add(:start_at, "Czas rozpoczęcia nie może być wcześniejszy niż
-      dzisiejsza data.")
+      errors.add(:base, "Data od nie może być wcześniejsza niż dzisiejsza data.")
     end
   end
 
   def start_at_must_be_before_end_at
     if end_at < start_at
-      errors.add(:end_at, 'Czas rozpoczęcia musi być wcześniejszy niż czas
-      zakończenia.')
+      errors.add(:base, 'Data od musi być wcześniejszy niż data do.')
     end
   end
 
@@ -68,7 +63,7 @@ class Vacation < ActiveRecord::Base
     if query.present? && querydate.blank?
       search(query)
     elsif query.present? && querydate.present?
-      search(query+' '+querydate)
+      search(query + ' ' + querydate)
     elsif query.blank? && querydate.present?
       search(querydate)
     else

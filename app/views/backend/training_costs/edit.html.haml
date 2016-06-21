@@ -1,2 +1,27 @@
 %h5 Edycja cennika
-= render 'form'
+.row
+  .col-md-6
+    %h5 Dodawanie cennika
+    .card-panel
+      .blue-text.text-darken-2
+        %i.fa.fa-info-circle
+        Na tej stronie możesz dodać cennik dla treningów indywidualnych.
+    = render 'form'
+  .col-md-6
+    %h5 Aktualny cennik
+    %table.table.table-striped.table-bordered
+      %thead
+        %tr
+          %th
+            Czas trwania
+          %th
+            Koszt
+      %tbody
+        - @training_costs.each do |tc|
+          %tr
+            %td
+              = tc.duration
+              min.
+            %td
+              = tc.cost.nice
+              zł

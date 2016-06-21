@@ -15,23 +15,23 @@
           %em.fa.fa-cog
           Zarządzanie
         %th
-          Nazwa
+          = sortable 'name', 'Nazwa'
         %th
-          Opis
+          = sortable 'description', 'Opis'
         %th
-          Aktywne?
+          = sortable 'active', 'Aktywne?'
         %th
-          Dzień tygodnia
+          = sortable 'day_of_week', 'Dzień tygodnia'
         %th
-          Godzina rozpoczęcia
+          = sortable 'start_on', 'Godzina rozpoczęcia'
         %th
-          Godzina zakończenia
+          = sortable 'end_on', 'Godzina zakończenia'
         %th
-          Strefa basenu
+          = sortable 'pool_zone', 'Strefa basenu'
         %th
-          Trener
+          = sortable 'people.first_name', 'Trener'
         %th
-          Maksymalna ilość osób
+          = sortable 'max_people', 'Maksymalna ilość osób'
     %tbody
       -unless current_client
         - @activities.each do |activity|

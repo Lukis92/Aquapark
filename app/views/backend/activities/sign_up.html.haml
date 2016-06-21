@@ -46,10 +46,7 @@
               = f.input :date, as: :hidden, input_html: { value: an }
               = f.input :activity_id, as: :hidden, input_html: { value: @activity.id }
               = f.input :person_id, as: :hidden, input_html: { value: @person.id }
-              = f.button :submit, class: "fa fa-times-circle btn btn-success"
-              -# .btn.btn-success
-              -#   %i.fa.fa-pencil-square
-              -#   Zapisz się
+              = f.button :submit, class: "btn btn-success"
           - elsif @activity.activities_people.where('date = ?', an).where('person_id = ?', current_person.id).count > 0
             - @activities_person = ActivitiesPerson.where('date = ?', an).where('person_id = ?', current_person.id).first
             %h5

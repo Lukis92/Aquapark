@@ -1,4 +1,5 @@
 class Backend::ActivitiesController < BackendController
+  helper_method :sort_column, :sort_direction
   before_action :set_activity, only: [:edit, :update, :destroy, :sign_up,
                                       :preview, :activate, :deactivate]
   before_action :set_trainers
@@ -8,9 +9,20 @@ class Backend::ActivitiesController < BackendController
                                             :deactivate]
   # GET backend/activities
   def index
-    @activities = Activity.paginate(page: params[:page], per_page: 20)
-    @actual_activities = Activity.where('active = ?', true)
-    @active_activities = ActivitiesPerson.where('activity.active = ?', true)
+    @activities = Activity.includes(:person)
+                          .order(sort_column + ' ' + sort_direction)
+                          .references(:people)
+                          .paginate(page: params[:page], per_page: 20)
+    @actual_activities = Activity.includes(:person)
+                                 .order(sort_column + ' ' + sort_direction)
+                                 .references(:people)
+                                 .where('active = ?', true)
+                                 .paginate(page: params[:page], per_page: 20)
+    @active_activities = ActivitiesPerson.includes(:person)
+                                         .order(sort_column + ' ' + sort_direction)
+                                         .references(:people)
+                                         .where('activity.active = ?', true)
+                                         .paginate(page: params[:page], per_page: 20)
   end
 
   # GET backend/activities/new
@@ -70,7 +82,10 @@ class Backend::ActivitiesController < BackendController
   end
 
   def preview
-    @activities_people = @activity.activities_people.select(:activity_id, :date).distinct
+    @activities_people = @activity.activities_people
+                                  .select(:activity_id, :date)
+                                  .order(:date)
+                                  .distinct
   end
 
   # GET backend/activities/search
@@ -103,8 +118,26 @@ class Backend::ActivitiesController < BackendController
     end
   end
 
+  JOINED_TABLE_COLUMNS = %w(people.first_name)
+  def sort_column
+    if JOINED_TABLE_COLUMNS.include?(params[:sort]) || Activity.column_names.include?(params[:sort])
+      params[:sort]
+    else
+      'name'
+    end
+  end
+
+  def sort_direction
+    %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+
   def set_activity
-    @activity = Activity.find(params[:id])
+    begin
+      @activity = Activity.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      flash[:danger] = 'Nie ma aktywności o takim id.'
+      redirect_to backend_news_index_path
+    end
   end
 
   def set_zone
@@ -112,7 +145,7 @@ class Backend::ActivitiesController < BackendController
   end
 
   def set_trainers
-    @trainers = Trainer.all
+    @trainers = Trainer.order(:first_name, :last_name)
   end
 
   def set_person

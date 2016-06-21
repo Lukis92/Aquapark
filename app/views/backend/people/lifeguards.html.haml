@@ -50,7 +50,7 @@
         %td
           = lifeguard.email
         %td
-          = number_with_precision(lifeguard.salary, precision: 2)
+          = lifeguard.salary.nice
           zł
         %td
           = l(lifeguard.hiredate)

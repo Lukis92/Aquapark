@@ -31,7 +31,7 @@ class Backend::StatisticsController < BackendController
     @most_busy = WorkSchedule.group(:person_id)
                              .sum('CAST(extract(epoch from work_schedules.end_time) as integer) - cast(extract(epoch from work_schedules.start_time) as integer)').sort_by { |_, v| 0 - v }.first.first
     @least_busy = WorkSchedule.group(:person_id)
-                         .sum('CAST(extract(epoch from work_schedules.end_time) as integer) - cast(extract(epoch from work_schedules.start_time) as integer)').sort_by { |_, v| 0 - v }.last.first
+                              .sum('CAST(extract(epoch from work_schedules.end_time) as integer) - cast(extract(epoch from work_schedules.start_time) as integer)').sort_by { |_, v| 0 - v }.last.first
 
     @most = Person.find(@most_busy)
     @least = Person.find(@least_busy)
@@ -41,6 +41,22 @@ class Backend::StatisticsController < BackendController
     @biggest_salary = Person.where.not(type: 'Client').order(salary: :desc).first
     @smallest_salary = Person.where.not(type: 'Client').order(salary: :asc).first
     @avg_salaries = Person.where.not(type: 'Client').average(:salary)
+
+    # Newsy
+    @all_news = News.count
+    @client_news = News.where(scope: 'klienci').count
+    @receptionist_news = News.where(scope: 'recepcjoniści').count
+    @lifeguard_news = News.where(scope: 'ratownicy').count
+    @trainer_news = News.where(scope: 'trenerzy').count
+    @most_liked_news = News.joins(:likes).where('likes.like = ?', true).group('news.id').order('COUNT(likes.id) DESC').first
+    @most_liked_news_likes_count =  Like.where(news_id: @most_liked_news.id).where('likes.like = ?', true).count
+    @most_liked_news_dislikes_count = Like.where(news_id: @most_liked_news.id).where('likes.like = ?', false).count
+    @most_hated_news = News.joins(:likes)
+                           .where('likes.like = ?', false)
+                           .group('news.id')
+                           .order('COUNT(likes.id) DESC').first
+    @most_hated_news_likes_count =  Like.where(news_id: @most_hated_news.id).where('likes.like = ?', true).count
+    @most_hated_news_dislikes_count = Like.where(news_id: @most_hated_news.id).where('likes.like = ?', false).count
   end
 
   private

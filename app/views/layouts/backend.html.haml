@@ -42,8 +42,8 @@
             %li{class: current_page?(backend_statistics_path) && 'active'}
               = link_to 'Statystyki', backend_statistics_path
           - unless current_client
-            %li{class: current_page?( list_backend_vacations_path(@current_person)) && 'active'}
-              = link_to 'Urlop', list_backend_vacations_path(@current_person)
+            %li{class: current_page?( backend_vacations_path(@current_person)) && 'active'}
+              = link_to 'Urlop', backend_vacations_path(@current_person)
           - if current_manager
             %li{class: current_page?(new_backend_person_registration_path) && 'active'}
               = link_to 'Rejestracja pracowników', new_backend_person_registration_path, data: { no_turbolink: true }
@@ -68,20 +68,19 @@
       .row
         .col-md-2
           #sidebar.well.sidebar-nav
-            - unless current_lifeguard || current_trainer
-              %h5
-                %i.fa.fa-ticket
-                %small
-                  %b Wejściówki
-              %ul.nav.nav-pills.nav-stacked
-                - if current_manager or current_receptionist
-                  %li{class: current_page?(backend_entry_types_path) && 'active'}
-                    = link_to "Bilety/Karnety", backend_entry_types_path, data: { no_turbolink: true }
-                - if current_client
-                  %li{class: current_page?(bought_history_backend_person_path(@current_person)) && 'active'}
-                    = link_to "Moja historia Zakupów", bought_history_backend_person_path(@current_person), data: { no_turbolink: true }
-                  %li{class: current_page?(bought_list_backend_entry_types_path) && 'active'}
-                    = link_to "Kup Bilet/Karnet",  bought_list_backend_entry_types_path, action: :show, data: {no_turbolink: true}
+            %h5
+              %i.fa.fa-ticket
+              %small
+                %b Wejściówki
+            %ul.nav.nav-pills.nav-stacked
+              - unless current_client
+                %li{class: current_page?(backend_entry_types_path) && 'active'}
+                  = link_to "Bilety/Karnety", backend_entry_types_path, data: { no_turbolink: true }
+              - if current_client
+                %li{class: current_page?(bought_history_backend_person_path(@current_person)) && 'active'}
+                  = link_to "Moja historia Zakupów", bought_history_backend_person_path(@current_person), data: { no_turbolink: true }
+                %li{class: current_page?(bought_list_backend_entry_types_path) && 'active'}
+                  = link_to "Kup Bilet/Karnet",  bought_list_backend_entry_types_path, action: :show, data: {no_turbolink: true}
             - if current_manager or current_receptionist
               %h5
                 %i.fa.fa-users
@@ -108,14 +107,14 @@
             %h5
               %i.fa.fa-child
               %small
-                %b Aktywności
+                %b Treningi indywidualne
             %ul.nav.nav-pills.nav-stacked
               - if current_manager || current_receptionist
-                %li{class: current_page?(backend_manage_trainings_path) && 'active'}
-                  = link_to 'Trening indywidualny', backend_manage_trainings_path, data: { no_turbolink: true }
-              %li{class: current_page?(show_backend_individual_trainings_path(@current_person)) && 'active'}
-                = link_to 'Moje treningi', show_backend_individual_trainings_path(@current_person)
-              - if current_client
+                %li{class: current_page?(backend_individual_trainings_path) && 'active'}
+                  = link_to 'Trening indywidualny', backend_individual_trainings_path, data: { no_turbolink: true }
+              - if current_client || current_trainer
+                %li{class: current_page?(show_backend_individual_trainings_path(@current_person)) && 'active'}
+                  = link_to 'Moje treningi', show_backend_individual_trainings_path(@current_person)
                 %li{class: current_page?(choose_trainer_backend_individual_trainings_path(@current_person)) && 'active'}
                   = link_to 'Zapisz się na trening',  choose_trainer_backend_individual_trainings_path(@current_person), data: { no_turbolink: true }
               %li{class: current_page?(backend_training_costs_path) && 'active'}
@@ -139,8 +138,8 @@
                 %small
                   %b Urlopy
               %ul.nav.nav-pills.nav-stacked
-                %li{class: current_page?(backend_vacations_path) && 'active'}
-                  = link_to 'Wszystkie urlopy', backend_vacations_path
+                %li{class: current_page?(backend_manage_vacations_path) && 'active'}
+                  = link_to 'Wszystkie urlopy', backend_manage_vacations_path
 
               %ul.nav.nav-pills.nav-stacked
                 %li{class: current_page?( requests_backend_vacations_path) && 'active'}

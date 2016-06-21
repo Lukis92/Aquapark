@@ -1,7 +1,7 @@
 class Backend::WorkSchedulesController < BackendController
   before_action :set_work_schedule, only: [:edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
-  before_action :set_person, only: [:index, :show, :new]
+  before_action :set_person, only: [:show]
   before_action :manager_person, only: [:edit, :destroy]
   before_action :select_rule_work_schedules, only: [:index, :new]
   before_action :manage_rule_work_schedules, only: [:edit, :update, :destroy]
@@ -98,6 +98,11 @@ class Backend::WorkSchedulesController < BackendController
   def show
     @nearest_vacation = Vacation.where(person_id: @person.id)
                                 .where(['start_at > ?', Date.today]).first
+    @p_work_schedules = @person.work_schedules.order("CASE day_of_week
+            WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa'
+            THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
+            WHEN 'Sobota' THEN 6
+            WHEN 'Niedziela' THEN 7 END")
   end
 
   # GET backend/work_schedules/search
@@ -126,14 +131,20 @@ class Backend::WorkSchedulesController < BackendController
 
   def set_work_schedule
     @work_schedule = WorkSchedule.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    flash[:danger] = 'Nie ma harmonogramu pracy o takim id.'
+    redirect_to backend_news_index_path
   end
 
   def set_person
-    @person = Person.find(params[:id]) unless params[:id].blank?
+    @person = Person.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    flash[:danger] = 'Nie ma osoby o takim id.'
+    redirect_to backend_news_index_path
   end
 
   def set_employees
-    @employees = Person.where.not(type: 'Client')
+    @employees = Person.where.not(type: 'Client').order(:first_name, :last_name)
   end
 
   def set_current_person

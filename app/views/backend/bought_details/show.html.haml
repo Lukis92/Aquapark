@@ -1,4 +1,4 @@
-f%h3 Historia zakupów wejściówki:
+%h3 Historia zakupów wejściówki:
 %h5
 .row
   .col-md-6
@@ -21,7 +21,7 @@ f%h3 Historia zakupów wejściówki:
           = @entry_type.kind
         %p
           Cena:
-          = @entry_type.price
+          = @entry_type.price.nice
           zł
 %table.table
   %thead
@@ -44,20 +44,20 @@ f%h3 Historia zakupów wejściówki:
     - @bought_details.each do |bought|
       %tr
         %td
-          = l(bought.bought_data) unless bought.bought_data.blank?
+          = l(bought.bought_data)
         %td
-          = bought.entry_type.kind unless bought.entry_type.blank?
+          = bought.entry_type.kind
         %td
-          = bought.entry_type.price
+          = bought.entry_type.price.nice
           zł
         %td
-          = bought.start_on unless bought.end_on.blank?
+          = bought.start_on
         %td
-          = bought.end_on unless bought.end_on.blank?
+          = bought.end_on
         %td
           - if bought.active?
             %i.fa.fa-check
           - else
             %i.fa.fa-times
         %td
-          = bought.person.full_name unless bought.person.blank?
+          = bought.person.full_name

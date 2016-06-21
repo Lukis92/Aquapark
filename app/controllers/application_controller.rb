@@ -18,12 +18,18 @@ class ApplicationController < ActionController::Base
     true
   end
 
-  def after_sign_up_path_for(resource)
+  def after_sign_up_path_for(_resource)
     redirect_to new_person_session, notice: "Zarejestrowano konto pomyślnie."
   end
 
   def logged_in?
     current_person != nil
+  end
+
+  protected
+
+  def update_resource(resource, params)
+    resource.update_without_password(params)
   end
 
   private

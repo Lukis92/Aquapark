@@ -50,7 +50,7 @@
           = receptionist.email
         %td
           - unless receptionist.salary.blank?
-            = number_with_precision(receptionist.salary, precision: 2)
+            = receptionist.salary.nice
             zł
           - else
             %i.fa.fa-times

@@ -79,3 +79,4 @@ gem 'rails-timeago', '~> 2.0' # helper for time tags
 gem 'i18n-tasks', '~> 0.9.5' # Manage translation for Ruby i18n
 gem 'jquery-turbolinks' # fix binded events problem caused by Turbolinks
 gem 'jquery-ui-rails' # jQuery UI for the Rails asset pipeline
+gem 'client_side_validations' # Client Side Validations

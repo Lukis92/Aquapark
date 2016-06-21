@@ -1,7 +1,7 @@
 %h5 Wszystkie indywidualne treningi klientów
 
 .col-md-6
-  -# = render 'shared/it_searchbar'
+  = render 'shared/it_searchbar'
 %table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   %thead
     %tr
@@ -33,7 +33,7 @@
             %i.btn.btn-danger
               %i.fa.fa-trash
         %td
-          = number_with_precision(training.training_cost.cost, precision: 2)
+          = training.training_cost.cost.nice
           zł
         %td
           = link_to backend_person_path(training.client) do

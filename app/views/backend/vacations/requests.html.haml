@@ -31,10 +31,10 @@
           %tr
             - if current_manager
               %td
-                = link_to edit_backend_vacation_path(vacation), title: 'Edytuj', data: { no_turbolink: true } do
+                = link_to edit_backend_vacation_path(vacation.person, vacation), title: 'Edytuj', data: { no_turbolink: true } do
                   %i.btn.btn-default
                     %i.fa.fa-pencil
-                = link_to backend_vacation_path(vacation), method: :delete, title: 'Usuń', data: { confirm: 'Jesteś pewny/a?' } do
+                = link_to backend_vacation_path(vacation.person, vacation), method: :delete, title: 'Usuń', data: { confirm: 'Jesteś pewny/a?' } do
                   %i.btn.btn-danger
                     %i.fa.fa-trash
                 = link_to accept_backend_vacation_path(vacation, accepted: true), title: 'Akceptuj', method: :post do

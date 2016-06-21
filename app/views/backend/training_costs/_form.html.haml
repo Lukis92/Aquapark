@@ -1,0 +1,5 @@
+= simple_form_for([:backend, @training_cost], as: :training_cost, validate: true) do |f|
+  = errors_for(@training_cost)
+  = f.input :duration
+  = f.input :cost
+  = f.button :submit, class: "btn btn-primary btn-block"

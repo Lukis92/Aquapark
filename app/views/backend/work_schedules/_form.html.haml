@@ -10,7 +10,7 @@
         %label{for: 'input_endtime'}* Godzina do
         = f.text_field :end_time, class: 'timepicker', id: 'input_endtime', required: true,
           placeholder: 'Kliknij'
-    = f.input :day_of_week, include_blank: "Wybierz dzień tygodnia", collection: WorkSchedule::DAYS
+    = f.input :day_of_week, required: true, include_blank: "Wybierz dzień tygodnia", collection: WorkSchedule::DAYS
     = f.input :person_id, required: true, as: :hidden, input_html: { value: @person.id }
     = f.button :submit, class: "btn btn-primary"
 
@@ -25,9 +25,8 @@
       .col-md-3
         %label{for: 'input_endtime'}* Godzina do
         = f.text_field :end_time, required: true, class: 'timepicker', id: 'input_endtime',
-          placeholder: 'Kliknij',
-          include_blank: 'Wybierz dzień tygodnia'
-    = f.input :day_of_week, collection: WorkSchedule::DAYS
+          placeholder: 'Kliknij'
+    = f.input :day_of_week, required: true, collection: WorkSchedule::DAYS, include_blank: 'Wybierz dzień tygodnia'
     = f.input :person_id, label: "Pracownik",
                           required: true,
                           collection: @employees.map{|e| [e.person_full_name_type, e.id]},

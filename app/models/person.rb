@@ -70,11 +70,13 @@ class Person < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :date_of_birth, presence: true
-  validates :password, presence: true
-  validates :password_confirmation, presence: true
+
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
                     format: { with: VALID_EMAIL_REGEX }
+
+  validates :salary, presence: false, format: { with: DECIMAL_REGEX },
+                     numericality: { greater_than: 0, less_than: 9999 }
   has_attached_file :profile_image, styles: { medium: '300x300>',
                                               thumb: '100x100>' },
                                     default_url: 'http://www.mediafire.com/convkey/2d40/jkaqkubtfktr7w3zg.jpg',

@@ -5,8 +5,9 @@
       = f.input :name
     .input-field
       = f.input :description, input_html: {class:'materialize-textarea'}
-    .checkbox-fix
-      = f.input :active
+    - if current_manager
+      .checkbox-fix
+        = f.input :active
     .col-md-6
       .form-group
         %label{for: 'input_starttime'}* Czas rozpoczęcia

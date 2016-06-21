@@ -5,6 +5,12 @@ pl:
     kind_details: Szczegóły
     price: Cena
     error: ' '
+    cost: Koszt
+    duration: Czas trwania
+    current_password: Obecne hasło
+    end_on: Godzina zakończenia
+    person_id: Osoba
+    days: Czas trwania
   activerecord:
     attributes:
       client:
@@ -62,26 +68,41 @@ pl:
           Piątek: 5
           Sobota: 6
       vacation:
-        start_at: Data pd
+        start_at: Data od
         end_at: Data do
     errors:
       messages:
         record_invalid: Nieprawidłowy rekord
       models:
-        news:
+        activity:
           attributes:
-            title:
-              blank: wymagane
+            name:
+              blank: '- wymagane'
+            active:
+              blank: '- wymagane'
+            pool_zone:
+              blank: '- wymagane'
+            start_on:
+              blank: '- wymagane'
+            end_on:
+              blank: '- wymagane'
+            day_of_week:
+              blank: '- wymagane'
+            person_id:
+              blank: '- wymagane'
         bought_detail:
           attributes:
             bought_data:
-              blank: wymagane
+              blank: '- wymagane'
             days:
-              blank: wymagane
+              blank: '- wymagane'
+            cost:
+              invalid: '- nieprawidłowy'
         client:
           attributes:
             current_password:
               blank: '- wymagane'
+              invalid: nieprawidłowe
             date_of_birth:
               blank: '- wymagane'
             email:
@@ -98,31 +119,34 @@ pl:
               blank: '- wymagane'
               taken: Taki pesel istnieje już w bazie
               wrong_length: musi posiadać 11 cyfr
-        receptionist:
+        entry_type:
           attributes:
-            current_password:
+            kind:
               blank: '- wymagane'
-            date_of_birth:
+            kind_details:
               blank: '- wymagane'
-            email:
+              too_short: za krótkie (min. 3 znaki)
+            price:
               blank: '- wymagane'
-              invalid: '- nieprawidłowy'
-              taken: Taki email istnieje już w bazie
-            first_name:
+              invalid: nieprawidłowa
+              not_a_number: tylko cyfry
+              greater_than: musi być dodatnia
+        individual_training:
+          attributes:
+            start_on:
+              overlap: Trening nachodzi na inny
               blank: '- wymagane'
-            last_name:
+            date_of_training:
               blank: '- wymagane'
-            password:
+            training_cost_id:
               blank: '- wymagane'
-            pesel:
+            end_on:
               blank: '- wymagane'
-              taken: Taki pesel istnieje już w bazie
-              wrong_length: musi posiadać 11 cyfr
-
         lifeguard:
           attributes:
             current_password:
               blank: '- wymagane'
+              invalid: nieprawidłowe
             date_of_birth:
               blank: '- wymagane'
             email:
@@ -139,30 +163,23 @@ pl:
               blank: '- wymagane'
               taken: Taki pesel istnieje już w bazie
               wrong_length: musi posiadać 11 cyfr
-        trainer:
+            salary:
+              invalid: '- nieprawidłowy'
+              greater_than: ma być większy od 0
+              less_than: ma być mniejszy niż 10000
+        manager:
           attributes:
-            current_password:
+            password_confirmation:
+              confirmation: Potwierdź hasło
+        news:
+          attributes:
+            title:
               blank: '- wymagane'
-            date_of_birth:
-              blank: '- wymagane'
-            email:
-              blank: '- wymagane'
-              invalid: '- nieprawidłowy'
-              taken: Taki email istnieje już w bazie
-            first_name:
-              blank: '- wymagane'
-            last_name:
-              blank: '- wymagane'
-            password:
-              blank: '- wymagane'
-            pesel:
-              blank: '- wymagane'
-              taken: Taki pesel istnieje już w bazie
-              wrong_length: musi posiadać 11 cyfr
         person:
           attributes:
             current_password:
               blank: '- wymagane'
+              invalid: nieprawidłowe
             password_confirmation:
               blank: '- wymagane'
             date_of_birth:
@@ -177,78 +194,96 @@ pl:
               blank: '- wymagane'
             type:
               blank: '- wymagane'
+            salary:
+              invalid: '- nieprawidłowy'
+              greater_than: ma być większy od 0
+              less_than: ma być mniejszy niż 10000
             password:
               blank: '- wymagane'
             pesel:
               blank: '- wymagane'
               taken: Taki pesel istnieje już w bazie
               wrong_length: musi posiadać 11 cyfr
-        entry_type:
+        receptionist:
           attributes:
-            kind:
-              blank: wymagane
-            kind_details:
-              blank: wymagane
-              too_short: za krótkie (min. 3 znaki)
-            price:
-              blank: wymagane
-              invalid: nieprawidłowa
-              not_a_number: tylko cyfry
-              greater_than: musi być dodatnia
-        individual_training:
+            current_password:
+              blank: '- wymagane'
+              invalid: 'nieprawidłowe'
+            date_of_birth:
+              blank: '- wymagane'
+            email:
+              blank: '- wymagane'
+              invalid: '- nieprawidłowy'
+              taken: Taki email istnieje już w bazie
+            first_name:
+              blank: '- wymagane'
+            last_name:
+              blank: '- wymagane'
+            password:
+              blank: '- wymagane'
+            pesel:
+              blank: '- wymagane'
+              taken: Taki pesel istnieje już w bazie
+              wrong_length: musi posiadać 11 cyfr
+            salary:
+              invalid: '- nieprawidłowy'
+              greater_than: ma być większy od 0
+              less_than: ma być mniejszy niż 10000
+        trainer:
           attributes:
-            start_on:
-              overlap: Trening nachodzi na inny
-              blank: wymagane
-            date_of_training:
-              blank: wymagane
-            training_cost_id:
-              blank: wymagane
-        manager:
-          attributes:
-            password_confirmation:
-              confirmation: Potwierdź hasło
+            current_password:
+              blank: '- wymagane'
+              invalid: nieprawidłowe
+            date_of_birth:
+              blank: '- wymagane'
+            email:
+              blank: '- wymagane'
+              invalid: '- nieprawidłowy'
+              taken: Taki email istnieje już w bazie
+            first_name:
+              blank: '- wymagane'
+            last_name:
+              blank: '- wymagane'
+            password:
+              blank: '- wymagane'
+            pesel:
+              blank: '- wymagane'
+              taken: Taki pesel istnieje już w bazie
+              wrong_length: musi posiadać 11 cyfr
+            salary:
+              invalid: '- nieprawidłowy'
+              greater_than: ma być większy od 0
+              less_than: ma być mniejszy niż 10000
         training_cost:
           attributes:
             cost:
-              blank: wymagane
+              blank: '- wymagane'
+              invalid: '- nieprawidłowy'
+              not_a_number: '- tylko cyfry'
+              greater_than: ma być większy od 0
+              less_than: ma być mniejszy niż 1000
             duration:
-              blank: wymagane
+              blank: '- wymagane'
+              taken: już istnieje w bazie
         work_schedule:
           attributes:
             day_of_week:
-              blank: wymagane
+              blank: '- wymagane'
               taken: jest już zajęty
             person_id:
-              missing: wymagane
+              missing: '- wymagane'
             start_time:
-              blank: wymagane
+              blank: '- wymagane'
             end_time:
-              blank: wymagane
-        activity:
-          attributes:
-            name:
-              blank: wymagane
-            active:
-              blank: wymagane
-            pool_zone:
-              blank: wymagane
-            start_on:
-              blank: wymagane
-            end_on:
-              blank: wymagane
-            day_of_week:
-              blank: wymagane
-            person_id:
-              blank: wymagane
+              blank: '- wymagane'
         vacation:
           attributes:
             start_at:
-              blank: wymagane
+              blank: '- wymagane'
             end_at:
-              blank: wymagane
+              blank: '- wymagane'
             person_id:
-              blank: wymagane
+              blank: '- wymagane'
   date:
     abbr_day_names:
     - Pon.
@@ -340,16 +375,16 @@ pl:
         contact:
           attributes:
             content:
-              blank: wymagane
+              blank: '- wymagane'
             email:
-              blank: wymagane
+              blank: '- wymagane'
               invalid: jest nieprawidłowy
             first_name:
-              blank: wymagane
+              blank: '- wymagane'
             last_name:
-              blank: wymagane
+              blank: '- wymagane'
             subject:
-              blank: wymagane
+              blank: '- wymagane'
   simple_form:
     labels:
       backend_person:
@@ -389,7 +424,7 @@ pl:
         duration: Czas trwania (min.)
       vacation:
         end_at: Data do
-        free: Darmowy?
+        free: Płatny?
         reason: Powód
         start_at: Data od
       activity:

@@ -20,15 +20,16 @@
 //= require bootstrap-wysihtml5
 //= require bootstrap-wysihtml5/locales
 //= require locales/jquery.timeago.pl.js
+//= require rails.validations
 //= require_tree .
 
 
 //alert disappear after few seconds
-window.setTimeout(function() {
-    $(".alert").fadeTo(500, 0).slideUp(500, function() {
-        $(this).remove();
-    });
-}, 10000);
+// window.setTimeout(function() {
+//     $(".alert").fadeTo(500, 0).slideUp(500, function() {
+//         $(this).remove();
+//     });
+// }, 10000);
 
 $(document).ready(function() {
     var $lightbox = $('#lightbox');

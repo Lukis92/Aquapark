@@ -1,3 +1,10 @@
+= link_to :back do
+  .btn.btn-primary.waves-effect.waves-light
+    %i.fa.fa-chevron-left
+    Wróć
+%h5.section-title.st-blue
+  2 krok
+  %small Wybór terminu i płatność
 -unless @trainer.blank?
   .row
     .col-md-6
@@ -33,7 +40,7 @@
               = l(tw.end_time, format: :short)
 .row
   .col-md-12
-    %h5 Grafik treningów
+    %h5 Zajęty grafik treningów
     - unless @trainer.individual_trainings_as_trainer.blank?
       %table.table.table-striped.table-bordered.table-list
         %thead

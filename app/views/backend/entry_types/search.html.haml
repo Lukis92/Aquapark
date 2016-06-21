@@ -3,9 +3,10 @@
 %table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   %thead
     %tr
-      %th
-        %em.fa.fa-cog
-        Zarządzanie
+      - if current_manager || current_receptionist
+        %th
+          %em.fa.fa-cog
+          Zarządzanie
       %th
         Bilet/Karnet
       %th
@@ -18,16 +19,19 @@
     - unless @entry_types.blank?
       - @entry_types.each do |entry|
         %tr
-          %td{:align => "center"}
-            = link_to edit_backend_entry_type_path(entry) do
-              .btn.btn-default
-                %i.fa.fa-pencil
-            = link_to backend_entry_type_path(entry), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
-              .btn.btn-danger
-                %i.fa.fa-trash
-            = link_to backend_entry_type_bought_details_path(entry), data: { no_turbolink: true } do
-              .btn.btn-warning
-                %i.fa.fa-history
+          - if current_manager || current_receptionist
+            %td{:align => "center"}
+              = link_to edit_backend_entry_type_path(entry), title: 'Edytuj' do
+                .btn.btn-default
+                  %i.fa.fa-pencil
+              = link_to backend_entry_type_path(entry), title: 'Usuń',
+                method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+                .btn.btn-danger
+                  %i.fa.fa-trash
+              = link_to backend_entry_type_bought_details_path(entry),
+                title: 'Historia zakupów', data: { no_turbolink: true } do
+                .btn.btn-warning
+                  %i.fa.fa-history
           %td
             = entry.kind
           %td
@@ -35,7 +39,7 @@
           %td
             = entry.description
           %td
-            = entry.price
+            = entry.price.nice
             zł
       = will_paginate @entry_types, renderer: BootstrapPagination::Rails
     - else

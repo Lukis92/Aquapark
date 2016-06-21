@@ -36,7 +36,7 @@
               %tr
                 %td Zarobki
                 %td
-                  = number_with_precision(@person.salary, precision: 2)
+                  = @person.salary.nice
                   zł
               %tr
                 %td Data zatrudnienia:
@@ -51,17 +51,18 @@
         = link_to bought_history_backend_person_path(@person), class: "btn btn-primary" do
           %i.fa.fa-shopping-cart
           Zakupione bilety/karnety
-        - unless @person.type == 'Client'
+        = link_to show_backend_individual_trainings_path(@person), class: "btn btn-primary" do
+          %i.fa.fa-child
+          Treningi indywidualne
+        - unless current_client
           = link_to backend_work_schedule_path(@person), class: "btn btn-primary" do
             %i.fa.fa-calendar
             Harmonogram pracy
         - if @current_person.type == 'Manager' && @person.type != 'Client'
-          = link_to new_backend_vacations_path(@person), data: { no_turbolink: true },  class: "btn btn-primary" do
+          = link_to new_backend_vacation_path(@person), data: { no_turbolink: true },  class: "btn btn-primary" do
             %i.fa.fa-plane
             Przydziel urlop
   .panel-footer
-    -# %a.btn.btn-sm.btn-primary{"data-original-title" => "Broadcast Message", "data-toggle" => "tooltip", :type => "button"}
-    -#   %i.glyphicon.glyphicon-envelope
     - if @person.current_sign_in_at.present?
       .btn.btn-border-success.waves-effect
         Ostatnie logowanie:
@@ -73,6 +74,7 @@
       = link_to edit_backend_person_path(@person), class: "btn btn-sm btn-warning", data: {no_turbolink: true} do
         %i.fa.fa-pencil-square
         Edytuj
-      = link_to backend_person_path(@person), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "btn btn-sm btn-danger" do
-        %i.fa.fa-trash
-        Zamknij konto
+      - if current_manager || current_client || current_manager != @person
+        = link_to backend_person_path(@person), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "btn btn-sm btn-danger" do
+          %i.fa.fa-trash
+          Zamknij konto

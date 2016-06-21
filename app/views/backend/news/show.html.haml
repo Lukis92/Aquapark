@@ -45,7 +45,7 @@
   .card-panel.horizontal-listing.no-padding.comments-section
     %h5.text-center.title
       Komentarze
-      %i.btn.btn-border-danger.disabled.btn-rounded.waves-effect
+      .label.label-pill.label.danger
         = @news.comments.count
     %hr/
     = render @news.comments

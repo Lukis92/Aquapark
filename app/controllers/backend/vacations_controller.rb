@@ -1,15 +1,49 @@
 class Backend::VacationsController < BackendController
-  before_action :set_vacation, only: [:edit, :update, :accept, :destroy]
+  before_action :set_vacation, only: [:edit, :show, :update, :accept, :destroy]
   helper_method :sort_column, :sort_direction
-  before_action :set_person, except: :accept
+  before_action :set_person, only: [:index, :new, :create, :edit, :update, :destroy]
   before_action :set_employees
   before_action :manage_rule_vacations, only: [:edit, :update, :destroy]
   before_action :select_rule_own_vacations, only: [:list, :new]
-  before_action :select_rule_vacations, only: :index
+  # before_action :select_rule_vacations, only: :index
   # GET backend/vacations
   def index
     @vacations = Vacation.order(sort_column + ' ' + sort_direction)
                          .paginate(page: params[:page], per_page: 20)
+    @old_vacations = Vacation.where(person_id: @person.id)
+                             .where(['end_at < ?', Date.today])
+                             .paginate(page: params[:page], per_page: 20)
+    @current_vacation = Vacation.where(person_id: @person.id)
+                                .where(['start_at <= ?', Date.today])
+                                .where(['end_at >= ?', Date.today])
+                                .where(['accepted = ?', true]).first
+    @unapproved_vacations = Vacation.where(person_id: @person.id)
+                                    .where('accepted = ?', false)
+                                    .paginate(page: params[:page], per_page: 20)
+    @all_vacations = Vacation.all
+    @nearest_un_vacations = Vacation.where(person_id: @person.id)
+                                    .where(['start_at >= ?', Date.today])
+                                    .where(['accepted = ?', false])
+                                    .order(:start_at)
+                                    .paginate(page: params[:page], per_page: 20)
+    @nearest_vacations = Vacation.where(person_id: @person.id)
+                                 .where('start_at >= ?', Date.today)
+                                 .where('accepted = ?', true).order(:start_at)
+                                 .paginate(page: params[:page], per_page: 20)
+    @nearest_vacation = @nearest_vacations.first unless @nearest_vacations.nil?
+    @days = 0
+    # count days to end of current vacation
+    unless @current_vacation.blank?
+      @end_vacation = (@current_vacation.end_at - Date.today).to_i
+    end
+
+    unless @current_vacation.blank?
+      @vac_days = (@current_vacation.end_at - @current_vacation.start_at).to_i
+    end
+
+    unless @nearest_vacation.blank?
+      @days = (@nearest_vacation.start_at - Date.today).to_i
+    end
   end
 
   # GET backend/vacations/new
@@ -21,7 +55,7 @@ class Backend::VacationsController < BackendController
   def create
     @vacation = Vacation.new(vacation_params)
     if @vacation.save
-      redirect_to :back, notice: 'Pomyślnie dodano.'
+      redirect_to backend_vacations_path(@person), notice: 'Pomyślnie dodano.'
     else
       render :new
     end
@@ -30,7 +64,7 @@ class Backend::VacationsController < BackendController
   # PATCH/PUT backend/vacations/1
   def update
     if @vacation.update(vacation_params)
-      redirect_to backend_vacations_path, notice: 'Pomyślnie zaktualizowano.'
+      redirect_to backend_vacations_path(@person), notice: 'Pomyślnie zaktualizowano.'
     else
       render :edit
     end
@@ -39,7 +73,7 @@ class Backend::VacationsController < BackendController
   # DELETE backend/vacations/1
   def destroy
     @vacation.destroy
-    redirect_to backend_vacations_path, notice: 'Pomyślnie usunięto.'
+    redirect_to :back, notice: 'Pomyślnie usunięto.'
   end
 
   def search
@@ -70,39 +104,6 @@ class Backend::VacationsController < BackendController
     end
   end
 
-  def list
-    @old_vacations = Vacation.where(person_id: @person.id)
-                             .where(['end_at < ?', Date.today])
-                             .paginate(page: params[:page], per_page: 20)
-    @current_vacation = Vacation.where(person_id: @person.id)
-                                .where(['start_at <= ?', Date.today])
-                                .where(['end_at >= ?', Date.today])
-                                .where(['accepted = ?', true]).first
-    @unapproved_vacations = Vacation.where(person_id: @person.id)
-                                    .where(['accepted = ?', false])
-                                    .paginate(page: params[:page], per_page: 20)
-    @all_vacations = Vacation.all
-    @nearest_un_vacations = Vacation.where(person_id: @person.id)
-                                    .where(['start_at >= ?', Date.today])
-                                    .where(['accepted = ?', false])
-                                    .order(:start_at)
-                                    .paginate(page: params[:page], per_page: 20)
-    @nearest_vacation = @nearest_vacations.first unless @nearest_vacations.nil?
-    @days = 0
-    # count days to end of current vacation
-    unless @current_vacation.blank?
-      @end_vacation = (@current_vacation.end_at - Date.today).to_i
-    end
-
-    unless @current_vacation.blank?
-      @vac_days = (@current_vacation.end_at - @current_vacation.start_at).to_i
-    end
-
-    unless @nearest_vacation.blank?
-      @days = (@nearest_vacation.start_at - Date.today).to_i
-    end
-  end
-
   private
 
   def vacation_params
@@ -119,32 +120,39 @@ class Backend::VacationsController < BackendController
   end
 
   def set_vacation
-    @vacation = Vacation.find(params[:id])
+    @vacation = Vacation.find(params[:vacation_id])
+  rescue ActiveRecord::RecordNotFound => e
+    flash[:danger] = 'Nie ma urlopu o takim id.'
+    redirect_to backend_news_index_path
   end
 
   def set_person
-    @person = Person.find(params[:id]) unless params[:id].blank?
+    @person = Person.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    flash[:danger] = 'Nie ma osoby o takim id.'
+    redirect_to backend_news_index_path
   end
 
   def set_employees
-    @employees = Person.where.not(type: 'Client')
+    @employees = Person.where.not(type: 'Client').order(:first_name, :last_name)
   end
 
-  def select_rule_vacations
-    unless current_manager || current_receptionist
-      redirect_to backend_news_index_path, notice: "Brak dostępu"
+  def set_rule_for_request
+    unless current_client
+      redirect_to backend_news_index_path, notice: "Brak dostępu {set_rule_for_request}"
     end
   end
 
   def manage_rule_vacations
     unless current_manager || current_receptionist
-      redirect_to backend_news_index_path, notice: "Brak dostępu"
+      redirect_to backend_news_index_path, notice: "Brak dostępu {manage_rule_vacations}"
     end
   end
 
   def select_rule_own_vacations
     unless current_manager || current_receptionist || current_person == @person
-      redirect_to backend_news_index_path, notice: "Brak dostępu"
+      flash[:danger] = "Brak dostępu {select_rule_own_vacations}"
+      redirect_to backend_news_index_path
     end
   end
 end

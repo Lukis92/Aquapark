@@ -153,7 +153,7 @@
       .panel-body.text-center
         %h4
           = @biggest_salary.full_name
-          = @biggest_salary.salary
+          = @biggest_salary.salary.nice
           zł
   .col-md-3
     .panel.panel-info
@@ -161,12 +161,71 @@
       .panel-body.text-center
         %h4
           = @smallest_salary.full_name
-          = @smallest_salary.salary
+          = @smallest_salary.salary.nice
           zł
   .col-md-3
     .panel.panel-info
       .panel-heading.text-center Średnie zarobki
       .panel-body.text-center
         %h3
-          = number_with_precision(@avg_salaries, precision: 2)
+          = @avg_salaries.nice
           zł
+.row
+  .divider-new
+    Newsy
+  .col-md-3
+    .panel.panel-danger
+      .panel-heading.text-center Ilość wszystkich newsów
+      .panel-body.text-center
+        %h4
+          = @all_news
+  .col-md-3
+    .panel.panel-danger
+      .panel-heading.text-center Newsy dot. klientów
+      .panel-body.text-center
+        %h4
+          = @client_news
+  .col-md-3
+    .panel.panel-danger
+      .panel-heading.text-center Newsy dot. recepcjonistów
+      .panel-body.text-center
+        %h4
+          = @receptionist_news
+  .col-md-3
+    .panel.panel-danger
+      .panel-heading.text-center Newsy dot. trenerów
+      .panel-body.text-center
+        %h4
+          = @trainer_news
+  .col-md-3
+    .panel.panel-danger
+      .panel-heading.text-center Newsy dot. ratowników
+      .panel-body.text-center
+        %h4
+          = @lifeguard_news
+  .col-md-3
+    .panel.panel-danger
+      .panel-heading.text-center Najbardziej lubiany news
+      .panel-body.text-center
+        %h5
+          = @most_liked_news.title
+          %i.fa.fa-thumbs-o-up
+            = @most_liked_news_likes_count
+          %i.fa.fa-thumbs-o-down
+            = @most_liked_news_dislikes_count
+  .col-md-3
+    .panel.panel-danger
+      .panel-heading.text-center Najmniej lubiany news
+      .panel-body.text-center
+        %h5
+          = @most_hated_news.title
+          %i.fa.fa-thumbs-o-up
+            = @most_hated_news_likes_count
+          %i.fa.fa-thumbs-o-down
+            = @most_hated_news_dislikes_count
+  .col-md-3
+    .panel.panel-danger
+      .panel-heading.text-center News posiadający najwięcej komentarzy
+      .panel-body.text-center
+        %h4
+          = @client_news

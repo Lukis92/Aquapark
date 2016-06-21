@@ -6,7 +6,7 @@ class Backend::NewsController < BackendController
   before_action :creation_news_rules, only: :new
   # GET backend/news
   def index
-    @news = @news.paginate(page: params[:page], per_page: 5)
+    @news = @news.paginate(page: params[:page], per_page: 5).order(created_at: :desc)
   end
 
   # GET backend/news/new
@@ -60,7 +60,12 @@ class Backend::NewsController < BackendController
   private
 
   def set_news
-    @news = News.find(params[:id])
+    begin
+      @news = News.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      flash[:danger] = 'Nie ma newsa o takim id.'
+      redirect_to backend_news_index_path
+    end
   end
 
   def news_params

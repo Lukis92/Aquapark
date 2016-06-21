@@ -21,9 +21,11 @@ class BoughtDetail < ActiveRecord::Base
   validates :bought_data, presence: true
   validates :cost, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }
   validate :validate_start_on
+  attr_accessor :credit_card, :card_code, :days
+
+  validates_presence_of :days
   validate :timeline
   # ****************************************#
-  attr_accessor :credit_card, :card_code, :days
 
   def active?
     (Date.today - start_on).to_i >= 0 && (Date.today - end_on).to_i <= 0
@@ -32,16 +34,15 @@ class BoughtDetail < ActiveRecord::Base
   private
 
   def timeline
-    if (person.bought_details.where('entry_type_id = ?', entry_type.id).count > 0) &&
-       ((person.bought_details.where('start_on <= ?', start_on).count > 0 &&
-          person.bought_details.where('end_on >= ?', end_on).count > 0) ||
-       (person.bought_details.where('start_on <= ?', start_on).count > 0 &&
-        person.bought_details.where('end_on <= ?', end_on).count > 0 &&
-        person.bought_details.where('end_on >= ?', start_on).count > 0) ||
-       (person.bought_details.where('start_on >= ?', start_on).count > 0 &&
-       person.bought_details.where('start_on <= ?', end_on).count > 0 &&
-       person.bought_details.where('end_on >= ?', end_on).count > 0))
-      errors.add(:error, 'Masz już aktywną wejściówkę w tym okresie.')
+    et_bought_details = person.bought_details.includes(:entry_type).where('entry_types.kind = ?', entry_type.kind).references(:entry_type)
+    if et_bought_details.exists?
+      overlapping_bought_details = person.bought_details.where('((start_on <= :start_on AND end_on >= :end_on) OR
+                                   (start_on <= :start_on AND end_on <= :end_on AND end_on >= :start_on) OR
+                                   (start_on >= :start_on AND start_on <= :end_on AND end_on >= :end_on))',
+                                  start_on: start_on, end_on: end_on)
+      if overlapping_bought_details.exists?
+        errors.add(:base, 'Masz już aktywną wejściówkę w tym okresie.')
+      end
     end
   end
 
@@ -69,3 +70,15 @@ class BoughtDetail < ActiveRecord::Base
     end
   end
 end
+
+# if (person.bought_details.where('entry_type_id = ?', entry_type.id).count > 0) &&
+#    ((person.bought_details.where('start_on <= ?', start_on).count > 0 &&
+#       person.bought_details.where('end_on >= ?', end_on).count > 0) ||
+#    (person.bought_details.where('start_on <= ?', start_on).count > 0 &&
+#     person.bought_details.where('end_on <= ?', end_on).count > 0 &&
+#     person.bought_details.where('end_on >= ?', start_on).count > 0) ||
+#    (person.bought_details.where('start_on >= ?', start_on).count > 0 &&
+#    person.bought_details.where('start_on <= ?', end_on).count > 0 &&
+#    person.bought_details.where('end_on >= ?', end_on).count > 0))
+#   errors.add(:error, 'Masz już aktywną wejściówkę w tym okresie.')
+# end

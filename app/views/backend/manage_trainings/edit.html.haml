@@ -38,24 +38,25 @@
         %tr
           %th Data treningu
           %th Treningi
-      - unless @manage_training.trainer.individual_trainings_as_trainer.blank?
-        - trainings = @manage_training.trainer.individual_trainings_as_trainer.group_by(&:date_of_training)
-        - trainings.keys.each do |ti|
-          %td
-            = l(ti)
-          %td
-            - @manage_training.trainer.individual_trainings_as_trainer.each_with_index do |tit, i|
-              - unless i == @manage_training.trainer.individual_trainings_as_trainer.size - 1
-                = l(tit.start_on, format: :short)
-                \-
-                = l(tit.end_on, format: :short)
-                |
-              - else
-                = l(tit.start_on, format: :short)
-                \-
-                = l(tit.end_on, format: :short)
-      - else
-        Dostępny cały dzień
+        - unless @manage_training.trainer.individual_trainings_as_trainer.blank?
+          - trainings = @manage_training.trainer.individual_trainings_as_trainer.group_by(&:date_of_training)
+          - trainings.keys.each do |ti|
+            %tr
+              %td
+                = l(ti)
+              %td
+                - @manage_training.trainer.individual_trainings_as_trainer.each_with_index do |tit, i|
+                  - unless i == @manage_training.trainer.individual_trainings_as_trainer.size - 1
+                    = l(tit.start_on, format: :short)
+                    \-
+                    = l(tit.end_on, format: :short)
+                    |
+                  - else
+                    = l(tit.start_on, format: :short)
+                    \-
+                    = l(tit.end_on, format: :short)
+        - else
+          Dostępny cały dzień
 .col-md-6
   %h5 Edycja treningu
   = simple_form_for([:backend, @manage_training], as: :manage_training, url: backend_manage_training_path(@manage_training) ) do |f|

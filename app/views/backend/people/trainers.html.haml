@@ -50,7 +50,7 @@
         %td
           = trainer.email
         %td
-          = number_with_precision(trainer.salary, precision: 2)
+          = trainer.salary.nice
           zł
         %td
           = l(trainer.hiredate)

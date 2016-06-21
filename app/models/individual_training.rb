@@ -18,10 +18,12 @@ class IndividualTraining < ActiveRecord::Base
   belongs_to :training_cost
   # ************************#
   # **VALIDATIONS***************************#
+  validate :set_end_on, if: :should_validate_end_on?
   validates_presence_of :start_on, :date_of_training, :training_cost_id
-  validate :set_end_on, if: :start_on && :training_cost_id
-  validate :date_of_training_validation, if: :date_of_training
-  validate :individual_training_validation
+  validates_presence_of :end_on, if: :set_end_on
+  validate :date_of_training_validation, if: :should_validate_date_of_training?
+  validate :client_individual_training_validation
+  validate :trainer_individual_training_validation
   # ****************************************#
   attr_accessor :credit_card, :card_code
   include PgSearch
@@ -29,7 +31,7 @@ class IndividualTraining < ActiveRecord::Base
                            associated_against:
                            { trainer: [:first_name, :last_name],
                              client: [:first_name, :last_name],
-                             training_cost: [:duration] },
+                             training_cost: [:duration, :cost] },
                            using: {
                              tsearch: { prefix: true }
                            }
@@ -49,10 +51,24 @@ class IndividualTraining < ActiveRecord::Base
     'Sunday' => 'Niedziela'
   }.freeze
 
+
+
   private
 
   def translate_date(daytime)
     DAYS_IN_PL[daytime.strftime('%A')]
+  end
+
+  def should_validate_date_of_training?
+    !date_of_training.nil? && !end_on.nil?
+  end
+
+  def should_validate_individual_training?
+    !date_of_training.nil? && !end_on.nil? && date_of_training_validation
+  end
+
+  def should_validate_end_on?
+    !start_on.nil? && !training_cost_id.nil?
   end
 
   def date_of_training_validation
@@ -69,35 +85,41 @@ class IndividualTraining < ActiveRecord::Base
     end
   end
 
-  def individual_training_validation
-    client.individual_trainings_as_client.each do |ci|
-      if date_of_training == ci.date_of_training
-        if (start_on..end_on).overlaps?(ci.start_on..ci.end_on)
-          errors.add(:error, 'Masz w tym czasie inny trening.')
-        end
+  def client_individual_training_validation
+    client.individual_trainings_as_client.where('date_of_training = ?', date_of_training).each do |ci|
+      if (start_on...end_on).overlaps?(ci.start_on...ci.end_on)
+        errors.add(:error, 'Masz w tym czasie inny trening.')
       end
     end
+  end
+
+  def trainer_individual_training_validation
     trainer.individual_trainings_as_trainer.each do |ti|
       if date_of_training == ti.date_of_training
-        if (start_on..end_on).overlaps?(ti.start_on..ti.end_on)
+        if (start_on...end_on).overlaps?(ti.start_on...ti.end_on)
           errors.add(:error, 'Trener ma w tym czasie inny trening.')
         end
       end
     end
   end
 
-  def self.text_search(query)
-    if query.present?
-      search(query)
-    else
-      all
-    end
-  end
-
+  
   def set_end_on
     unless training_cost_id.blank?
       training = TrainingCost.where(id: training_cost_id).first
-      end_on = start_on + training.duration.minutes
+      self.end_on = start_on + training.duration.minutes
+    end
+  end
+
+  def self.text_search(query, querydate)
+    if query.present? && querydate.blank?
+      search(query)
+    elsif query.present? && querydate.present?
+      search(query+' '+querydate)
+    elsif query.blank? && querydate.present?
+      search(querydate)
+    else
+      all
     end
   end
 end

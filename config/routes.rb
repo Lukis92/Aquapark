@@ -51,8 +51,8 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :trainers, only: [:index]
-    resources :vacations, except: [:show] do
+    resources :trainers, only: :index
+    resources :vacations, only: [:list] do
       collection do
         get 'requests'
         get 'search'
@@ -61,16 +61,10 @@ Rails.application.routes.draw do
       post 'accept'
       end
     end
-    #Manage individual_trainings
-    resources :manage_trainings do
-      collection do
-        get 'search'
-      end
-    end
 
     #Manage vacations
-    resources :manage_vacations, only: [:new, :create, :edit, :update]
-    resources :individual_trainings, only: [:show, :edit, :search] do
+    resources :manage_vacations, only: :index
+    resources :individual_trainings, only: [:index, :show, :edit, :search] do
       collection do
         get 'search'
       end
@@ -89,6 +83,7 @@ Rails.application.routes.draw do
           collection do
             get 'choose_trainer'
             get 'show', as: 'show'
+            get 'show_details'
           end
         end
 
@@ -101,12 +96,7 @@ Rails.application.routes.draw do
             get 'my_schedule', to: 'work_schedules#show', as: 'my'
           end
         end
-        resources :vacations, only: [:create] do
-          collection do
-            get 'list'
-            get 'new', as: 'new'
-          end
-        end
+        resources :vacations, param: :vacation_id
       end
     end
     resources :statistics, only: [:index]

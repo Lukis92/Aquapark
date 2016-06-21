@@ -1,12 +1,9 @@
 class Backend::PeopleController < BackendController
   helper_method :sort_column, :sort_direction, :sort_bought
-  before_action :set_person
+  before_action :set_person, except: [:index, :search]
   before_action :set_rule_to_edit_client_profile, only: [:edit, :update,
                                                          :destroy, :show]
   before_action :require_same_user, only: [:show, :bought_history]
-  # before_action :require_receptionist, only: [:index, :edit, :update, :clients,
-  #                                             :receptionists, :lifeguards,
-  #                                             :trainers]
   before_action :person_exists, only: :show
 
   def index
@@ -36,12 +33,22 @@ class Backend::PeopleController < BackendController
   end
 
   def update
-    if @person.update_with_password(person_params)
-      sign_in(current_person, bypass: true)
-      redirect_to backend_person_path(@person),
-                  notice: 'Pomyślnie zaktualizowano.'
+    if current_manager && @person != current_manager
+      if @person.update(person_params)
+        sign_in(current_person, bypass: true)
+        redirect_to backend_person_path(@person),
+                    notice: 'Pomyślnie zaktualizowano.'
+      else
+        render :edit
+      end
     else
-      render :edit
+      if @person.update_with_password(person_params)
+        sign_in(current_person, bypass: true)
+        redirect_to backend_person_path(@person),
+                    notice: 'Pomyślnie zaktualizowano.'
+      else
+        render :edit
+      end
     end
   end
 
@@ -76,8 +83,9 @@ class Backend::PeopleController < BackendController
   end
 
   def bought_history
-    @bought_history = BoughtDetail.order(bought_data: :desc)
+    @bought_history = BoughtDetail.includes(:entry_type)
                                   .order(sort_bought + ' ' + sort_direction)
+                                  .references(:entry_types)
                                   .where(person_id: @person)
                                   .paginate(page: params[:page], per_page: 20)
     @last_bought = BoughtDetail.where(person_id: @person)
@@ -87,17 +95,23 @@ class Backend::PeopleController < BackendController
   private
 
   def set_person
-    @person = Person.find(params[:id]) unless params[:id].blank?
-  rescue
-    redirect_to root_path
+    @person = Person.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    flash[:danger] = 'Nie ma osoby o takim id.'
+    redirect_to backend_news_index_path
   end
 
   def set_current_person
     @current_person = current_person
   end
 
+  JOINED_TABLE_COLUMNS = %w(entry_types.kind).freeze
   def sort_bought
-    BoughtDetail.column_names.include?(params[:sort]) ? params[:sort] : 'end_on'
+    if JOINED_TABLE_COLUMNS.include?(params[:sort]) || BoughtDetail.column_names.include?(params[:sort])
+      params[:sort]
+    else
+      'bought_data'
+    end
   end
 
   def sort_column
@@ -112,7 +126,7 @@ class Backend::PeopleController < BackendController
     params.require(:person).permit(:pesel, :first_name, :last_name,
                                    :date_of_birth, :email, :profile_image,
                                    :salary, :hiredate, :password,
-                                   :password_confirmation, :current_password,
+                                   :password_confirmation,
                                    :remember_me, activities_people: [:date])
   end
 
@@ -162,10 +176,10 @@ class Backend::PeopleController < BackendController
   end
 
   def set_news
-    unless params[:id].blank?
-      @news = News.find(params[:id])
-    else
-      @news = News.find(1)
-    end
+    @news = if params[:id].blank?
+              News.find(1)
+            else
+              News.find(params[:id])
+            end
   end
 end

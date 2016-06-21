@@ -27,11 +27,12 @@ class Backend::ActivitiesPeopleController < BackendController
   private
 
   def set_activities_person
-
-  end
-
-  def set_activities_person
-    @activities_person = ActivitiesPerson.find(params[:id])
+    begin
+      @activities_person = ActivitiesPerson.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      flash[:danger] = 'Nie istnieje aktywność o takim id.'
+      redirect_to backend_news_index_path
+    end
   end
   def activities_person_params
     params.require(:activities_person).permit(:date, :person_id, :activity_id)

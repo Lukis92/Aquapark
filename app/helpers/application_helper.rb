@@ -21,6 +21,14 @@ module ApplicationHelper
     link_to title, { sort: column, direction: direction }, class: css_class
   end
 
+  def sortable_bought(column, title = nil)
+    title ||= column.titleize
+    css_class = column == sort_bought ? "current #{sort_direction}" : nil
+    direction = column == sort_bought && sort_direction == 'asc' ?
+    'desc' : 'asc'
+    link_to title, { sort: column, direction: direction }, class: css_class
+  end
+
   def next_n_days(amount, day_of_week)
     day = I18n.t(:"activerecord.attributes.activity.day_number.#{day_of_week}", day_of_week)
     (Date.today...Date.today + 7 * amount).select do |d|
@@ -28,11 +36,8 @@ module ApplicationHelper
     end
   end
 
-
   def errors_for(object)
-    if object.errors.any?
-      render 'shared/errors', object: object
-    end
+    render 'shared/errors', object: object if object.errors.any?
     #   content_tag(:div, class: 'panel panel-danger') do
     #     concat(content_tag(:div, class: 'panel-heading') do
     #       concat(content_tag(:h4, class: 'panel-title') do

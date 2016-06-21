@@ -1,4 +1,4 @@
-%h3.section-title.st-blue Cennik
+%h5 Cennik
 .row
   .col-md-6
     .card-panel
@@ -37,7 +37,7 @@
                       %h5
                         = field.kind
                       %h4.blue-text
-                        = field.price
+                        = field.price.nice
                         ZŁ
                       %p
                         = HTML_Truncator.truncate(field.kind_details, 20)
@@ -58,7 +58,7 @@
                       %h5
                         = field.kind
                       %h4.blue-text
-                        = field.price
+                        = field.price.nice
                         ZŁ
                       %p
                         = HTML_Truncator.truncate(field.kind_details, 20)
@@ -100,7 +100,7 @@
                       %h5
                         = field.kind
                       %h4.blue-text
-                        = field.price
+                        = field.price.nice
                         ZŁ
                       %p
                         = HTML_Truncator.truncate(field.kind_details, 20)
@@ -121,7 +121,7 @@
                       %h5
                         = field.kind
                       %h4.blue-text
-                        = field.price
+                        = field.price.nice
                         ZŁ
                       %p
                         = HTML_Truncator.truncate(field.kind_details, 20)

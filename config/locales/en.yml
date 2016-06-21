@@ -185,7 +185,7 @@ en:
         duration: Czas trwania (min.)
       vacation:
         end_at: Data do
-        free: Darmowy?
+        free: Płatny?
         reason: Powód
         start_at: Data od
   time:

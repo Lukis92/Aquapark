@@ -65,7 +65,12 @@ class Backend::EntryTypesController < BackendController
   end
 
   def set_entry_type
-    @entry_type = EntryType.find(params[:id])
+    begin
+      @entry_type = EntryType.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      flash[:danger] = 'Nie istnieje wejściówka o takim id.'
+      redirect_to backend_news_index_path
+    end
   end
 
   def set_current_person

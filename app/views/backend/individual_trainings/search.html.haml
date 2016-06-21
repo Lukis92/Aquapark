@@ -31,7 +31,7 @@
               %i.btn.btn-danger
                 %i.fa.fa-trash
           %td
-            = number_with_precision(training.training_cost.cost, precision: 2)
+            = training.training_cost.cost.nice
             zł
           %td
             = training.client.try(:full_name)

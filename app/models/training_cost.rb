@@ -8,11 +8,12 @@
 #
 
 class TrainingCost < ActiveRecord::Base
+  DECIMAL_REGEX = /\A\d+(?:\.\d{0,2})?\z/
   has_many :individual_trainings
 
-  validates_presence_of :duration, :cost
-  validates_uniqueness_of :duration
-
+  validates :duration, presence: true, uniqueness: true
+  validates :cost, presence: true, format: { with: DECIMAL_REGEX },
+                     numericality: { greater_than: 0, less_than: 999 }
   def full_duration
     "#{duration} min."
   end

@@ -30,10 +30,10 @@
             - else
               = w.day_of_week + ', '
         %h5
-          .btn.btn-border-default.waves-effect
-            %i.fa.fa-check-circle-o
-            = link_to new_backend_trainer_individual_training_path(@current_person, t.id),
-              data: {no_turbolink: true} do
+          = link_to new_backend_trainer_individual_training_path(@current_person, t.id),
+            data: {no_turbolink: true} do
+            .btn.btn-border-default.waves-effect
+              %i.fa.fa-check-circle-o
               Wybieram
 
 

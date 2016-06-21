@@ -2,7 +2,7 @@
   .btn.btn-primary.waves-effect.waves-light
     %i.fa.fa-chevron-left
     Wróć
-%h5 Uczestnicy zajęć grupowych
+%h5 Uczestnicy zajęcia grupowego
 
 - unless @activities_people.blank?
   - @activities_people.each do |ap|
@@ -35,10 +35,11 @@
               - @activity.activities_people.where('date = ?', ap.date).each_with_index do |a, i|
                 - unless i == @activity.activities_people.size - 1
                   = link_to backend_person_path(a.person.id) do
-                    = a.person.full_name+', '
+                    = a.person.full_name
                 - else
                   = link_to backend_person_path(a.person.id) do
                     = a.person.full_name
+                  = ', '
 - else
   .alert.alert-info
     Brak uczestników

@@ -29,7 +29,7 @@
         %li.collection-item
           %b
             Cena:
-          = @entry_type.price
+          = @entry_type.price.nice
           - if @entry_type.kind == 'Karnet'
             zł / miesiąc
           - else
@@ -59,6 +59,9 @@
               = f.select :days, [['1 miesiąc', 30], ['2 miesiące', 60], ['3 miesiące', 90]], prompt: 'Wybierz czas trwania', required: true
             .row
               = f.input :start_on, start_year: Date.today.year, end_year: Date.today.year + 1, hint: "Pozostaw bez zmian, jeśli chcesz, aby karnet był aktywny od razu po zakupie."
+              -# %label{for: "datepicker"}* Data od
+              -# = f.text_field :start_on, required: true, class: 'datepicker', placeholder: 'Kliknij', value: Date.today
+              -# Pozostaw bez zmian, jeśli chcesz, aby karnet był aktywny od razu po zakupie.
   .col-md-offset-3.col-md-5
     .row
       = f.button :submit, class: "btn btn-primary btn-block"
@@ -109,3 +112,8 @@
           }
       }
   };
+
+  $('.datepicker').pickadate({
+     selectMonths: true, // Creates a dropdown to control month
+     selectYears: 150 // Creates a dropdown of 15 years to control year
+   });

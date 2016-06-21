@@ -28,16 +28,18 @@ Please feel free to use a different markup language if you do not plan to run
 <tt>rake doc:app</tt>.
 
 == TODO:
-* rozjeżdza się widok biletów, karnetów na drugim monitorze
 * dla managera podgląd kto dał like/dislike dla news
 * Uporządkować backend dla każdej grupy użytkowników
 * dodać link w news podgląd kto dał lajka
 * dodać gwiazdkę przy dacie urodzenia clients/sign_up
 * dodać dla managera strony z bought_details/index
 * dodać opis zasięg news/new
-* usunąć grafik pracy dla managera, jest on wszechobecny :D
 * dodać przydzielanie indywidualnych treningów
 * ograniczyć rozmiar dodawanych zdjęć profilowych
+* dodać do formularza cennika treningów indywidualnych informacje o użytych już
+  czasach trwania
+* dodać wszędzie etykiety informacyjne na jakiej jest się podstronie
+* dodać wyszukiwarkę do backend/manage_trainings
 == What's done:
 - activities/new - heroku
 - activities/search - heroku
@@ -55,3 +57,13 @@ Please feel free to use a different markup language if you do not plan to run
 - dodać te same ikony w activity search co activity index
 - przy dezaktywacji zajęć usuwamy wszystkich uczestników zapisanych na przyszłe
   daty
+- manager może edytować konta użytkowników bez current_password
+- obsłużony wyjątek backend/people/1000, work_schedules, news, vacations, activities
+- dodanie sortowania po imieniu, nazwisku w work_schedule, vacations
+- sortowanie po start_on w individual_trainings/show
+- w pełni funkcjonalny kalendarz treningów indywidualnych od strony klienta
+   i trenera
+- usunąć grafik pracy dla managera, jest on wszechobecny :D
+- sortowanie po dniu tygodnia w my_schedule
+- oddzielenie manage_vacations i vacations - poprawne działanie formularza
+- sortowanie kolumny people.full_name w vacations

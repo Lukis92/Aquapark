@@ -20,7 +20,7 @@
             = @last_bought.entry_type.kind
           %p
             Cena:
-            = @last_bought.entry_type.price
+            = @last_bought.entry_type.price.nice
             zł
 
 - unless @bought_history.blank?
@@ -28,31 +28,31 @@
     %thead
       %tr
         %th
-          = sortable 'bought_data', 'Data zakupu'
+          = sortable_bought 'bought_data', 'Data zakupu'
         %th
-          Bilet/Karnet
+          = sortable_bought 'entry_types.kind', 'Bilet/Karnet'
         %th
-          = sortable 'price', 'Cena'
+          = sortable_bought 'cost', 'Cena'
         %th
-          = sortable 'start_on', 'Data ważności od'
+          = sortable_bought 'start_on', 'Data ważności od'
         %th
-          = sortable 'end_on', 'Data ważności do'
+          = sortable_bought 'end_on', 'Data ważności do'
         %th
           Aktywny?
     %tbody
       - @bought_history.each do |bought|
         %tr
           %td
-            = l(bought.bought_data) unless bought.bought_data.blank?
+            = l(bought.bought_data)
           %td
-            = bought.entry_type.kind unless bought.entry_type.blank?
+            = bought.entry_type.kind
           %td
-            = bought.entry_type.price
+            = bought.entry_type.price.nice
             zł
           %td
-            = l(bought.start_on) unless bought.end_on.blank?
+            = l(bought.start_on)
           %td
-            = l(bought.end_on) unless bought.end_on.blank?
+            = l(bought.end_on)
           %td
             - if bought.active?
               %i.fa.fa-check
