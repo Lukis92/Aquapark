@@ -1,7 +1,4 @@
-= link_to :back do
-  .btn.btn-primary.waves-effect.waves-light
-    %i.fa.fa-chevron-left
-    Wróć
+= render 'shared/back'
 %h5.section-title.st-blue
   2 krok
   %small Wybór terminu i płatność
@@ -71,14 +68,3 @@
 
 .col-md-12
   = render 'form'
-:javascript
-  $('#input_starttime').pickatime({
-        twelvehour: false
-      });
-  $('#input_endtime').pickatime({
-        twelvehour: false
-      });
-  $('.datepicker').pickadate({
-     selectMonths: true, // Creates a dropdown to control month
-     selectYears: 150 // Creates a dropdown of 15 years to control year
-   });

@@ -2,7 +2,7 @@
 class BackendController < ApplicationController
   before_action :require_person
   before_action :set_current_person
-  layout 'backend'
+  # layout 'backend'
   def show
   end
 

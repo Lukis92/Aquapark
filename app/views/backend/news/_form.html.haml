@@ -7,7 +7,7 @@
       .form-group
         = f.input :content, input_html: { class: 'materialize-textarea2' }, as: :wysihtml5, wysihtml5: { locale: "pl-PL"}
       = f.label :scope, '* Zasięg'
-      = f.select :scope, [['Wszyscy', 'wszyscy'], ['Pracownicy', 'pracownicy'],
+      = f.select :scope,  [['Wszyscy', 'wszyscy'], ['Pracownicy', 'pracownicy'],
                           ['Ratownicy', 'ratownicy'], ['Trenerzy', 'trenerzy'],
                           ['Recepcjoniści', 'recepcjoniści'],
                           ['Klienci', 'klienci']]

@@ -21,23 +21,24 @@ class Backend::IndividualTrainingsController < BackendController
   # POST backend/individual_trainings
   def create
     @individual_training = IndividualTraining.new(individual_training_params)
-    Stripe.api_key = ENV['STRIPE_SECRET_KEY']
-    token = params[:stripeToken]
-    begin
-      charge = Stripe::Charge.create(
-        amount: (@individual_training.training_cost.cost * 100).floor,
-        currency: 'pln',
-        card: token
-      )
-    rescue Stripe::CardError => e
-      flash[:danger] = e.message
-      render :new
-    end
-
-    if @individual_training.save
-      redirect_to :back, notice: 'Pomyślnie dodano.'
-    else
-      render :new
+    if @individual_training.valid?
+      Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+      token = params[:stripeToken]
+      begin
+        charge = Stripe::Charge.create(
+          amount: (@individual_training.training_cost.cost * 100).floor,
+          currency: 'pln',
+          card: token
+        )
+        if @individual_training.save
+          redirect_to :back, notice: 'Pomyślnie dodano.'
+        else
+          render :new
+        end
+      rescue Stripe::CardError => e
+        flash[:danger] = e.message
+        render :new
+      end
     end
   end
 

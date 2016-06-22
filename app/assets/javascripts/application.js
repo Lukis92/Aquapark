@@ -25,46 +25,46 @@
 
 
 //alert disappear after few seconds
-// window.setTimeout(function() {
-//     $(".alert").fadeTo(500, 0).slideUp(500, function() {
-//         $(this).remove();
-//     });
-// }, 10000);
+window.setTimeout(function() {
+    $(".alert").fadeTo(500, 0).slideUp(500, function() {
+        $(this).remove();
+    });
+}, 10000);
 
-$(document).ready(function() {
-    var $lightbox = $('#lightbox');
+//Nice dropdown
+$('select').material_select();
 
-    $('[data-target="#lightbox"]').on('click', function(event) {
-        var $img = $(this).find('img'),
-            src = $img.attr('src'),
-            alt = $img.attr('alt'),
-            css = {
-                'maxWidth': $(window).width() - 100,
-                'maxHeight': $(window).height() - 100
-            };
+//count character in forms
+$('input#input_text, textarea#textarea1').characterCounter();
 
-        $lightbox.find('.close').addClass('hidden');
-        $lightbox.find('img').attr('src', src);
-        $lightbox.find('img').attr('alt', alt);
-        $lightbox.find('img').css(css);
+$('.datepicker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 15 // Creates a dropdown of 15 years to control year
+});
+
+$('#input_starttime').pickatime({
+    twelvehour: false
+});
+$('#input_endtime').pickatime({
+    twelvehour: false
+});
+
+$("#nav ul li a[href^='#']").on('click', function(e) {
+
+    // prevent default anchor click behavior
+    e.preventDefault();
+
+    // store hash
+    var hash = this.hash;
+
+    // animate
+    $('html, body').animate({
+        scrollTop: $(hash).offset().top
+    }, 300, function() {
+
+        // when done, add hash to url
+        // (default click behaviour)
+        window.location.hash = hash;
     });
 
-    $lightbox.on('shown.bs.modal', function(e) {
-        var $img = $lightbox.find('img');
-
-        $lightbox.find('.modal-dialog').css({
-            'width': $img.width()
-        });
-        $lightbox.find('.close').removeClass('hidden');
-    });
-    //Nice dropdown
-    $('select').material_select();
-
-    //count character in forms
-    $('input#input_text, textarea#textarea1').characterCounter();
-
-    $('.datepicker').pickadate({
-       selectMonths: true, // Creates a dropdown to control month
-       selectYears: 15 // Creates a dropdown of 15 years to control year
-     });
 });

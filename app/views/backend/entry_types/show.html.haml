@@ -132,9 +132,3 @@
                       = link_to new_backend_entry_type_bought_detail_path(field), data: {no_turbolink: true} do
                         .fa.fa-shopping-cart
                         Kup Teraz
-
-:javascript
-  $(document).ready(function(){
-      $('[data-toggle="popover"]').popover({animation: true, delay: {show: 100, hide: 100}});
-      $('[data-toggle="tooltip"]').tooltip({animation: true, delay: {show: 300, hide: 300}});
-  });

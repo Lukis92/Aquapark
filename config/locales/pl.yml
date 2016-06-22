@@ -11,6 +11,7 @@ pl:
     end_on: Godzina zakończenia
     person_id: Osoba
     days: Czas trwania
+    salary: Wynagrodzenie
   activerecord:
     attributes:
       client:
@@ -198,6 +199,7 @@ pl:
               invalid: '- nieprawidłowy'
               greater_than: ma być większy od 0
               less_than: ma być mniejszy niż 10000
+              not_a_number: nie jest liczbą
             password:
               blank: '- wymagane'
             pesel:

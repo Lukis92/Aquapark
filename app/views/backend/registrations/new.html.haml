@@ -44,9 +44,3 @@
       = f.button :submit, "Zarejestruj", class: "btn btn-info btn-block"
   - if @current_person.blank?
     = render "devise/shared/links"
-
-:javascript
-  $('.datepicker').pickadate({
-     selectMonths: true, // Creates a dropdown to control month
-     selectYears: 150 // Creates a dropdown of 15 years to control year
-   });

@@ -5,28 +5,15 @@
       = current_person.translate_type
       \- Panel
     = stylesheet_link_tag    'application', media: 'all'
-    = javascript_include_tag "application"
+    = stylesheet_link_tag 'mdb.min.css'
+    = javascript_include_tag "application", "data-turbolinks-track" => true
     = javascript_include_tag 'https://js.stripe.com/v2'
-    = favicon_link_tag 'Aquapark', href: 'http://www.mediafire.com/convkey/3ae8/l0k4388rtzm4rzkzg.jpg'
+    = favicon_link_tag 'Aquapark', href: '/images/brand.png'
     = timeago_script_tag
     = csrf_meta_tags
     = tag :meta, name: 'stripe-key', content: ENV['STRIPE_PUBLIC_KEY']
-    %link{ href: 'http://fonts.googleapis.com/css?family=&&ada&subset=latin,latin-ext', rel: 'stylesheet', type: 'text/css' }
     %link{ href: 'http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext', rel: 'stylesheet', type: 'text/css' }
     %link{ href: 'https://fonts.googleapis.com/icon?family=Material+Icons', rel: 'stylesheet' }
-    /jquery.min.js
-    -# - if @news.blank?
-    -#   - @news = News.find(1)
-    - unless current_page?(new_backend_news_path) || current_page?(edit_backend_news_path(News.last))
-      %script{ src: 'https://code.jquery.com/jquery-3.0.0.min.js', type: 'text/javascript' }
-
-    /mdb.css
-    %link{ href: 'https://googledrive.com/host/0B3yx98FbxNb4STVleGxYZTZnOEE/', rel: 'stylesheet' }
-    /mdb.min.css
-    %link{ href: 'https://googledrive.com/host/0B3yx98FbxNb4U2RwYi1udXE0MzA/', rel: 'stylesheet' }
-    /mdb.min.js
-    %script{src: 'https://googledrive.com/host/0B3yx98FbxNb4TVBMRWdIZjBSQkE/', type: 'text/javascript' }
-
   %body
   - if @current_person.present?
     %nav.navbar.primary-color

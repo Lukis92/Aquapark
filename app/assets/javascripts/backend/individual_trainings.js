@@ -1,3 +1,4 @@
+$("")
 var payment;
 
 var errorMessages = {

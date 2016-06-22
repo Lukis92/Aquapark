@@ -32,12 +32,3 @@
                           collection: @employees.map{|e| [e.person_full_name_type, e.id]},
                           prompt: "Wybierz pracownika"
     = f.button :submit, class: "btn btn-primary"
-
-
-:javascript
-  $('#input_starttime').pickatime({
-        twelvehour: false
-      });
-  $('#input_endtime').pickatime({
-        twelvehour: false
-      });

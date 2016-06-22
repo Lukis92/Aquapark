@@ -15,6 +15,6 @@ class TrainingCost < ActiveRecord::Base
   validates :cost, presence: true, format: { with: DECIMAL_REGEX },
                      numericality: { greater_than: 0, less_than: 999 }
   def full_duration
-    "#{duration} min."
+    "#{duration} min. - #{cost.nice} zł"
   end
 end
