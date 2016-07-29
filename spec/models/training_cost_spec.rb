@@ -10,5 +10,11 @@
 require 'rails_helper'
 
 RSpec.describe TrainingCost, :type => :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'has a valid factory' do
+    expect(build(:training_cost)).to be_valid
+  end
+
+  it 'is invalid without a duration' do
+    expect(build(:training_cost, duration: nil)).to_not be_valid
+  end
 end

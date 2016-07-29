@@ -9,6 +9,7 @@
 
 FactoryGirl.define do
   factory :training_cost do
-    
+    duration 140
+    cost 120.00
   end
 end

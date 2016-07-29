@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   devise_for :people, controllers: { sessions: 'devise/sessions' },
                       skip: [:registrations]
   devise_for :clients, skip: :sessions,
@@ -58,11 +57,11 @@ Rails.application.routes.draw do
         get 'search'
       end
       member do
-      post 'accept'
+        post 'accept'
       end
     end
 
-    #Manage vacations
+    # Manage vacations
     resources :manage_vacations, only: :index
     resources :individual_trainings, only: [:index, :show, :edit, :search] do
       collection do

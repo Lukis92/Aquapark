@@ -1,0 +1,80 @@
+.panel.panel-info
+  .panel-heading
+    h3.panel-title
+      = @person.full_name
+  .panel-body
+    .row
+      .col-md-3
+        img.img-circle.img-responsive
+          = image_tag @person.profile_image.url(:medium)
+
+      .col-md-9
+        table.table.table-user-information
+          tbody
+            tr
+              td Pesel:
+              td
+                = @person.pesel
+            tr
+              td Imię:
+              td
+                = @person.first_name
+            tr
+              td Nazwisko:
+              td
+                = @person.last_name
+            tr
+              td Data urodzenia:
+              td
+                = l(@person.date_of_birth)
+            tr
+              td Email:
+              td
+                a href="mailto:#{@person.email}"
+                  = @person.email
+            - if @person.type != "Client"
+              tr
+                td Zarobki
+                td
+                  = @person.salary.nice
+                  zł
+              tr
+                td Data zatrudnienia:
+                td
+                  = l(@person.hiredate)
+              tr
+                td Zarejestrowany jako:
+                td
+                  = @person.translate_type
+        br
+
+        = link_to bought_history_backend_person_path(@person), class: "btn btn-primary" do
+          i.fa.fa-shopping-cart
+          |  Zakupione bilety/karnety
+        = link_to show_backend_individual_trainings_path(@person), class: "btn btn-primary" do
+          i.fa.fa-child
+          |  Treningi indywidualne
+        - unless current_client
+          = link_to backend_work_schedule_path(@person), class: "btn btn-primary" do
+            i.fa.fa-calendar
+            |  Harmonogram pracy
+        - if @current_person.type == 'Manager' && @person.type != 'Client'
+          = link_to new_backend_vacation_path(@person), data: { no_turbolink: true },  class: "btn btn-primary" do
+            i.fa.fa-plane
+            |  Przydziel urlop
+  .panel-footer
+    - if @person.current_sign_in_at.present?
+      .btn.btn-border-success.waves-effect
+        | Ostatnie logowanie:
+        = l(@person.current_sign_in_at)
+    - else
+      .btn.btn-border-danger.waves-effect
+        | Brak logowania
+    i.pull-right
+      = link_to edit_backend_person_path(@person), class: "btn btn-sm btn-warning", data: {no_turbolink: true} do
+        i.fa.fa-pencil-square
+        |  Edytuj
+      - if current_manager || current_client || current_manager != @person
+        = link_to backend_person_path(@person), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "btn btn-sm btn-danger" do
+          i.fa.fa-trash
+          |  Zamknij konto

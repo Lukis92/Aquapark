@@ -1,0 +1,56 @@
+h5 Rodzaje wszystkich wejściówek
+.row
+  .col-md-6
+    .card-panel
+      .blue-text.text-darken-2
+        i.fa.fa-info-circle
+        | Jesteś na stronie prezentującej listę wszystkich rodzajów biletów/karnetów
+        | zarejestrowanych w bazie.
+- if current_manager || current_receptionist
+  = link_to new_backend_entry_type_path do
+    .btn.btn-info.waves-effect.waves-light
+      i.fa.fa-plus
+      |  Dodaj bilet/karnet
+br
+.col-md-6
+  = render 'shared/et_searchbar'
+table.table.table-striped.table-bordered.table-list.pretty.table-list-search
+  thead
+    tr
+      - if current_manager
+        th
+          em.fa.fa-cog
+          |  Zarządzanie
+      th
+        = sortable "kind", "Bilet/Karnet"
+      th
+        = sortable "kind_details", "Szczegóły"
+      th
+        = sortable "description", "Opis"
+      th
+        = sortable "price", "Cena"
+  tbody
+    - @entry_types.each do |entry|
+      tr
+        - if current_manager
+          td align="center"
+            = link_to edit_backend_entry_type_path(entry), title: 'Edytuj' do
+              .btn.btn-default
+                i.fa.fa-pencil
+            = link_to backend_entry_type_path(entry), title: 'Usuń', method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+              .btn.btn-danger
+                i.fa.fa-trash
+            = link_to backend_entry_type_bought_details_path(entry), title: 'Historia zakupów', data: { no_turbolink: true } do
+              .btn.btn-warning
+                i.fa.fa-history
+        td
+          = entry.kind
+        td
+          = entry.kind_details
+        td
+          = entry.description
+        td
+          = entry.price.nice
+          | zł
+
+= will_paginate @entry_types, renderer: BootstrapPagination::Rails

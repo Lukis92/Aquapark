@@ -1,0 +1,48 @@
+= render 'shared/back'
+.row
+  .col-md-12.blog-column
+    .card-panel.text-center.hoverable
+      h4.black-text
+        = @news.title
+      h6
+        | Napisane przez:
+        |  #{link_to @news.person.full_name, backend_person_path(@news.person_id)}
+        |
+        |  #{l(@news.created_at)}
+      / Social Counter
+      .hidden-xs
+        - if current_manager || current_person == @news.person
+          = link_to edit_backend_news_path(@news), data: {no_turbolink: true} do
+            .btn.btn-warning.waves-effect.waves-light
+              i.fa.fa-pencil-square
+              | Edytuj
+          = link_to backend_news_path(@news),  method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+            .btn.btn-danger.waves-effect.waves-light
+              i.fa.fa-trash
+              | Usuń
+      .visible-xs
+        a.btn-sm.comm-bg.rectangle.waves-effect.waves-light
+          i.fa.fa-comments
+        span.badge.social-counter 5
+      / /.Social Counters for mobile
+      hr/
+      p.text-left
+        = @news.content.html_safe
+
+    .card-panel.reply-section.hoverable
+      .row
+        h5.text-center Zostaw komentarz
+        hr/
+        = simple_form_for([:backend, @news, @comment]) do |f|
+          .input-field
+            = f.input :body, input_html: { class: "materialize-textarea" }
+          = f.button :submit, class: "btn btn-primary btn-block"
+
+.row
+  .card-panel.horizontal-listing.no-padding.comments-section
+    h5.text-center.title
+      | Komentarze
+      .label.label-pill.label.danger
+        = @news.comments.count
+    hr/
+    = render @news.comments

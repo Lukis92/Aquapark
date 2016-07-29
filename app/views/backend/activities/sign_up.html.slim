@@ -1,0 +1,61 @@
+= render 'shared/back'
+h5 Dołącz do wybranych zajęć
+.row
+  .col-md-6
+    ul.collection
+      li.collection-item
+        h5
+          = @activity.name
+      li.collection-item
+        = @activity.description
+table.table
+  thead
+    tr
+      th
+        | Data
+      th
+        | Godzina od/do
+      th
+        | Ilość zapisanych osób / Maksymalna ilość
+      th
+        | Wybierz
+  tbody
+    - @activity.next_n_days(4).each do |an|
+      tr
+        td
+          = l(an)
+        td
+          = l(@activity.start_on, format: :short)
+          | -
+          = l(@activity.end_on, format: :short)
+        td
+          = @activity.activities_people.where('date = ?', an).count
+          | /
+          = @activity.max_people
+          - if @activity.activities_people.where('date = ?', an).count > 0
+            |  #{link_to 'Podgląd uczestników', preview_backend_activity_path(@activity)}
+
+        td
+          - if @activity.activities_people.where('date = ?', an).count < @activity.max_people && \
+            - @activity.activities_people.where('person_id = ? AND date = ?', current_person.id, an).count == 0 && @activity.active == true
+            = simple_form_for([:backend, @activities_person], url: backend_activities_people_path, method: :post) do |f|
+              = f.input :date, as: :hidden, input_html: { value: an }
+              = f.input :activity_id, as: :hidden, input_html: { value: @activity.id }
+              = f.input :person_id, as: :hidden, input_html: { value: @person.id }
+              = f.button :submit, class: "btn btn-success"
+          - elsif @activity.activities_people.where('date = ?', an).where('person_id = ?', current_person.id).count > 0
+            - @activities_person = ActivitiesPerson.where('date = ?', an).where('person_id = ?', current_person.id).first
+            h5
+              .label.label-info
+                | Już się zapisałeś
+            = link_to backend_activities_person_path(@activities_person), method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
+              .btn.btn-info
+                | Zrezygnuj
+          - elsif @activity.activities_people.where('date = ?', an).count == @activity.max_people
+            .btn.btn-danger.disabled
+              i.fa.fa-times-circle
+              | Brak wolnych miejsc
+          - elsif @activity.active == false
+            h5
+              .label.label-warning
+                | Zajęcie nie jest aktywne

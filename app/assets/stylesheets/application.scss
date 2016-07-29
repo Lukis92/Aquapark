@@ -39,13 +39,17 @@ body {
     padding-top: 0;
   }
 }
+
+// .padding-icons {
+//   margin-right: 0.1px;
+// }
 .footer {
   position: relative;
   margin-top: -350px;
   /* negative value of footer height */
   height: 350px;
   clear: both;
-  padding-top: 20px;
+  padding-top: 50px;
 }
 #frontend {
   background-image: url("/images/blue-slate.jpg");
@@ -72,7 +76,10 @@ body {
   margin-top: 50px;
 }
 .fix-brand {
-  margin-top: -9px;
+  margin-top: -6px;
+}
+.fix-img {
+  margin-bottom: -5px;
 }
 /* font color for statistic page */
 .success {
@@ -168,7 +175,7 @@ body {
 .item {
   height: auto;
 }
-#carousel1 {
+#slider {
   margin-top: 100px;
 }
 /* Main carousel on top page */

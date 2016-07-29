@@ -1,8 +1,0 @@
-= simple_form_for([:backend, @entry_type]) do |f|
-  = errors_for(@entry_type)
-  = f.input :kind, as: :radio_buttons, collection: EntryType::KIND
-  = f.input :kind_details, hint: 'np. bilet normalny, ulgowy itp.', input_html: {length: 30, maxlength: 30}
-  = f.input :description, hint: 'Szczegółowy opis wejściówki m.in kogo obowiązuje',
-            as: :text, input_html: {class: "materialize-textarea"}
-  = f.input :price
-  = f.button :submit, class: "btn btn-primary"

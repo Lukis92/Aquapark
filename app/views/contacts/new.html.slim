@@ -1,0 +1,20 @@
+.container-fluid.parallax#parallax_contact
+#contact.container
+  .text-center
+    h2.divider-new Kontakt
+    h4 W razie jakichkolwiek pytań skontaktuj się z nami.
+  .row
+  = simple_form_for @contact do |f|
+    = errors_for(@contact)
+    .input-field.col-md-6
+      = f.input :first_name, required: true
+    .input-field.col-md-6
+      = f.input :last_name, required: true
+    .input-field.col-md-12
+      = f.input :email, required: true
+    .input-field.col-md-12
+      = f.input :subject, required: true
+    .input-field.col-md-12
+      = f.input :content, required: true, as: :text, input_html: {class: "materialize-textarea", rows: 10}
+    .row
+      = f.button :submit, 'Wyślij', class: "btn btn-primary btn-lg btn-block waves-effect.waves-light"

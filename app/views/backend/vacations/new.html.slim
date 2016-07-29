@@ -1,0 +1,23 @@
+= render 'shared/back'
+- if current_manager
+  h5 Dodaj urlop
+- else
+  h5 Dodaj prośbę o urlop
+= simple_form_for(@vacation, url: backend_vacations_path(@person)) do |f|
+  = errors_for(@vacation)
+  .row
+    .col-md-6
+      label for="datepicker"* Data od
+      = f.text_field :start_at, required: true, class: 'datepicker', placeholder: 'Kliknij'
+    .col-md-6
+      label for="datepicker"* Data do
+      = f.text_field :end_at, required: true, class: 'datepicker', placeholder: 'Kliknij'
+    .col-md-12
+      - if current_manager
+        = f.input :free, as: :boolean
+        = f.input :accepted, as: :hidden, input_html: { value: true }
+      = f.input :person_id, as: :hidden, input_html: { value: @person.id }
+    .col-md-12.input-field
+      = f.input :reason, as: :text, input_html: { class: "materialize-textarea" }
+    .col-md-6
+      = f.button :submit, class: "btn btn-primary btn-block"

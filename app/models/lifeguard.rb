@@ -27,5 +27,6 @@
 #
 
 class Lifeguard < Person
-  # code
+  validates :salary, presence: true, format: { with: DECIMAL_REGEX }
+  validates :hiredate, presence: true
 end

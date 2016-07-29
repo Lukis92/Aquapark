@@ -1,0 +1,12 @@
+.container.fix
+  h2 Zmiana hasła
+  = simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
+    = f.error_notification
+    = f.input :reset_password_token, as: :hidden
+    = f.full_error :reset_password_token
+    .form-inputs
+      = f.input :password, label: "Nowe hasło", required: true, autofocus: true, hint: ("minimum #{@minimum_password_length} znaków" if @minimum_password_length)
+      = f.input :password_confirmation, label: "Potwierdź hasło", required: true
+    .form-actions
+      = f.button :submit, "Zmień hasło"
+  = render "devise/shared/links"

@@ -111,12 +111,12 @@ class Backend::ActivitiesController < BackendController
                   :pool_zone, :max_people, :person_id, activities_people: [:date])
   end
 
-  # check if activity is active
-  def check_activity
-    unless @activity.active == true
-      errors.add(:error, 'Nie możesz dołączać do nie aktywnych zajęć.')
-    end
-  end
+  # # check if activity is active
+  # def check_activity
+  #   unless @activity.active == true
+  #     errors.add(:error, 'Nie możesz dołączać do nie aktywnych zajęć.')
+  #   end
+  # end
 
   JOINED_TABLE_COLUMNS = %w(people.first_name)
   def sort_column
@@ -152,9 +152,9 @@ class Backend::ActivitiesController < BackendController
     @person = current_person
   end
 
-  def set_employees
-    @employees = Person.where.not(type: 'Client')
-  end
+  # def set_employees
+  #   @employees = Person.where.not(type: 'Client')
+  # end
 
   def set_rule_to_manage
     unless current_manager || current_receptionist

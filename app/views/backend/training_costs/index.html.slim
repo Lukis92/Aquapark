@@ -1,0 +1,45 @@
+h5 Cennik Treningów Indywidualnych
+.row
+  .col-md-6
+    .card-panel
+      .blue-text.text-darken-2
+        i.fa.fa-info-circle
+        |  Jesteś na stronie aktualnego cennika treningów indywidualnych. Koszt zależny jest
+        |  od czasu trwania.
+- if current_manager || current_receptionist
+  = link_to new_backend_training_cost_path, data: { no_turbolink: true } do
+    i.btn.btn-primary
+      i.fa.fa-plus
+      |  Dodaj
+
+table.table.table-striped.table-bordered.table-list
+  thead
+    tr
+      - if current_manager || current_receptionist
+        th
+          em.fa.fa-cog
+          |  Zarządzanie
+      th
+        | Czas trwania
+      th
+        | Koszt
+  tbody
+    - @training_costs.each do |tc|
+      tr
+        - if current_manager || current_receptionist
+          td
+            = link_to edit_backend_training_cost_path(tc), title: 'Edytuj', data: { no_turbolink: true } do
+              i.btn.btn-default
+                i.fa.fa-pencil
+            = link_to backend_training_cost_path(tc), title: 'Usuń', method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
+              i.btn.btn-danger
+                i.fa.fa-trash
+        td
+          = tc.duration
+          |  min.
+        td
+          = tc.cost.nice
+          |  zł
+
+
+= will_paginate @training_costs, renderer: BootstrapPagination::Rails

@@ -1,7 +1,8 @@
 class Backend::IndividualTrainingsController < BackendController
   before_action :set_individual_training, only: [:edit, :update, :destroy]
-  before_action :set_trainer, except: [:show, :show_details, :choose_trainer, :search]
-  before_action :set_client, only: [:show, :show_details, :new, :create]
+  before_action :set_trainer, only: [:create, :edit, :update, :destroy]
+  # except: [:index, :show, :show_details, :choose_trainer, :search]
+  before_action :set_client, only: [:show, :show_details, :new, :create, :edit, :update, :destroy]
   before_action :set_person, only: [:show, :show_details]
   before_action :set_training_cost, except: :index
   before_action :select_rule_own_trainings, only: [:show]
@@ -21,9 +22,9 @@ class Backend::IndividualTrainingsController < BackendController
   # POST backend/individual_trainings
   def create
     @individual_training = IndividualTraining.new(individual_training_params)
+    Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+    token = params[:stripeToken]
     if @individual_training.valid?
-      Stripe.api_key = ENV['STRIPE_SECRET_KEY']
-      token = params[:stripeToken]
       begin
         charge = Stripe::Charge.create(
           amount: (@individual_training.training_cost.cost * 100).floor,
@@ -31,7 +32,7 @@ class Backend::IndividualTrainingsController < BackendController
           card: token
         )
         if @individual_training.save
-          redirect_to :back, notice: 'Pomyślnie dodano.'
+          redirect_to show_backend_individual_trainings_path(@client), notice: 'Pomyślnie dodano.'
         else
           render :new
         end
@@ -39,6 +40,8 @@ class Backend::IndividualTrainingsController < BackendController
         flash[:danger] = e.message
         render :new
       end
+    else
+      render :new
     end
   end
 

@@ -1,0 +1,67 @@
+h3 Historia zakupów
+.row
+  .col-md-6
+    .card-panel
+      .blue-text.text-darken-2
+        i.fa.fa-info-circle
+        | Jesteś na stronie historii wszystkich dokonanych transakcji.
+.row
+  .col-md-6
+    - unless @last_bought.blank?
+      ul.collection
+        li.collection-item
+          h5 Ostatni zakup:
+        li.collection-item
+          p
+            | Data:
+            = l(@last_bought.bought_data) unless @last_bought.blank?
+          p
+            | Rodzaj:
+            = @last_bought.entry_type.kind
+          p
+            | Cena:
+            = @last_bought.entry_type.price.nice
+            | zł
+
+- unless @bought_history.blank?
+  table.table.table-striped.table-bordered.table-list.pretty.table-list-search
+    thead
+      tr
+        th
+          = sortable_bought 'bought_data', 'Data zakupu'
+        th
+          = sortable_bought 'entry_types.kind', 'Bilet/Karnet'
+        th
+          = sortable_bought 'cost', 'Cena'
+        th
+          = sortable_bought 'start_on', 'Data ważności od'
+        th
+          = sortable_bought 'end_on', 'Data ważności do'
+        th
+          | Aktywny?
+    tbody
+      - @bought_history.each do |bought|
+        tr
+          td
+            = l(bought.bought_data)
+          td
+            = bought.entry_type.kind
+          td
+            = bought.entry_type.price.nice
+            |  zł
+          td
+            = l(bought.start_on)
+          td
+            = l(bought.end_on)
+          td
+            - if bought.active?
+              i.fa.fa-check
+            - else
+              i.fa.fa-times
+  = will_paginate @bought_history, renderer: BootstrapPagination::Rails
+- else
+  .row
+    .col-md-12
+      .card-panel.teal.text-center
+        span.white-text
+          | Brak zakupów.

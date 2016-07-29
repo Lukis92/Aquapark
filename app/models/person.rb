@@ -43,12 +43,11 @@ class Person < ActiveRecord::Base
   has_many :individual_trainings_as_client,
            class_name: 'IndividualTraining',
            foreign_key: 'client_id'
-  has_many :news
+  has_many :news, dependent: :destroy
+  has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
-  # has_and_belongs_to_many :activities
   has_many :activities_people
   has_many :activities, through: :activities_people
-  # accepts_nested_attributes_for :assignments
 
   has_many :activities_as_trainer,
            class_name: 'Activity',
@@ -58,25 +57,19 @@ class Person < ActiveRecord::Base
   # **VALIDATIONS*******************************************************#
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   DECIMAL_REGEX = /\A\d+(?:\.\d{0,2})?\z/
-  # ONLY_LETTERS = /\A[a-zA-Z]+\z/
 
   before_save { self.email = email.downcase }
   validates :pesel, presence: true,
                     length: { is: 11 },
                     uniqueness: true
-  # ,
-  # numericality: { only_integer: true }
   validates :type, presence: true
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :date_of_birth, presence: true
-
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
                     format: { with: VALID_EMAIL_REGEX }
 
-  validates :salary, presence: false, format: { with: DECIMAL_REGEX },
-                     numericality: { greater_than: 0, less_than: 9999 }
   has_attached_file :profile_image, styles: { medium: '300x300>',
                                               thumb: '100x100>' },
                                     default_url: '/images/user_default.png',
@@ -85,7 +78,6 @@ class Person < ActiveRecord::Base
   validates_attachment_content_type :profile_image,
                                     content_type: /\Aimage\/.*\Z/
   validate :profile_image_size
-  # validates :salary, numericality: { greater_than: 0, less_than: 9999 }
   #########################################################################
 
   include PgSearch
@@ -106,13 +98,6 @@ class Person < ActiveRecord::Base
       (Date.today.strftime('%m').to_i == date_of_birth.strftime('%m').to_i &&
       Date.today.strftime('%d').to_i >= date_of_birth.strftime('%d').to_i)) ? 0 : 1)
   end
-  # def online?
-  #   if current_sign_in_at.nil?
-  #     false
-  #   else
-  #     current_sign_in_at + 2.hours > 5.minutes.ago
-  #   end
-  # end
 
   def person_full_name_type
     "#{first_name} #{last_name} | #{translate_type}"
@@ -121,7 +106,7 @@ class Person < ActiveRecord::Base
   def profile_image_size
     unless profile_image.blank?
       if profile_image.size > 5.megabytes
-        erros.add(:profile_image, "powinno ważyć mniej niż 5MB")
+        erros.add(:profile_image, 'powinno ważyć mniej niż 5MB')
       end
     end
   end
@@ -133,6 +118,7 @@ class Person < ActiveRecord::Base
     'Trainer' => 'Trener',
     'Client' => 'Klient'
   }.freeze
+  
   def translate_type
     TYPES_IN_PL[type]
   end

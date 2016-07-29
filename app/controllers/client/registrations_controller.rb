@@ -51,12 +51,11 @@ class Client::RegistrationsController < Devise::RegistrationsController
   # end
 
   # The path used after sign up.
-  def after_sign_up_path_for(resource)
+  def after_sign_up_path_for(_resource)
     # super(resource)
     new_person_session_path
   end
 
-  
   def after_sign_in_path_for(resource)
   end
   # The path used after sign up for inactive accounts.
@@ -67,9 +66,7 @@ class Client::RegistrationsController < Devise::RegistrationsController
   protected
 
   def update_resource(resource, params)
-    if current_manager
-      resource.update_without_password(params)
-    end
+    resource.update_without_password(params) if current_manager
   end
 
   private

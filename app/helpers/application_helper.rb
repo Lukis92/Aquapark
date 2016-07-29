@@ -1,6 +1,10 @@
 module ApplicationHelper
   require 'html_truncator'
 
+  def active?(*paths)
+    'active' if paths.any? { |path| current_page?(path) }
+  end
+
   def resource_name
     :person
   end
@@ -38,20 +42,5 @@ module ApplicationHelper
 
   def errors_for(object)
     render 'shared/errors', object: object if object.errors.any?
-    #   content_tag(:div, class: 'panel panel-danger') do
-    #     concat(content_tag(:div, class: 'panel-heading') do
-    #       concat(content_tag(:h4, class: 'panel-title') do
-    #                concat "Zapis danych nie powiódł się. Wystąpiły błędy:"
-    #              end)
-    #     end)
-    #     concat(content_tag(:div, class: 'panel-body') do
-    #       concat(content_tag(:ul) do
-    #         object.errors.full_messages.each do |msg|
-    #           concat content_tag(:li, msg)
-    #         end
-    #       end)
-    #     end)
-    #   end
-    # end
   end
 end

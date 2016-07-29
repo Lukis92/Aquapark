@@ -1,0 +1,136 @@
+doctype html
+html
+  head
+    title
+      = current_person.translate_type
+      | - Panel
+    = stylesheet_link_tag 'application', media: 'all'
+    = stylesheet_link_tag 'mdb.min.css'
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = javascript_include_tag 'https://js.stripe.com/v2'
+    = favicon_link_tag 'Aquapark', href: '/images/brand.png'
+    = timeago_script_tag
+    = csrf_meta_tags
+    = tag :meta, name: 'stripe-key', content: ENV['STRIPE_PUBLIC_KEY']
+    link href='http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext' rel='stylesheet'type='text/css'
+    link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'
+  body
+  - if current_person.present?
+    nav.navbar.primary-color
+      .container-fluid
+        .navbar-header
+          .navbar-brand
+            = current_person.translate_type
+            | - Panel
+        ul.nav.navbar-nav
+          li class=(active?(backend_news_index_path))
+            = link_to 'Aktualności', backend_news_index_path
+          - if current_manager
+            li class=(active?(backend_statistics_path))
+              = link_to 'Statystyki', backend_statistics_path
+          - unless current_client
+            li class=(active?(backend_vacations_path(@current_person)))
+              = link_to 'Urlop', backend_vacations_path(@current_person)
+          - if current_manager
+            li class=(active?(new_backend_person_registration_path))
+              = link_to 'Rejestracja pracowników', new_backend_person_registration_path, data: { no_turbolink: true }
+
+        ul.nav.navbar-nav.navbar-right
+          li.dropdown
+            a.dropdown-toggle data-toggle="dropdown" href=backend_person_path(@current_person)
+              i.fa.fa-user
+              |  #{current_person.full_name}
+              i.caret
+            ul.dropdown-menu
+              li
+                = link_to backend_person_path(@current_person) do
+                  i.fa.fa-bars
+                  |  Profil
+              li.divider
+              li
+                = link_to destroy_person_session_path, method: :delete do
+                  i.fa.fa-sign-out
+                  |  Wyloguj
+    .container-fluid
+      .row
+        .col-md-2
+          #sidebar.well.sidebar-nav
+            h5
+              i.fa.fa-ticket
+              small
+                b  Wejściówki
+            ul.nav.nav-pills.nav-stacked
+              - unless current_client
+                li class=(current_page?(backend_entry_types_path) && 'active')
+                  = link_to "Bilety/Karnety", backend_entry_types_path, data: { no_turbolink: true }
+              - if current_client
+                li class=(current_page?(bought_history_backend_person_path(current_person)) && 'active')
+                  = link_to "Moja historia Zakupów", bought_history_backend_person_path(current_person), data: { no_turbolink: true }
+                li class=(current_page?(bought_list_backend_entry_types_path) && 'active')
+                  = link_to "Kup Bilet/Karnet",  bought_list_backend_entry_types_path, action: :show, data: {no_turbolink: true}
+            - if current_manager or current_receptionist
+              h5
+                i.fa.fa-users
+                small
+                  b  Zarejestrowane osoby
+              ul.nav.nav-pills.nav-stacked
+                li class=(current_page?(backend_people_path) && 'active')
+                  = link_to "Użytkownicy", backend_people_path, data: { no_turbolink: true }
+            - unless current_client
+              h5
+                i.fa.fa-calendar
+                small
+                  b  Harmonogram pracy
+              ul.nav.nav-pills.nav-stacked
+                - if current_manager
+                  li class=(current_page?(backend_work_schedules_path) && 'active')
+                    = link_to "Grafik pracy", backend_work_schedules_path, data: { no_turbolink: true }
+                - unless current_client || current_manager
+                  li class=(current_page?( my_backend_manage_schedule_index_path(current_person)) && 'active')
+                    = link_to "Mój grafik pracy",  my_backend_manage_schedule_index_path(current_person) if current_person.present?
+                - if current_manager
+                  li class=(current_page?(new_backend_work_schedule_path) && 'active')
+                    = link_to "Dodaj grafik pracy", new_backend_work_schedule_path, data: { no_turbolink: true }
+            h5
+              i.fa.fa-child
+              small
+                b  Treningi indywidualne
+            ul.nav.nav-pills.nav-stacked
+              - if current_manager || current_receptionist
+                li class=(current_page?(backend_individual_trainings_path) && 'active')
+                  = link_to 'Trening indywidualny', backend_individual_trainings_path, data: { no_turbolink: true }
+              - if current_client || current_trainer
+                li class=(current_page?(show_backend_individual_trainings_path(current_person)) && 'active')
+                  = link_to 'Moje treningi', show_backend_individual_trainings_path(current_person)
+                li class=(current_page?(choose_trainer_backend_individual_trainings_path(current_person)) && 'active')
+                  = link_to 'Zapisz się na trening',  choose_trainer_backend_individual_trainings_path(current_person), data: { no_turbolink: true }
+              li class=(current_page?(backend_training_costs_path) && 'active')
+                = link_to 'Cennik treningów', backend_training_costs_path
+            h5
+              i.fa.fa-object-group
+              small
+                b  Zajęcia grupowe
+            ul.nav.nav-pills.nav-stacked
+              li class=(current_page?(backend_activities_path) && 'active')
+                = link_to 'Zajęcia grupowe', backend_activities_path
+              - if current_trainer
+                li class=(current_page?(new_backend_activity_path) && 'active')
+                  = link_to 'Zaproponuj zajęcia', new_backend_activity_path
+              - unless current_client
+                li class=(current_page?(requests_backend_activities_path) && 'active')
+                  = link_to 'Niezaakceptowane zajęcia', requests_backend_activities_path
+            - if current_manager
+              h5
+                i.fa.fa-plane
+                small
+                  b  Urlopy
+              ul.nav.nav-pills.nav-stacked
+                li class=(current_page?(backend_manage_vacations_path) && 'active')
+                  = link_to 'Wszystkie urlopy', backend_manage_vacations_path
+
+              ul.nav.nav-pills.nav-stacked
+                li class=(current_page?( requests_backend_vacations_path) && 'active')
+                  = link_to 'Urlopy do zaakceptowania', requests_backend_vacations_path
+        .col-md-10
+          = render 'layouts/messages'
+          = yield

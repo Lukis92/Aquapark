@@ -20,7 +20,7 @@
 //= require bootstrap-wysihtml5
 //= require bootstrap-wysihtml5/locales
 //= require locales/jquery.timeago.pl.js
-//= require rails.validations
+//= require mdb.min.js
 //= require_tree .
 
 
@@ -30,24 +30,6 @@ window.setTimeout(function() {
         $(this).remove();
     });
 }, 10000);
-
-//Nice dropdown
-$('select').material_select();
-
-//count character in forms
-$('input#input_text, textarea#textarea1').characterCounter();
-
-$('.datepicker').pickadate({
-    selectMonths: true, // Creates a dropdown to control month
-    selectYears: 15 // Creates a dropdown of 15 years to control year
-});
-
-$('#input_starttime').pickatime({
-    twelvehour: false
-});
-$('#input_endtime').pickatime({
-    twelvehour: false
-});
 
 $("#nav ul li a[href^='#']").on('click', function(e) {
 
@@ -68,3 +50,24 @@ $("#nav ul li a[href^='#']").on('click', function(e) {
     });
 
 });
+
+$(function() {
+    // Nice dropdown
+    $('select').material_select();
+    // datepicker
+    $('.datepicker').pickadate({
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 15 // Creates a dropdown of 15 years to control year
+    });
+    //timepicker
+    $('#input_starttime').pickatime({
+        twelvehour: false
+    });
+    $('#input_endtime').pickatime({
+        twelvehour: false
+    });
+});
+
+
+//count character in forms
+$('input#input_text, textarea#textarea1').characterCounter();

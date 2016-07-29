@@ -1,7 +1,5 @@
 # Main actions for application
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
   rescue_from ActionController::RoutingError, with: :error_render_method
@@ -18,8 +16,8 @@ class ApplicationController < ActionController::Base
     true
   end
 
-  def after_sign_up_path_for(_resource)
-    redirect_to new_person_session, notice: "Zarejestrowano konto pomyślnie."
+  def after_sign_up_path_for(resource)
+    redirect_to new_person_session, notice: 'Zarejestrowano konto pomyślnie.'
   end
 
   def logged_in?
@@ -32,28 +30,37 @@ class ApplicationController < ActionController::Base
     resource.update_without_password(params)
   end
 
-  private
-
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up)  << :pesel
-    devise_parameter_sanitizer.for(:sign_up)  << :first_name
-    devise_parameter_sanitizer.for(:sign_up)  << :last_name
-    devise_parameter_sanitizer.for(:sign_up)  << :date_of_birth
-    devise_parameter_sanitizer.for(:sign_up)  << :profile_image
-    devise_parameter_sanitizer.for(:sign_up)  << :salary
-    devise_parameter_sanitizer.for(:sign_up)  << :hiredate
-    devise_parameter_sanitizer.for(:sign_up)  << :type
-    devise_parameter_sanitizer.for(:sign_up)  << :password
-    devise_parameter_sanitizer.for(:sign_up)  << :password_confirmation
-    devise_parameter_sanitizer.for(:account_update)  << :pesel
-    devise_parameter_sanitizer.for(:account_update)  << :first_name
-    devise_parameter_sanitizer.for(:account_update)  << :last_name
-    devise_parameter_sanitizer.for(:account_update)  << :date_of_birth
-    devise_parameter_sanitizer.for(:account_update)  << :profile_image
-    devise_parameter_sanitizer.for(:account_update)  << :salary
-    devise_parameter_sanitizer.for(:account_update)  << :hiredate
-    devise_parameter_sanitizer.for(:account_update)  << :type
-    devise_parameter_sanitizer.for(:account_update)  << :password
-    devise_parameter_sanitizer.for(:account_update)  << :password_confirmation
+    devise_parameter_sanitizer.permit(:sign_up) do |u|
+      sanitized_params = %i(
+        pesel
+        first_name
+        last_name
+        date_of_birth
+        profile_image
+        salary
+        hiredate
+        type
+        password
+        password_confirmation
+      )
+      u.permit(sanitized_params)
+    end
+
+    devise_parameter_sanitizer.permit(:account_update) do |u|
+      sanitized_params = %i(
+        pesel
+        first_name
+        last_name
+        date_of_birth
+        profile_image
+        salary
+        hiredate
+        type
+        password
+        password_confirmation
+      )
+      u.permit(sanitized_params)
+    end
   end
 end

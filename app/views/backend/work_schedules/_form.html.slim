@@ -1,0 +1,34 @@
+- unless @person.blank?
+  = simple_form_for([:backend, @work_schedule], as: :manage_schedule) do |f|
+    = errors_for(@work_schedule)
+    .row
+      .col-md-3
+        label for='input_starttime'* Godzina od
+        = f.text_field :start_time, required: true,
+          class: 'timepicker', id: 'input_starttime', placeholder: 'Kliknij'
+      .col-md-3
+        label for='input_endtime'* Godzina do
+        = f.text_field :end_time, class: 'timepicker', id: 'input_endtime', required: true,
+          placeholder: 'Kliknij'
+    = f.input :day_of_week, required: true, include_blank: "Wybierz dzień tygodnia", collection: WorkSchedule::DAYS
+    = f.input :person_id, required: true, as: :hidden, input_html: { value: @person.id }
+    = f.button :submit, class: "btn btn-primary btn-block"
+
+- else
+  = simple_form_for([:backend, @work_schedule], as: :work_schedule) do |f|
+    = errors_for(@work_schedule)
+    .row
+      .col-md-3
+        label for='input_starttime'* Godzina od
+        = f.text_field :start_time, required: true,
+          class: 'timepicker', id: 'input_starttime', placeholder: 'Kliknij'
+      .col-md-3
+        label for='input_endtime'* Godzina do
+        = f.text_field :end_time, required: true, class: 'timepicker', id: 'input_endtime',
+          placeholder: 'Kliknij'
+    = f.input :day_of_week, required: true, collection: WorkSchedule::DAYS, include_blank: 'Wybierz dzień tygodnia'
+    = f.input :person_id, label: "Pracownik",
+                          required: true,
+                          collection: @employees.map{|e| [e.person_full_name_type, e.id]},
+                          prompt: "Wybierz pracownika"
+    = f.button :submit, class: "btn btn-primary btn-block"

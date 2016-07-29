@@ -1,0 +1,134 @@
+h5 Cennik
+.row
+  .col-md-6
+    .card-panel
+      .blue-text.text-darken-2
+        i.fa.fa-info-circle
+        | Jesteś na stronie zakupu wejściówki na teren aquaparku.
+        | Poniżej wybierz interesujący Cię rodzaj biletu/karnetu a następnie kliknij "KUP TERAZ".
+.divider-new
+  | Bilety
+.row
+  #carousel-multi-item1.carousel.slide.multiitem-car
+    .text-center
+      a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "prev", :href => "#carousel-multi-item1", :role => "button"}
+        i.material-icons keyboard_arrow_left
+      a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "next", :href => "#carousel-multi-item1", :role => "button"}
+        i.material-icons keyboard_arrow_right
+    / Indicators
+    ol.carousel-indicators
+      - groups = @tickets.in_groups_of(4, false)
+      - groups.each_with_index do |group, i|
+        - if i == 0
+          li.active{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item1"}
+        - else
+          li{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item1"}
+    / Wrapper for slides
+    .carousel-inner
+      - groups = @tickets.in_groups_of(4, false)
+      - groups.each_with_index do |group, i|
+        - if i == 0
+          .item.active
+            .row.text-center
+              - group.each do |field|
+                .col-md-3
+                  .card.hoverable.success-color-dark
+                    #price-card.card-content.white-text
+                      h5
+                        = field.kind
+                      h4.blue-text
+                        = field.price.nice
+                        | ZŁ
+                      p
+                        = HTML_Truncator.truncate(field.kind_details, 20)
+                      p
+                        = HTML_Truncator.truncate(field.description, 20)
+                    / Buttons
+                    .card-action.text-center
+                      = link_to new_backend_entry_type_bought_detail_path(field), data: { no_turbolink: true} do
+                        .fa.fa-shopping-cart
+                        | Kup Teraz
+        - else
+          .item
+            .row.text-center
+              - group.each do |field|
+                .col-md-3
+                  .card.hoverable.success-color-dark
+                    #price-card.card-content.white-text
+                      h5
+                        = field.kind
+                      h4.blue-text
+                        = field.price.nice
+                        | ZŁ
+                      p
+                        = HTML_Truncator.truncate(field.kind_details, 20)
+                      p
+                        = HTML_Truncator.truncate(field.description, 20)
+                    / Buttons
+                    .card-action.text-center
+                      = link_to new_backend_entry_type_bought_detail_path(field), data: {no_turbolink: true} do
+                        .fa.fa-shopping-cart
+                        | Kup Teraz
+.divider-new
+  | Karnety
+.row
+  #carousel-multi-item.carousel.slide.multiitem-car
+    .text-center
+      a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "prev", :href => "#carousel-multi-item", :role => "button"}
+        i.material-icons keyboard_arrow_left
+      a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "next", :href => "#carousel-multi-item", :role => "button"}
+        i.material-icons keyboard_arrow_right
+    / Indicators
+    ol.carousel-indicators
+      - groups = @passes.in_groups_of(4, false)
+      - groups.each_with_index do |group, i|
+        - if i == 0
+          li.active{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item"}
+        - else
+          li{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item"}
+    / Wrapper for slides
+    .carousel-inner
+      - groups = @passes.in_groups_of(4, false)
+      - groups.each_with_index do |group, i|
+        - if i == 0
+          .item.active
+            .row.text-center
+              - group.each do |field|
+                .col-md-3
+                  .card.hoverable.primary-color-dark
+                    #price-card.card-content.white-text
+                      h5
+                        = field.kind
+                      h4.blue-text
+                        = field.price.nice
+                        | ZŁ
+                      p
+                        = HTML_Truncator.truncate(field.kind_details, 20)
+                      p
+                        = HTML_Truncator.truncate(field.description, 20)
+                    / Buttons
+                    .card-action.text-center
+                      = link_to new_backend_entry_type_bought_detail_path(field), data: { no_turbolink: true}  do
+                        .fa.fa-shopping-cart
+                        | Kup Teraz
+        - else
+          .item
+            .row.text-center
+              - group.each do |field|
+                .col-md-3
+                  .card.hoverable.primary-color-dark
+                    #price-card.card-content.white-text
+                      h5
+                        = field.kind
+                      h4.blue-text
+                        = field.price.nice
+                        | ZŁ
+                      p
+                        = HTML_Truncator.truncate(field.kind_details, 20)
+                      p
+                        = HTML_Truncator.truncate(field.description, 20)
+                    / Buttons
+                    .card-action.text-center
+                      = link_to new_backend_entry_type_bought_detail_path(field), data: {no_turbolink: true} do
+                        .fa.fa-shopping-cart
+                        | Kup Teraz

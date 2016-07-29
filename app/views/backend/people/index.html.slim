@@ -1,0 +1,46 @@
+= render 'nav'
+h5 Wszyscy
+p
+  | Obecnie w bazie posiadamy #{Person.count} zarejestrowanych użytkowników.
+= render 'shared/people_searchbar'
+table.table.table-striped.table-bordered.table-list.pretty.table-list-search
+  thead
+    tr
+      th
+        em.fa.fa-cog
+        |  Zarządzanie
+      th
+        = sortable "pesel", "Pesel"
+      th
+        = sortable "first_name", "Imię"
+      th
+        = sortable "last_name", "Nazwisko"
+      th
+        = sortable "date_of_birth", "Data urodzenia"
+      th
+        = sortable "email", "Email"
+  tbody
+    - @people.each do |person|
+      tr
+        td
+          = link_to backend_person_path(person), title: 'Profil' do
+            i.btn.btn-success
+              i.fa.fa-user
+          = link_to edit_backend_person_path(person), title: 'Edytuj' do
+            i.btn.btn-default
+              i.fa.fa-pencil
+          = link_to backend_person_path(person), title: 'Usuń', method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
+            i.btn.btn-danger
+              i.fa.fa-trash
+        td
+          = person.pesel
+        td
+          = person.first_name
+        td
+          = person.last_name
+        td
+          = l(person.date_of_birth)
+        td
+          = person.email
+
+= will_paginate @people, renderer: BootstrapPagination::Rails

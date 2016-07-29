@@ -36,21 +36,17 @@ class Backend::CommentsController < BackendController
   end
 
   def set_news
-    begin
-      @news = News.find(params[:news_id])
-    rescue ActiveRecord::RecordNotFound => e
-      flash[:danger] = 'Nie istnieje news o takim id.'
-      redirect_to backend_news_index_path
-    end
+    @news = News.find(params[:news_id])
+  rescue ActiveRecord::RecordNotFound => e
+    flash[:danger] = 'Nie istnieje news o takim id.'
+    redirect_to backend_news_index_path
   end
 
   def set_comment
-    begin
-      @comment = Comment.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      flash[:danger] = 'Nie istnieje komentarz o takim id.'
-      redirect_to backend_news_index_path
-    end
+    @comment = Comment.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    flash[:danger] = 'Nie istnieje komentarz o takim id.'
+    redirect_to backend_news_index_path
   end
 
   def require_same_user
@@ -60,7 +56,7 @@ class Backend::CommentsController < BackendController
       flash[:danger] = 'Nie istnieje komentarz o takim id.'
       redirect_to backend_news_index_path
     end
-    if current_person != @comment.person && (!current_manager || !current_receptionist)
+    if current_person != @comment.person
       flash[:danger] = "Możesz edytować tylko własne komentarze."
       redirect_to backend_news_index_path
     end

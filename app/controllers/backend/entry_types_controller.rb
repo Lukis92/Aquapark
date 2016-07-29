@@ -65,12 +65,10 @@ class Backend::EntryTypesController < BackendController
   end
 
   def set_entry_type
-    begin
-      @entry_type = EntryType.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      flash[:danger] = 'Nie istnieje wejściówka o takim id.'
-      redirect_to backend_news_index_path
-    end
+    @entry_type = EntryType.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    flash[:danger] = 'Nie istnieje wejściówka o takim id.'
+    redirect_to backend_news_index_path
   end
 
   def set_current_person
@@ -87,24 +85,15 @@ class Backend::EntryTypesController < BackendController
 
   def receptionist_access
     unless current_receptionist || current_manager
-      flash[:danger] = "Brak dostępu. {receptionist_access}"
+      flash[:danger] = 'Brak dostępu. {receptionist_access}'
       redirect_to backend_news_index_path
     end
   end
 
   def employee_access
     if current_client == 'Client'
-      flash[:danger] = "Brak dostępu. {employee_access}"
+      flash[:danger] = 'Brak dostępu. {employee_access}'
       redirect_to backend_news_index_path
-    end
-  end
-
-  def require_same_user
-    unless current_receptionist || current_manager
-      unless current_person != @person
-        flash[:danger] = "Brak dostępu. {require_same_user}"
-        redirect_to backend_news_index_path
-      end
     end
   end
 end

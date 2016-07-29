@@ -1,14 +1,19 @@
 class Backend::PeopleController < BackendController
   helper_method :sort_column, :sort_direction, :sort_bought
-  before_action :set_person, except: [:index, :search]
+  before_action :set_person, only: [:show, :create, :edit, :update, :destroy]
   before_action :set_rule_to_edit_client_profile, only: [:edit, :update,
                                                          :destroy, :show]
   before_action :require_same_user, only: [:show, :bought_history]
   before_action :person_exists, only: :show
 
   def index
-    @people = Person.order(sort_column + ' ' + sort_direction)
-                    .paginate(page: params[:page], per_page: 20)
+    if current_manager
+      @people = Person.order(sort_column + ' ' + sort_direction)
+                      .paginate(page: params[:page], per_page: 20)
+    else
+      @people = Client.order(sort_column + ' ' + sort_direction)
+                       .paginate(page: params[:page], per_page: 20)
+    end
   end
 
   def clients
@@ -132,21 +137,21 @@ class Backend::PeopleController < BackendController
 
   def require_same_person
     unless current_person == @person || current_manager
-      flash[:danger] = "Możesz edytować tylko własny profil."
+      flash[:danger] = 'Możesz edytować tylko własny profil.'
       redirect_to backend_person_path(current_person)
     end
   end
 
   def require_same_user
     unless current_person == @person || current_manager || current_receptionist
-      flash[:danger] = "Brak dostępu. {require_same_user}"
+      flash[:danger] = 'Brak dostępu. {require_same_user}'
       redirect_to backend_news_index_path
     end
   end
 
   def require_receptionist
     unless current_receptionist || current_manager || current_person == @person
-      flash[:danger] = "Brak dostępu.{require_receptionist}"
+      flash[:danger] = 'Brak dostępu.{require_receptionist}'
       redirect_to backend_news_index_path
     end
   end
@@ -155,12 +160,12 @@ class Backend::PeopleController < BackendController
     if @person.type == 'Client'
       unless current_person == @person || current_receptionist ||
              current_manager
-        flash[:danger] = "Brak dostępu. {set_rule_to_edit_client_profile}"
+        flash[:danger] = 'Brak dostępu. {set_rule_to_edit_client_profile}'
         redirect_to backend_news_index_path
       end
     else
       unless current_person == @person || current_manager
-        flash[:danger] = "Brak dostępu. {set_rule_to_edit_client_profile}"
+        flash[:danger] = 'Brak dostępu. {set_rule_to_edit_client_profile}'
         redirect_to backend_person_path(current_person)
       end
     end
@@ -171,7 +176,7 @@ class Backend::PeopleController < BackendController
       flash[:info] = 'Brak takiej osoby.'
       redirect_to backend_news_index_path
     elsif @person.blank? && current_person.blank?
-      flash[:danger] = "Brak dostępu. {person_exists}"
+      flash[:danger] = 'Brak dostępu. {person_exists}'
     end
   end
 

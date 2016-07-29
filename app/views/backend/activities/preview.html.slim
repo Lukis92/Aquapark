@@ -1,0 +1,42 @@
+= render 'shared/back'
+h5 Uczestnicy zajęcia grupowego
+
+- unless @activities_people.blank?
+  - @activities_people.each do |ap|
+    .row
+      .col-md-6
+        ul.collection
+          li.collection-item
+            h5
+              | Data:
+              = l(ap.date)
+    table.table.table-striped.table-bordered.table-list
+      thead
+        tr
+          th
+            | Nazwa
+          th
+            | Ilość uczestników
+          th
+            | Uczestnicy
+      tbody
+        tr
+          td
+            = @activity.name
+          td
+            = @activity.activities_people.where('date = ?', ap.date).count
+            |  /
+            = @activity.max_people
+          td
+            - if @activity.activities_people.present?
+              - @activity.activities_people.where('date = ?', ap.date).each_with_index do |a, i|
+                - unless i == @activity.activities_people.size - 1
+                  = link_to backend_person_path(a.person.id) do
+                    = a.person.full_name
+                - else
+                  = link_to backend_person_path(a.person.id) do
+                    = a.person.full_name
+                  = ', '
+- else
+  .alert.alert-info
+    | Brak uczestników

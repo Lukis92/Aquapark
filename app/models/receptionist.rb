@@ -27,4 +27,6 @@
 #
 
 class Receptionist < Person
+  validates :salary, presence: true, format: { with: DECIMAL_REGEX }
+  validates :hiredate, presence: true
 end

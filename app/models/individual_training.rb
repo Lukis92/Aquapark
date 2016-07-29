@@ -103,7 +103,6 @@ class IndividualTraining < ActiveRecord::Base
     end
   end
 
-  
   def set_end_on
     unless training_cost_id.blank?
       training = TrainingCost.where(id: training_cost_id).first

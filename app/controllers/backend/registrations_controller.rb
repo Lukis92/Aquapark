@@ -1,11 +1,9 @@
 # Controller for backend registration actions by devise gem
 class Backend::RegistrationsController < Devise::RegistrationsController
   skip_before_filter :require_no_authentication, only: [:new, :create]
-  before_action :set_person
   layout 'backend'
   # GET /resource/sign_up
   def new
-    @current_person = current_person
     super
   end
 
@@ -29,10 +27,6 @@ class Backend::RegistrationsController < Devise::RegistrationsController
   end
 
   private
-
-  def set_person
-    @current_person = current_person
-  end
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up)  << :pesel
