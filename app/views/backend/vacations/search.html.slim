@@ -23,7 +23,7 @@ table.table.table-striped.table-bordered.table-list.pretty
       - @vacations.each do |vacation|
         tr
           td
-            = link_to edit_backend_vacation_path(vacation.person, vacation), data: { no_turbolink: true } do
+            = link_to edit_backend_vacation_path(vacation.person, vacation) do
               i.btn.btn-default
                 i.fa.fa-pencil
             = link_to backend_vacation_path(vacation.person, vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do

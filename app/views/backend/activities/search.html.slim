@@ -32,7 +32,7 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
         tr
           td
             - if current_receptionist || current_manager
-              = link_to edit_backend_activity_path(activity), title: 'Edytuj', data: { no_turbolink: true } do
+              = link_to edit_backend_activity_path(activity), title: 'Edytuj' do
                 i.btn.btn-default
                   i.fa.fa-pencil
               = link_to backend_activity_path(activity), title: 'Usuń', method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
@@ -47,7 +47,7 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
                 = link_to activate_backend_activity_path(activity, active: true), title: 'Aktywuj', method: :post do
                   i.btn.btn-success
                     i.fa.fa-calendar-plus-o
-            = link_to sign_up_backend_activity_path(activity), title: 'Dołącz', data: { no_turbolink: true } do
+            = link_to sign_up_backend_activity_path(activity), title: 'Dołącz' do
               i.btn.btn-success
                 i.fa.fa-user-plus
             = link_to preview_backend_activity_path(activity), title: 'Lista uczestników' do

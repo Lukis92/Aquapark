@@ -20,7 +20,7 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
       - @work_schedules.each do |work|
         tr
           td
-            = link_to edit_backend_work_schedule_path(work), data: { no_turbolink: true } do
+            = link_to edit_backend_work_schedule_path(work) do
               i.btn.btn-default
                 i.fa.fa-pencil
             = link_to backend_work_schedule_path(work), method: :delete, data: {confirm: 'Jesteś pewny/a?'} do

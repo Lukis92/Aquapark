@@ -29,7 +29,7 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
     - @individual_trainings.each do |training|
       tr
         td
-          = link_to edit_backend_trainer_individual_training_path(training.client, training.trainer, training), data: { no_turbolink: true } do
+          = link_to edit_backend_trainer_individual_training_path(training.client, training.trainer, training) do
             i.btn.btn-default
               i.fa.fa-pencil
           = link_to backend_individual_training_path(training), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do

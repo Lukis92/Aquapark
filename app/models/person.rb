@@ -118,7 +118,7 @@ class Person < ActiveRecord::Base
     'Trainer' => 'Trener',
     'Client' => 'Klient'
   }.freeze
-  
+
   def translate_type
     TYPES_IN_PL[type]
   end

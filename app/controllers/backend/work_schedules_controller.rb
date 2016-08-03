@@ -79,6 +79,10 @@ class Backend::WorkSchedulesController < BackendController
     end
   end
 
+  # GET backend/people/:id/work_schedules/:id
+  def edit
+  end
+
   # PATCH/PUT backend/work_schedules/1
   def update
     if @work_schedule.update(work_schedule_params)

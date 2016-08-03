@@ -37,7 +37,7 @@
                 td Zarobki
                 td
                   = @person.salary.nice
-                  zł
+                  | zł
               tr
                 td Data zatrudnienia:
                 td
@@ -59,11 +59,11 @@
             i.fa.fa-calendar
             |  Harmonogram pracy
         - if @current_person.type == 'Manager' && @person.type != 'Client'
-          = link_to new_backend_vacation_path(@person), data: { no_turbolink: true },  class: "btn btn-primary" do
+          = link_to new_backend_vacation_path(@person), class: "btn btn-primary" do
             i.fa.fa-plane
             |  Przydziel urlop
   .panel-footer
-    - if @person.current_sign_in_at.present?
+    - if @person.current_sign_in_at
       .btn.btn-border-success.waves-effect
         | Ostatnie logowanie:
         = l(@person.current_sign_in_at)
@@ -71,7 +71,7 @@
       .btn.btn-border-danger.waves-effect
         | Brak logowania
     i.pull-right
-      = link_to edit_backend_person_path(@person), class: "btn btn-sm btn-warning", data: {no_turbolink: true} do
+      = link_to edit_backend_person_path(@person), class: "btn btn-sm btn-warning" do
         i.fa.fa-pencil-square
         |  Edytuj
       - if current_manager || current_client || current_manager != @person

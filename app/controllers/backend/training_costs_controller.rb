@@ -10,7 +10,6 @@ class Backend::TrainingCostsController < BackendController
   # GET backend/training_costs/new
   def new
     @training_cost = TrainingCost.new
-
   end
 
   # POST backend/training_costs
@@ -22,6 +21,10 @@ class Backend::TrainingCostsController < BackendController
     else
       render :new
     end
+  end
+
+  # GET backend/training_costs/:id/edit
+  def edit
   end
 
   # PATCH/PUT backend/training_costs/1
@@ -45,13 +48,12 @@ class Backend::TrainingCostsController < BackendController
   def set_training_costs
     @training_costs = TrainingCost.order(duration: :asc)
   end
+
   def set_training_cost
-    begin
-      @training_cost = TrainingCost.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      flash[:danger] = 'Nie istnieje kosztorys treningu o takim id.'
-      redirect_to backend_news_index_path
-    end
+    @training_cost = TrainingCost.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    flash[:danger] = 'Nie istnieje kosztorys treningu o takim id.'
+    redirect_to backend_news_index_path
   end
 
   def training_cost_params

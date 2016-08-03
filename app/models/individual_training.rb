@@ -37,9 +37,6 @@ class IndividualTraining < ActiveRecord::Base
                            }
 
   attr_accessor :duration, :day
-  def available_day
-    @days = WorkSchedule.where(id: :trainer_id)
-  end
 
   DAYS_IN_PL = {
     'Monday' => 'Poniedziałek',

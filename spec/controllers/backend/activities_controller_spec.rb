@@ -6,9 +6,8 @@ RSpec.describe Backend::ActivitiesController, type: :controller do
   before { sign_in person}
 
   describe 'GET #index' do
-    let(:manager) { create :manager}
-    subject { get :index, id: manager.id }
+    subject { get :index }
 
-    it_behaves_like 'template rendering action', :show
+    it_behaves_like 'template rendering action', :index
   end
 end

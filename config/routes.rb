@@ -16,7 +16,7 @@ Rails.application.routes.draw do
                controllers: { registrations: 'backend/registrations' }
 
     resources :entry_types do
-      resources :bought_details
+      resources :bought_details, except: [:show, :edit, :update]
       collection do
         get 'bought_list', to: 'entry_types#show'
         get 'search'
@@ -24,19 +24,19 @@ Rails.application.routes.draw do
     end
     get 'trainers', to: 'people#trainers'
 
-    resources :activities_people
+    resources :activities_people, except: [:show, :new, :edit]
     resources :news do
       member do
         post 'like'
       end
-      resources :comments
+      resources :comments, only: [:create, :edit, :update, :destroy]
     end
     resources :work_schedules do
       collection do
         get 'search'
       end
     end
-    resources :activities do
+    resources :activities, except: [:show] do
       collection do
         get 'search'
         get 'pool_zone'
@@ -50,8 +50,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :trainers, only: :index
-    resources :vacations, only: [:list] do
+    resources :vacations, only: [] do
       collection do
         get 'requests'
         get 'search'
@@ -68,8 +67,8 @@ Rails.application.routes.draw do
         get 'search'
       end
     end
-    resources :training_costs
-    resources :people do
+    resources :training_costs, except: [:show]
+    resources :people, except: [:new, :create] do
       collection do
         get 'search'
       end
@@ -86,7 +85,7 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :trainers do
+        resources :trainers, only: [] do
           resources :individual_trainings
         end
         resources :work_schedules, as: 'manage_schedule' do
@@ -95,7 +94,7 @@ Rails.application.routes.draw do
             get 'my_schedule', to: 'work_schedules#show', as: 'my'
           end
         end
-        resources :vacations, param: :vacation_id
+        resources :vacations, param: :vacation_id, except: [:show]
       end
     end
     resources :statistics, only: [:index]

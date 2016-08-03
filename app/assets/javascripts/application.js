@@ -11,11 +11,10 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery-ui
-//= require jquery.turbolinks
 //= require bootstrap-sprockets
-//= require turbolinks
 //= require rails-timeago-all
 //= require bootstrap-wysihtml5
 //= require bootstrap-wysihtml5/locales

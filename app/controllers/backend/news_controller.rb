@@ -26,6 +26,10 @@ class Backend::NewsController < BackendController
     end
   end
 
+  # GET backend/news/:id/edit
+  def edit
+  end
+
   # PATCH/PUT backend/news/1
   def update
     if @news.update(news_params)

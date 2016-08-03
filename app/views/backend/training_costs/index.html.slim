@@ -7,7 +7,7 @@ h5 Cennik Treningów Indywidualnych
         |  Jesteś na stronie aktualnego cennika treningów indywidualnych. Koszt zależny jest
         |  od czasu trwania.
 - if current_manager || current_receptionist
-  = link_to new_backend_training_cost_path, data: { no_turbolink: true } do
+  = link_to new_backend_training_cost_path do
     i.btn.btn-primary
       i.fa.fa-plus
       |  Dodaj
@@ -28,7 +28,7 @@ table.table.table-striped.table-bordered.table-list
       tr
         - if current_manager || current_receptionist
           td
-            = link_to edit_backend_training_cost_path(tc), title: 'Edytuj', data: { no_turbolink: true } do
+            = link_to edit_backend_training_cost_path(tc), title: 'Edytuj' do
               i.btn.btn-default
                 i.fa.fa-pencil
             = link_to backend_training_cost_path(tc), title: 'Usuń', method: :delete, data: {confirm: 'Jesteś pewny/a?'} do

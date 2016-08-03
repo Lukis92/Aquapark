@@ -7,8 +7,7 @@ h5 Lista wszystkich urlopów
         |  Jesteś na stronie wszystkich urlopów.
 
 - unless current_manager
-  = link_to new_backend_vacations_path(@person), class: 'btn btn-primary',
-    data: { no_turbolink: true } do
+  = link_to new_backend_vacations_path(@person), class: 'btn btn-primary' do
     i.fa.fa-plus
     |  Poproś o urlop
 .row
@@ -56,7 +55,7 @@ h5.divider-new Obecny urlop
       tr
         - unless current_person == @person
           td
-            = link_to edit_backend_vacation_path(@current_vacation), data: { no_turbolink: true } do
+            = link_to edit_backend_vacation_path(@current_vacation) do
               i.btn.btn-default
                 i.fa.fa-pencil
             = link_to backend_vacation_path(@current_vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
@@ -109,7 +108,7 @@ h5.divider-new Nadchodzące Urlopy
         tr
           - unless current_person == @person
             td
-              = link_to edit_backend_vacation_path(vacation), data: { no_turbolink: true } do
+              = link_to edit_backend_vacation_path(vacation) do
                 i.btn.btn-default
                   i.fa.fa-pencil
               = link_to backend_vacation_path(vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
@@ -163,7 +162,7 @@ h5.divider-new Nadchodzące Urlopy
           tr
             - unless current_person == @person
               td
-                = link_to edit_backend_vacation_path(vacation), data: { no_turbolink: true } do
+                = link_to edit_backend_vacation_path(vacation) do
                   i.btn.btn-default
                     i.fa.fa-pencil
                 = link_to backend_vacation_path(vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
@@ -216,7 +215,7 @@ h5.divider-new Archiwalne Urlopy
         tr
           - unless current_person == @person
             td
-              = link_to edit_backend_vacation_path(vacation), data: { no_turbolink: true } do
+              = link_to edit_backend_vacation_path(vacation) do
                 i.btn.btn-default
                   i.fa.fa-pencil
               = link_to backend_vacation_path(vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do

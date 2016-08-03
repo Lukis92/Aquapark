@@ -3,8 +3,7 @@ class Backend::VacationsController < BackendController
   helper_method :sort_column, :sort_direction
   before_action :set_person, only: [:index, :new, :create, :edit, :update, :destroy]
   before_action :set_employees
-  before_action :manage_rule_vacations, only: [:edit, :update, :destroy]
-  before_action :select_rule_own_vacations, only: [:list, :new]
+  before_action :select_rule_own_vacations, only: [:list, :new, :edit, :update, :destroy]
   # before_action :select_rule_vacations, only: :index
   # GET backend/vacations
   def index
@@ -49,6 +48,9 @@ class Backend::VacationsController < BackendController
   # GET backend/vacations/new
   def new
     @vacation = Vacation.new
+  end
+
+  def edit
   end
 
   # POST backend/vacations
@@ -137,21 +139,16 @@ class Backend::VacationsController < BackendController
     @employees = Person.where.not(type: 'Client').order(:first_name, :last_name)
   end
 
-  def set_rule_for_request
-    unless current_client
-      redirect_to backend_news_index_path, notice: "Brak dostępu {set_rule_for_request}"
-    end
-  end
-
   def manage_rule_vacations
     unless current_manager || current_receptionist
-      redirect_to backend_news_index_path, notice: "Brak dostępu {manage_rule_vacations}"
+      flash[:danger] = 'Brak dostępu {manage_rule_vacations}'
+      redirect_to backend_news_index_path
     end
   end
 
   def select_rule_own_vacations
     unless current_manager || current_receptionist || current_person == @person
-      flash[:danger] = "Brak dostępu {select_rule_own_vacations}"
+      flash[:danger] = 'Brak dostępu {select_rule_own_vacations}'
       redirect_to backend_news_index_path
     end
   end

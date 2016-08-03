@@ -1,7 +1,6 @@
 class Backend::EntryTypesController < BackendController
   helper_method :sort_column, :sort_direction
   before_action :set_entry_type, only: [:edit, :update, :destroy, :show_details]
-  before_action :set_current_person
   before_action :receptionist_access, only: [:new, :edit, :update, :destroy]
   before_action :employee_access, only: [:index]
 
@@ -24,6 +23,10 @@ class Backend::EntryTypesController < BackendController
     else
       render :new
     end
+  end
+
+  # GET backend/entry_types/:id/edit
+  def edit
   end
 
   # PATCH/PUT backend/entry_types/1
@@ -69,10 +72,6 @@ class Backend::EntryTypesController < BackendController
   rescue ActiveRecord::RecordNotFound => e
     flash[:danger] = 'Nie istnieje wejściówka o takim id.'
     redirect_to backend_news_index_path
-  end
-
-  def set_current_person
-    @current_person = current_person
   end
 
   def sort_column

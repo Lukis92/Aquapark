@@ -59,10 +59,6 @@ class BoughtDetail < ActiveRecord::Base
     self.end_on = start_on + days.to_i
   end
 
-  def remaining_days
-    expired? ? 0 : (Date.today - end_on).to_i
-  end
-
   def validate_start_on
     if start_on < Date.today && entry_type == 'Karnet'
       errors.add(:error,
@@ -70,15 +66,3 @@ class BoughtDetail < ActiveRecord::Base
     end
   end
 end
-
-# if (person.bought_details.where('entry_type_id = ?', entry_type.id).count > 0) &&
-#    ((person.bought_details.where('start_on <= ?', start_on).count > 0 &&
-#       person.bought_details.where('end_on >= ?', end_on).count > 0) ||
-#    (person.bought_details.where('start_on <= ?', start_on).count > 0 &&
-#     person.bought_details.where('end_on <= ?', end_on).count > 0 &&
-#     person.bought_details.where('end_on >= ?', start_on).count > 0) ||
-#    (person.bought_details.where('start_on >= ?', start_on).count > 0 &&
-#    person.bought_details.where('start_on <= ?', end_on).count > 0 &&
-#    person.bought_details.where('end_on >= ?', end_on).count > 0))
-#   errors.add(:error, 'Masz już aktywną wejściówkę w tym okresie.')
-# end

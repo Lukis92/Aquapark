@@ -3,7 +3,13 @@
     i.fa.fa-chevron-left
     |  Wróć
 
-h5 Edycja urlopu
+h4 Edycja urlopu
+.row
+  .col-md-6
+    .card-panel
+      .blue-text.text-darken-2
+        i.fa.fa-info-circle
+        | Jesteś na stronie edycji urlopu.
 = simple_form_for(@vacation, url: backend_vacation_path(@person, @vacation)) do |f|
   = errors_for(@vacation)
   .row
@@ -24,5 +30,4 @@ h5 Edycja urlopu
         = f.input :vacation_id, as: :hidden, input_html: { value: @vacation.id}
     .col-md-12.input-field
       = f.input :reason, as: :text, input_html: { class: "materialize-textarea" }
-    .col-md-6
       = f.button :submit, class: "btn btn-primary btn-block"

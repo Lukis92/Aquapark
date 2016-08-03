@@ -40,7 +40,7 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
             = link_to backend_entry_type_path(entry), title: 'Usuń', method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
               .btn.btn-danger
                 i.fa.fa-trash
-            = link_to backend_entry_type_bought_details_path(entry), title: 'Historia zakupów', data: { no_turbolink: true } do
+            = link_to backend_entry_type_bought_details_path(entry), title: 'Historia zakupów' do
               .btn.btn-warning
                 i.fa.fa-history
         td

@@ -45,6 +45,10 @@ class Backend::IndividualTrainingsController < BackendController
     end
   end
 
+  # GET backend/people/:id/trainers/:trainer_id/individual_trainings/:id
+  def edit
+  end
+
   # PATCH/PUT backend/individual_trainings/1
   def update
     if @individual_training.update(individual_training_params)

@@ -40,6 +40,10 @@ class Backend::ActivitiesController < BackendController
     end
   end
 
+  # GET backend/activities/:id/edit
+  def edit
+  end
+
   # PATCH/PUT backend/activities/1
   def update
     if @activity.update(activity_params)
@@ -58,9 +62,7 @@ class Backend::ActivitiesController < BackendController
   def deactivate
     @activity.update!(active: false)
     @activities_people = ActivitiesPerson.where(activity_id: @activity).where('date >= ?', Date.today)
-    @activities_people.each do |ap|
-      ap.destroy
-    end
+    @activities_people.each(&:destroy)
     redirect_to :back, notice: 'Deaktywowano.'
   end
 
@@ -84,6 +86,7 @@ class Backend::ActivitiesController < BackendController
   def preview
     @activities_people = @activity.activities_people
                                   .select(:activity_id, :date)
+                                  .where('date >= ?', Date.today)
                                   .order(:date)
                                   .distinct
   end
@@ -118,7 +121,7 @@ class Backend::ActivitiesController < BackendController
   #   end
   # end
 
-  JOINED_TABLE_COLUMNS = %w(people.first_name)
+  JOINED_TABLE_COLUMNS = %w(people.first_name).freeze
   def sort_column
     if JOINED_TABLE_COLUMNS.include?(params[:sort]) || Activity.column_names.include?(params[:sort])
       params[:sort]
@@ -132,12 +135,10 @@ class Backend::ActivitiesController < BackendController
   end
 
   def set_activity
-    begin
-      @activity = Activity.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      flash[:danger] = 'Nie ma aktywności o takim id.'
-      redirect_to backend_news_index_path
-    end
+    @activity = Activity.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    flash[:danger] = 'Nie ma aktywności o takim id.'
+    redirect_to backend_news_index_path
   end
 
   def set_zone
@@ -158,7 +159,7 @@ class Backend::ActivitiesController < BackendController
 
   def set_rule_to_manage
     unless current_manager || current_receptionist
-      flash[:danger] = "Brak dostępu. {set_rule_to_manage}"
+      flash[:danger] = 'Brak dostępu. {set_rule_to_manage}'
       redirect_to backend_news_path
     end
   end

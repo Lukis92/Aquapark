@@ -1,8 +1,14 @@
 h4 Pracownik
+.row
+  .col-md-6
+    .card-panel
+      .blue-text.text-darken-2
+        i.fa.fa-info-circle
+        | Jesteś na stronie prezentującej grafik pracy.
 h5
   = @person.full_name
 - unless @person == current_person || !current_manager
-  = link_to new_backend_manage_schedule_index_path(@person), data: { no_turbolink: true } do
+  = link_to new_backend_manage_schedule_index_path(@person) do
     i.btn.btn-success
       i.fa.fa-plus
       |  Dodaj grafik
@@ -29,7 +35,7 @@ table.table.table-striped.table-bordered.table-list
       tr
         - if current_manager
           td
-            = link_to edit_backend_work_schedule_path(work), data: { no_turbolink: true } do
+            = link_to edit_backend_work_schedule_path(work) do
               i.btn.btn-default
                 i.fa.fa-pencil
             = link_to backend_work_schedule_path(work), method: :delete, data: {confirm: 'Jesteś pewny/a?'} do

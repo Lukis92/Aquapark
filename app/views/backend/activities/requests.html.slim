@@ -5,9 +5,10 @@ h5 Zajęcia czekające na zatwierdzenie
 table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   thead
     tr
-      th
-        em.fa.fa-cog
-        |  Zarządzanie
+      - if current_receptionist || current_manager
+        th
+          em.fa.fa-cog
+          |  Zarządzanie
       th
         | Nazwa
       th
@@ -29,9 +30,9 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   tbody
     - @activity_requests.each do |activity|
       tr
-        td
-          - if current_receptionist || current_manager
-            = link_to edit_backend_activity_path(activity), title: 'Edytuj', data: { no_turbolink: true } do
+        - if current_receptionist || current_manager
+          td
+            = link_to edit_backend_activity_path(activity), title: 'Edytuj' do
               i.btn.btn-default
                 i.fa.fa-pencil
             = link_to activate_backend_activity_path(activity, active: true), title: 'Aktywuj', method: :post do

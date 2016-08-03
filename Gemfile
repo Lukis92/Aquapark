@@ -16,6 +16,7 @@ gem 'aws-sdk', '< 2.0' # the official AWS SDK for Ruby
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'bootstrap-wysihtml5-rails', github: 'nerian/bootstrap-wysihtml5-rails'
 gem 'bcrypt' # password hashing algorithmp
+gem 'decent_exposure', '3.0.0' # creating declarative interfaces in controllers
 gem 'devise' # flexible authentication solution for Rails with Warden.
 gem 'font-awesome-rails' # font-awesome font for rails
 gem 'html_truncator', '~>0.2' # truncate an HTML string

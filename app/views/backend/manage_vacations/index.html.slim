@@ -29,7 +29,7 @@ p
         tr
           - if current_manager
             td
-              = link_to edit_backend_vacation_path(vacation.person, vacation), title: 'Edytuj', data: { no_turbolink: true } do
+              = link_to edit_backend_vacation_path(vacation.person, vacation), title: 'Edytuj' do
                 i.btn.btn-default
                   i.fa.fa-pencil
               = link_to backend_vacation_path(vacation.person, vacation), title: 'Usuń', method: :delete, data: { confirm: 'Jesteś pewny/a?' } do

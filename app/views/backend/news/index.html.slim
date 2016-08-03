@@ -1,6 +1,6 @@
 h5 Aktualności
 - if current_manager || current_receptionist
-  = link_to new_backend_news_path, data: {no_turbolink: true} do
+  = link_to new_backend_news_path do
     .btn.btn-primary.waves-effect.waves-light
       i.fa.fa-plus
       |  Dodaj news
@@ -20,7 +20,7 @@ h5 Aktualności
             |  #{l(n.created_at)}
 
             - if current_manager || current_receptionist
-              = link_to edit_backend_news_path(n), data: { no_turbolink: true} do
+              = link_to edit_backend_news_path(n) do
                 .btn.btn-warning.waves-effect.waves-light
                   i.fa.fa-pencil-square
                   | Edytuj

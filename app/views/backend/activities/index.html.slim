@@ -1,8 +1,8 @@
 h5 Zajęcia grupowe
 
-- unless current_client || current_trainer || current_lifeguard
+- if current_manager || current_receptionist
   p
-    = link_to new_backend_activity_path, class: 'btn btn-primary', data: {no_turbolink: true} do
+    = link_to new_backend_activity_path, class: 'btn btn-primary' do
       i.fa.fa-plus
       |  Dodaj zajęcia
 .col-md-6
@@ -11,9 +11,10 @@ h5 Zajęcia grupowe
   table.table.table-striped.table-bordered.table-list.pretty.table-list-search
     thead
       tr
-        th
-          em.fa.fa-cog
-          |  Zarządzanie
+        - if current_manager || current_receptionist
+          th
+            em.fa.fa-cog
+            |  Zarządzanie
         th
           = sortable 'name', 'Nazwa'
         th
@@ -38,7 +39,7 @@ h5 Zajęcia grupowe
           tr
             td
               - if current_receptionist || current_manager
-                = link_to edit_backend_activity_path(activity), title: 'Edytuj', data: { no_turbolink: true } do
+                = link_to edit_backend_activity_path(activity), title: 'Edytuj' do
                   .btn.btn-default
                     i.fa.fa-pencil
                 = link_to backend_activity_path(activity), title: 'Usuń', method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
@@ -53,9 +54,10 @@ h5 Zajęcia grupowe
                   = link_to activate_backend_activity_path(activity, active: true), title: 'Aktywuj', method: :post do
                     .btn.btn-success
                       i.fa.fa-calendar-plus-o
-              = link_to sign_up_backend_activity_path(activity), title: 'Dołącz', data: { no_turbolink: true } do
-                .btn.btn-success
-                  i.fa.fa-user-plus
+              - if current_client
+                = link_to sign_up_backend_activity_path(activity), title: 'Dołącz' do
+                  .btn.btn-success
+                    i.fa.fa-user-plus
               = link_to preview_backend_activity_path(activity), title: 'Lista uczestników' do
                 i.btn.btn-warning
                   i.fa.fa-search
@@ -88,7 +90,7 @@ h5 Zajęcia grupowe
           tr
             td
               - if current_receptionist || current_manager
-                = link_to edit_backend_activity_path(activity), title: 'Edytuj', data: { no_turbolink: true } do
+                = link_to edit_backend_activity_path(activity), title: 'Edytuj' do
                   i.btn.btn-default
                     i.fa.fa-pencil
                 = link_to backend_activity_path(activity), title: 'Usuń', method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
@@ -103,7 +105,7 @@ h5 Zajęcia grupowe
                   = link_to activate_backend_activity_path(activity, active: true), title: 'Aktywuj', method: :post do
                     i.btn.btn-success
                       i.fa.fa-calendar-plus-o
-              = link_to sign_up_backend_activity_path(activity), title: 'Dołącz', data: { no_turbolink: true } do
+              = link_to sign_up_backend_activity_path(activity), title: 'Dołącz' do
                 i.btn.btn-success
                   i.fa.fa-user-plus
               = link_to preview_backend_activity_path(activity), title: 'Lista uczestników' do

@@ -1,6 +1,7 @@
 class Backend::PeopleController < BackendController
   helper_method :sort_column, :sort_direction, :sort_bought
-  before_action :set_person, only: [:show, :create, :edit, :update, :destroy]
+  before_action :set_person, only: [:show, :create, :edit, :update, :destroy,
+                                    :bought_history]
   before_action :set_rule_to_edit_client_profile, only: [:edit, :update,
                                                          :destroy, :show]
   before_action :require_same_user, only: [:show, :bought_history]
@@ -12,7 +13,7 @@ class Backend::PeopleController < BackendController
                       .paginate(page: params[:page], per_page: 20)
     else
       @people = Client.order(sort_column + ' ' + sort_direction)
-                       .paginate(page: params[:page], per_page: 20)
+                      .paginate(page: params[:page], per_page: 20)
     end
   end
 
@@ -37,6 +38,9 @@ class Backend::PeopleController < BackendController
                        .paginate(page: params[:page], per_page: 10)
   end
 
+  def edit
+  end
+
   def update
     if current_manager && @person != current_manager
       if @person.update(person_params)
@@ -55,6 +59,9 @@ class Backend::PeopleController < BackendController
         render :edit
       end
     end
+  end
+
+  def show
   end
 
   def destroy
@@ -106,10 +113,6 @@ class Backend::PeopleController < BackendController
     redirect_to backend_news_index_path
   end
 
-  def set_current_person
-    @current_person = current_person
-  end
-
   JOINED_TABLE_COLUMNS = %w(entry_types.kind).freeze
   def sort_bought
     if JOINED_TABLE_COLUMNS.include?(params[:sort]) || BoughtDetail.column_names.include?(params[:sort])
@@ -135,23 +138,9 @@ class Backend::PeopleController < BackendController
                                    :remember_me, activities_people: [:date])
   end
 
-  def require_same_person
-    unless current_person == @person || current_manager
-      flash[:danger] = 'Możesz edytować tylko własny profil.'
-      redirect_to backend_person_path(current_person)
-    end
-  end
-
   def require_same_user
     unless current_person == @person || current_manager || current_receptionist
       flash[:danger] = 'Brak dostępu. {require_same_user}'
-      redirect_to backend_news_index_path
-    end
-  end
-
-  def require_receptionist
-    unless current_receptionist || current_manager || current_person == @person
-      flash[:danger] = 'Brak dostępu.{require_receptionist}'
       redirect_to backend_news_index_path
     end
   end
@@ -178,13 +167,5 @@ class Backend::PeopleController < BackendController
     elsif @person.blank? && current_person.blank?
       flash[:danger] = 'Brak dostępu. {person_exists}'
     end
-  end
-
-  def set_news
-    @news = if params[:id].blank?
-              News.find(1)
-            else
-              News.find(params[:id])
-            end
   end
 end

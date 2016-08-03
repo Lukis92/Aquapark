@@ -14,6 +14,9 @@ class Backend::CommentsController < BackendController
     end
   end
 
+  def edit
+  end
+
   def update
     if @comment.update(comment_params)
       flash[:notice] = "Komentarz został zaktualizowany!"

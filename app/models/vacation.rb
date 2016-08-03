@@ -62,7 +62,7 @@ class Vacation < ActiveRecord::Base
   def self.text_search(query, querydate)
     if query.present? && querydate.blank?
       search(query)
-    elsif query.present? && querydate.present?
+  elsif query.present? && querydate.present?
       search(query + ' ' + querydate)
     elsif query.blank? && querydate.present?
       search(querydate)

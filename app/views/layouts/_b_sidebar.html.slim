@@ -1,0 +1,77 @@
+#sidebar.well.sidebar-nav
+  h5
+    i.fa.fa-ticket
+    small
+      b  Wejściówki
+  ul.nav.nav-pills.nav-stacked
+    - unless current_client
+      li class=(active?(backend_entry_types_path))
+        = link_to "Bilety/Karnety", backend_entry_types_path
+    - if current_client
+      li class=(active?(bought_history_backend_person_path(current_person)))
+        = link_to "Moja historia Zakupów", bought_history_backend_person_path(current_person)
+      li class=(active?(bought_list_backend_entry_types_path))
+        = link_to "Kup Bilet/Karnet",  bought_list_backend_entry_types_path, action: :show
+  - if current_manager or current_receptionist
+    h5
+      i.fa.fa-users
+      small
+        b  Zarejestrowane osoby
+    ul.nav.nav-pills.nav-stacked
+      li class=(active?(backend_people_path))
+        = link_to "Użytkownicy", backend_people_path
+  - unless current_client
+    h5
+      i.fa.fa-calendar
+      small
+        b  Harmonogram pracy
+    ul.nav.nav-pills.nav-stacked
+      - if current_manager
+        li class=(active?(backend_work_schedules_path))
+          = link_to "Grafik pracy", backend_work_schedules_path
+      - unless current_client || current_manager
+        li class=(active?(my_backend_manage_schedule_index_path(current_person)))
+          = link_to "Mój grafik pracy",  my_backend_manage_schedule_index_path(current_person) if current_person.present?
+      - if current_manager
+        li class=(active?(new_backend_work_schedule_path))
+          = link_to "Dodaj grafik pracy", new_backend_work_schedule_path
+  h5
+    i.fa.fa-child
+    small
+      b  Treningi indywidualne
+  ul.nav.nav-pills.nav-stacked
+    - if current_manager || current_receptionist
+      li class=(active?(backend_individual_trainings_path))
+        = link_to 'Trening indywidualny', backend_individual_trainings_path
+    - if current_client || current_trainer
+      li class=(active?(show_backend_individual_trainings_path(current_person)))
+        = link_to 'Moje treningi', show_backend_individual_trainings_path(current_person)
+      li class=(active?(choose_trainer_backend_individual_trainings_path(current_person)))
+        = link_to 'Zapisz się na trening',  choose_trainer_backend_individual_trainings_path(current_person)
+    li class=(active?(backend_training_costs_path) )
+      = link_to 'Cennik treningów', backend_training_costs_path
+  h5
+    i.fa.fa-object-group
+    small
+      b  Zajęcia grupowe
+  ul.nav.nav-pills.nav-stacked
+    li class=(active?(backend_activities_path) )
+      = link_to 'Zajęcia grupowe', backend_activities_path
+    - if current_trainer
+      li class=(active?(new_backend_activity_path))
+        = link_to 'Zaproponuj zajęcia', new_backend_activity_path
+    - unless current_client
+      li class=(active?(requests_backend_activities_path))
+        = link_to 'Niezaakceptowane zajęcia', requests_backend_activities_path
+  - if current_manager
+    h5
+      i.fa.fa-plane
+      small
+        b  Urlopy
+    ul.nav.nav-pills.nav-stacked
+      li class=(active?(backend_manage_vacations_path))
+        = link_to 'Wszystkie urlopy', backend_manage_vacations_path
+
+    ul.nav.nav-pills.nav-stacked
+      li class=(active?( requests_backend_vacations_path))
+        = link_to 'Urlopy do zaakceptowania', requests_backend_vacations_path

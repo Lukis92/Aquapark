@@ -3,6 +3,12 @@
   h5 Dodaj urlop
 - else
   h5 Dodaj prośbę o urlop
+  .row
+    .col-md-6
+      .card-panel
+        .blue-text.text-darken-2
+          i.fa.fa-info-circle
+          | Jesteś na stronie na której możesz wysłać podanie o urlop do kierownika.
 = simple_form_for(@vacation, url: backend_vacations_path(@person)) do |f|
   = errors_for(@vacation)
   .row
@@ -19,5 +25,5 @@
       = f.input :person_id, as: :hidden, input_html: { value: @person.id }
     .col-md-12.input-field
       = f.input :reason, as: :text, input_html: { class: "materialize-textarea" }
-    .col-md-6
+    .col-md-12
       = f.button :submit, class: "btn btn-primary btn-block"
