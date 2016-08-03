@@ -1,11 +1,11 @@
 class Backend::IndividualTrainingsController < BackendController
   before_action :set_individual_training, only: [:edit, :update, :destroy]
   before_action :set_trainer, only: [:create, :edit, :update, :destroy]
-  # except: [:index, :show, :show_details, :choose_trainer, :search]
-  before_action :set_client, only: [:show, :show_details, :new, :create, :edit, :update, :destroy]
+  before_action :set_client, only: [:show_details, :new, :create, :edit, :update, :destroy]
   before_action :set_person, only: [:show, :show_details]
   before_action :set_training_cost, except: :index
   before_action :select_rule_own_trainings, only: [:show]
+  before_action :set_rule_to_join, only: [:choose_trainer]
 
   def index
     @individual_trainings = IndividualTraining.paginate(page: params[:page],
@@ -151,6 +151,13 @@ class Backend::IndividualTrainingsController < BackendController
 
   def select_rule_own_trainings
     unless current_manager || current_receptionist || current_person == @person
+      flash[:danger] = "Brak dostępu"
+      redirect_to backend_news_index_path
+    end
+  end
+
+  def set_rule_to_join
+    unless current_client
       flash[:danger] = "Brak dostępu"
       redirect_to backend_news_index_path
     end

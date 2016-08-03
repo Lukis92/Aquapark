@@ -39,7 +39,7 @@ Please feel free to use a different markup language if you do not plan to run
   czasach trwania
 * dodać wszędzie etykiety informacyjne na jakiej jest się podstronie
 * dodać wyszukiwarkę do backend/manage_trainings
-* naprawić js w application
 
 == What's done:
 * przenieść foty z amazon do projektu
+* naprawić js w application

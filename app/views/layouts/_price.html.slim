@@ -49,10 +49,11 @@
                                   p
                                     i.fa.fa-check.green-text
                                     = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
-                                li
-                                  p
-                                    i.fa.fa-check.green-text
-                                    = HTML_Truncator.truncate(field.description, 180, length_in_chars: true)
+                                - if field.description.present?
+                                  li
+                                    p
+                                      i.fa.fa-check.green-text
+                                      = HTML_Truncator.truncate(field.description, 170, length_in_chars: true)
                             hr
                             = link_to new_backend_entry_type_bought_detail_path(field) do
                               .btn.btn-danger.btn-etc.waves-effect.waves-light
@@ -78,11 +79,11 @@
                                   p
                                     i.fa.fa-check.green-text
                                     = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
-                                - if field.description
+                                - if field.description.present?
                                   li
                                     p
                                       i.fa.fa-check.green-text
-                                      = HTML_Truncator.truncate(field.description, 180, length_in_chars: true)
+                                      = HTML_Truncator.truncate(field.description, 170, length_in_chars: true)
                             hr
                             = link_to new_backend_entry_type_bought_detail_path(field) do
                               .btn.btn-danger.btn-etc.waves-effect.waves-light
@@ -126,10 +127,11 @@
                                   p
                                     i.fa.fa-check.green-text
                                     = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
-                                li
-                                  p
-                                    i.fa.fa-check.green-text
-                                    = HTML_Truncator.truncate(field.description, 180, length_in_chars: true)
+                                - if field.description.present?
+                                  li
+                                    p
+                                      i.fa.fa-check.green-text
+                                      = HTML_Truncator.truncate(field.description, 170, length_in_chars: true)
                             hr
                             = link_to new_backend_entry_type_bought_detail_path(field) do
                               .btn.btn-danger.btn-etc.waves-effect.waves-light
@@ -155,11 +157,11 @@
                                   p
                                     i.fa.fa-check.green-text
                                     = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
-                                - if field.description
+                                - if field.description.present?
                                   li
                                     p
                                       i.fa.fa-check.green-text
-                                      = HTML_Truncator.truncate(field.description, 180, length_in_chars: true)
+                                      = HTML_Truncator.truncate(field.description, 170, length_in_chars: true)
                             hr
                             = link_to new_backend_entry_type_bought_detail_path(field) do
                               .btn.btn-danger.btn-etc.waves-effect.waves-light

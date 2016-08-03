@@ -43,10 +43,10 @@ class Backend::NewsController < BackendController
   def like
     like = Like.create(like: params[:like], person: current_person, news: @news)
     if like.valid?
-      flash[:notice] = "Pomyślnie."
+      flash[:notice] = 'Pomyślnie.'
       redirect_to :back
     else
-      flash[:danger] = "Możesz polubić lub nie tylko raz."
+      flash[:danger] = 'Możesz polubić lub nie tylko raz.'
       redirect_to :back
     end
   end
@@ -64,12 +64,10 @@ class Backend::NewsController < BackendController
   private
 
   def set_news
-    begin
-      @news = News.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      flash[:danger] = 'Nie ma newsa o takim id.'
-      redirect_to backend_news_index_path
-    end
+    @news = News.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    flash[:danger] = 'Nie ma newsa o takim id.'
+    redirect_to backend_news_index_path
   end
 
   def news_params
@@ -92,15 +90,15 @@ class Backend::NewsController < BackendController
   end
 
   def creation_news_rules
-    if current_client
-      flash[:danger] = "Brak dostępu. {creation_news_rules}"
+    unless current_manager || current_receptionist
+      flash[:danger] = 'Brak dostępu. {creation_news_rules}'
       redirect_to backend_news_index_path
     end
   end
 
   def manage_news_rules
     unless current_manager || current_person == @news.person
-      flash[:danger] = "Brak dostępu. {manage_news_rules}"
+      flash[:danger] = 'Brak dostępu. {manage_news_rules}'
       redirect_to backend_news_index_path
     end
   end
@@ -108,26 +106,27 @@ class Backend::NewsController < BackendController
   def display_news_rules
     unless current_manager
       if current_client
-        unless @news.scope == 'klienci' || @news.scope == 'wszyscy'
-          flash[:danger] = "Brak dostępu. {display_news_rules}"
+        unless @news.scope == 'klienci' || @news.scope == 'wszyscy' ||
+               @news.person == current_person
+          flash[:danger] = 'Brak dostępu. {display_news_rules}'
           redirect_to backend_news_index_path
         end
       elsif current_receptionist
         unless @news.scope == 'recepcjonisci' || @news.scope == 'pracownicy' ||
-               @news.scope == 'wszyscy'
-          flash[:danger] = "Brak dostępu. {display_news_rules}"
+               @news.scope == 'wszyscy' || @news.person == current_person
+          flash[:danger] = 'Brak dostępu. {display_news_rules}'
           redirect_to backend_news_index_path
         end
       elsif current_trainer
         unless @news.scope == 'trenerzy' || @news.scope == 'pracownicy' ||
-               @news.scope == 'wszyscy'
-          flash[:danger] = "Brak dostępu. {display_news_rules}"
+               @news.scope == 'wszyscy' || @news.person == current_person
+          flash[:danger] = 'Brak dostępu. {display_news_rules}'
           redirect_to backend_news_index_path
         end
       elsif current_lifeguard
         unless @news.scope == 'ratownicy' || @news.scope == 'pracownicy' ||
-               @news.scope == 'wszyscy'
-          flash[:danger] = "Brak dostępu. {display_news_rules}"
+               @news.scope == 'wszyscy' || @news.person == current_person
+          flash[:danger] = 'Brak dostępu. {display_news_rules}'
           redirect_to backend_news_index_path
         end
       end

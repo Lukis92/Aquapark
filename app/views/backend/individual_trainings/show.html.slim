@@ -28,7 +28,7 @@ h5 Moje treningi indywidualne
               | Data:
               = l(@nearest_training.date_of_training)
             p
-              Godzina:
+              | Godzina:
               = l(@nearest_training.start_on, format: :short)
               |
               | Czas trwania:
@@ -40,7 +40,7 @@ h5 Moje treningi indywidualne
     - trainings.each_with_index do |training, index|
       - if index < 3
         = l(training.start_on, format: :short)
-        \-
+        | -
         = l(training.end_on, format: :short)
         = training.trainer.full_name
         br
@@ -57,7 +57,7 @@ h5 Moje treningi indywidualne
     - trainings.each_with_index do |training, index|
       - if index < 3
         = l(training.start_on, format: :short)
-        \-
+        | -
         = l(training.end_on, format: :short)
         = training.client.full_name
         br
