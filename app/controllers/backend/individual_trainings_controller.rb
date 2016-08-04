@@ -1,14 +1,19 @@
 class Backend::IndividualTrainingsController < BackendController
   before_action :set_individual_training, only: [:edit, :update, :destroy]
-  before_action :set_trainer, only: [:create, :edit, :update, :destroy]
+  before_action :set_trainer, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_client, only: [:show_details, :new, :create, :edit, :update, :destroy]
   before_action :set_person, only: [:show, :show_details]
   before_action :set_training_cost, except: :index
   before_action :select_rule_own_trainings, only: [:show]
   before_action :set_rule_to_join, only: [:choose_trainer]
-
+  helper_method :sort_column, :sort_direction
   def index
-    @individual_trainings = IndividualTraining.paginate(page: params[:page],
+    @individual_trainings = IndividualTraining.includes(:training_cost)
+                                              .includes(:client)
+                                              .order(sort_column + ' ' + sort_direction)
+                                              .references(:training_costs)
+                                              .references(:clients)
+                                              .paginate(page: params[:page],
                                                         per_page: 20)
     @manage_trainings = @individual_trainings
   end
@@ -94,11 +99,9 @@ class Backend::IndividualTrainingsController < BackendController
 
   # GET backend/individual_trainings/search
   def search
-    if params[:query].present?
-      @individual_trainings = IndividualTraining.text_search(params[:query], params[:querydate])
-                                                .paginate(page: params[:page],
-                                                          per_page: 20)
-    end
+    @individual_trainings = IndividualTraining.text_search(params[:query], params[:querydate])
+                                              .paginate(page: params[:page],
+                                                        per_page: 20)
   end
 
   private
@@ -111,7 +114,11 @@ class Backend::IndividualTrainingsController < BackendController
   end
 
   def set_individual_training
-    @individual_training = IndividualTraining.find(params[:id])
+    if params[:ind_training_id].present?
+      @individual_training = IndividualTraining.find(params[:ind_training_id])
+    else
+      @individual_training = IndividualTraining.find(params[:id])
+    end
   rescue ActiveRecord::RecordNotFound => e
     flash[:danger] = 'Nie istnieje indywidualny trening o takim id.'
     redirect_to backend_news_index_path
@@ -151,15 +158,29 @@ class Backend::IndividualTrainingsController < BackendController
 
   def select_rule_own_trainings
     unless current_manager || current_receptionist || current_person == @person
-      flash[:danger] = "Brak dostępu"
+      flash[:danger] = 'Brak dostępu'
       redirect_to backend_news_index_path
     end
   end
 
   def set_rule_to_join
     unless current_client
-      flash[:danger] = "Brak dostępu"
+      flash[:danger] = 'Brak dostępu'
       redirect_to backend_news_index_path
     end
+  end
+
+  JOINED_TABLE_COLUMNS = %w(training_costs.cost training_costs.duration
+                            clients.first_name).freeze
+  def sort_column
+    if JOINED_TABLE_COLUMNS.include?(params[:sort]) || IndividualTraining.column_names.include?(params[:sort])
+      params[:sort]
+    else
+      'date_of_training'
+    end
+  end
+
+  def sort_direction
+    %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
   end
 end

@@ -1,20 +1,20 @@
 h5 Zajęcia grupowe
-
 - if current_manager || current_receptionist
   p
     = link_to new_backend_activity_path, class: 'btn btn-primary' do
       i.fa.fa-plus
       |  Dodaj zajęcia
-.col-md-6
-  = render 'shared/a_searchbar'
+= info("Jesteś na stronie prezentującej wszystkie zajęcia odbywające się w \
+aquaparku(aktywne) lub te które są na razie nie wdrożone(nieaktywne).")
+
+= render 'shared/a_searchbar'
 .row
   table.table.table-striped.table-bordered.table-list.pretty.table-list-search
     thead
       tr
-        - if current_manager || current_receptionist
-          th
-            em.fa.fa-cog
-            |  Zarządzanie
+        th
+          em.fa.fa-cog
+          |  Zarządzanie
         th
           = sortable 'name', 'Nazwa'
         th
@@ -64,12 +64,9 @@ h5 Zajęcia grupowe
             td
               = activity.name
             td
-              = activity.description
+              = empty_info(activity.description, "--BRAK OPISU--")
             td
-              - if activity.active?
-                i.fa.fa-check
-              - else
-                i.fa.fa-times
+              = show_status(activity.active)
             td
               = activity.day_of_week
             td
@@ -84,7 +81,7 @@ h5 Zajęcia grupowe
               = link_to backend_person_path(activity.person) do
                 = activity.person.full_name
             td
-              = activity.max_people
+              = empty_info(activity.max_people, "--BRAK OGRANICZENIA--")
       - else
         - @actual_activities.each do |activity|
           tr
@@ -114,12 +111,9 @@ h5 Zajęcia grupowe
             td
               = activity.name
             td
-              = activity.description
+              = empty_info(activity.description, "--BRAK OPISU--")
             td
-              - if activity.active?
-                i.fa.fa-check
-              - else
-                i.fa.fa-times
+              = show_status(activity.active)
             td
               = activity.day_of_week
             td
@@ -134,6 +128,6 @@ h5 Zajęcia grupowe
               = link_to backend_person_path(activity.person) do
                 = activity.person.full_name
             td
-              = activity.max_people
+              = empty_info(activity.max_people, "--BRAK OGRANICZENIA--")
 
   = will_paginate @activities, renderer: BootstrapPagination::Rails

@@ -1,10 +1,5 @@
 h5 Lista wszystkich urlopów
-.row
-  .col-md-6
-    .card-panel
-      .blue-text.text-darken-2
-        i.fa.fa-info-circle
-        |  Jesteś na stronie wszystkich urlopów.
+= info("Jesteś na stronie wszystkich urlopów.")
 
 - unless current_manager
   = link_to new_backend_vacations_path(@person), class: 'btn btn-primary' do
@@ -66,23 +61,13 @@ h5.divider-new Obecny urlop
         td
           = l(@current_vacation.end_at)
         td
-          - if @current_vacation.free
-            i.fa.fa-check
-          - else
-            i.fa.fa-times
+          = show_status(@current_vacation.free)
         td
-          = @current_vacation.reason
+          = empty_info(@current_vacation.reason, "--BRAK POWODU--")
         td
-          - if @current_vacation.accepted
-            i.fa.fa-check-square-o
-          - else
-            i.fa.fa-times-circle
+          = show_accept_status(@current_vacation.accepted)
 - else
-  .row
-    .col-md-4.col-md-offset-4
-      .card-panel.teal.text-center
-        span.white-text
-          | Brak urlopów.
+  = notice_info("Brak urlopów.")
 
 h5.divider-new Nadchodzące Urlopy
 - unless @nearest__un_vacations.blank?
@@ -119,24 +104,14 @@ h5.divider-new Nadchodzące Urlopy
           td
             = l(vacation.end_at)
           td
-            - if vacation.free
-              i.fa.fa-check
-            - else
-              i.fa.fa-times
+            = show_status(vacation.free)
           td
-            = vacation.reason
+            = empty_info(vacation.reason, "--BRAK POWODU--")
           td
-            - if vacation.accepted
-              i.fa.fa-check-square-o
-            - else
-              i.fa.fa-times-circle
+            = show_accept_status(vacation.accepted)
   = will_paginate @nearest_vacations, renderer: BootstrapPagination::Rails
 - else
-  .row
-    .col-md-4.col-md-offset-4
-      .card-panel.teal.text-center
-        span.white-text
-          | Brak urlopów.
+  = notice_info("Brak urlopów.")
 - unless current_manager
   h5.divider-new Niezatwierdzone urlopy
   - unless @unapproved_vacations.blank?
@@ -173,24 +148,14 @@ h5.divider-new Nadchodzące Urlopy
             td
               = l(vacation.end_at)
             td
-              - if vacation.free
-                i.fa.fa-check
-              - else
-                i.fa.fa-times
+              = show_status(vacation.free)
             td
-              = vacation.reason
+              = empty_info(vacation.reason, "--BRAK POWODU--")
             td
-              - if vacation.accepted
-                i.fa.fa-check-square-o
-              - else
-                i.fa.fa-times-circle
+              = show_accept_status(vacation.accepted)
     = will_paginate @unapproved_vacations, renderer: BootstrapPagination::Rails
   - else
-    .row
-      .col-md-4.col-md-offset-4
-        .card-panel.teal.text-center
-          span.white-text
-            | Brak urlopów.
+    = notice_info("Brak urlopów.")
 h5.divider-new Archiwalne Urlopy
 - unless @old_vacations.blank?
   table.table.table-striped.table-bordered.table-list.pretty
@@ -226,21 +191,11 @@ h5.divider-new Archiwalne Urlopy
           td
             = l(vacation.end_at)
           td
-            - if vacation.free
-              i.fa.fa-check
-            - else
-              i.fa.fa-times
+            = show_status(vacation.free)
           td
-            = vacation.reason
+            = empty_info(vacation.reason, "--BRAK POWODU--")
           td
-            - if vacation.accepted
-              i.fa.fa-check-square-o
-            - else
-              i.fa.fa-times-circle
+            = show_accept_status(vacation.accepted)
   = will_paginate @old_vacations, renderer: BootstrapPagination::Rails
 - else
-  .row
-    .col-md-4.col-md-offset-4
-      .card-panel.teal.text-center
-        span.white-text
-          | Brak urlopów.
+  = notice_info("Brak urlopów.")

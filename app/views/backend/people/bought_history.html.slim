@@ -1,10 +1,5 @@
 h3 Historia zakupów
-.row
-  .col-md-6
-    .card-panel
-      .blue-text.text-darken-2
-        i.fa.fa-info-circle
-        | Jesteś na stronie historii wszystkich dokonanych transakcji.
+= info("Jesteś na stronie historii wszystkich dokonanych transakcji.")
 .row
   .col-md-6
     - unless @last_bought.blank?
@@ -54,10 +49,8 @@ h3 Historia zakupów
           td
             = l(bought.end_on)
           td
-            - if bought.active?
-              i.fa.fa-check
-            - else
-              i.fa.fa-times
+            = show_status(bought.active)
+            
   = will_paginate @bought_history, renderer: BootstrapPagination::Rails
 - else
   .row

@@ -67,7 +67,10 @@ class Backend::ActivitiesController < BackendController
   end
 
   def requests
-    @activity_requests = Activity.where(active: false)
+    @activity_requests = Activity.includes(:person)
+                                 .where(active: false)
+                                 .order(sort_column + ' ' + sort_direction)
+                                 .references(:people)
                                  .paginate(page: params[:page], per_page: 20)
   end
 

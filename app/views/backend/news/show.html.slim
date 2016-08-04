@@ -20,6 +20,16 @@
             .btn.btn-danger.waves-effect.waves-light
               i.fa.fa-trash
               | Usuń
+          br
+          = link_to like_backend_news_path(@news, like: true), method: :post do
+            i.fa.fa-thumbs-o-up.fa-2x
+              = @news.thumbs_up_total
+          = link_to like_backend_news_path(@news, like: false), method: :post do
+            i.fa.fa-thumbs-o-down.fa-2x
+              = @news.thumbs_down_total
+          h5
+            .label.label-success
+              = @news.scope
       .visible-xs
         a.btn-sm.comm-bg.rectangle.waves-effect.waves-light
           i.fa.fa-comments

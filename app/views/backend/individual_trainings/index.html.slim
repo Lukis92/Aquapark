@@ -1,10 +1,11 @@
 h5 Treningi indywidualne klientów.
 p
   | Obecnie w bazie posiadamy #{IndividualTraining.count} zarejestrowanych
-  | treningów.
+  |  treningów.
+= info("Poniżej znajduje się lista wszystkich zarejestrowanych treningów \
+        indywidualnych odbytych lub zaplanowanych w najbliższym czasie.")
 
-.row
-  = render 'shared/it_searchbar'
+= render 'shared/it_searchbar'
 table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   thead
     tr
@@ -12,19 +13,19 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
         em.fa.fa-cog
         |  Zarządzanie
       th
-        | Koszt
+        = sortable "training_costs.cost", "Koszt"
       th
-        | Klient
+        = sortable "clients.first_name", "Klient"
       th
-        | Trener
+        = sortable "people.first_name", "Trener"
       th
-        | Data
+        = sortable "date_of_training", "Data"
       th
-        | Godzina rozpoczęcia
+        = sortable "start_on", "Godzina rozpoczęcia"
       th
-        | Godzina zakończenia
+        = sortable "end_on", "Godzina zakończenia"
       th
-        | Czas trwania
+        = sortable "training_costs.duration", "Czas trwania"
   tbody
     - @individual_trainings.each do |training|
       tr
@@ -37,7 +38,7 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
               i.fa.fa-trash
         td
           = training.training_cost.cost.nice
-          | zł
+          |  zł
         td
           = link_to backend_person_path(training.client) do
             = training.client.full_name
@@ -52,5 +53,5 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
           = l(training.end_on, format: :short)
         td
           = training.training_cost.duration
-          | min.
+          |  min.
 = will_paginate @individual_trainings, renderer: BootstrapPagination::Rails unless @individual_trainings.blank?

@@ -1,11 +1,6 @@
 = render 'shared/back'
 h5 Edycja komentarza
-.row
-  .col-md-6
-    .card-panel
-      .blue-text.text-darken-2
-        i.fa.fa-info-circle
-        |  Jesteś na stronie edycji komentarza.
+= info("Jesteś na stronie edycji komentarza.")
 = simple_form_for([:backend, @news, @comment]) do |f|
   = f.input :body, input_html: {class: 'materialize-textarea'}
   = f.button :submit, class: "btn btn-success"

@@ -1,4 +1,6 @@
 h5 Urlopy do zaakceptowania
+= info("Jesteś na stronie listy urlopów czekających na zatwierdzenie. W przypadku \
+        nieakceptacji usuń daną prośbę.")
 p
   | Obecnie w bazie posiadamy #{@un_vacations.count} nie zaakceptowanych urlopów.
 .row
@@ -43,20 +45,14 @@ p
             td
               = l(vacation.end_at)
             td
-              - if vacation.free
-                i.fa.fa-check
-              - else
-                i.fa.fa-times
+              = show_status(vacation.free)
             td
-              = HTML_Truncator.truncate(vacation.reason, 40)
+              = empty_info(HTML_Truncator.truncate(vacation.reason, 40), "--BRAK POWODU--")
             td
               = link_to backend_person_path(vacation.person) do
                 = vacation.person.full_name unless vacation.person.blank?
             td
-              - if vacation.accepted
-                i.fa.fa-check-square-o
-              - else
-                i.fa.fa-times-circle
+              = show_accept_status(vacation.accepted)
     = will_paginate @un_vacations, renderer: BootstrapPagination::Rails
   - else
     .alert.alert-info.col-md-6.col-md-offset-3

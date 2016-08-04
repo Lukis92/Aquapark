@@ -1,28 +1,24 @@
 h5 Cennik
-.row
-  .col-md-6
-    .card-panel
-      .blue-text.text-darken-2
-        i.fa.fa-info-circle
-        | Jesteś na stronie zakupu wejściówki na teren aquaparku.
-        | Poniżej wybierz interesujący Cię rodzaj biletu/karnetu a następnie kliknij "KUP TERAZ".
+= info("Jesteś na stronie zakupu wejściówki na teren aquaparku. \
+        Poniżej wybierz interesujący Cię rodzaj biletu/karnetu a następnie \
+        kliknij \"KUP TERAZ\".")
 .divider-new
   | Bilety
 .row
   #carousel-multi-item1.carousel.slide.multiitem-car
     .text-center
-      a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "prev", :href => "#carousel-multi-item1", :role => "button"}
+      a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4 data-slide="prev" href="#carousel-multi-item1" role="button"
         i.material-icons keyboard_arrow_left
-      a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "next", :href => "#carousel-multi-item1", :role => "button"}
+      a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4 data-slide="next" href="#carousel-multi-item1" role="button"
         i.material-icons keyboard_arrow_right
     / Indicators
     ol.carousel-indicators
       - groups = @tickets.in_groups_of(4, false)
       - groups.each_with_index do |group, i|
         - if i == 0
-          li.active{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item1"}
+          li.active data-slide-to=i.to_s data-target="#carousel-multi-item1"
         - else
-          li{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item1"}
+          li data-slide-to=i.to_s data-target="#carousel-multi-item1"
     / Wrapper for slides
     .carousel-inner
       - groups = @tickets.in_groups_of(4, false)
@@ -74,18 +70,18 @@ h5 Cennik
 .row
   #carousel-multi-item.carousel.slide.multiitem-car
     .text-center
-      a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "prev", :href => "#carousel-multi-item", :role => "button"}
+      a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4 data-slide="prev" href="#carousel-multi-item" role="button"
         i.material-icons keyboard_arrow_left
-      a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4{"data-slide" => "next", :href => "#carousel-multi-item", :role => "button"}
+      a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4 data-slide="next" href="#carousel-multi-item" role="button"
         i.material-icons keyboard_arrow_right
     / Indicators
     ol.carousel-indicators
       - groups = @passes.in_groups_of(4, false)
       - groups.each_with_index do |group, i|
         - if i == 0
-          li.active{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item"}
+          li.active data-slide-to=i.to_s data-target="#carousel-multi-item"
         - else
-          li{"data-slide-to" => i.to_s, "data-target" => "#carousel-multi-item"}
+          li data-slide-to=i.to_s data-target="#carousel-multi-item"
     / Wrapper for slides
     .carousel-inner
       - groups = @passes.in_groups_of(4, false)

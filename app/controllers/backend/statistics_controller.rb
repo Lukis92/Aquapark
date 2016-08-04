@@ -29,9 +29,9 @@ class Backend::StatisticsController < BackendController
                                  .where(['end_at >= ?', Date.today]).count
     # Hiredate
     @most_busy = WorkSchedule.group(:person_id)
-                             .sum('CAST(extract(epoch from work_schedules.end_time) as integer) - cast(extract(epoch from work_schedules.start_time) as integer)').sort_by { |_, v| 0 - v }.first.first
+                             .sum('CAST(extract(epoch from work_schedules.end_time) as integer) - cast(extract(epoch from work_schedules.start_time) as integer)').sort_by { |_, v| v }.last.first
     @least_busy = WorkSchedule.group(:person_id)
-                              .sum('CAST(extract(epoch from work_schedules.end_time) as integer) - cast(extract(epoch from work_schedules.start_time) as integer)').sort_by { |_, v| 0 - v }.last.first
+                              .sum('CAST(extract(epoch from work_schedules.end_time) as integer) - cast(extract(epoch from work_schedules.start_time) as integer)').sort_by { |_, v| v }.first.first
 
     @most = Person.find(@most_busy)
     @least = Person.find(@least_busy)
@@ -57,6 +57,8 @@ class Backend::StatisticsController < BackendController
                            .order('COUNT(likes.id) DESC').first
     @most_hated_news_likes_count =  Like.where(news_id: @most_hated_news.id).where('likes.like = ?', true).count
     @most_hated_news_dislikes_count = Like.where(news_id: @most_hated_news.id).where('likes.like = ?', false).count
+
+    @count_true_likes = Like.where('likes.like = ?', true).group(:news_id).count
   end
 
   private

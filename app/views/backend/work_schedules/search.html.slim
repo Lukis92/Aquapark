@@ -1,3 +1,6 @@
+= render 'shared/back'
+h5 Rezultat wyszukiwania
+= info("Jesteś na stronie prezentującej wyniki wyszukiwania odnośnie grafiku pracy.")
 = render 'shared/w_ch_searchbar'
 table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   thead
@@ -6,11 +9,11 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
         em.fa.fa-cog
         |  Zarządzanie
       th
-        = sortable "day_of_week", "Dzień tygodnia"
+        | Dzień tygodnia
       th
-        = sortable "start_time", "Czas od"
+        | Czas od
       th
-        = sortable "end_time", "Czas do"
+        | Czas do
       th
         | Pracownik
       th

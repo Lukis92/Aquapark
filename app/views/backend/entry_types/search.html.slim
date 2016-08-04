@@ -1,3 +1,6 @@
+= render 'shared/back'
+h5 Rezultat wyszukiwania
+= info("Jesteś na stronie prezentującej wyniki wyszukiwania odnośnie biletów/karnetów.")
 .col-md-6
   = render 'shared/et_searchbar'
 table.table.table-striped.table-bordered.table-list.pretty.table-list-search
@@ -37,7 +40,7 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
           td
             = entry.kind_details
           td
-            = entry.description
+            = empty_info(entry.description, "--BRAK OPISU--")
           td
             = entry.price.nice
             | zł

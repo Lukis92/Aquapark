@@ -1,12 +1,8 @@
 = render 'shared/back'
 h5 Uczestnicy zajęcia grupowego
-.row
-  .col-md-6
-    .card-panel
-      .blue-text.text-darken-2
-        i.fa.fa-info-circle
-        | Jesteś na stronie prezentującej uczestników zajęcia zapisanych 
-        | na najbliższe terminy.
+= info("Jesteś na stronie prezentującej uczestników zajęcia zapisanych \
+        na najbliższe terminy.")
+
 - unless @activities_people.blank?
   - @activities_people.each do |ap|
     .row
@@ -32,7 +28,7 @@ h5 Uczestnicy zajęcia grupowego
           td
             = @activity.activities_people.where('date = ?', ap.date).count
             |  /
-            = @activity.max_people
+            = empty_info(@activity.max_people, "--BRAK OGRANICZENIA--")
           td
             - if @activity.activities_people.present?
               - @activity.activities_people.where('date = ?', ap.date).each_with_index do |a, i|

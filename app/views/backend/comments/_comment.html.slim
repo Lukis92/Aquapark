@@ -5,9 +5,11 @@
       = image_tag comment.person.profile_image.url(:medium)
     .col-md-7
       | #{comment.person.full_name}
+      = ' '
       i.fa.fa-clock-o
       | utworzono:
       |  #{timeago_tag comment.created_at, lang: :pl}
+      = ' '
       i.fa.fa-clock-o
       | edytowano:
       |  #{timeago_tag comment.updated_at, lang: :pl}

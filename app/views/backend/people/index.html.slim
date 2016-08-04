@@ -1,7 +1,14 @@
 = render 'nav'
-h5 Wszyscy
-p
-  | Obecnie w bazie posiadamy #{Person.count} zarejestrowanych użytkowników.
+- if current_manager
+  h5 Wszyscy
+  p
+    | Obecnie w bazie posiadamy #{Person.count} zarejestrowanych użytkowników.
+  = info("Jesteś na stronie prezentującej listę wszystkich klientów i pracowników.")
+- elsif current_receptionist
+  h5 Klienci
+  p
+    | Obecnie w bazie posiadamy #{Client.count} zarejestrowanych klientów.
+  = info("Jesteś na stronie prezentującej listę wszystkich klientów.")
 = render 'shared/people_searchbar'
 table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   thead

@@ -79,13 +79,9 @@ class Backend::VacationsController < BackendController
   end
 
   def search
-    if params[:query].present? || params[:querydate].present?
-      @vacations = Vacation.text_search(params[:query], params[:querydate])
-                           .paginate(page: params[:page],
-                                     per_page: 20)
-    else
-      @vacations = Vacation.paginate(page: params[:page], per_page: 20)
-    end
+    @vacations = Vacation.text_search(params[:query], params[:querydate])
+                         .paginate(page: params[:page],
+                                   per_page: 20)
   end
 
   def requests

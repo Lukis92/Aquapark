@@ -1,12 +1,7 @@
 h4 Zakupy
-.row
-  .col-md-6
-    .card-panel
-      .blue-text.text-darken-2
-        i.fa.fa-info-circle
-        | Jesteś na stronie płatności. Poniżej po lewej stronie masz informacje
-        | o zakupie. Wprowadź numer karty płatniczej, kod CVV oraz datę ważności,
-        | a następnie kliknij ZAPŁAĆ.
+= info("Jesteś na stronie płatności. Poniżej po lewej stronie masz informacje \
+        o zakupie. Wprowadź numer karty płatniczej, kod CVV oraz datę ważności, \
+        a następnie kliknij ZAPŁAĆ.")
 = simple_form_for([:backend, @entry_type, @bought_detail], url: {action: "create"}) do |f|
   = errors_for(@bought_detail)
   .row

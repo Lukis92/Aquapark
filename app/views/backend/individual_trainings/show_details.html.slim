@@ -1,11 +1,7 @@
 = render 'shared/back'
-.row
-  .col-md-6
-    .card-panel
-      .blue-text.text-darken-2
-        i.fa.fa-info-circle
-        | Jesteś na stronie wszystkich treningów indywidualnych odbywającym
-        | się w danym dniu.
+
+= info("Jesteś na stronie wszystkich treningów indywidualnych odbywającym \
+        się w danym dniu.")
 
 - if @individual_trainings.present?
   p.flow-text

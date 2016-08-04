@@ -86,7 +86,7 @@ Rails.application.routes.draw do
         end
 
         resources :trainers, only: [] do
-          resources :individual_trainings
+          resources :individual_trainings, param: :ind_training_id
         end
         resources :work_schedules, as: 'manage_schedule' do
           collection do

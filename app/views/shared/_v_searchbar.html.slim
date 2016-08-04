@@ -1,5 +1,5 @@
 = form_tag search_backend_vacations_path, method: :get do
-  .input-field.col-md-12
+  .input-field.col-md-6
     .input-group-btn
       i.material-icons.prefix{type="submit"} search
       label{for="icon_prefix"} Szukaj
@@ -9,4 +9,5 @@
       i.material-icons.prefix{type="submit"} search
       label{for="icon_prefix"} Szukaj po dacie
       = text_field_tag :querydate, params[:querydate], class: "search-query datepicker", input_html: {id: 'icon_prefix'}
-      = submit_tag 'Szukaj', class: 'btn btn-primary'
+  .searchbar-fix
+    = submit_tag 'Szukaj', class: 'btn btn-primary'

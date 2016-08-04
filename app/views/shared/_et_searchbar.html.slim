@@ -1,7 +1,9 @@
 /Entry Type searchbar
 = form_tag search_backend_entry_types_path, method: :get do
-  .input-field.col-md-12
+  .input-field.col-md-6
     .input-group-btn
       i.material-icons.prefix type="submit" search
       label for="icon_prefix" Szukaj
       = text_field_tag :query, params[:query], class: "search-query", input_html: {id: 'icon_prefix'}
+  .searchbar-fix
+    = submit_tag 'Szukaj', class: 'btn btn-primary'

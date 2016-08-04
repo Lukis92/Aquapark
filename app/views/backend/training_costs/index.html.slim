@@ -1,11 +1,7 @@
 h5 Cennik Treningów Indywidualnych
-.row
-  .col-md-6
-    .card-panel
-      .blue-text.text-darken-2
-        i.fa.fa-info-circle
-        |  Jesteś na stronie aktualnego cennika treningów indywidualnych. Koszt zależny jest
-        |  od czasu trwania.
+= info("Jesteś na stronie aktualnego cennika treningów indywidualnych. \ 
+        Koszt zależny jest od czasu trwania.")
+
 - if current_manager || current_receptionist
   = link_to new_backend_training_cost_path do
     i.btn.btn-primary

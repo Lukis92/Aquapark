@@ -11,7 +11,8 @@
         = f.input :last_name, required: true, input_html: {length: 60, maxlength: 60}
       .row
         .col-md-5
-          label for="datepicker" Data urodzenia
+          label for="datepicker" 
+            | * Data urodzenia
           = f.text_field :date_of_birth, required: true, class: 'datepicker',
                           placeholder: 'Kliknij'
       .input-field
@@ -31,5 +32,5 @@
 javascript:
   $('.datepicker').pickadate({
       selectMonths: true, // Creates a dropdown to control month
-      selectYears: 15 // Creates a dropdown of 15 years to control year
+      selectYears: 80 // Creates a dropdown of 15 years to control year
   });

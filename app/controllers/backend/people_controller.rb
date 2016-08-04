@@ -76,12 +76,8 @@ class Backend::PeopleController < BackendController
 
   # GET backend/people/search
   def search
-    if params[:query].present? || params[:querydate].present?
-      @people = Person.text_search(params[:query], params[:querydate])
-                      .paginate(page: params[:page], per_page: 20)
-    else
-      @people = Person.paginate(page: params[:page], per_page: 20)
-    end
+    @people = Person.text_search(params[:query], params[:querydate])
+                    .paginate(page: params[:page], per_page: 20)
   end
 
   def remove_photo

@@ -1,3 +1,6 @@
+= render 'shared/back'
+h5 Rezultat wyszukiwania
+= info("Jesteś na stronie prezentującej wyniki wyszukiwania odnośnie urlopów.")
 = render 'shared/v_searchbar'
 
 table.table.table-striped.table-bordered.table-list.pretty
@@ -7,15 +10,15 @@ table.table.table-striped.table-bordered.table-list.pretty
         em.fa.fa-cog
         |  Zarządzanie
       th
-        = sortable "start_at", "Data rozpoczęcia"
+        | Data rozpoczęcia
       th
-        = sortable "end_at", "Data zakończenia"
+        | Data zakończenia
       th
-        = sortable "free", "Płatny?"
+        | Płatny?
       th
-        = sortable "reason", "Powód"
+        | Powód
       th
-        = sortable "person_id", "Pracownik"
+        | Pracownik
       th
         | Zaakceptowano?
   tbody
@@ -34,21 +37,13 @@ table.table.table-striped.table-bordered.table-list.pretty
           td
             = l(vacation.end_at)
           td
-            - if vacation.free
-              i.fa.fa-check
-            - else
-              i.fa.fa-times
+            = show_status(vacation.free)
           td
-            = vacation.reason
+            = empty_info(vacation.reason, "--BRAK POWODU--")
           td
             = vacation.person.full_name unless vacation.person.blank?
           td
-            - if vacation.accepted
-              i.fa.fa-check-square-o
-            - else
-              i.fa.fa-times-circle
-      -# %br
-      -# = will_paginate @vacations, renderer: BootstrapPagination::Rails
+            = show_accept_status(vacation.accepted)
     - else
       tr
         td colspan='7'

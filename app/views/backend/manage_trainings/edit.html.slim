@@ -48,13 +48,13 @@
                 - @manage_training.trainer.individual_trainings_as_trainer.each_with_index do |tit, i|
                   - unless i == @manage_training.trainer.individual_trainings_as_trainer.size - 1
                     = l(tit.start_on, format: :short)
-                    \-
-                    = l(tit.end_on, format: :short)
+                    | -
+                    | #{l(tit.end_on, format: :short)}
                     |
                   - else
                     = l(tit.start_on, format: :short)
-                    \-
-                    = l(tit.end_on, format: :short)
+                    | -
+                    | #{l(tit.end_on, format: :short)}
         - else
           | Dostępny cały dzień
 .col-md-6

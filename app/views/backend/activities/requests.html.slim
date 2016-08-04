@@ -1,5 +1,6 @@
 h5 Zajęcia czekające na zatwierdzenie
-
+= info("Jesteś na stronie listy zajęć, które czekają na zatwierdzenie dołączenia \
+        ich do aktywności odbywających się na terenie aquaparku.")
 .col-md-6
   = render 'shared/a_searchbar'
 table.table.table-striped.table-bordered.table-list.pretty.table-list-search
@@ -10,23 +11,23 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
           em.fa.fa-cog
           |  Zarządzanie
       th
-        | Nazwa
+        = sortable "name", "Nazwa"
       th
-        | Opis
+        = sortable "description", "Opis"
       th
-        | Aktywne?
+        = sortable "active", "Aktywne?"
       th
-        | Dzień tygodnia
+        = sortable "day_of_week", "Dzień tygodnia"
       th
-        | Godzina rozpoczęcia
+        = sortable "start_on", "Godzina rozpoczęcia"
       th
-        | Godzina zakończenia
+        = sortable "end_on", "Godzina zakończenia"
       th
-        | Strefa basenu
+        = sortable "pool_zone", "Strefa basenu"
       th
-        | Trener
+        = sortable "people.first_name", "Trener"
       th
-        | Maksymalna ilość osób
+        = sortable "max_people", "Maksymalna ilość osób"
   tbody
     - @activity_requests.each do |activity|
       tr
@@ -42,12 +43,9 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
         td
           = activity.name
         td
-          = activity.description
+          = empty_info(activity.description, "--BRAK OPISU--")
         td
-          - if activity.active?
-            i.fa.fa-check
-          - else
-            i.fa.fa-times
+          = show_status(activity.active)
         td
           = activity.day_of_week
         td
@@ -62,6 +60,6 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
           = link_to backend_person_path(activity.person) do
             = activity.person.full_name
         td
-          = activity.max_people
+          = empty_info(activity.max_people, "--BRAK OGRANICZENIA--")
 
 = will_paginate @activity_requests, renderer: BootstrapPagination::Rails

@@ -7,7 +7,7 @@ h5 Dołącz do wybranych zajęć
         h5
           = @activity.name
       li.collection-item
-        = @activity.description
+        = empty_info(@activity.description, "-- BRAK OPISU--")
 table.table
   thead
     tr
@@ -31,31 +31,55 @@ table.table
         td
           = @activity.activities_people.where('date = ?', an).count
           | /
-          = @activity.max_people
+          = empty_info(@activity.max_people, "--BRAK OGRANICZENIA--")
           - if @activity.activities_people.where('date = ?', an).count > 0
             |  #{link_to 'Podgląd uczestników', preview_backend_activity_path(@activity)}
 
         td
-          - if @activity.activities_people.where('date = ?', an).count < @activity.max_people && \
-            - @activity.activities_people.where('person_id = ? AND date = ?', current_person.id, an).count == 0 && @activity.active == true
-            = simple_form_for([:backend, @activities_person], url: backend_activities_people_path, method: :post) do |f|
-              = f.input :date, as: :hidden, input_html: { value: an }
-              = f.input :activity_id, as: :hidden, input_html: { value: @activity.id }
-              = f.input :person_id, as: :hidden, input_html: { value: @person.id }
-              = f.button :submit, class: "btn btn-success"
-          - elsif @activity.activities_people.where('date = ?', an).where('person_id = ?', current_person.id).count > 0
-            - @activities_person = ActivitiesPerson.where('date = ?', an).where('person_id = ?', current_person.id).first
-            h5
-              .label.label-info
-                | Już się zapisałeś
-            = link_to backend_activities_person_path(@activities_person), method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
-              .btn.btn-info
-                | Zrezygnuj
-          - elsif @activity.activities_people.where('date = ?', an).count == @activity.max_people
-            .btn.btn-danger.disabled
-              i.fa.fa-times-circle
-              | Brak wolnych miejsc
-          - elsif @activity.active == false
-            h5
-              .label.label-warning
-                | Zajęcie nie jest aktywne
+          - unless @activity.max_people.blank?
+            - if @activity.activities_people.where('date = ?', an).count < @activity.max_people && \
+              - @activity.activities_people.where('person_id = ? AND date = ?', current_person.id, an).count == 0 && @activity.active == true
+              = simple_form_for([:backend, @activities_person], url: backend_activities_people_path, method: :post) do |f|
+                = f.input :date, as: :hidden, input_html: { value: an }
+                = f.input :activity_id, as: :hidden, input_html: { value: @activity.id }
+                = f.input :person_id, as: :hidden, input_html: { value: @person.id }
+                = f.button :submit, class: "btn btn-success"
+            - elsif @activity.activities_people.where('date = ?', an).where('person_id = ?', current_person.id).count > 0
+              - @activities_person = ActivitiesPerson.where('date = ?', an).where('person_id = ?', current_person.id).first
+              h5
+                .label.label-info
+                  | Już się zapisałeś
+              = link_to backend_activities_person_path(@activities_person), method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
+                .btn.btn-info
+                  | Zrezygnuj
+            - elsif @activity.activities_people.where('date = ?', an).count == @activity.max_people
+              .btn.btn-danger.disabled
+                i.fa.fa-times-circle
+                | Brak wolnych miejsc
+            - elsif @activity.active == false
+              h5
+                .label.label-warning
+                  | Zajęcie nie jest aktywne
+          - else
+            - if @activity.activities_people.where('person_id = ? AND date = ?', current_person.id, an).count == 0 && @activity.active == true
+              = simple_form_for([:backend, @activities_person], url: backend_activities_people_path, method: :post) do |f|
+                = f.input :date, as: :hidden, input_html: { value: an }
+                = f.input :activity_id, as: :hidden, input_html: { value: @activity.id }
+                = f.input :person_id, as: :hidden, input_html: { value: @person.id }
+                = f.button :submit, class: "btn btn-success"
+            - elsif @activity.activities_people.where('date = ?', an).where('person_id = ?', current_person.id).count > 0
+              - @activities_person = ActivitiesPerson.where('date = ?', an).where('person_id = ?', current_person.id).first
+              h5
+                .label.label-info
+                  | Już się zapisałeś
+              = link_to backend_activities_person_path(@activities_person), method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
+                .btn.btn-info
+                  | Zrezygnuj
+            - elsif @activity.activities_people.where('date = ?', an).count == @activity.max_people
+              .btn.btn-danger.disabled
+                i.fa.fa-times-circle
+                | Brak wolnych miejsc
+            - elsif @activity.active == false
+              h5
+                .label.label-warning
+                  | Zajęcie nie jest aktywne      

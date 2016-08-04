@@ -1,3 +1,7 @@
+= render 'shared/back'
+h5 Rezultat wyszukiwania
+= info("Poniżej znajdują się wyniki Twojego wyszukiwania odnośnie treningów \
+        indywidualnych.")
 = render 'shared/it_searchbar'
 table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   thead
@@ -32,7 +36,7 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
                 i.fa.fa-trash
           td
             = training.training_cost.cost.nice
-            | zł
+            |  zł
           td
             = training.client.try(:full_name)
           td
@@ -45,7 +49,7 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
             = l(training.end_on, format: :short)
           td
             = training.training_cost.duration
-            | min.
+            |  min.
       = will_paginate @individual_trainings, renderer: BootstrapPagination::Rails unless @individual_trainings.blank?
     - else
       tr

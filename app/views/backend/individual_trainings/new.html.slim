@@ -2,12 +2,15 @@
 h5.section-title.st-blue
   | 2 krok
   small Wybór terminu i płatność
+= info("Jesteś na stronie wyboru dogodnego terminu treningu oraz finalizacji \
+        płatności. Przed wyborem daty i godziny zapoznaj się z harmonogramem \
+        pracy trenera.")
 -unless @trainer.blank?
   .row
     .col-md-6
       h5
         | Trener
-        = @trainer.full_name
+        |  #{@trainer.full_name}
 
       h6
         | Harmonogram pracy:
@@ -46,24 +49,29 @@ h5.section-title.st-blue
             th Treningi
         tbody
           - trainings = @trainer.individual_trainings_as_trainer.where('date_of_training >= ?', Date.today).group_by(&:date_of_training)
-          - trainings.keys.each do |ti|
+          - unless trainings.blank?
+            - trainings.keys.each do |ti|
+              tr
+                td
+                  = l(ti)
+                td
+                  - @trainer.individual_trainings_as_trainer.each_with_index do |tit, i|
+                    - if tit.date_of_training == ti
+                      - unless i == @trainer.individual_trainings_as_trainer.size - 1
+                        = l(tit.start_on, format: :short)
+                        | -
+                        = l(tit.end_on, format: :short)
+                        |
+                      - else
+                        = l(tit.start_on, format: :short)
+                        | -
+                        = l(tit.end_on, format: :short)
+          - else
             tr
-              td
-                = l(ti)
-              td
-                - @trainer.individual_trainings_as_trainer.each_with_index do |tit, i|
-                  - if tit.date_of_training == ti
-                    - unless i == @trainer.individual_trainings_as_trainer.size - 1
-                      = l(tit.start_on, format: :short)
-                      \-
-                      = l(tit.end_on, format: :short)
-                      |
-                    - else
-                      = l(tit.start_on, format: :short)
-                      \-
-                      = l(tit.end_on, format: :short)
+              td colspan="2"
+                .text-center
+                  | Brak treningów
     - else
-      .alert.alert-info.col-md-6
         | Dostępny cały dzień
 
 .col-md-12

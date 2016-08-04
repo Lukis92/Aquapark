@@ -1,10 +1,5 @@
 h4 Pracownik
-.row
-  .col-md-6
-    .card-panel
-      .blue-text.text-darken-2
-        i.fa.fa-info-circle
-        | Jesteś na stronie prezentującej grafik pracy.
+= info("Jesteś na stronie prezentującej grafik pracy.")
 h5
   = @person.full_name
 - unless @person == current_person || !current_manager

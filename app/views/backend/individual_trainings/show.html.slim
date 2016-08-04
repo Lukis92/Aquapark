@@ -1,10 +1,6 @@
 h5 Moje treningi indywidualne
-.row
-  .col-md-6
-    .card-panel
-      .blue-text.text-darken-2
-        i.fa.fa-info-circle
-        | Jesteś na stronie wszystkich zarejestrowanych treningów indywidualnych dotyczących Ciebie.
+= info("Jesteś na stronie wszystkich zarejestrowanych treningów indywidualnych \
+        dotyczących Ciebie.")
 - if @person.type == 'Client'
   .row
     .col-md-6
