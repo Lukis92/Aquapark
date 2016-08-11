@@ -58,7 +58,7 @@ class Person < ActiveRecord::Base
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   DECIMAL_REGEX = /\A\d+(?:\.\d{0,2})?\z/
 
-  before_save { self.email = email.downcase }
+  before_validation :downcase_email
   validates :pesel, presence: true,
                     length: { is: 11 },
                     uniqueness: true
@@ -133,5 +133,11 @@ class Person < ActiveRecord::Base
     else
       all
     end
+  end
+
+  private
+
+  def downcase_email
+    self.email = email.downcase if email.present?
   end
 end

@@ -37,19 +37,21 @@ class Vacation < ActiveRecord::Base
   def timeline
     if start_at_changed? || end_at_changed? || person_id_changed?
       overlapping_vacations = person.vacations.where('vacations.id != ?', id)
-      ol_vacations = overlapping_vacations.where('((start_at <= :start_at AND end_at >= :end_at) OR
-                                       (start_at <= :start_at AND end_at <= :end_at AND end_at >= :start_at) OR
-                                       (start_at >= :start_at AND start_at <= :end_at AND end_at >= :end_at))',
-                                  start_at: start_at, end_at: end_at)
-      if ol_vacations.exists?
-        errors.add(:base, 'Masz już urlop w tym okresie.')
+      ol_vacations = ''
+      if overlapping_vacations.exists?
+        ol_vacations = overlapping_vacations
+                       .where('(start_at, end_at) OVERLAPS (?, ?)', start_at, end_at)
+      else
+        ol_vacations = person.vacations
+                             .where('(start_at, end_at) OVERLAPS (?, ?)', start_at, end_at)
       end
+      errors.add(:base, 'Masz już urlop w tym okresie.') if ol_vacations.exists?
     end
   end
 
   def validate_start_at
     if start_at < Date.today
-      errors.add(:base, "Data od nie może być wcześniejsza niż dzisiejsza data.")
+      errors.add(:base, 'Data od nie może być wcześniejsza niż dzisiejsza data.')
     end
   end
 

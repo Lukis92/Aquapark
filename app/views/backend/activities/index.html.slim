@@ -47,11 +47,11 @@ aquaparku(aktywne) lub te które są na razie nie wdrożone(nieaktywne).")
                     i.fa.fa-trash
                 - if activity.active
                   - if current_receptionist || current_manager
-                    = link_to deactivate_backend_activity_path(activity, active: false), title: 'Deaktywuj', method: :post do
+                    = link_to deactivate_backend_activity_path(activity), title: 'Deaktywuj', method: :post do
                       .btn.btn-danger
                         i.fa.fa-calendar-minus-o
                 - unless activity.active
-                  = link_to activate_backend_activity_path(activity, active: true), title: 'Aktywuj', method: :post do
+                  = link_to activate_backend_activity_path(activity), title: 'Aktywuj', method: :post do
                     .btn.btn-success
                       i.fa.fa-calendar-plus-o
               - if current_client

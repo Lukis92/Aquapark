@@ -40,6 +40,7 @@ table.table
             - if @activity.activities_people.where('date = ?', an).count < @activity.max_people && \
               - @activity.activities_people.where('person_id = ? AND date = ?', current_person.id, an).count == 0 && @activity.active == true
               = simple_form_for([:backend, @activities_person], url: backend_activities_people_path, method: :post) do |f|
+                = f.error_notification
                 = f.input :date, as: :hidden, input_html: { value: an }
                 = f.input :activity_id, as: :hidden, input_html: { value: @activity.id }
                 = f.input :person_id, as: :hidden, input_html: { value: @person.id }
@@ -63,6 +64,7 @@ table.table
           - else
             - if @activity.activities_people.where('person_id = ? AND date = ?', current_person.id, an).count == 0 && @activity.active == true
               = simple_form_for([:backend, @activities_person], url: backend_activities_people_path, method: :post) do |f|
+                = f.error_notification
                 = f.input :date, as: :hidden, input_html: { value: an }
                 = f.input :activity_id, as: :hidden, input_html: { value: @activity.id }
                 = f.input :person_id, as: :hidden, input_html: { value: @person.id }
@@ -82,4 +84,4 @@ table.table
             - elsif @activity.active == false
               h5
                 .label.label-warning
-                  | Zajęcie nie jest aktywne      
+                  | Zajęcie nie jest aktywne

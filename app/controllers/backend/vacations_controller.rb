@@ -4,7 +4,7 @@ class Backend::VacationsController < BackendController
   before_action :set_person, only: [:index, :new, :create, :edit, :update, :destroy]
   before_action :set_employees
   before_action :select_rule_own_vacations, only: [:list, :new, :edit, :update, :destroy]
-  # before_action :select_rule_vacations, only: :index
+  before_action :edit_rule_vacations, only: :edit
   # GET backend/vacations
   def index
     @vacations = Vacation.order(sort_column + ' ' + sort_direction)
@@ -118,7 +118,11 @@ class Backend::VacationsController < BackendController
   end
 
   def set_vacation
-    @vacation = Vacation.find(params[:vacation_id])
+    if params[:vacation_id].present?
+      @vacation = Vacation.find(params[:vacation_id])
+    elsif params[:id].present?
+      @vacation = Vacation.find(params[:id])
+    end
   rescue ActiveRecord::RecordNotFound => e
     flash[:danger] = 'Nie ma urlopu o takim id.'
     redirect_to backend_news_index_path
@@ -143,8 +147,16 @@ class Backend::VacationsController < BackendController
   end
 
   def select_rule_own_vacations
-    unless current_manager || current_receptionist || current_person == @person
+    unless current_manager || current_person == @person
       flash[:danger] = 'Brak dostępu {select_rule_own_vacations}'
+      redirect_to backend_news_index_path
+    end
+  end
+
+  def edit_rule_vacations
+    unless (current_manager || current_person == @person) &&
+      (@vacation.accepted == false && @vacation.start_at > Date.today)
+      flash[:danger] = 'Brak dostępu {edit_rule_vacations}'
       redirect_to backend_news_index_path
     end
   end

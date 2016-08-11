@@ -1,4 +1,7 @@
-= render 'shared/back'
+= link_to backend_activities_path do
+  .btn.btn-primary.waves-effect.waves-light
+    i.fa.fa-chevron-left
+    |  Wróć
 h5 Rezultat wyszukiwania
 = info("Jesteś na stronie prezentującej wyniki wyszukiwania dot. zajęć grupowych.")
 .col-md-6
@@ -78,6 +81,6 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
       = will_paginate @activities, renderer: BootstrapPagination::Rails
     - else
       tr
-        td colspan='9'
+        td colspan='10'
           .text-center
             | Brak rezultatów.

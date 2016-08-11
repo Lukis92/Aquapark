@@ -1,4 +1,7 @@
-= render 'shared/back'
+= link_to backend_manage_vacations_path do
+  .btn.btn-primary.waves-effect.waves-light
+    i.fa.fa-chevron-left
+    |  Wróć
 h5 Rezultat wyszukiwania
 = info("Jesteś na stronie prezentującej wyniki wyszukiwania odnośnie urlopów.")
 = render 'shared/v_searchbar'

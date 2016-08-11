@@ -5,10 +5,13 @@ class Backend::ActivitiesPeopleController < BackendController
   end
   def create
     @activities_person = ActivitiesPerson.new(activities_person_params)
+    # raise 'Dupa'
     if @activities_person.save
-      redirect_to :back, notice: 'Pomyślnie dodano.'
+      flash[:notice] = 'Pomyślnie dodano.'
+      redirect_to :back
     else
-      redirect_to :back, notice: @activities_person.errors.full_messages
+      flash[:danger] = "#{@activities_person.errors.full_messages.join('')}"
+      redirect_to :back
     end
   end
 

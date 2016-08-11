@@ -49,8 +49,7 @@ h3 Historia zakupów
           td
             = l(bought.end_on)
           td
-            = show_status(bought.active)
-            
+            = show_status(bought.active?)
   = will_paginate @bought_history, renderer: BootstrapPagination::Rails
 - else
   .row

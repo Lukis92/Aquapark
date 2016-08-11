@@ -1,0 +1,26 @@
+language: ruby
+sudo: required
+rvm:
+  - 2.3.1
+env:
+  global:
+    - PGPORT=5433
+    - PGHOST=localhost
+    - DATABASE_URL=postgres://localhost:5433/aquapark_test
+services:
+  -postgresql
+before_script:
+  - sudo cp /etc/postgresql/9.4/main/pg_hba.conf /etc/postgresql/9.5/main/pg_hba.conf
+  - sudo /etc/init.d/postgresql restart
+  - cp config/database.yml.sample config/database.yml
+  - psql -U postgres -c 'CREATE DATABASE aquapark_test;'
+addons:
+  apt:
+    sources:
+      - precise-pgdg-9.5
+    packages:
+      - postgresql-9.5
+      - postgresql-contrib-9.5
+  postgresql: 9.5
+script: RAILS_ENV=test bundle exec rspec
+bundler_args: ''

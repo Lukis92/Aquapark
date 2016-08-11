@@ -1,4 +1,4 @@
-# Aquapark
+an # Aquapark
 > Aplikacja wspomagająca pracę aquaparku.
 
 ## Struktura aplikacji
@@ -67,13 +67,24 @@ $ rails s
 ```
 
 ## Historia zmian
+* 0.5.3
+  * Zabezpieczenie przed niepowołanym wejściem w sekcję urlopów
+  * Poprawienie walidacji nachodzenia na siebie urlopów
+  * Usunięty błąd z akceptowaniem urlopu przez kierownika
+  * naprawione statystyki dot. newsów
+  * umożliwienie recepcjonistom zarządzaniem komentarzami
+  * zablokowanie możliwości edycji urlopów pracownikom poza niezatwierdzonymi
+  * widoczność własnych newsów mimo należności do innej kategorii
+  * podczas dodawania zajęcia grupowego, sprawdzane jest czy trener ma w tym czasie inne zajęcia lub treningi
+  * podczas dołączania klienta do zajęć, sprawdzane jest czy klient ma w tym czasie inne zajęcia lub treningi
+  * naprawione przyciski wróć w wynikach wyszukiwania
 * 0.5.2
   * Naprawienie żle wyświetlających się podstron
   * Dodanie notatek informacyjnych na każdej podstronie
   * Wyświetlanie tylko najbliższych terminów zajęć grupowych
   * Usunięty zielony haczyk pszy pustych opisach cen biletów/karnetów
   * Wyrównane wysokości bloków z cenami
-  * poprawienie wyglądu komentarza
+  * Poprawienie wyglądu komentarza
   * Sortowane kolumny w activities/requests
   * Usunięte sortowania z rezultatów wyszukiwań
   * Dodanie napisu informującego, że dany atrybut nie ma przypisanej wartości

@@ -15,23 +15,27 @@
 #
 
 require 'rails_helper'
+require 'spec_helper'
 
 describe Activity do
+  it "has a valid factory" do
+    expect(FactoryGirl.create(:activity)).to be_valid
+  end
   describe 'with no nil values of attributes' do
     it 'is invalid without a name' do
-      expect(build(:activity, name: nil)).to_not be_valid
+      expect(build(:activity, name: nil)).to be_invalid
     end
     it 'is invalid without day_of_week' do
-      expect(build(:activity, start_on: nil)).to_not be_valid
+      expect(build(:activity, day_of_week: nil)).to be_invalid
     end
     it 'is invalid without a start_on' do
-      expect(build(:activity, name: nil)).to_not be_valid
+      expect(build(:activity, start_on: nil)).to be_invalid
     end
     it 'is invalid without a end_on' do
-      expect(build(:activity, name: nil)).to_not be_valid
+      expect(build(:activity, end_on: nil)).to be_invalid
     end
     it 'is invalid without a person_id' do
-      expect(build(:activity, person_id: nil)).to_not be_valid
+      expect(build(:activity, person_id: nil)).to be_invalid
     end
   end
 

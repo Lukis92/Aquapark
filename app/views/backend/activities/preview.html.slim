@@ -35,7 +35,7 @@ h5 Uczestnicy zajęcia grupowego
                 = link_to backend_person_path(a.person.id) do
                   = a.person.full_name
                 - if i < @activity.activities_people.where('date = ?', ap.date).size - 1
-                  |, 
+                  |,
 - else
   .alert.alert-info
     | Brak uczestników

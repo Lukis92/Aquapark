@@ -16,12 +16,10 @@ h5 Lista wszystkich urlopów
           h5 Najbliższy urlop:
         li.collection-item
           p
-            | Już za
-            = @days
-            | dni!
+            | Już za #{@days} dni!
           p
             | Data:
-            = @nearest_vacation.start_at
+            |  #{l(@nearest_vacation.start_at)}
 
     - unless @current_vacation.blank?
       ul.collection
@@ -118,7 +116,6 @@ h5.divider-new Nadchodzące Urlopy
   = will_paginate @nearest_vacations, renderer: BootstrapPagination::Rails
 - else
   = notice_info("Brak urlopów.")
-  
 h5.divider-new Niezatwierdzone urlopy
 - unless @unapproved_vacations.blank?
   table.table.table-striped.table-bordered.table-list.pretty

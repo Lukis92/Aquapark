@@ -7,9 +7,9 @@ class Backend::CommentsController < BackendController
     @comment.person = current_person
     if @comment.save
       redirect_to backend_news_path(@news),
-                  notice: "Komentarz pomyślnie dodano"
+                  notice: 'Komentarz pomyślnie dodano'
     else
-      flash[:danger] = "Komentarz nie został dodany. Wymagana treść, minimum 5 znaków."
+      flash[:danger] = 'Komentarz nie został dodany. Wymagana treść, minimum 5 znaków.'
       redirect_to :back
     end
   end
@@ -19,7 +19,7 @@ class Backend::CommentsController < BackendController
 
   def update
     if @comment.update(comment_params)
-      flash[:notice] = "Komentarz został zaktualizowany!"
+      flash[:notice] = 'Komentarz został zaktualizowany!'
       redirect_to backend_news_path(@news)
     else
       render 'edit'
@@ -28,7 +28,7 @@ class Backend::CommentsController < BackendController
 
   def destroy
     @comment.destroy
-    flash[:notice] = "Komentarz usunięty."
+    flash[:notice] = 'Komentarz usunięty.'
     redirect_to backend_news_path(@news)
   end
 
@@ -59,8 +59,8 @@ class Backend::CommentsController < BackendController
       flash[:danger] = 'Nie istnieje komentarz o takim id.'
       redirect_to backend_news_index_path
     end
-    if current_person != @comment.person
-      flash[:danger] = "Możesz edytować tylko własne komentarze."
+    unless current_person == @comment.person || current_receptionist || current_manager
+      flash[:danger] = 'Możesz edytować tylko własne komentarze.'
       redirect_to backend_news_index_path
     end
   end

@@ -27,7 +27,7 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
     - @entry_types.each do |entry|
       tr
         - if current_manager || current_receptionist
-          td align="center"
+          td
             = link_to edit_backend_entry_type_path(entry), title: 'Edytuj' do
               .btn.btn-default
                 i.fa.fa-pencil

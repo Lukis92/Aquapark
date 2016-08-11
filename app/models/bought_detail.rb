@@ -61,7 +61,7 @@ class BoughtDetail < ActiveRecord::Base
 
   def validate_start_on
     if start_on < Date.today && entry_type == 'Karnet'
-      errors.add(:error,
+      errors.add(:base,
                  "Czas rozpoczęcia jest wcześniejszy niż dzisiejsza data.")
     end
   end

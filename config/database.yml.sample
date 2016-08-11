@@ -1,15 +1,15 @@
 connection: &connection
   adapter: postgresql
   encoding: unicode
-  host:localhost
-  pool:5
-  username: test
+  host: localhost
+  pool: 5
+  username: postgres
   password:
-  port
+
 development:
   <<: *connection
-  database: app_development
+  database: aquapark_development
 
 test: &test
   <<: *connection
-  database: app_test
+  database: aquapark_test

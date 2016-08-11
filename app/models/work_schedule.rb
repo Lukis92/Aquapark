@@ -34,7 +34,7 @@ class WorkSchedule < ActiveRecord::Base
   # **METHODS***************************************************#
   def start_must_be_before_end_time
     unless start_time < end_time
-      errors.add(:error, 'Czas rozpoczęcia musi być przed czasem zakończenia pracy')
+      errors.add(:base, 'Czas rozpoczęcia musi być przed czasem zakończenia pracy')
     end
   end
 

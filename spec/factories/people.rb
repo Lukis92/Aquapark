@@ -25,9 +25,9 @@
 #  profile_image_file_size    :integer
 #  profile_image_updated_at   :datetime
 #
-
+require 'faker'
+TYPES = %w(Manager, Lifeguard, Client, Receptionist, Trainer).freeze
 FactoryGirl.define do
-  TYPES = %w(Manager, Lifeguard, Client, Receptionist, Trainer).freeze
   factory :client do
     pesel { Faker::Number.number(11) }
     first_name { Faker::Name.first_name }

@@ -1,5 +1,5 @@
 h5 Urlopy
-= info("Jesteś na stronie prezentującej listę wszystkich urlopów \ 
+= info("Jesteś na stronie prezentującej listę wszystkich urlopów \
         (zaakceptowanych i tych czekających na decyzję)")
 p
   | Obecnie w bazie posiadamy #{Vacation.count} zarejestrowanych urlopów.
@@ -50,7 +50,6 @@ p
               = vacation.person.full_name
           td
             = show_accept_status(vacation.accepted)
-            
   = will_paginate @vacations, renderer: BootstrapPagination::Rails
 - else
   .alert.alert-info.col-md-6.col-md-offset-3

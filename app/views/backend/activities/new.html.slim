@@ -1,5 +1,6 @@
-- if current_manager
+- if current_manager || current_receptionist
   h5 Dodawanie zajęcia grupowego
+  = info("Jesteś na podstronie dodawania zajęć grupowych do grafiku aquaparku.")
 - else
   h5 Proponowanie zajęcia
   = info("W tym miejscu możesz zaproponować zajęcie grupowe, które według \

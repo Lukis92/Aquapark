@@ -83,6 +83,8 @@ class Backend::ActivitiesController < BackendController
   # DELETE backend/activities/1
   def destroy
     @activity.destroy
+    @activities_people = ActivitiesPerson.where(activity_id: @activity)
+    @activities_people.each(&:destroy)
     redirect_to :back, notice: 'Pomyślnie usunięto.'
   end
 
@@ -120,7 +122,7 @@ class Backend::ActivitiesController < BackendController
   # # check if activity is active
   # def check_activity
   #   unless @activity.active == true
-  #     errors.add(:error, 'Nie możesz dołączać do nie aktywnych zajęć.')
+  #     errors.add(:base, 'Nie możesz dołączać do nie aktywnych zajęć.')
   #   end
   # end
 

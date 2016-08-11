@@ -41,6 +41,14 @@ class Backend::StatisticsController < BackendController
     @biggest_salary = Person.where.not(type: 'Client').order(salary: :desc).first
     @smallest_salary = Person.where.not(type: 'Client').order(salary: :asc).first
     @avg_salaries = Person.where.not(type: 'Client').average(:salary)
+    @day_most_work = WorkSchedule.group(:day_of_week)
+                                 .select('day_of_week, COUNT(id) as work_count')
+                                 .order('COUNT(id) DESC').first.day_of_week
+    @day_most_work_count = WorkSchedule.where(day_of_week: @day_most_work).count
+    @day_least_work = WorkSchedule.group(:day_of_week)
+                                  .select('day_of_week, COUNT(id) as work_count')
+                                  .order('COUNT(id) ASC').first.day_of_week
+    @day_least_work_count = WorkSchedule.where(day_of_week: @day_least_work).count
 
     # Newsy
     @all_news = News.count
@@ -48,24 +56,31 @@ class Backend::StatisticsController < BackendController
     @receptionist_news = News.where(scope: 'recepcjoniści').count
     @lifeguard_news = News.where(scope: 'ratownicy').count
     @trainer_news = News.where(scope: 'trenerzy').count
-    @most_liked_news = News.joins(:likes).where('likes.like = ?', true).group('news.id').order('COUNT(likes.id) DESC').first
-    @most_liked_news_likes_count =  Like.where(news_id: @most_liked_news.id).where('likes.like = ?', true).count
-    @most_liked_news_dislikes_count = Like.where(news_id: @most_liked_news.id).where('likes.like = ?', false).count
-    @most_hated_news = News.joins(:likes)
-                           .where('likes.like = ?', false)
-                           .group('news.id')
-                           .order('COUNT(likes.id) DESC').first
-    @most_hated_news_likes_count =  Like.where(news_id: @most_hated_news.id).where('likes.like = ?', true).count
-    @most_hated_news_dislikes_count = Like.where(news_id: @most_hated_news.id).where('likes.like = ?', false).count
+    @most_liked_news_id = Like.group(:news_id)
+                              .select('news_id, SUM(case when likes.like then 1 else -1 end) as max_positive')
+                              .order('max_positive desc').map(&:news_id).first
+    @most_liked_news = News.find(@most_liked_news_id)
+    @most_liked_news_likes_count =  Like.where(news_id: @most_liked_news_id).where('likes.like = ?', true).count
+    @most_liked_news_dislikes_count = Like.where(news_id: @most_liked_news_id).where('likes.like = ?', false).count
+
+    @most_hated_news_id = Like.group(:news_id)
+                           .select('news_id, SUM(case when likes.like then 1 else -1 end) as max_positive')
+                           .order('max_positive asc').map(&:news_id).first
+    @most_hated_news = News.find(@most_hated_news_id)
+    @most_hated_news_likes_count =  Like.where(news_id: @most_hated_news_id).where('likes.like = ?', true).count
+    @most_hated_news_dislikes_count = Like.where(news_id: @most_hated_news_id).where('likes.like = ?', false).count
 
     @count_true_likes = Like.where('likes.like = ?', true).group(:news_id).count
+
+    @news_most_comments_id = Comment.group('news_id, comments.id').order('COUNT(id) desc').map(&:news_id).first
+    @news_most_comments = News.find(@news_most_comments_id).title
   end
 
   private
 
   def require_manager
     unless current_manager
-      flash[:danger] = "Brak dostępu"
+      flash[:danger] = 'Brak dostępu'
       redirect_to backend_news_index_path
     end
   end

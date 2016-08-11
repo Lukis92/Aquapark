@@ -78,14 +78,19 @@ class Backend::NewsController < BackendController
     if current_manager
       @news = News.where(scope: %w(wszyscy ratownicy trenerzy
                                    recepcjoniści klienci))
+                  .or(News.where(person_id: current_person))
     elsif current_receptionist
       @news = News.where(scope: %w(wszyscy pracownicy recepcjonisci klienci))
+                  .or(News.where(person_id: current_person))
     elsif current_lifeguard
       @news = News.where(scope: %w(wszyscy pracownicy ratownicy))
+                  .or(News.where(person_id: current_person))
     elsif current_trainer
       @news = News.where(scope: %w(wszyscy pracownicy trenerzy))
+                  .or(News.where(person_id: current_person))
     elsif current_client
       @news = News.where(scope: %w(wszyscy klienci))
+                  .or(News.where(person_id: current_person))
     end
   end
 

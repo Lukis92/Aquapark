@@ -38,23 +38,7 @@ class IndividualTraining < ActiveRecord::Base
 
   attr_accessor :duration, :day
 
-  DAYS_IN_PL = {
-    'Monday' => 'Poniedziałek',
-    'Tuesday' => 'Wtorek',
-    'Wednesday' => 'Środa',
-    'Thursday' => 'Czwartek',
-    'Friday' => 'Piątek',
-    'Saturday' => 'Sobota',
-    'Sunday' => 'Niedziela'
-  }.freeze
-
-
-
   private
-
-  def translate_date(daytime)
-    DAYS_IN_PL[daytime.strftime('%A')]
-  end
 
   def should_validate_date_of_training?
     !date_of_training.nil? && !end_on.nil?
@@ -70,13 +54,13 @@ class IndividualTraining < ActiveRecord::Base
 
   def date_of_training_validation
     if date_of_training < Date.today
-      errors.add(:error, 'Nie możesz ustalać terminu treningu wcześniej niż dzień dzisiejszy.')
+      errors.add(:base, 'Nie możesz ustalać terminu treningu wcześniej niż dzień dzisiejszy.')
     end
     trainer.work_schedules.each do |ti|
-      if ti.day_of_week == translate_date(date_of_training)
+      if ti.day_of_week == BackendController.helpers.translate_date(date_of_training)
         unless start_on >= ti.start_time && start_on <= ti.end_time &&
                end_on >= ti.start_time && end_on <= ti.end_time
-          errors.add(:error, 'Trening jest poza grafikiem pracy trenera.')
+          errors.add(:base, 'Trening jest poza grafikiem pracy trenera.')
         end
       end
     end
@@ -85,7 +69,7 @@ class IndividualTraining < ActiveRecord::Base
   def client_individual_training_validation
     client.individual_trainings_as_client.where('date_of_training = ?', date_of_training).each do |ci|
       if (start_on...end_on).overlaps?(ci.start_on...ci.end_on)
-        errors.add(:error, 'Masz w tym czasie inny trening.')
+        errors.add(:base, 'Masz w tym czasie inny trening.')
       end
     end
   end
@@ -94,7 +78,7 @@ class IndividualTraining < ActiveRecord::Base
     trainer.individual_trainings_as_trainer.each do |ti|
       if date_of_training == ti.date_of_training
         if (start_on...end_on).overlaps?(ti.start_on...ti.end_on)
-          errors.add(:error, 'Trener ma w tym czasie inny trening.')
+          errors.add(:base, 'Trener ma w tym czasie inny trening.')
         end
       end
     end

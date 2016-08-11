@@ -5,9 +5,11 @@
       = f.input :name
     .input-field
       = f.input :description, input_html: {class:'materialize-textarea'}
-    - if current_manager
+    - if current_manager || current_receptionist
       .checkbox-fix
         = f.input :active
+    - else
+      = f.input :active, as: :hidden, input_html: { value: false}
     .col-md-6
       .form-group
         label for='input_starttime'* Czas rozpoczęcia
@@ -24,9 +26,12 @@
     .form-group
       = f.input :pool_zone, collection: [['A', 'A'], ['B', 'B'], ['C', 'C'],
       ['D', 'D'], ['E', 'E'], ['F', 'F']], prompt: 'Wybierz strefę'
-    .form-group
-      = f.input :person_id, collection: @trainers.map{|t| [t.full_name, t.id]},
-                            prompt: "Wybierz trenera"
+    - unless current_trainer
+      .form-group
+        = f.input :person_id, collection: @trainers.map{|t| [t.full_name, t.id]},
+                              prompt: "Wybierz trenera"
+    - else
+      = f.input :person_id, as: :hidden, input_html: { value: current_trainer.id}
     .input-field
       = f.input :max_people
     = f.button :submit, class: "btn btn-primary btn-block"

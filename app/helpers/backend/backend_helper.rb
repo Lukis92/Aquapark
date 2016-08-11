@@ -24,7 +24,7 @@ module Backend::BackendHelper
              <div class=\"blue-text text-darken-2\"><i class=\"fa fa-info-circle\"></i>
              #{message}</div></div></div></div>"
 
-    return html.html_safe
+    html.html_safe
   end
 
   # notice boxes
@@ -34,7 +34,7 @@ module Backend::BackendHelper
              <div class=\"card-panel teal text-center\"><span class=\"white-text\">
              #{message}</span></div></div></div>"
 
-    return html.html_safe
+    html.html_safe
   end
 
   # info about empty field
@@ -50,21 +50,48 @@ module Backend::BackendHelper
 
   def show_status(statement)
     html = ''
-    if statement
-      html << "<i class=\"fa fa-check\"></i>"
-    else
-      html << "<i class=\"fa fa-times\"></i>"
-    end
-    return html.html_safe
+    html << if statement
+              '<i class="fa fa-check"></i>'
+            else
+              '<i class="fa fa-times"></i>'
+            end
+    html.html_safe
   end
 
   def show_accept_status(statement)
     html = ''
-    if statement
-      html << "<i class=\"fa fa-check-square-o\"></i>"
-    else
-      html << "<i class=\"fa fa-times-circle\"></i>"
-    end
-    return html.html_safe
+    html << if statement
+              '<i class="fa fa-check-square-o"></i>'
+            else
+              '<i class="fa fa-times-circle"></i>'
+            end
+    html.html_safe
+  end
+
+  DAYS_IN_PL = {
+    'Monday' => 'Poniedziałek',
+    'Tuesday' => 'Wtorek',
+    'Wednesday' => 'Środa',
+    'Thursday' => 'Czwartek',
+    'Friday' => 'Piątek',
+    'Saturday' => 'Sobota',
+    'Sunday' => 'Niedziela'
+  }.freeze
+
+  DAYS_IN_ENG = {
+    'Poniedziałek' => 'Monday',
+    'Wtorek' => 'Tuesday',
+    'Środa' => 'Wednesday',
+    'Czwartek' => 'Thursday',
+    'Piątek' => 'Friday',
+    'Sobota' => 'Saturday',
+    'Niedziela' => 'Sunday'
+  }.freeze
+  def translate_date(daytime)
+    DAYS_IN_PL[daytime.strftime('%A')]
+  end
+
+  def translate_day_eng(day)
+    DAYS_IN_ENG[day]
   end
 end

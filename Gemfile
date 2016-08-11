@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.3.0'
+ruby '2.3.1'
 
 gem 'rails', '4.2.5.1'
 gem 'pg', '~> 0.15'
@@ -37,7 +37,7 @@ gem 'slim-rails' # Slim templating.
 gem 'sprockets', '~> 3.0' # Rack-based asset packaging system
 gem 'stripe', source: 'https://code.stripe.com/' # stripe Ruby bindings
 gem 'will_paginate-bootstrap' # bootstrap pagination
-
+gem 'where-or' # Where or function backport from Rails 5 for Rails 4.2
 group :assets do
   gem 'jquery-smooth-scroll-rails'
 end
@@ -66,7 +66,9 @@ group :production do
 end
 
 group :test do
-  gem 'capybara' # Acceptance test framework for web applications
+  gem 'capybara' # Simulate your users’ interactions with your application
   gem 'database_cleaner' # Strategies for cleaning databases in Ruby.
-  gem 'shoulda-matchers', require: false
+  gem 'shoulda-matchers', require: false # Collection of testing matchers
+  gem 'guard-rspec' # Automatically run your specs
+  gem 'launchy' # A helper for launching cross-platform applications
 end
