@@ -1,7 +1,7 @@
 class Backend::PeopleController < BackendController
   helper_method :sort_column, :sort_direction, :sort_bought
   before_action :set_person, only: [:show, :create, :edit, :update, :destroy,
-                                    :bought_history]
+                                    :bought_history, :remove_photo]
   before_action :set_rule_to_edit_client_profile, only: [:edit, :update,
                                                          :destroy, :show]
   before_action :require_same_user, only: [:show, :bought_history]
@@ -130,7 +130,7 @@ class Backend::PeopleController < BackendController
     params.require(:person).permit(:pesel, :first_name, :last_name,
                                    :date_of_birth, :email, :profile_image,
                                    :salary, :hiredate, :password,
-                                   :password_confirmation,
+                                   :password_confirmation, :current_password,
                                    :remember_me, activities_people: [:date])
   end
 

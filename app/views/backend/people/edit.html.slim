@@ -19,8 +19,14 @@ h5
                      placeholder: 'Kliknij'
     .form-group
       = f.input :email, required: true
-    .form-group
-      = f.input :profile_image, as: :file
+    .col-md-6
+      .form-group
+        = f.input :profile_image, as: :file
+    - if @person.profile_image.present?
+      .col-md-6
+        = link_to remove_photo_backend_person_path(@person), method: :delete, data: {confirm: 'Czy na pewno?'}, class: "btn btn-sm btn-danger" do
+          i.fa.fa-trash-o
+          |  Usuń zdjęcie profilowe
     - if @person.type == 'Manager'
       .form-group
         = f.input :salary, required: true
@@ -39,7 +45,3 @@ h5
         = f.input :current_password, required: true, autocomplete: "off"
     .form-actions
       = f.button :submit, "Zapisz", class: "btn btn-primary btn-block"
-      - if @person.profile_image.present?
-        = link_to remove_photo_backend_person_path(@person), method: :delete, data: {confirm: 'Czy na pewno?'}, class: "btn btn-sm btn-danger" do
-          i.fa.fa-trash-o
-          |  Usuń zdjęcie profilowe

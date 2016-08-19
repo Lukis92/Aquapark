@@ -28,204 +28,95 @@
 
 require 'rails_helper'
 
-describe Client do
-  it "has a valid factory" do
-    expect(FactoryGirl.create(:client)).to be_valid
-  end
-  describe 'with no nil values of attributes' do
-    it 'is invalid without a pesel' do
-      expect(build(:client, pesel: nil)).to be_invalid
-    end
-    it 'is invalid without a first_name' do
-      expect(build(:client, first_name: nil)).to be_invalid
-    end
-    it 'is invalid without a last_name' do
-      expect(build(:client, last_name: nil)).to be_invalid
-    end
-    it 'is invalid without a date_of_birth' do
-      expect(build(:client, date_of_birth: nil)).to be_invalid
-    end
-    it 'is invalid without a email' do
-      expect(build(:client, email: nil)).to be_invalid
-    end
-    it 'is invalid without a type' do
-      expect(build(:client, type: nil)).to be_invalid
-    end
-  end
-
-  describe 'with nil values of attributes' do
-    it 'is valid without salary' do
-      expect(build(:client, salary: nil)).to be_valid
-    end
-
-    it 'is valid without hiredate' do
-      expect(build(:client, hiredate: nil)).to be_valid
-    end
-  end
-
-  describe 'uniqueness' do
-    subject { FactoryGirl.build(:client) }
-    it 'validates uniqueness of email' do
-      expect(subject).to validate_uniqueness_of(:email).case_insensitive
-    end
-    it 'validates uniqueness of pesel' do
-      expect(subject).to validate_uniqueness_of(:pesel).case_insensitive
-    end
-  end
+describe Person, 'associations' do
+  it { is_expected.to have_many :work_schedules }
+  it { is_expected.to have_many :bought_details }
+  it { is_expected.to have_many :vacations }
+  it { is_expected.to have_many :individual_trainings_as_trainer }
+  it { is_expected.to have_many :individual_trainings_as_client }
+  it { is_expected.to have_many :news }
+  it { is_expected.to have_many :comments }
+  it { is_expected.to have_many :likes }
+  it { is_expected.to have_many :activities_people }
+  it { is_expected.to have_many(:activities).through(:activities_people) }
+  it { is_expected.to have_many :activities_as_trainer }
 end
 
-describe Receptionist do
-  it "has a valid factory" do
-    expect(FactoryGirl.create(:receptionist)).to be_valid
-  end
-  describe 'with no nil values of attributes' do
-    it 'is invalid without a pesel' do
-      expect(build(:receptionist, pesel: nil)).to be_invalid
-    end
-    it 'is invalid without a first_name' do
-      expect(build(:receptionist, first_name: nil)).to be_invalid
-    end
-    it 'is invalid without a last_name' do
-      expect(build(:receptionist, last_name: nil)).to be_invalid
-    end
-    it 'is invalid without a date_of_birth' do
-      expect(build(:receptionist, date_of_birth: nil)).to be_invalid
-    end
-    it 'is invalid without a email' do
-      expect(build(:receptionist, email: nil)).to be_invalid
-    end
-    it 'is invalid without a type' do
-      expect(build(:receptionist, type: nil)).to be_invalid
-    end
-    it 'is invalid without a salary' do
-      expect(build(:receptionist, salary: nil)).to be_invalid
-    end
-    it 'is invalid without a hiredate' do
-      expect(build(:receptionist, hiredate: nil)).to be_invalid
-    end
-  end
+describe Person, 'column specifications' do
+  it { is_expected.to have_db_column(:pesel).of_type(:string).with_options(null: false) }
+  it { is_expected.to have_db_column(:first_name).of_type(:string).with_options(null: false) }
+  it { is_expected.to have_db_column(:last_name).of_type(:string).with_options(null: false) }
+  it { is_expected.to have_db_column(:type).of_type(:string).with_options(null: false) }
+  it { is_expected.to have_db_column(:salary).of_type(:decimal).with_options(null: true, precision: 6, scale: 2) }
+  it { is_expected.to have_db_column(:hiredate).of_type(:date).with_options(null: true) }
 
-  describe 'with nil values of attributes' do
-    it 'is valid without salary' do
-      expect(build(:client, salary: nil)).to be_valid
-    end
-
-    it 'is valid without hiredate' do
-      expect(build(:client, hiredate: nil)).to be_valid
-    end
-  end
-
-  describe 'uniqueness' do
-    subject { FactoryGirl.build(:receptionist) }
-    it 'validates uniqueness of email' do
-      expect(subject).to validate_uniqueness_of(:email).case_insensitive
-    end
-    it 'validates uniqueness of pesel' do
-      expect(subject).to validate_uniqueness_of(:email).case_insensitive
-    end
-  end
+  it { is_expected.to have_db_index :email }
+  it { is_expected.to have_db_index :reset_password_token }
 end
 
-describe Lifeguard do
-  it "has a valid factory" do
-    expect(FactoryGirl.create(:lifeguard)).to be_valid
-  end
-  describe 'with no nil values of attributes' do
-    it 'is invalid without a pesel' do
-      expect(build(:lifeguard, pesel: nil)).to be_invalid
-    end
-    it 'is invalid without a first_name' do
-      expect(build(:lifeguard, first_name: nil)).to be_invalid
-    end
-    it 'is invalid without a last_name' do
-      expect(build(:lifeguard, last_name: nil)).to be_invalid
-    end
-    it 'is invalid without a date_of_birth' do
-      expect(build(:lifeguard, date_of_birth: nil)).to be_invalid
-    end
-    it 'is invalid without a email' do
-      expect(build(:lifeguard, email: nil)).to be_invalid
-    end
-    it 'is invalid without a type' do
-      expect(build(:lifeguard, type: nil)).to be_invalid
-    end
-    it 'is invalid without a salary' do
-      expect(build(:lifeguard, salary: nil)).to be_invalid
-    end
-    it 'is invalid without a hiredate' do
-      expect(build(:lifeguard, hiredate: nil)).to be_invalid
-    end
-  end
+describe Person, 'validations' do
+  it { is_expected.to validate_presence_of :pesel }
+  it { is_expected.to validate_presence_of :first_name }
+  it { is_expected.to validate_presence_of :last_name }
+  it { is_expected.to validate_presence_of :date_of_birth }
+  it { is_expected.to validate_presence_of :email }
+  it { is_expected.to validate_presence_of :type }
 
-  describe 'with nil values of attributes' do
-    it 'is valid without salary' do
-      expect(build(:client, salary: nil)).to be_valid
-    end
-
-    it 'is valid without hiredate' do
-      expect(build(:client, hiredate: nil)).to be_valid
-    end
-  end
-
-  describe 'uniqueness' do
-    subject { FactoryGirl.build(:lifeguard) }
-    it 'validates uniqueness of email' do
-      expect(subject).to validate_uniqueness_of(:email).case_insensitive
-    end
-    it 'validates uniqueness of pesel' do
-      expect(subject).to validate_uniqueness_of(:email).case_insensitive
-    end
-  end
+  subject { FactoryGirl.build(:person) }
+  it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
+  it { is_expected.to validate_uniqueness_of(:pesel).case_insensitive }
 end
 
-describe Trainer do
-  it "has a valid factory" do
-    expect(FactoryGirl.create(:trainer)).to be_valid
-  end
-  describe 'with no nil values of attributes' do
-    it 'is invalid without a pesel' do
-      expect(build(:trainer, pesel: nil)).to be_invalid
-    end
-    it 'is invalid without a first_name' do
-      expect(build(:trainer, first_name: nil)).to be_invalid
-    end
-    it 'is invalid without a last_name' do
-      expect(build(:trainer, last_name: nil)).to be_invalid
-    end
-    it 'is invalid without a date_of_birth' do
-      expect(build(:trainer, date_of_birth: nil)).to be_invalid
-    end
-    it 'is invalid without a email' do
-      expect(build(:trainer, email: nil)).to be_invalid
-    end
-    it 'is invalid without a type' do
-      expect(build(:trainer, type: nil)).to be_invalid
-    end
-    it 'is invalid without a salary' do
-      expect(build(:trainer, salary: nil)).to be_invalid
-    end
-    it 'is invalid without a hiredate' do
-      expect(build(:trainer, hiredate: nil)).to be_invalid
+describe Person, 'methods' do
+  subject { Person }
+
+  describe '#full_name' do
+    let(:person) { build(:person) }
+
+    it 'returns a full name of person' do
+      expect(person.full_name).to eq 'Thomas Owel'
     end
   end
 
-  describe 'with nil values of attributes' do
-    it 'is valid without salary' do
-      expect(build(:client, salary: nil)).to be_valid
-    end
+  describe '#age' do
+    let(:person) { build(:person, date_of_birth: '1992-01-22')}
 
-    it 'is valid without hiredate' do
-      expect(build(:client, hiredate: nil)).to be_valid
+    it 'returns an age of person' do
+      expect(person.age).to eq 24
     end
   end
 
-  describe 'uniqueness' do
-    subject { FactoryGirl.build(:trainer) }
-    it 'validates uniqueness of email' do
-      expect(subject).to validate_uniqueness_of(:email).case_insensitive
+  describe '#person_full_name_type' do
+    let(:person) { build(:person, type: 'Manager') }
+
+    it 'returns a full name and type of person' do
+      expect(person.person_full_name_type).to eq 'Thomas Owel | Kierownik'
     end
-    it 'validates presence of pesel' do
-      expect(subject).to validate_uniqueness_of(:email).case_insensitive
+  end
+
+  describe '.text_search(query)' do
+    let!(:person) { create(:person) }
+
+    context 'when query string is nil' do
+      it 'returns all people' do
+        expect(subject.text_search(nil)).to eq([person])
+      end
+    end
+
+    it 'searches for people using given query string' do
+      expect(subject.text_search('Thomas Owel')).to include(person)
+    end
+
+    it 'is case insensitive' do
+      expect(subject.text_search('THOMAS OWEL')).to include(person)
+    end
+  end
+
+  describe '#downcase_email' do
+    let(:person) { build(:person, email: 'PERSON@person.pl') }
+
+    it 'converts letters to lowercase' do
+      expect(person.send(:downcase_email)).to eq 'person@person.pl'
     end
   end
 end

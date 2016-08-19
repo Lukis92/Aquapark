@@ -11,21 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160613105344) do
+ActiveRecord::Schema.define(version: 20160815190148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
-    t.string  "name",        limit: 20, null: false
+    t.string  "name",        null: false
     t.text    "description"
-    t.boolean "active",                 null: false
-    t.string  "day_of_week", limit: 20, null: false
-    t.time    "start_on",               null: false
-    t.time    "end_on",                 null: false
-    t.string  "pool_zone",   limit: 1,  null: false
+    t.boolean "active"
+    t.string  "day_of_week", null: false
+    t.time    "start_on",    null: false
+    t.time    "end_on",      null: false
+    t.string  "pool_zone",   null: false
     t.integer "max_people"
-    t.integer "person_id"
+    t.integer "person_id",   null: false
   end
 
   add_index "activities", ["person_id"], name: "index_activities_on_person_id", using: :btree
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20160613105344) do
   create_table "activities_people", force: :cascade do |t|
     t.integer "activity_id", null: false
     t.integer "person_id",   null: false
-    t.date    "date"
+    t.date    "date",        null: false
   end
 
   add_index "activities_people", ["activity_id", "person_id"], name: "index_activities_people_on_activity_id_and_person_id", using: :btree
@@ -129,16 +129,9 @@ ActiveRecord::Schema.define(version: 20160613105344) do
   add_index "people", ["email"], name: "index_people_on_email", unique: true, using: :btree
   add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true, using: :btree
 
-  create_table "products", force: :cascade do |t|
-    t.string   "name"
-    t.decimal  "price",      precision: 12, scale: 2
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-  end
-
   create_table "training_costs", force: :cascade do |t|
     t.integer "duration",                         null: false
-    t.decimal "cost",     precision: 5, scale: 2
+    t.decimal "cost",     precision: 5, scale: 2, null: false
   end
 
   create_table "vacations", force: :cascade do |t|

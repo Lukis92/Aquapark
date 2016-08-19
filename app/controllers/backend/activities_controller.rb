@@ -19,10 +19,12 @@ class Backend::ActivitiesController < BackendController
                                  .where('active = ?', true)
                                  .paginate(page: params[:page], per_page: 20)
     @active_activities = ActivitiesPerson.includes(:person)
-                                         .order(sort_column + ' ' + sort_direction)
+                                         .order(
+                                         sort_column + ' ' + sort_direction)
                                          .references(:people)
                                          .where('activity.active = ?', true)
-                                         .paginate(page: params[:page], per_page: 20)
+                                         .paginate(page: params[:page],
+                                                   per_page: 20)
   end
 
   # GET backend/activities/new
@@ -54,18 +56,22 @@ class Backend::ActivitiesController < BackendController
     end
   end
 
+  # POST backend/activities/:id/activate
   def activate
     @activity.update!(active: true)
     redirect_to :back, notice: 'Aktywowano.'
   end
 
+  # POST backend/activities/:id/deactivate
   def deactivate
     @activity.update!(active: false)
-    @activities_people = ActivitiesPerson.where(activity_id: @activity).where('date >= ?', Date.today)
+    @activities_people = ActivitiesPerson.where(activity_id: @activity)
+                                         .where('date >= ?', Date.today)
     @activities_people.each(&:destroy)
     redirect_to :back, notice: 'Deaktywowano.'
   end
 
+  # GET backend/activities/requests
   def requests
     @activity_requests = Activity.includes(:person)
                                  .where(active: false)
@@ -74,10 +80,14 @@ class Backend::ActivitiesController < BackendController
                                  .paginate(page: params[:page], per_page: 20)
   end
 
+  # GET backend/activities/pool_zone
   def pool_zone
-    @activities_people = Activity.where(activities: { pool_zone: @zone, active: true }).order(start_on: :asc)
+    @activities_people = Activity.where(activities: { pool_zone: @zone,
+                                                      active: true })
+                                 .order(start_on: :asc)
     @act_people = ActivitiesPerson.where(activity_id: :activity_id)
-                                  .includes(:activity).includes(:activities_people)
+                                  .includes(:activity)
+                                  .includes(:activities_people)
   end
 
   # DELETE backend/activities/1
@@ -88,6 +98,7 @@ class Backend::ActivitiesController < BackendController
     redirect_to :back, notice: 'Pomyślnie usunięto.'
   end
 
+  # GET backend/activities/:id/preview
   def preview
     @activities_people = @activity.activities_people
                                   .select(:activity_id, :date)
@@ -105,6 +116,7 @@ class Backend::ActivitiesController < BackendController
     end
   end
 
+  # GET backend/activities/:id/sign_up
   def sign_up
     @activities_person = ActivitiesPerson.new
     @activities_people = ActivitiesPerson.where('activity_id = ?', @activity.id)
@@ -115,20 +127,15 @@ class Backend::ActivitiesController < BackendController
 
   def activity_params
     params.require(:activity)
-          .permit(:name, :description, :active, :day_of_week, :start_on, :end_on,
-                  :pool_zone, :max_people, :person_id, activities_people: [:date])
+          .permit(:name, :description, :active, :day_of_week, :start_on,
+                  :end_on, :pool_zone, :max_people, :person_id,
+                  activities_people: [:date])
   end
-
-  # # check if activity is active
-  # def check_activity
-  #   unless @activity.active == true
-  #     errors.add(:base, 'Nie możesz dołączać do nie aktywnych zajęć.')
-  #   end
-  # end
 
   JOINED_TABLE_COLUMNS = %w(people.first_name).freeze
   def sort_column
-    if JOINED_TABLE_COLUMNS.include?(params[:sort]) || Activity.column_names.include?(params[:sort])
+    if JOINED_TABLE_COLUMNS.include?(params[:sort]) ||
+       Activity.column_names.include?(params[:sort])
       params[:sort]
     else
       'name'
@@ -157,10 +164,6 @@ class Backend::ActivitiesController < BackendController
   def set_person
     @person = current_person
   end
-
-  # def set_employees
-  #   @employees = Person.where.not(type: 'Client')
-  # end
 
   def set_rule_to_manage
     unless current_manager || current_receptionist

@@ -18,12 +18,12 @@ class IndividualTraining < ActiveRecord::Base
   belongs_to :training_cost
   # ************************#
   # **VALIDATIONS***************************#
-  validate :set_end_on, if: :should_validate_end_on?
-  validates_presence_of :start_on, :date_of_training, :training_cost_id
-  validates_presence_of :end_on, if: :set_end_on
-  validate :date_of_training_validation, if: :should_validate_date_of_training?
-  validate :client_individual_training_validation
-  validate :trainer_individual_training_validation
+  # validate :set_end_on, if: :should_validate_end_on?
+  validates_presence_of :start_on, :date_of_training, :training_cost_id, :end_on
+  validate :date_and_start_on_validation
+  validate :date_of_training_validation
+  validate :client_free_time_validation
+  # validate :trainer_individual_training_validation
   # ****************************************#
   attr_accessor :credit_card, :card_code
   include PgSearch
@@ -40,9 +40,9 @@ class IndividualTraining < ActiveRecord::Base
 
   private
 
-  def should_validate_date_of_training?
-    !date_of_training.nil? && !end_on.nil?
-  end
+  # def should_validate_date_of_training?
+  #   !date_of_training.nil? && !end_on.nil?
+  # end
 
   def should_validate_individual_training?
     !date_of_training.nil? && !end_on.nil? && date_of_training_validation
@@ -52,31 +52,57 @@ class IndividualTraining < ActiveRecord::Base
     !start_on.nil? && !training_cost_id.nil?
   end
 
-  def date_of_training_validation
-    if date_of_training < Date.today
-      errors.add(:base, 'Nie możesz ustalać terminu treningu wcześniej niż dzień dzisiejszy.')
-    end
-    trainer.work_schedules.each do |ti|
-      if ti.day_of_week == BackendController.helpers.translate_date(date_of_training)
-        unless start_on >= ti.start_time && start_on <= ti.end_time &&
-               end_on >= ti.start_time && end_on <= ti.end_time
-          errors.add(:base, 'Trening jest poza grafikiem pracy trenera.')
+  def date_and_start_on_validation
+    unless start_on.blank?
+      if date_of_training < Date.today
+        errors.add(:base, 'Nie możesz ustalać terminu treningu wcześniej niż dzień dzisiejszy.')
+      elsif date_of_training == Date.today
+        if start_on <= Time.now
+          errors.add(:base, 'Godzina dzisiejszego treningu jest wcześniejsza niż obecny czas.')
         end
       end
     end
   end
 
-  def client_individual_training_validation
-    client.individual_trainings_as_client.where('date_of_training = ?', date_of_training).each do |ci|
-      if (start_on...end_on).overlaps?(ci.start_on...ci.end_on)
-        errors.add(:base, 'Masz w tym czasie inny trening.')
+  # check if trainer work while will be individual_training
+  def date_of_training_validation
+    unless start_on.blank?
+      trainer.work_schedules.each_with_index do |ti, ind|
+        if ti.day_of_week == BackendController.helpers.translate_date(date_of_training)
+          if (start_on...end_on).overlaps?(ti.start_time...ti.end_time)
+            break
+          else
+            errors.add(:base, 'Trening jest poza grafikiem pracy trenera.')
+          end
+        elsif ind == trainer.work_schedules.size - 1
+          errors.add(:base, 'Trener w tym dniu nie pracuje.')
+        end
+      end
+    end
+  end
+
+  #check if client doesn't have another training or activity
+  def client_free_time_validation
+    unless start_on.blank?
+      client.individual_trainings_as_client.where(date_of_training: date_of_training)
+            .where('id != ?', id).each do |ci|
+        if (start_on...end_on).overlaps?(ci.start_on...ci.end_on)
+          errors.add(:base, 'Masz w tym czasie inny trening.')
+        end
+      end
+      client.activities.where(day_of_week: BackendController.helpers.translate_date(date_of_training))
+            .each do |ca|
+        if (start_on...end_on).overlaps?(ca.start_on...end_on)
+          errors.add(:base, 'Masz w tym czasie zajęcie grupowe.')
+        end
       end
     end
   end
 
   def trainer_individual_training_validation
-    trainer.individual_trainings_as_trainer.each do |ti|
-      if date_of_training == ti.date_of_training
+    unless start_on.blank?
+      trainer.individual_trainings_as_trainer.where(date_of_training: date_of_training)
+             .where('id != ?', id).each do |ti|
         if (start_on...end_on).overlaps?(ti.start_on...ti.end_on)
           errors.add(:base, 'Trener ma w tym czasie inny trening.')
         end
@@ -95,7 +121,7 @@ class IndividualTraining < ActiveRecord::Base
     if query.present? && querydate.blank?
       search(query)
     elsif query.present? && querydate.present?
-      search(query+' '+querydate)
+      search(query + ' ' + querydate)
     elsif query.blank? && querydate.present?
       search(querydate)
     else

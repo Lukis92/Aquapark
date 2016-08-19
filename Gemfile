@@ -30,7 +30,7 @@ gem 'pg_search' # PostgreSQL's full text search
 gem 'rails_best_practices' # a code metric tool for rails projects
 gem 'rails-timeago', '~> 2.0' # helper for time tags
 gem 'rolify' # Role management library with resource scoping
-gem 'rubocop', require: false
+gem 'rubocop', require: false # Static code analyzer
 gem 'simple_calendar', '~> 2.0' # A wonderfully simple calendar gem for Rails
 gem 'simple_form' # forms made easy for Rails!
 gem 'slim-rails' # Slim templating.
@@ -55,10 +55,12 @@ group :development, :test do
   # Call 'byebug' anywhere in the occode to stop execution
   # and get a debugger console
   gem 'byebug'
+  gem 'capybara' # Simulate your users’ interactions with your application
   gem 'factory_girl_rails' # generating random test data
   gem 'faker' # a library for generating fake data.
   gem 'foreman' # Manage Procfile-based applications
   gem 'rspec-rails', '~> 3.5', '>= 3.5.1' # Use RSpec for specs
+  gem 'pry' # An IRB alternative and runtime developer console
 end
 
 group :production do
@@ -66,7 +68,6 @@ group :production do
 end
 
 group :test do
-  gem 'capybara' # Simulate your users’ interactions with your application
   gem 'database_cleaner' # Strategies for cleaning databases in Ruby.
   gem 'shoulda-matchers', require: false # Collection of testing matchers
   gem 'guard-rspec' # Automatically run your specs

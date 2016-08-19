@@ -15,9 +15,10 @@ class WorkSchedule < ActiveRecord::Base
   # ************************#
 
   # **VALIDATIONS***************************#
-  validates_presence_of :start_time, :end_time, :day_of_week
+  validates_presence_of :start_time, :end_time, :day_of_week, :person_id
   validates :day_of_week, uniqueness: { scope: :person_id, allow_blank: false }
-  before_save :start_must_be_before_end_time
+  validate :start_must_be_before_end_time
+  validate :work_duration
   validate :person_existing
   # ****************************************#
 
@@ -33,8 +34,18 @@ class WorkSchedule < ActiveRecord::Base
   DAYS = %w(Poniedziałek Wtorek Środa Czwartek Piątek Sobota Niedziela).freeze
   # **METHODS***************************************************#
   def start_must_be_before_end_time
-    unless start_time < end_time
-      errors.add(:base, 'Czas rozpoczęcia musi być przed czasem zakończenia pracy')
+    unless start_time.blank? || end_time.blank?
+      if start_time >= end_time
+        errors.add(:base, 'Czas rozpoczęcia musi być przed czasem zakończenia pracy')
+      end
+    end
+  end
+
+  def work_duration
+    unless start_time.blank? || end_time.blank?
+      if ((end_time - start_time) / 1.hour) < 1
+        errors.add(:base, 'Minimalny czas pracy powinien wynosić 1 godzinę.')
+      end
     end
   end
 
@@ -43,8 +54,10 @@ class WorkSchedule < ActiveRecord::Base
   end
 
   def next_n_days(amount, day_of_week)
+    day = I18n.t(:"activerecord.attributes.activity.day_number.#{day_of_week}",
+                 day_of_week)
     (Date.today...Date.today + 7 * amount).select do |d|
-      d.wday == day_of_week
+      d.wday == day
     end
   end
 

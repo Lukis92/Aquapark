@@ -4,7 +4,7 @@
 #
 #  id       :integer          not null, primary key
 #  duration :integer          not null
-#  cost     :decimal(5, 2)
+#  cost     :decimal(5, 2)    not null
 #
 
 class TrainingCost < ActiveRecord::Base
@@ -13,7 +13,7 @@ class TrainingCost < ActiveRecord::Base
 
   validates :duration, presence: true, uniqueness: true
   validates :cost, presence: true, format: { with: DECIMAL_REGEX },
-                     numericality: { greater_than: 0, less_than: 999 }
+                     numericality: { greater_than: 0, less_than: 1000 }
   def full_duration
     "#{duration} min. - #{cost.nice} zł"
   end

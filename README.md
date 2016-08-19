@@ -1,5 +1,7 @@
-an # Aquapark
+# Aquapark
 > Aplikacja wspomagająca pracę aquaparku.
+
+[![Build Status][travis-image]][travis-url]
 
 ## Struktura aplikacji
 Aplikacja ma za zadanie wspierać wszelkie aspekty związane z klientami kompleksu
@@ -96,3 +98,6 @@ $ rails s
 Łukasz Korol - lukas.korol@gmail.com
 Licencja - Użytek wyłącznie w celach naukowych.
 [https://github.com/Lukis92](https://github.com/Lukis92)
+
+[travis-image]: https://travis-ci.org/Lukis92/Aquapark.svg?branch=master
+[travis-url]: https://travis-ci.org/Lukis92/Aquapark

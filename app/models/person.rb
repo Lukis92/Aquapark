@@ -51,7 +51,7 @@ class Person < ActiveRecord::Base
 
   has_many :activities_as_trainer,
            class_name: 'Activity',
-           foreign_key: 'trainer_id'
+           foreign_key: 'person_id'
   ##########################
 
   # **VALIDATIONS*******************************************************#
@@ -59,13 +59,10 @@ class Person < ActiveRecord::Base
   DECIMAL_REGEX = /\A\d+(?:\.\d{0,2})?\z/
 
   before_validation :downcase_email
+  validates_presence_of :first_name, :last_name, :date_of_birth, :type
   validates :pesel, presence: true,
                     length: { is: 11 },
                     uniqueness: true
-  validates :type, presence: true
-  validates :first_name, presence: true
-  validates :last_name, presence: true
-  validates :date_of_birth, presence: true
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
                     format: { with: VALID_EMAIL_REGEX }
@@ -106,7 +103,7 @@ class Person < ActiveRecord::Base
   def profile_image_size
     unless profile_image.blank?
       if profile_image.size > 5.megabytes
-        erros.add(:profile_image, 'powinno ważyć mniej niż 5MB')
+        errors.add(:profile_image, 'powinno ważyć mniej niż 5MB')
       end
     end
   end
@@ -123,7 +120,10 @@ class Person < ActiveRecord::Base
     TYPES_IN_PL[type]
   end
 
-  def self.text_search(query, querydate)
+
+  private
+
+  def self.text_search(query, querydate = '')
     if query.present? && querydate.blank?
       search(query)
     elsif query.present? && querydate.present?
@@ -134,9 +134,6 @@ class Person < ActiveRecord::Base
       all
     end
   end
-
-  private
-
   def downcase_email
     self.email = email.downcase if email.present?
   end
