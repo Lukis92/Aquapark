@@ -39,12 +39,28 @@ FactoryGirl.define do
   end
 
   factory :client, parent: :person, class: 'Client' do
+    pesel { Faker::Number.number(11) }
+    first_name { Faker::Name.first_name }
+    last_name { Faker::Name.last_name }
+    type 'Client'
+  end
+
+  factory :client1, parent: :person, class: 'Client' do
+    pesel { Faker::Number.number(11) }
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
     type 'Client'
   end
 
   factory :trainer, parent: :person, class: 'Trainer' do
+    first_name { Faker::Name.first_name }
+    last_name { Faker::Name.last_name }
+    type 'Trainer'
+    salary { Faker::Number.decimal(4, 2) }
+    hiredate { Faker::Time.between('2016-01-01', '2016-04-30') }
+  end
+
+  factory :trainer1, parent: :person, class: 'Trainer' do
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
     type 'Trainer'

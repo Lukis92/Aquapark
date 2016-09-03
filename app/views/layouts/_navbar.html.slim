@@ -13,15 +13,15 @@ nav.navbar.blue.darken-4.navbar-fixed-top.sticky.z-depth-1.scrollspy role="navig
               |  Pure Space
 
     #bs-example-navbar-collapse-1.collapse.navbar-collapse
-      ul.nav.navbar-nav.nav-pills
+      ul.nav.navbar-nav
         li
-          a.waves-effect.waves-light href="#{root_path}#slider" Strona Główna
+          a.waves-effect.waves-light href="#slider" data-toggle="tab" Strona Główna
         li
-          a.waves-effect.waves-light href="#{root_path}#about" O nas
+          a.waves-effect.waves-light href="#about" data-toggle="tab" O nas
         li
-          a.waves-effect.waves-light href="#{root_path}#price" Cennik
+          a.waves-effect.waves-light href="#price" data-toggle="tab" Cennik
         li
-          a.waves-effect.waves-light href="#{root_path}#contact" Kontakt
+          a.waves-effect.waves-light href="#contact" data-toggle="tab" Kontakt
       ul.nav.navbar-nav.navbar-right
         - unless person_signed_in?
           li

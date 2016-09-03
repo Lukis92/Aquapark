@@ -22,9 +22,9 @@ h5 Trenerzy
           | Dostępny w dni:
           - t.work_schedules.each_with_index do |w, i|
             - if i == t.work_schedules.size - 1
-              = w.day_of_week
+              |  #{w.day_of_week}
             - else
-              = w.day_of_week + ', '
+              |  #{w.day_of_week + ', '}
         h5
           = link_to new_backend_trainer_individual_training_path(current_person, t.id) do
             .btn.btn-border-default.waves-effect

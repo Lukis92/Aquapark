@@ -1,14 +1,7 @@
-
-== TODO:
-* dla managera podgląd kto dał like/dislike dla news
-* dodać link w news podgląd kto dał lajka
-* dodać przydzielanie indywidualnych treningów
-
 == What's done:
-* przenieść foty z amazon do projektu
-* naprawić js w application
-* dodać wszędzie etykiety informacyjne na jakiej jest się podstronie
-* dodać gwiazdkę przy dacie urodzenia clients/sign_up
-* Uporządkować backend dla każdej grupy użytkowników
-* dodać do formularza cennika treningów indywidualnych informacje o użytych już
-  czasach trwania
+* usunięty problem z duplikatami treningów indywidualnych
+* smooth scrolling na stronie głównej
+* poprawiony tekst na stronie głównej
+* li active dla poszczególnych sekcji strony głównej
+* obsłużone nil dla statistics/news
+* wyłączenie znikających alertów na bought_details/new

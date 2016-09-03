@@ -5,11 +5,9 @@
 
 - if @individual_trainings.present?
   p.flow-text
-    | Data:
-    = l(params[:date_of_training].to_date)
+    | Data: #{l(params[:date_of_training].to_date)}
     br
-    | Ilość treningów:
-    = @individual_trainings.count
+    | Ilość treningów: #{@individual_trainings.count}
   table.table.table-striped.table-bordered
     thead
       tr

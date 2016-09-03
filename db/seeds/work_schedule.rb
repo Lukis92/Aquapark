@@ -1,6 +1,6 @@
 NAZWY_DNI = %w(Poniedziałek Wtorek Środa Czwartek Piątek
                Sobota Niedziela).freeze
-500.times do
+10.times do
   WorkSchedule.create!(
     start_time: Faker::Time.forward(1, :morning),
     end_time: Faker::Time.forward(1, :afternoon),

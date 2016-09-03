@@ -11,7 +11,6 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery-ui
 //= require bootstrap-sprockets
@@ -19,37 +18,22 @@
 //= require bootstrap-wysihtml5
 //= require bootstrap-wysihtml5/locales
 //= require locales/jquery.timeago.pl.js
-//= require mdb.min.js
 //= require_tree .
 
 
 //alert disappear after few seconds
-window.setTimeout(function() {
-    $(".alert").fadeTo(500, 0).slideUp(500, function() {
-        $(this).remove();
-    });
-}, 10000);
 
-$("#nav ul li a[href^='#']").on('click', function(e) {
+$(window).load(function() {
+var body = document.body;
 
-    // prevent default anchor click behavior
-    e.preventDefault();
-
-    // store hash
-    var hash = this.hash;
-
-    // animate
-    $('html, body').animate({
-        scrollTop: $(hash).offset().top
-    }, 300, function() {
-
-        // when done, add hash to url
-        // (default click behaviour)
-        window.location.hash = hash;
-    });
-
+if (body.getAttribute("data-controller") != 'bought_details' && body.getAttribute("data-action") != 'new') {
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function() {
+            $(this).remove();
+        });
+    }, 10000);
+}
 });
-
 $(function() {
     // Nice dropdown
     $('select').material_select();
@@ -67,6 +51,42 @@ $(function() {
     });
 });
 
+$(document).ready(function() {
+        // Add smooth scrolling to all links in navbar + footer link
+        $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
+            // Make sure this.hash has a value before overriding default behavior
+            if (this.hash !== "") {
+                // Prevent default anchor click behavior
+                event.preventDefault();
+
+                // Store hash
+                var hash = this.hash;
+
+                // Using jQuery's animate() method to add smooth page scroll
+                // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
+                $('html, body').animate({
+                    scrollTop: $(hash).offset().top - 10
+                }, 900, function() {
+
+                    // Add hash (#) to URL when done scrolling (default click behavior)
+                    window.location.hash = hash;
+                });
+            } // End if
+        });
+
+        $(window).scroll(function() {
+            $(".slideanim").each(function() {
+                var pos = $(this).offset().top;
+
+                var winTop = $(window).scrollTop();
+                if (pos < winTop + 600) {
+                    $(this).addClass("slide");
+                }
+            });
+        });
+    })
+    //carousel autoplay
+$('.carousel').carousel();
 
 //count character in forms
 $('input#input_text, textarea#textarea1').characterCounter();

@@ -19,6 +19,7 @@ gem 'bcrypt' # password hashing algorithmp
 gem 'decent_exposure', '3.0.0' # creating declarative interfaces in controllers
 gem 'devise' # flexible authentication solution for Rails with Warden.
 gem 'font-awesome-rails' # font-awesome font for rails
+gem 'heroku' # Heroku CLI
 gem 'html_truncator', '~>0.2' # truncate an HTML string
 gem 'i18n-tasks', '~> 0.9.5' # Manage translation for Ruby i18n
 gem 'jquery-ui-rails' # jQuery UI for the Rails asset pipeline
@@ -30,6 +31,7 @@ gem 'pg_search' # PostgreSQL's full text search
 gem 'rails_best_practices' # a code metric tool for rails projects
 gem 'rails-timeago', '~> 2.0' # helper for time tags
 gem 'rolify' # Role management library with resource scoping
+gem 'rb-readline' # readline library
 gem 'rubocop', require: false # Static code analyzer
 gem 'simple_calendar', '~> 2.0' # A wonderfully simple calendar gem for Rails
 gem 'simple_form' # forms made easy for Rails!

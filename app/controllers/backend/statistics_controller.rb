@@ -59,21 +59,25 @@ class Backend::StatisticsController < BackendController
     @most_liked_news_id = Like.group(:news_id)
                               .select('news_id, SUM(case when likes.like then 1 else -1 end) as max_positive')
                               .order('max_positive desc').map(&:news_id).first
-    @most_liked_news = News.find(@most_liked_news_id)
+    @most_liked_news = News.find_by_id(@most_liked_news_id)
     @most_liked_news_likes_count =  Like.where(news_id: @most_liked_news_id).where('likes.like = ?', true).count
     @most_liked_news_dislikes_count = Like.where(news_id: @most_liked_news_id).where('likes.like = ?', false).count
 
     @most_hated_news_id = Like.group(:news_id)
                            .select('news_id, SUM(case when likes.like then 1 else -1 end) as max_positive')
                            .order('max_positive asc').map(&:news_id).first
-    @most_hated_news = News.find(@most_hated_news_id)
+    unless @most_hated_news_id.blank?
+      @most_hated_news = News.find(@most_hated_news_id)
+    end
     @most_hated_news_likes_count =  Like.where(news_id: @most_hated_news_id).where('likes.like = ?', true).count
     @most_hated_news_dislikes_count = Like.where(news_id: @most_hated_news_id).where('likes.like = ?', false).count
 
     @count_true_likes = Like.where('likes.like = ?', true).group(:news_id).count
 
     @news_most_comments_id = Comment.group('news_id, comments.id').order('COUNT(id) desc').map(&:news_id).first
-    @news_most_comments = News.find(@news_most_comments_id).title
+    unless @news_most_comments_id.blank?
+      @news_most_comments = News.find(@news_most_comments_id).title
+    end
   end
 
   private

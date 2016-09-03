@@ -16,7 +16,7 @@ FactoryGirl.define do
     day_of_week 'Wtorek'
     association :person, factory: :trainer
 
-    factory :wch2 do
+    trait :wch2 do
       day_of_week 'Wtorek'
     end
   end

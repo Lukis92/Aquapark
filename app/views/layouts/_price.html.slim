@@ -7,163 +7,169 @@
         a.btn.btn-large.btn-success.btn-xlg data-toggle="tab" href="#tickets"
           i.fa.fa-ticket
           |  Bilety
-          a.btn.btn-large.btn-primary.btn-xlg(data-toggle="tab" href="#passes")
+          a.btn.btn-large.btn-primary.btn-xlg data-toggle="tab" href="#passes"
             i.fa.fa-clipboard
             |  Karnety
       .tab-content
         #tickets.tab-pane
           br
-          #carousel-multi-item.carousel.slide.multiitem-car
-            .text-center
-              a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4 data-slide="prev" href="#carousel-multi-item" role="button"
-                i.material-icons keyboard_arrow_left
-              a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4 data-slide="next" href="#carousel-multi-item" role="button"
-                i.material-icons keyboard_arrow_right
-            ol.carousel-indicators
-              - groups = @tickets.in_groups_of(3, false)
-              - groups.each_with_index do |group, i|
-                - if i == 0
-                  li.active data-slide-to=i.to_s data-target="#carousel-multi-item"
-                - else
-                  li data-slide-to=i.to_s data-target="#carousel-multi-item"
-            .carousel-inner
-              - groups = @tickets.in_groups_of(3, false)
-              - groups.each_with_index do |group, i|
-                - if i == 0
-                  .item.active
-                    .row.text-center
-                      - group.each do |field|
-                        .col-sm-4.item-card
-                          .pricing-card.text-center.z-depth-1.hoverable
-                            .success-color-dark.z-depth-1
-                              p.no-margin.white-text.extra-padding-05
-                                = field.kind
-                            .card-up.success-color
-                              h6 Wejście
-                              h1
-                                = field.price.nice
-                                | ZŁ
-                            #price-card.card-content
-                              ul.features-list
-                                li
-                                  p
-                                    i.fa.fa-check.green-text
-                                    = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
-                                - if field.description.present?
+          - unless @tickets.blank?
+            #carousel-multi-item.carousel.slide.multiitem-car
+              .text-center
+                a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4 data-slide="prev" href="#carousel-multi-item" role="button"
+                  i.material-icons keyboard_arrow_left
+                a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4 data-slide="next" href="#carousel-multi-item" role="button"
+                  i.material-icons keyboard_arrow_right
+              ol.carousel-indicators
+                - groups = @tickets.in_groups_of(3, false)
+                - groups.each_with_index do |group, i|
+                  - if i == 0
+                    li.active data-slide-to=i.to_s data-target="#carousel-multi-item"
+                  - else
+                    li data-slide-to=i.to_s data-target="#carousel-multi-item"
+              .carousel-inner
+                - groups = @tickets.in_groups_of(3, false)
+                - groups.each_with_index do |group, i|
+                  - if i == 0
+                    .item.active
+                      .row.text-center
+                        - group.each do |field|
+                          .col-sm-4.item-card
+                            .pricing-card.text-center.z-depth-1.hoverable
+                              .success-color-dark.z-depth-1
+                                p.no-margin.white-text.extra-padding-05
+                                  = field.kind
+                              .card-up.success-color
+                                h6 Wejście
+                                h1
+                                  = field.price.nice
+                                  | ZŁ
+                              #price-card.card-content
+                                ul.features-list
                                   li
                                     p
                                       i.fa.fa-check.green-text
-                                      = HTML_Truncator.truncate(field.description, 170, length_in_chars: true)
-                            hr
-                            = link_to new_backend_entry_type_bought_detail_path(field) do
-                              .btn.btn-danger.btn-etc.waves-effect.waves-light
-                                .fa.fa-shopping-cart
-                                |  Kup teraz
-                - else
-                  .item
-                    .row.text-center
-                      - group.each do |field|
-                        .col-sm-4.item-card
-                          .pricing-card.text-center.z-depth-1.hoverable
-                            .success-color-dark.z-depth-1
-                              p.no-margin.white-text.extra-padding-05
-                                = field.kind
-                            .card-up.success-color
-                              h6 Wejście
-                              h1
-                                = field.price.nice
-                                | ZŁ
-                            #price-card.card-content
-                              ul.features-list
-                                li
-                                  p
-                                    i.fa.fa-check.green-text
-                                    = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
-                                - if field.description.present?
+                                      = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
+                                  - if field.description.present?
+                                    li
+                                      p
+                                        i.fa.fa-check.green-text
+                                        = HTML_Truncator.truncate(field.description, 170, length_in_chars: true)
+                              hr
+                              = link_to new_backend_entry_type_bought_detail_path(field) do
+                                .btn.btn-danger.btn-etc.waves-effect.waves-light
+                                  .fa.fa-shopping-cart
+                                  |  Kup teraz
+                  - else
+                    .item
+                      .row.text-center
+                        - group.each do |field|
+                          .col-sm-4.item-card
+                            .pricing-card.text-center.z-depth-1.hoverable
+                              .success-color-dark.z-depth-1
+                                p.no-margin.white-text.extra-padding-05
+                                  = field.kind
+                              .card-up.success-color
+                                h6 Wejście
+                                h1
+                                  = field.price.nice
+                                  | ZŁ
+                              #price-card.card-content
+                                ul.features-list
                                   li
                                     p
                                       i.fa.fa-check.green-text
-                                      = HTML_Truncator.truncate(field.description, 170, length_in_chars: true)
-                            hr
-                            = link_to new_backend_entry_type_bought_detail_path(field) do
-                              .btn.btn-danger.btn-etc.waves-effect.waves-light
-                                .fa.fa-shopping-cart
-                                | Kup teraz
+                                      = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
+                                  - if field.description.present?
+                                    li
+                                      p
+                                        i.fa.fa-check.green-text
+                                        = HTML_Truncator.truncate(field.description, 170, length_in_chars: true)
+                              hr
+                              = link_to new_backend_entry_type_bought_detail_path(field) do
+                                .btn.btn-danger.btn-etc.waves-effect.waves-light
+                                  .fa.fa-shopping-cart
+                                  | Kup teraz
+          - else
+            h5 Brak biletów
         #passes.tab-pane
           br
-          #carousel-multi-item1.carousel.slide.multiitem-car
-            .text-center
-              a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4 data-slide="prev" href="#carousel-multi-item1" role="button"
-                i.material-icons keyboard_arrow_left
-              a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4 data-slide="next" href="#carousel-multi-item1" role="button"
-                i.material-icons keyboard_arrow_right
-            ol.carousel-indicators
-              - groups = @passes.in_groups_of(3, false)
-              - groups.each_with_index do |group, i|
-                - if i == 0
-                  li.active data-slide-to=i.to_s data-target="#carousel-multi-item1"
-                - else
-                  li data-slide-to=i.to_s data-target="#carousel-multi-item1"
-            .carousel-inner
-              - groups = @passes.in_groups_of(3, false)
-              - groups.each_with_index do |group, i|
-                - if i == 0
-                  .item.active
-                    .row.text-center
-                      - group.each do |field|
-                        .col-sm-4.item-card
-                          .pricing-card.text-center.z-depth-1.hoverable
-                            .primary-color-dark.z-depth-1
-                              p.no-margin.white-text.extra-padding-05
-                                = field.kind
-                            .card-up.primary-color
-                              h6 Miesiąc
-                              h1
-                                = field.price.nice
-                                | ZŁ
-                            #price-card.card-content
-                              ul.features-list
-                                li
-                                  p
-                                    i.fa.fa-check.green-text
-                                    = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
-                                - if field.description.present?
+          - unless @passes.blank?
+            #carousel-multi-item1.carousel.slide.multiitem-car
+              .text-center
+                a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4 data-slide="prev" href="#carousel-multi-item1" role="button"
+                  i.material-icons keyboard_arrow_left
+                a.btn-floating.btn-small.waves-effect.waves-light.grey.darken-4 data-slide="next" href="#carousel-multi-item1" role="button"
+                  i.material-icons keyboard_arrow_right
+              ol.carousel-indicators
+                - groups = @passes.in_groups_of(3, false)
+                - groups.each_with_index do |group, i|
+                  - if i == 0
+                    li.active data-slide-to=i.to_s data-target="#carousel-multi-item1"
+                  - else
+                    li data-slide-to=i.to_s data-target="#carousel-multi-item1"
+              .carousel-inner
+                - groups = @passes.in_groups_of(3, false)
+                - groups.each_with_index do |group, i|
+                  - if i == 0
+                    .item.active
+                      .row.text-center
+                        - group.each do |field|
+                          .col-sm-4.item-card
+                            .pricing-card.text-center.z-depth-1.hoverable
+                              .primary-color-dark.z-depth-1
+                                p.no-margin.white-text.extra-padding-05
+                                  = field.kind
+                              .card-up.primary-color
+                                h6 Miesiąc
+                                h1
+                                  = field.price.nice
+                                  | ZŁ
+                              #price-card.card-content
+                                ul.features-list
                                   li
                                     p
                                       i.fa.fa-check.green-text
-                                      = HTML_Truncator.truncate(field.description, 170, length_in_chars: true)
-                            hr
-                            = link_to new_backend_entry_type_bought_detail_path(field) do
-                              .btn.btn-danger.btn-etc.waves-effect.waves-light
-                                .fa.fa-shopping-cart
-                                | Kup teraz
-                - else
-                  .item
-                    .row.text-center
-                      - group.each do |field|
-                        .col-sm-4.item-card
-                          .pricing-card.text-center.z-depth-1.hoverable
-                            .primary-color-dark.z-depth-1
-                              p.no-margin.white-text.extra-padding-05
-                                = field.kind
-                            .card-up.primary-color
-                              h6 Miesiąc
-                              h1
-                                = field.price.nice
-                                | ZŁ
-                            #price-card.card-content
-                              ul.features-list
-                                li
-                                  p
-                                    i.fa.fa-check.green-text
-                                    = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
-                                - if field.description.present?
+                                      = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
+                                  - if field.description.present?
+                                    li
+                                      p
+                                        i.fa.fa-check.green-text
+                                        = HTML_Truncator.truncate(field.description, 170, length_in_chars: true)
+                              hr
+                              = link_to new_backend_entry_type_bought_detail_path(field) do
+                                .btn.btn-danger.btn-etc.waves-effect.waves-light
+                                  .fa.fa-shopping-cart
+                                  | Kup teraz
+                  - else
+                    .item
+                      .row.text-center
+                        - group.each do |field|
+                          .col-sm-4.item-card
+                            .pricing-card.text-center.z-depth-1.hoverable
+                              .primary-color-dark.z-depth-1
+                                p.no-margin.white-text.extra-padding-05
+                                  = field.kind
+                              .card-up.primary-color
+                                h6 Miesiąc
+                                h1
+                                  = field.price.nice
+                                  | ZŁ
+                              #price-card.card-content
+                                ul.features-list
                                   li
                                     p
                                       i.fa.fa-check.green-text
-                                      = HTML_Truncator.truncate(field.description, 170, length_in_chars: true)
-                            hr
-                            = link_to new_backend_entry_type_bought_detail_path(field) do
-                              .btn.btn-danger.btn-etc.waves-effect.waves-light
-                                .fa.fa-shopping-cart
-                                | Kup teraz
+                                      = HTML_Truncator.truncate(field.kind_details, 50, length_in_chars: true)
+                                  - if field.description.present?
+                                    li
+                                      p
+                                        i.fa.fa-check.green-text
+                                        = HTML_Truncator.truncate(field.description, 170, length_in_chars: true)
+                              hr
+                              = link_to new_backend_entry_type_bought_detail_path(field) do
+                                .btn.btn-danger.btn-etc.waves-effect.waves-light
+                                  .fa.fa-shopping-cart
+                                  | Kup teraz
+          - else
+            h5 Brak karnetów

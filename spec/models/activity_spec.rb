@@ -15,7 +15,6 @@
 #
 
 require 'rails_helper'
-require 'spec_helper'
 
 describe Activity, 'associations' do
   it { is_expected.to have_many :activities_people }

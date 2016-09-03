@@ -25,7 +25,7 @@ FactoryGirl.define do
     start_on '12:00'
     end_on '13:00'
     pool_zone 'B'
-    max_people { Faker::Number.number(2) }
+    max_people 20
     association :person, factory: :trainer
 
     factory :first do

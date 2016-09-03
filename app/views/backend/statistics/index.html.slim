@@ -226,27 +226,32 @@ h5 Statystyki
     .panel.panel-danger
       .panel-heading.text-center Najbardziej lubiany news
       .panel-body.text-center
-        h5
-          = @most_liked_news.title
-          br
-          i.fa.fa-thumbs-o-up
-            = @most_liked_news_likes_count
-          i.fa.fa-thumbs-o-down
-            = @most_liked_news_dislikes_count
+        - unless @most_liked_news.blank?
+          h5
+            = @most_liked_news.title
+            br
+            i.fa.fa-thumbs-o-up
+              = @most_liked_news_likes_count
+            i.fa.fa-thumbs-o-down
+              = @most_liked_news_dislikes_count
+        - else 
+          h5 = empty_info(@most_liked_news, "BRAK DANYCH")
   .col-md-3
     .panel.panel-danger
       .panel-heading.text-center Najmniej lubiany news
       .panel-body.text-center
-        h5
-          = @most_hated_news.title
-          br
-          i.fa.fa-thumbs-o-up
-            = @most_hated_news_likes_count
-          i.fa.fa-thumbs-o-down
-            = @most_hated_news_dislikes_count
+        - unless @most_liked_news.blank?
+          h5
+            = @most_hated_news.title
+            br
+            i.fa.fa-thumbs-o-up
+              = @most_hated_news_likes_count
+            i.fa.fa-thumbs-o-down
+              = @most_hated_news_dislikes_count
+        - else 
+          h5 = empty_info(@most_hated_news, "BRAK DANYCH")
   .col-md-3
     .panel.panel-danger
       .panel-heading.text-center News posiadający najwięcej komentarzy
       .panel-body.text-center
-        h4
-          = @news_most_comments
+        h5 = empty_info(@news_most_comments, "BRAK DANYCH")

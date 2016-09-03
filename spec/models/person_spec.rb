@@ -62,11 +62,22 @@ describe Person, 'validations' do
   it { is_expected.to validate_presence_of :email }
   it { is_expected.to validate_presence_of :type }
 
-  subject { FactoryGirl.build(:person) }
+  subject { build :person }
   it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
   it { is_expected.to validate_uniqueness_of(:pesel).case_insensitive }
 end
 
+describe Person, 'factories' do
+  let(:client) { build(:client) }
+  let(:trainer) { build(:trainer) }
+  it 'returns valid client factory' do
+    expect(client.valid?).to be_truthy
+  end
+
+  it 'returns valid trainer factory' do
+    expect(trainer.valid?).to be_truthy
+  end
+end
 describe Person, 'methods' do
   subject { Person }
 

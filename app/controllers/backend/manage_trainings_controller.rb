@@ -15,11 +15,13 @@ class Backend::ManageTrainingsController < BackendController
 
   # POST backend/individual_trainings
   def create
-    @manage_training = IndividualTraining.new(manage_training_params)
-    if @manage_training.save
-      redirect_to :back, notice: 'Pomyślnie dodano.'
-    else
-      render :new
+    if current_admin
+      @manage_training = IndividualTraining.new(manage_training_params)
+      if @manage_training.save
+        redirect_to :back, notice: 'Pomyślnie dodano.'
+      else
+        render :new
+      end
     end
   end
 

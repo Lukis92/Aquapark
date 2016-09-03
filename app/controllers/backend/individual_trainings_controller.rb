@@ -36,7 +36,8 @@ class Backend::IndividualTrainingsController < BackendController
           currency: 'pln',
           card: token
         )
-        if @individual_training.save
+
+        if charge && @individual_training.save
           redirect_to show_backend_individual_trainings_path(@client), notice: 'Pomyślnie dodano.'
         else
           render :new

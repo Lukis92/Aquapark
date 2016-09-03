@@ -41,16 +41,16 @@ class Activity < ActiveRecord::Base
   # **METHODS******************************************************************#
   DAYS = %w(Poniedziałek Wtorek Środa Czwartek Piątek Sobota Niedziela).freeze
 
-  private
-
   # Getting next n dates of day_of_week
   def next_n_days(n = 2)
     day = I18n.t(:"activerecord.attributes.activity.day_number.#{day_of_week}",
-                 day_of_week)
+    day_of_week)
     (Date.today...Date.today + 7 * n).select do |d|
       d.wday == day
     end
   end
+  private
+
 
   # PostgreSQL search
   def self.text_search(query)

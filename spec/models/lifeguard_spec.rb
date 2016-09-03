@@ -26,6 +26,8 @@
 #  profile_image_updated_at   :datetime
 #
 
+require 'rails_helper'
+
 describe Lifeguard, 'methods' do
   subject { FactoryGirl.build(:lifeguard) }
   it { is_expected.to validate_presence_of :salary }

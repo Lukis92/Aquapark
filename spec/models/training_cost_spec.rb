@@ -28,6 +28,19 @@ describe TrainingCost, 'validations' do
   it { is_expected.to validate_numericality_of(:cost).is_greater_than(0).is_less_than(1000) }
 end
 
+describe TrainingCost, 'factories' do
+  let(:training_cost) { build(:training_cost) }
+  let(:tc2) { build(:tc2) }
+
+  it 'returns valid training cost factory' do
+    expect(training_cost.valid?).to be_truthy
+  end
+
+  it 'returns valid tc2 factory' do
+    expect(tc2.valid?).to be_truthy
+  end
+end
+
 describe TrainingCost, 'methods' do
   describe '#full_duration' do
     let(:training_cost) { build(:training_cost) }

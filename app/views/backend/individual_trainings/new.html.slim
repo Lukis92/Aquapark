@@ -55,17 +55,13 @@ h5.section-title.st-blue
                 td
                   = l(ti)
                 td
-                  - @trainer.individual_trainings_as_trainer.each_with_index do |tit, i|
+                  - @trainer.individual_trainings_as_trainer.order(date_of_training: :desc).order(start_on: :asc).each_with_index do |tit, i|
                     - if tit.date_of_training == ti
                       - unless i == @trainer.individual_trainings_as_trainer.size - 1
-                        = l(tit.start_on, format: :short)
-                        | -
-                        = l(tit.end_on, format: :short)
-                        |
+                        | #{l(tit.start_on, format: :short)} - #{l(tit.end_on, format: :short)}
+                        |, 
                       - else
-                        = l(tit.start_on, format: :short)
-                        | -
-                        = l(tit.end_on, format: :short)
+                        | #{l(tit.start_on, format: :short)} - #{l(tit.end_on, format: :short)}
           - else
             tr
               td colspan="2"

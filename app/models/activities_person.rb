@@ -26,11 +26,14 @@ class ActivitiesPerson < ActiveRecord::Base
 private
   # checking lack of slots to join activity
   def check_max_people
-    if activity.activities_people.where(date: date).count > 0
-      if activity.activities_people.where(date: date)
-                                   .count >= activity.max_people
-        errors.add(:base, "Została wykorzystana masymalna ilość miejsc \
-                           na ten trening.")
+    unless activity.blank?
+      # binding.pry
+      if activity.activities_people.where(date: date).count > 0
+        if activity.activities_people.where(date: date)
+                                     .count >= activity.max_people
+          errors.add(:base, "Została wykorzystana masymalna ilość miejsc \
+                             na ten trening.")
+        end
       end
     end
   end

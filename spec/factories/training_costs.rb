@@ -10,11 +10,11 @@
 FactoryGirl.define do
   factory :training_cost do
     duration 140
-    cost 120
+    cost 120.00
 
     factory :tc2 do
       duration 60
-      cost 100
+      cost 100.00
     end
   end
 end

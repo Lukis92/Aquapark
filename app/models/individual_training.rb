@@ -18,12 +18,15 @@ class IndividualTraining < ActiveRecord::Base
   belongs_to :training_cost
   # ************************#
   # **VALIDATIONS***************************#
-  # validate :set_end_on, if: :should_validate_end_on?
-  validates_presence_of :start_on, :date_of_training, :training_cost_id, :end_on
+  validate :set_end_on, if: :should_validate_end_on?
+  validates_presence_of :start_on, :date_of_training,
+                        :training_cost_id
+
+  validates_presence_of :end_on if :set_end_on
   validate :date_and_start_on_validation
-  validate :date_of_training_validation
+  validate :date_of_training_validation, if: :should_validate_date_of_training?
   validate :client_free_time_validation
-  # validate :trainer_individual_training_validation
+  validate :trainer_free_time_validation
   # ****************************************#
   attr_accessor :credit_card, :card_code
   include PgSearch
@@ -40,12 +43,8 @@ class IndividualTraining < ActiveRecord::Base
 
   private
 
-  # def should_validate_date_of_training?
-  #   !date_of_training.nil? && !end_on.nil?
-  # end
-
-  def should_validate_individual_training?
-    !date_of_training.nil? && !end_on.nil? && date_of_training_validation
+  def should_validate_date_of_training?
+   !date_of_training.nil? && !end_on.nil?
   end
 
   def should_validate_end_on?
@@ -69,10 +68,12 @@ class IndividualTraining < ActiveRecord::Base
     unless start_on.blank?
       trainer.work_schedules.each_with_index do |ti, ind|
         if ti.day_of_week == BackendController.helpers.translate_date(date_of_training)
-          if (start_on...end_on).overlaps?(ti.start_time...ti.end_time)
+          if (start_on.strftime('%H:%M')..end_on.strftime('%H:%M'))
+             .overlaps?(ti.start_time.strftime('%H:%M')..ti.end_time.strftime('%H:%M'))
             break
-          else
+        else
             errors.add(:base, 'Trening jest poza grafikiem pracy trenera.')
+            break
           end
         elsif ind == trainer.work_schedules.size - 1
           errors.add(:base, 'Trener w tym dniu nie pracuje.')
@@ -81,30 +82,39 @@ class IndividualTraining < ActiveRecord::Base
     end
   end
 
-  #check if client doesn't have another training or activity
+  # check if client doesn't have another training or activity
   def client_free_time_validation
     unless start_on.blank?
       client.individual_trainings_as_client.where(date_of_training: date_of_training)
-            .where('id != ?', id).each do |ci|
+            .each do |ci|
         if (start_on...end_on).overlaps?(ci.start_on...ci.end_on)
           errors.add(:base, 'Masz w tym czasie inny trening.')
         end
       end
-      client.activities.where(day_of_week: BackendController.helpers.translate_date(date_of_training))
-            .each do |ca|
-        if (start_on...end_on).overlaps?(ca.start_on...end_on)
-          errors.add(:base, 'Masz w tym czasie zajęcie grupowe.')
+      client.activities_people.where(date: date_of_training)
+                              .where(person_id: client_id).each do |ca|
+        activity.where(activity_id: ca.id).each do |a|
+          if (start_on...end_on).overlaps?(a.start_on...a.end_on)
+            errors.add(:base, 'Masz w tym czasie zajęcie grupowe.')
+          end
         end
       end
     end
   end
 
-  def trainer_individual_training_validation
+  def trainer_free_time_validation
     unless start_on.blank?
       trainer.individual_trainings_as_trainer.where(date_of_training: date_of_training)
-             .where('id != ?', id).each do |ti|
+             .each do |ti|
         if (start_on...end_on).overlaps?(ti.start_on...ti.end_on)
           errors.add(:base, 'Trener ma w tym czasie inny trening.')
+        end
+      end
+
+      trainer.activities.where(person_id: trainer_id)
+                        .where(day_of_week: BackendController.helpers.translate_date(date_of_training)).each do |ta|
+        if (start_on...end_on).overlaps?(ta.start_on...ta.end_on)
+          errors.add(:base, 'Trener ma w tym czasie inne zajęcia.')
         end
       end
     end
@@ -117,7 +127,7 @@ class IndividualTraining < ActiveRecord::Base
     end
   end
 
-  def self.text_search(query, querydate)
+  def self.text_search(query, querydate = '')
     if query.present? && querydate.blank?
       search(query)
     elsif query.present? && querydate.present?
