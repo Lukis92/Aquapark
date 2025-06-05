@@ -1,9 +1,11 @@
 # Controller to contact form on main page
 class ContactsController < ApplicationController
+  # Display the contact form.
   def new
     @contact = Contact.new
   end
 
+  # Process the submitted contact form and send email.
   def create
     @contact = Contact.new(params[:contact])
     @contact.request = request

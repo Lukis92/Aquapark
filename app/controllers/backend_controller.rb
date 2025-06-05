@@ -20,6 +20,7 @@ class BackendController < ApplicationController
 
   private
 
+  # Ensures a user of any role is logged in before accessing backend pages.
   def require_person
     unless current_manager.present? || current_client.present? ||
            current_receptionist.present? || current_lifeguard.present? ||
