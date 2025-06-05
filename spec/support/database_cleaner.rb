@@ -7,8 +7,8 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
   end
 
-  # When testing multiple db connections transaction doesn't because it isolate
-  # connections from each other. See database_cleaner README for more info
+  # When testing multiple DB connections, `:transaction` doesn't work because it
+  # isolates connections from each other. See database_cleaner README for more info
   config.before(:each, multiple_db: true) do
     DatabaseCleaner.strategy = :truncation
   end
