@@ -84,7 +84,7 @@ $ rails s
   * Naprawienie żle wyświetlających się podstron
   * Dodanie notatek informacyjnych na każdej podstronie
   * Wyświetlanie tylko najbliższych terminów zajęć grupowych
-  * Usunięty zielony haczyk pszy pustych opisach cen biletów/karnetów
+  * Usunięty zielony haczyk przy pustych opisach cen biletów/karnetów
   * Wyrównane wysokości bloków z cenami
   * Poprawienie wyglądu komentarza
   * Sortowane kolumny w activities/requests
