@@ -1,5 +1,6 @@
+# Helpers used across backend views.
 module Backend::BackendHelper
-  # to get various helper method like "current_user" and "authenticate_user"
+  # Define methods such as "current_manager" or "authenticate_trainer!"
   %w(Manager Receptionist Client Lifeguard Trainer).each do |k|
     define_method "current_#{k.underscore}" do
       current_person if current_person.is_a?(k.constantize)
@@ -13,11 +14,12 @@ module Backend::BackendHelper
     end
   end
 
+  # Returns "active" if the current page matches any of the provided paths.
   def active?(*paths)
     'active' if paths.any? { |path| current_page?(path) }
   end
 
-  # information boxes - top on pages (i)
+  # Displays an informational message box.
   def info(message)
     html = ''
     html << "<div class=\"row\"><div class=\"col-md-6\"><div class=\"card-panel\">
@@ -26,8 +28,7 @@ module Backend::BackendHelper
 
     html.html_safe
   end
-
-  # notice boxes
+  # Displays a notification box.
   def notice_info(message)
     html = ''
     html << "<div class=\"row\"><div class=\"col-md-4 col-md-offset-4\">
@@ -37,7 +38,7 @@ module Backend::BackendHelper
     html.html_safe
   end
 
-  # info about empty field
+  # Returns a highlighted message if the object is blank.
   def empty_info(object, message)
     if object.blank?
       html = ''
@@ -48,6 +49,7 @@ module Backend::BackendHelper
     end
   end
 
+  # Renders a check or cross icon depending on the statement.
   def show_status(statement)
     html = ''
     html << if statement
@@ -58,6 +60,7 @@ module Backend::BackendHelper
     html.html_safe
   end
 
+  # Renders accept/reject icons depending on the statement.
   def show_accept_status(statement)
     html = ''
     html << if statement
@@ -68,6 +71,7 @@ module Backend::BackendHelper
     html.html_safe
   end
 
+  # Polish names for days of the week.
   DAYS_IN_PL = {
     'Monday' => 'Poniedziałek',
     'Tuesday' => 'Wtorek',
@@ -78,6 +82,7 @@ module Backend::BackendHelper
     'Sunday' => 'Niedziela'
   }.freeze
 
+  # English names for days of the week.
   DAYS_IN_ENG = {
     'Poniedziałek' => 'Monday',
     'Wtorek' => 'Tuesday',
@@ -87,10 +92,13 @@ module Backend::BackendHelper
     'Sobota' => 'Saturday',
     'Niedziela' => 'Sunday'
   }.freeze
+
+  # Translate a Date object to its Polish day name.
   def translate_date(daytime)
     DAYS_IN_PL[daytime.strftime('%A')]
   end
 
+  # Translate a Polish day name to English.
   def translate_day_eng(day)
     DAYS_IN_ENG[day]
   end

@@ -1,4 +1,6 @@
+# Helper methods for Devise forms.
 module DeviseHelper
+  # Build an HTML list of Devise error messages.
   def devise_error_messages!
     flash_alerts = []
     error_key = 'errors.messages.not_saved'

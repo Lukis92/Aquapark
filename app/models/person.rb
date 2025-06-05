@@ -85,9 +85,11 @@ class Person < ActiveRecord::Base
                              tsearch: { prefix: true }
                            }
   # **METHODS*********************#
+  # Returns first and last name concatenated.
   def full_name
     "#{first_name} #{last_name}"
   end
+  # Calculates the age of the person.
 
   def age
     Date.today.strftime('%Y').to_i - date_of_birth.strftime('%Y').to_i -
@@ -95,10 +97,12 @@ class Person < ActiveRecord::Base
       (Date.today.strftime('%m').to_i == date_of_birth.strftime('%m').to_i &&
       Date.today.strftime('%d').to_i >= date_of_birth.strftime('%d').to_i)) ? 0 : 1)
   end
+  # Returns the name with translated type.
 
   def person_full_name_type
     "#{first_name} #{last_name} | #{translate_type}"
   end
+  # Validates the size of the uploaded profile image.
 
   def profile_image_size
     unless profile_image.blank?
@@ -116,6 +120,7 @@ class Person < ActiveRecord::Base
     'Client' => 'Klient'
   }.freeze
 
+  # Returns the Polish translation of the person type.
   def translate_type
     TYPES_IN_PL[type]
   end
@@ -123,6 +128,7 @@ class Person < ActiveRecord::Base
 
   private
 
+  # Performs full text search across several columns.
   def self.text_search(query, querydate = '')
     if query.present? && querydate.blank?
       search(query)
@@ -134,6 +140,7 @@ class Person < ActiveRecord::Base
       all
     end
   end
+  # Normalize email before validation.
   def downcase_email
     self.email = email.downcase if email.present?
   end
