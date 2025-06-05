@@ -69,6 +69,16 @@ $ rails s
 ```
 
 ## Historia zmian
+* 0.5.4
+  * Naprawiono wyszukiwanie nakładających się aktywności oraz tłumaczenie dni (I18n)
+  * Dodano komentarze dokumentacyjne
+  * Poprawiono literówkę w changelogu
+  * Naprawiono walidację wolnego czasu klienta i dodano testy jednostkowe
+  * Dodano testy walidacji obecności dla BoughtDetail
+  * Zaktualizowano komentarz dotyczący czyszczenia bazy danych
+  * Zrefaktoryzowano kontroler home i scope’y typu wpisu
+  * Dodano brakujące testy jednostkowe
+
 * 0.5.3
   * Zabezpieczenie przed niepowołanym wejściem w sekcję urlopów
   * Poprawienie walidacji nachodzenia na siebie urlopów
