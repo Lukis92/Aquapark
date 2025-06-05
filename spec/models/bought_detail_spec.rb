@@ -24,5 +24,9 @@ describe BoughtDetail, 'column specifications' do
 end
 
 describe BoughtDetail, 'validations' do
-
+  it { is_expected.to validate_presence_of :bought_data }
+  it { is_expected.to validate_presence_of :cost }
+  it { is_expected.to validate_presence_of :days }
+  it { is_expected.to validate_presence_of :entry_type_id }
+  it { is_expected.to validate_presence_of :person_id }
 end
