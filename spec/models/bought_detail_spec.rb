@@ -30,3 +30,15 @@ describe BoughtDetail, 'validations' do
   it { is_expected.to validate_presence_of :entry_type_id }
   it { is_expected.to validate_presence_of :person_id }
 end
+
+describe BoughtDetail, '#active?' do
+  it 'returns true when current date is within range' do
+    bd = build(:bought_detail, start_on: Date.today - 1, days: 10)
+    expect(bd.active?).to be_truthy
+  end
+
+  it 'returns false when current date is outside range' do
+    bd = build(:bought_detail, start_on: Date.today - 10, days: 5)
+    expect(bd.active?).to be_falsey
+  end
+end
