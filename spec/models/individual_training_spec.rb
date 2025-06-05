@@ -86,23 +86,47 @@ describe IndividualTraining, 'methods' do
     end
   end
 
-  # describe '#client_free_time_validation' do
-  #   let(:work_schedule) { create :work_schedule }
-  #   let(:ind) do
-  #     build :ind
-  #   end
-  #   let(:ind2) do
-  #     build :ind2
-  #   end
-  #   context 'when training is during another training' do
-  #     it 'raises an error' do
-  #       expect(ind.valid?).to be_truthy
-  #       expect(ind2.valid?).to be_falsey
-  #       # expect(ind2.errors.count).to eq 1
-  #       # expect(ind2.errors[:base]).to eq(['Masz w tym czasie inny trening.'])
-  #     end
-  #   end
-  # end
+  describe '#client_free_time_validation' do
+    let(:client) { create :client }
+    let(:trainer) { create :trainer }
+    let!(:work_schedule) do
+      create(:work_schedule, person: trainer, day_of_week: 'Wtorek',
+                             start_time: '10:00', end_time: '15:00')
+    end
+    let(:activity_trainer) { create :trainer }
+    let(:activity) do
+      create(:activity, person: activity_trainer, day_of_week: 'Wtorek',
+                        start_on: '12:00', end_on: '13:00')
+    end
+    let(:date) { Date.today.next_week.advance(days: 1) }
+    let!(:activities_person) do
+      create(:activities_person, activity: activity, person: client, date: date)
+    end
+
+    context 'when training overlaps with client activity' do
+      let(:individual_training) do
+        build(:individual_training, client: client, trainer: trainer,
+             date_of_training: date, start_on: '12:30')
+      end
+
+      it 'raises an error' do
+        expect(individual_training.valid?).to be_falsey
+        expect(individual_training.errors[:base])
+          .to include('Masz w tym czasie zajęcie grupowe.')
+      end
+    end
+
+    context 'when training does not overlap with client activity' do
+      let(:individual_training) do
+        build(:individual_training, client: client, trainer: trainer,
+             date_of_training: date, start_on: '13:30')
+      end
+
+      it 'is valid' do
+        expect(individual_training.valid?).to be_truthy
+      end
+    end
+  end
 
   # describe "#trainer_free_time_validation" do
   #   let(:work_schedule) { create :work_schedule }
