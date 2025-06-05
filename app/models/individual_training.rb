@@ -93,7 +93,7 @@ class IndividualTraining < ActiveRecord::Base
       end
       client.activities_people.where(date: date_of_training)
                               .where(person_id: client_id).each do |ca|
-        activity.where(activity_id: ca.id).each do |a|
+        Activity.where(id: ca.activity_id).each do |a|
           if (start_on...end_on).overlaps?(a.start_on...a.end_on)
             errors.add(:base, 'Masz w tym czasie zajęcie grupowe.')
           end
