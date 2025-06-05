@@ -12,6 +12,9 @@
 class EntryType < ActiveRecord::Base
   KIND = %w(Bilet Karnet).freeze
 
+  scope :tickets, -> { where(kind: 'Bilet') }
+  scope :passes, -> { where(kind: 'Karnet') }
+
   # **VALIDATIONS*******************************************************#
   DECIMAL_REGEX = /\A\d+(?:\.\d{0,2})?\z/
   validates :kind, presence: true
