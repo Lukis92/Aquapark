@@ -54,8 +54,7 @@ class WorkSchedule < ActiveRecord::Base
   end
 
   def next_n_days(amount, day_of_week)
-    day = I18n.t(:"activerecord.attributes.activity.day_number.#{day_of_week}",
-                 day_of_week)
+    day = I18n.t("activerecord.attributes.activity.day_number.#{day_of_week}")
     (Date.today...Date.today + 7 * amount).select do |d|
       d.wday == day
     end
