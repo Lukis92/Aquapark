@@ -121,10 +121,8 @@ class Activity < ActiveRecord::Base
   # checks if new activity is while trainer works
   def overlapping_trainer_work_schedule
     work_schedules = WorkSchedule.where(person_id: person_id)
-    work_schedules.each do |ws|
-      unless (start_on...end_on).overlaps?(ws.start_time...ws.end_time)
-        errors.add(:base, 'W tym czasie trener nie pracuje.')
-      end
+    unless work_schedules.any? { |ws| (start_on...end_on).overlaps?(ws.start_time...ws.end_time) }
+      errors.add(:base, 'W tym czasie trener nie pracuje.')
     end
   end
 
