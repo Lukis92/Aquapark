@@ -7,7 +7,7 @@
 #  cost     :decimal(5, 2)    not null
 #
 
-class TrainingCost < ActiveRecord::Base
+class TrainingCost < ApplicationRecord
   DECIMAL_REGEX = /\A\d+(?:\.\d{0,2})?\z/
   has_many :individual_trainings
 

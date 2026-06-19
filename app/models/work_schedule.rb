@@ -9,7 +9,7 @@
 #  person_id   :integer          not null
 #
 
-class WorkSchedule < ActiveRecord::Base
+class WorkSchedule < ApplicationRecord
   # **ASSOCIATIONS**********#
   belongs_to :person
   # ************************#

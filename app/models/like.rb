@@ -8,7 +8,7 @@
 #  news_id   :integer          not null
 #
 
-class Like < ActiveRecord::Base
+class Like < ApplicationRecord
   belongs_to :news
   belongs_to :person
 

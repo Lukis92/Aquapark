@@ -14,7 +14,7 @@
 #  person_id   :integer          not null
 #
 
-class Activity < ActiveRecord::Base
+class Activity < ApplicationRecord
   # **ASSOCIATIONS*************************************************************#
   has_many :activities_people
   has_many :people, through: :activities_people

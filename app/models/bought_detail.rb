@@ -11,7 +11,7 @@
 #  cost          :decimal(5, 2)    not null
 #
 
-class BoughtDetail < ActiveRecord::Base
+class BoughtDetail < ApplicationRecord
   # **ASSOCIATIONS**********#
   belongs_to :entry_type
   belongs_to :person

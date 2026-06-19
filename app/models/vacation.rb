@@ -11,8 +11,7 @@
 #  accepted  :boolean          default(FALSE)
 #
 
-class Vacation < ActiveRecord::Base
-  include ActiveModel::Dirty
+class Vacation < ApplicationRecord
   # **ASSOCIATIONS**********#
   belongs_to :person
   # ************************#

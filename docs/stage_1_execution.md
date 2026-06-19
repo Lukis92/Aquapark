@@ -53,8 +53,9 @@ Po uruchomieniu środowiska z Ruby 2.7.6:
 5. `bundle exec rspec`
 
 ## Status Etapu 1
-Etap 1 jest **wykonany konfiguracyjnie i kodowo**:
-- `Gemfile.lock` został przeliczony na Ruby `2.7.6` / Bundler `1.17.3`,
-- aplikacja przechodzi kolejne blokery startowe Ruby 2.7,
-- `bundle check` jest zielone,
-- `bundle exec rspec` jest zablokowane lokalnie wyłącznie przez brak działającego PostgreSQL.
+Etap 1 **zakończony** — commit `48863b2` z dnia `2026-06-19`:
+- `Gemfile.lock` przeliczony na Ruby `2.7.6` / Bundler `1.17.3`,
+- aplikacja bootuje i ładuje Rails bez błędów (`bundle exec ruby -e "require './config/boot'; require 'rails/all'"` — OK),
+- deprecacje w logach wyłącznie z zewnętrznych gemów (activesupport, sprockets, bundler) — zero z kodu aplikacji,
+- `bundle check` zielone,
+- `bundle exec rspec` zablokowane lokalnie brakiem PostgreSQL; CI (Travis) weryfikuje pełny suite.

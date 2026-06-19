@@ -11,7 +11,7 @@
 #  person_id  :integer          not null
 #
 
-class News < ActiveRecord::Base
+class News < ApplicationRecord
   # **ASSOCIATIONS**********#
   belongs_to :person
   has_many :likes, dependent: :destroy

@@ -11,7 +11,7 @@
 #  start_on         :time             not null
 #
 
-class IndividualTraining < ActiveRecord::Base
+class IndividualTraining < ApplicationRecord
   # **ASSOCIATIONS**********#
   belongs_to :trainer, class_name: 'Person', foreign_key: 'trainer_id'
   belongs_to :client, class_name: 'Person', foreign_key: 'client_id'

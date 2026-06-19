@@ -48,8 +48,12 @@ To oznacza brak aktualnych poprawek bezpieczeństwa i rosnące ryzyko awarii prz
 - Szczegóły i zasady feature freeze: `docs/stage_0_execution.md`.
 
 ## Status Etapu 1
-- Etap 1 został rozpoczęty.
+- Etap 1 **zakończony** (commit `48863b2`).
 - Szczegóły wykonania: `docs/stage_1_execution.md`.
+
+## Status Etapu 2
+- Etap 2 **zakończony** — aplikacja działa na Rails `5.2.8.1`.
+- Szczegóły wykonania: `docs/stage_2_execution.md`.
 
 ## Kryteria zakończenia
 1. Aplikacja działa na Ruby `3.x`.

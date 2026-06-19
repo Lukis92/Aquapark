@@ -26,9 +26,9 @@ module Aquapark
                                                  '*.{rb,yml}').to_s]
     config.i18n.default_locale = :pl
     config.beginning_of_week = :monday
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
-    config.assets.initialize_on_precompile = false
+    # Disable belongs_to required by default for incremental Rails 5 migration.
+    # TODO Stage 3: remove this and add optional: true where needed.
+    config.active_record.belongs_to_required_by_default = false
 
     # Autoload files under /lib
     config.autoload_paths << "#{Rails.root}/lib"

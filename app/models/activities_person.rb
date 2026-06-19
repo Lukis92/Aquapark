@@ -8,7 +8,7 @@
 #  id          :integer          not null, primary key
 #
 
-class ActivitiesPerson < ActiveRecord::Base
+class ActivitiesPerson < ApplicationRecord
   # **ASSOCIATIONS*************************************************************#
   belongs_to :activity
   belongs_to :person

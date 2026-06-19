@@ -9,7 +9,7 @@
 #  price        :decimal(5, 2)    not null
 #
 
-class EntryType < ActiveRecord::Base
+class EntryType < ApplicationRecord
   KIND = %w(Bilet Karnet).freeze
 
   scope :tickets, -> { where(kind: 'Bilet') }
