@@ -1,4 +1,4 @@
-module My_modules
+module MyModules
   # Utility helpers for handling sorting parameters in controllers.
   module Sort
     # Returns the database column used for sorting Person records.

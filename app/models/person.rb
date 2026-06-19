@@ -67,14 +67,15 @@ class Person < ApplicationRecord
                     uniqueness: { case_sensitive: false },
                     format: { with: VALID_EMAIL_REGEX }
 
-  has_attached_file :profile_image, styles: { medium: '300x300>',
-                                              thumb: '100x100>' },
-                                    default_url: '/images/user_default.png',
-                                    storage: :s3,
-                                    bucket: 'aquapark-project'
-  validates_attachment_content_type :profile_image,
-                                    content_type: /\Aimage\/.*\Z/
-  validate :profile_image_size
+  has_one_attached :profile_image do |attachable|
+    attachable.variant :medium, resize_to_limit: [300, 300]
+    attachable.variant :thumb,  resize_to_limit: [100, 100]
+  end
+
+  validates :profile_image,
+            content_type: { in: /\Aimage\/.*\z/, message: 'musi być obrazem' },
+            size: { less_than: 5.megabytes, message: 'powinno ważyć mniej niż 5MB' },
+            if: -> { profile_image.attached? }
   #########################################################################
 
   include PgSearch
@@ -102,16 +103,6 @@ class Person < ApplicationRecord
   def person_full_name_type
     "#{first_name} #{last_name} | #{translate_type}"
   end
-  # Validates the size of the uploaded profile image.
-
-  def profile_image_size
-    unless profile_image.blank?
-      if profile_image.size > 5.megabytes
-        errors.add(:profile_image, 'powinno ważyć mniej niż 5MB')
-      end
-    end
-  end
-
   TYPES_IN_PL = {
     'Manager' => 'Kierownik',
     'Lifeguard' => 'Ratownik',

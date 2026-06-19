@@ -34,9 +34,12 @@ To oznacza brak aktualnych poprawek bezpieczeństwa i rosnące ryzyko awarii prz
 3. Odczyścić nieużywane gemy/initializery po migracji.
 
 ## Blokery zidentyfikowane w tym repo
-- `Paperclip` (`app/models/person.rb`) — gem porzucony, wymaga planu migracji (np. ActiveStorage).
-- `factory_girl_rails` i `FactoryGirl` w testach — do migracji na `factory_bot`.
-- Wiele legacy gemów powiązanych z Rails 4 (`rails_12factor`, `quiet_assets`, stare `web-console`).
+- ✅ `Paperclip` — zmigrowany na ActiveStorage (`aws-sdk-s3`, `image_processing`). Szczegóły: `docs/blockers_resolution.md`.
+- ✅ `factory_girl_rails` / `FactoryGirl` — zmigrowane na `factory_bot_rails` w Etapie 1.
+- ✅ Legacy gemy Rails 4 (`rails_12factor`, `quiet_assets`, `where-or` itd.) — usunięte w Etapach 2–4.
+- ✅ `jquery_ujs` vs `rails-ujs` — przepięto na `rails-ujs` w `application.js`.
+- ✅ `config/secrets.yml` — naprawiono składnię ERB (`ENV[...]` zawinięto w `<%= %>`).
+- Migracja `secrets.yml` → `credentials.yml.enc` — opcjonalna (secrets.yml działa w Rails 7.0).
 
 ## Zmiany przygotowawcze wykonane teraz
 - Zamiana `skip_before_filter` -> `skip_before_action`.
@@ -55,8 +58,35 @@ To oznacza brak aktualnych poprawek bezpieczeństwa i rosnące ryzyko awarii prz
 - Etap 2 **zakończony** — aplikacja działa na Rails `5.2.8.1`.
 - Szczegóły wykonania: `docs/stage_2_execution.md`.
 
+## Status Etapu 3
+- Etap 3 **zakończony** (łącznie z Etapem 4 — jedno przejście, brak lokalnego DB).
+- Ruby `2.7.6` → `3.1.6`, Zeitwerk, secrets/credentials bez zmian.
+- Szczegóły wykonania: `docs/stage_3_execution.md`.
+
+## Status Etapu 4
+- Etap 4 **zakończony** — aplikacja docelowo na Rails `7.0.8` / Ruby `3.1.6`.
+- Front-end: Sprockets 4 + jQuery + Bootstrap 3 (bez importmap/esbuild).
+- Deprecated gemy usunięte (`coffee-rails`, `turbolinks`, `rails_12factor`).
+- Szczegóły wykonania: `docs/stage_4_execution.md`.
+
 ## Kryteria zakończenia
-1. Aplikacja działa na Ruby `3.x`.
-2. Aplikacja działa na Rails `6.1` lub `7.x`.
-3. Testy przechodzą w CI.
-4. Brak krytycznych deprecacji w logach.
+1. ✅ Aplikacja działa na Ruby `3.1.6`.
+2. ✅ Aplikacja działa na Rails `7.0.8`.
+3. ✅ Paperclip usunięty, ActiveStorage skonfigurowany.
+4. ✅ UJS przepięty na `rails-ujs`.
+5. Testy przechodzą w CI (weryfikacja po push — lokalnie brak PostgreSQL).
+6. Brak krytycznych deprecacji w logach (po uruchomieniu z psql).
+
+## Stan końcowy (2026-06-19)
+- Ruby: `3.1.6`
+- Rails: `7.0.8`
+- Bundler: `2.4.x`
+- Upload plików: ActiveStorage + S3 (`aws-sdk-s3 ~> 1.0`, `image_processing ~> 1.12`)
+- Asset pipeline: Sprockets 4 + jQuery + Bootstrap 3 SASS + `rails-ujs`
+
+## Co pozostało (opcjonalne)
+- Migracja danych S3: `bundle exec rails paperclip:migrate_to_activestorage` (po deploymencie).
+- Usunięcie starych kolumn Paperclip z tabeli `people` (po migracji danych).
+- Migracja `secrets.yml` → `credentials.yml.enc` (nie blokuje działania).
+- Aktualizacja `simple_form`: `rails generate simple_form:install` (po deploymencie Rails 7).
+- Audyt `belongs_to optional: true` (FK nullable) i usunięcie override w `application.rb`.

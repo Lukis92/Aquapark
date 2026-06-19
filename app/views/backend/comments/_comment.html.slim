@@ -2,7 +2,10 @@
   / First row
   .row
     .col-md-4
-      = image_tag comment.person.profile_image.url(:medium)
+      - if comment.person.profile_image.attached?
+        = image_tag comment.person.profile_image.variant(:medium)
+      - else
+        = image_tag '/images/user_default.png'
     .col-md-7
       | #{comment.person.full_name}
       = ' '

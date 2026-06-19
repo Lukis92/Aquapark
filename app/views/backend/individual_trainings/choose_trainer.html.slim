@@ -11,7 +11,10 @@ h5 Trenerzy
     .testimonial-card.z-depth-1
       .card-up.default-color-dark
       .avatar
-        img.img-circle.img-responsive src=t.profile_image
+        - if t.profile_image.attached?
+          = image_tag t.profile_image.variant(:thumb), class: 'img-circle img-responsive'
+        - else
+          = image_tag '/images/user_default.png', class: 'img-circle img-responsive'
       .card-content
         h5
           = t.full_name

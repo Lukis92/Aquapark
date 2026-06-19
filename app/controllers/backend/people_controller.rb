@@ -81,11 +81,7 @@ class Backend::PeopleController < BackendController
   end
 
   def remove_photo
-    @person.profile_image.destroy
-    @person.update(profile_image_file_name: nil,
-                   profile_image_content_type: nil,
-                   profile_image_file_size: nil,
-                   profile_image_updated_at: nil)
+    @person.profile_image.purge
     redirect_to backend_person_path(@person),
                 notice: 'Zdjęcie zostało pomyślnie usunięte.'
   end

@@ -1,13 +1,9 @@
 language: ruby
 rvm:
-  - 2.7.6
+  - 3.1.6
 cache: bundler
 before_install:
-  - gem install bundler -v '~> 2.1'
-  - bundle config build.bcrypt --with-cflags=-Wno-incompatible-pointer-types
-  - bundle config build.bindex --with-cflags=-Wno-incompatible-pointer-types
-  - bundle config build.websocket-driver --with-cflags=-Wno-incompatible-pointer-types
-  - bundle config build.nio4r --with-cflags=-Wno-incompatible-pointer-types
+  - gem install bundler -v '~> 2.4'
 env:
   global:
     - RAILS_ENV=test

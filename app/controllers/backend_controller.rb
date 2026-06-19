@@ -22,7 +22,7 @@ class BackendController < ApplicationController
 
   def safe_redirect_back(**options)
     fallback_location = options.delete(:fallback_location) || backend_root_path
-    redirect_to(request.referer.presence || fallback_location, options)
+    redirect_back(fallback_location: fallback_location, **options)
   end
 
   # Ensures a user of any role is logged in before accessing backend pages.

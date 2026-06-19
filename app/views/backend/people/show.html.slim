@@ -5,8 +5,10 @@
   .panel-body
     .row
       .col-md-3
-        img.img-circle.img-responsive
-          = image_tag @person.profile_image.url(:medium)
+        - if @person.profile_image.attached?
+          = image_tag @person.profile_image.variant(:medium), class: 'img-circle img-responsive'
+        - else
+          = image_tag '/images/user_default.png', class: 'img-circle img-responsive'
 
       .col-md-9
         table.table.table-user-information

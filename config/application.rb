@@ -1,4 +1,4 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
 require 'rails/all'
 
@@ -7,31 +7,20 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 module Aquapark
-  # main initializers for application, as autoload paths.
   class Application < Rails::Application
-    # Settings in config/environments/* take precedence over those
-    # specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # Load Rails 7.0 defaults. New defaults introduced since Rails 5.2 are
+    # activated incrementally here; any that break the app are overridden below.
+    config.load_defaults 7.0
 
-    # Set Time.zone default to the specified zone and make Active Record
-    # auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names.
-    # Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
-
-    # The default locale is :en and all translations from
-    # config/locales/*.rb,yml are auto loaded.
-    config.i18n.load_path += Dir[Rails.root.join('my', 'locales',
-                                                 '*.{rb,yml}').to_s]
+    config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :pl
     config.beginning_of_week = :monday
-    # Disable belongs_to required by default for incremental Rails 5 migration.
-    # TODO Stage 3: remove this and add optional: true where needed.
+
+    # Keep belongs_to optional until all associations are audited for nullability.
+    # TODO: add `optional: true` where FK is nullable, then remove this override.
     config.active_record.belongs_to_required_by_default = false
 
-    # Autoload files under /lib
-    config.autoload_paths << "#{Rails.root}/lib"
+    config.active_storage.variant_processor = :mini_magick
 
     config.generators do |g|
       g.test_framework :rspec,
