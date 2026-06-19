@@ -55,11 +55,11 @@ class Backend::WorkSchedulesController < BackendController
                                       .paginate(page: params[:page], per_page: 20)
       else
         @work_schedules = WorkSchedule.includes(:person)
-                                      .order("CASE day_of_week
+                                      .order(Arel.sql("CASE day_of_week
                 WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa'
                 THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
                 WHEN 'Sobota' THEN 6
-                WHEN 'Niedziela' THEN 7 END")
+                WHEN 'Niedziela' THEN 7 END"))
                                       .order(sort_column + ' ' + sort_direction)
                                       .references(:people)
                                       .paginate(page: params[:page], per_page: 20)
@@ -68,11 +68,11 @@ class Backend::WorkSchedulesController < BackendController
     else
       @work_schedules = WorkSchedule.includes(:person)
                                     .where(person_id: @person.id)
-                                    .order("CASE day_of_week
+                                    .order(Arel.sql("CASE day_of_week
               WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa'
               THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
               WHEN 'Sobota' THEN 6
-              WHEN 'Niedziela' THEN 7 END")
+              WHEN 'Niedziela' THEN 7 END"))
                                     .order(sort_column + ' ' + sort_direction)
                                     .references(:people)
                                     .paginate(page: params[:page],
@@ -121,11 +121,11 @@ class Backend::WorkSchedulesController < BackendController
   def show
     @nearest_vacation = Vacation.where(person_id: @person.id)
                                 .where(['start_at > ?', Date.today]).first
-    @p_work_schedules = @person.work_schedules.order("CASE day_of_week
+    @p_work_schedules = @person.work_schedules.order(Arel.sql("CASE day_of_week
             WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa'
             THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
             WHEN 'Sobota' THEN 6
-            WHEN 'Niedziela' THEN 7 END")
+            WHEN 'Niedziela' THEN 7 END"))
   end
 
   # GET backend/work_schedules/search

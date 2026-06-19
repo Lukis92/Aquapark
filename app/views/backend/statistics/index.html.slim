@@ -119,17 +119,17 @@ h5 Statystyki
       .panel-heading.text-center Najwięcej zarabia
       .panel-body.text-center
         h4
-          = @biggest_salary.full_name
-          |  #{@biggest_salary.salary.nice}
-          |  zł
+          = @biggest_salary&.full_name || 'Brak danych'
+          - if @biggest_salary
+            |  #{@biggest_salary.salary.nice} zł
   .col-md-3
     .panel.panel-warning
       .panel-heading.text-center Najmniej zarabia
       .panel-body.text-center
         h4
-          = @smallest_salary.full_name
-          |  #{@smallest_salary.salary.nice}
-          |  zł
+          = @smallest_salary&.full_name || 'Brak danych'
+          - if @smallest_salary
+            |  #{@smallest_salary.salary.nice} zł
   .col-md-3
     .panel.panel-warning
       .panel-heading.text-center Średnie zarobki
@@ -145,13 +145,13 @@ h5 Statystyki
       .panel-heading.text-center Najbardziej zapracowany pracownik
       .panel-body.text-center
         h4
-          = @most.full_name
+          = @most&.full_name || 'Brak danych'
   .col-md-3
     .panel.panel-info
       .panel-heading.text-center Najmniej zapracowany pracownik
       .panel-body.text-center
         h4
-          = @least.full_name
+          = @least&.full_name || 'Brak danych'
   .col-md-3
     .panel.panel-info
       .panel-heading.text-center Ilość osób bez grafiku pracy
@@ -163,15 +163,17 @@ h5 Statystyki
       .panel-heading.text-center Najwcześniej zatrudniony
       .panel-body.text-center
         h4
-          = @earliest_worker.full_name
-          |  #{I18n.t(:"activerecord.attributes.work_schedule.pl_person_types.#{@earliest_worker.type}")}
+          = @earliest_worker&.full_name || 'Brak danych'
+          - if @earliest_worker
+            |  #{I18n.t(:"activerecord.attributes.work_schedule.pl_person_types.#{@earliest_worker.type}")}
   .col-md-3
     .panel.panel-info
       .panel-heading.text-center Ostatnio zatrudniony
       .panel-body.text-center
         h4
-          = @last_worker.full_name
-          |  #{I18n.t(:"activerecord.attributes.work_schedule.pl_person_types.#{@last_worker.type}")}
+          = @last_worker&.full_name || 'Brak danych'
+          - if @last_worker
+            |  #{I18n.t(:"activerecord.attributes.work_schedule.pl_person_types.#{@last_worker.type}")}
   .col-md-3
     .panel.panel-info
       .panel-heading.text-center Najwięcej osób pracuje w

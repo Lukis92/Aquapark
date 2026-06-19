@@ -17,7 +17,7 @@ class Backend::NewsController < BackendController
   # POST backend/news
   def create
     @news = News.new(news_params)
-    @news.person = Person.find(current_person)
+    @news.person = current_person
     if @news.save
       redirect_to backend_news_index_path,
                   notice: 'Pomyślnie dodano.'

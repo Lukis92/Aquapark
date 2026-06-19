@@ -23,31 +23,34 @@
 
 //alert disappear after few seconds
 
-$(window).load(function() {
-var body = document.body;
+$(document).ready(function() {
+    var body = document.body;
 
-if (body.getAttribute("data-controller") != 'bought_details' && body.getAttribute("data-action") != 'new') {
-    window.setTimeout(function() {
-        $(".alert").fadeTo(500, 0).slideUp(500, function() {
-            $(this).remove();
-        });
-    }, 10000);
-}
-});
-$(function() {
+    if (body.getAttribute("data-controller") != 'bought_details' && body.getAttribute("data-action") != 'new') {
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function() {
+                $(this).remove();
+            });
+        }, 10000);
+    }
+
     // Nice dropdown
     $('select').material_select();
-    // datepicker
-    $('.datepicker').pickadate({
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 120 // Creates a dropdown of 15 years to control year
+
+    // Datepicker — flatpickr (replaces pickadate)
+    flatpickr('.datepicker', {
+        locale: 'pl',
+        dateFormat: 'Y-m-d',
+        allowInput: true
     });
-    //timepicker
-    $('#input_starttime').pickatime({
-        twelvehour: false
-    });
-    $('#input_endtime').pickatime({
-        twelvehour: false
+
+    // Timepicker — flatpickr (replaces pickatime)
+    flatpickr('.timepicker', {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: 'H:i',
+        time_24hr: true,
+        allowInput: true
     });
 });
 

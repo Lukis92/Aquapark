@@ -8,12 +8,15 @@ html
     = stylesheet_link_tag 'mdb.min.css'
     = javascript_include_tag "application"
     = javascript_include_tag 'https://js.stripe.com/v2'
-    = favicon_link_tag 'Aquapark', href: '/images/brand.png'
+    /= favicon_link_tag 'Aquapark', href: '/images/brand.png'
     = timeago_script_tag
     = csrf_meta_tags
     = tag :meta, name: 'stripe-key', content: ENV['STRIPE_PUBLIC_KEY']
-    link href='http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext' rel='stylesheet'type='text/css'
+    link href='http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext' rel='stylesheet' type='text/css'
     link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'
+    link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css'
+    script src='https://cdn.jsdelivr.net/npm/flatpickr' type='text/javascript'
+    script src='https://npmcdn.com/flatpickr/dist/l10n/pl.js' type='text/javascript'
   body data-controller=controller_name data-action=action_name
     header
       = render 'layouts/b_navbar'

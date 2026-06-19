@@ -28,13 +28,13 @@ class Backend::StatisticsController < BackendController
     @current_vacations = Vacation.all.where(['start_at <= ?', Date.today])
                                  .where(['end_at >= ?', Date.today]).count
     # Hiredate
-    @most_busy = WorkSchedule.group(:person_id)
-                             .sum('CAST(extract(epoch from work_schedules.end_time) as integer) - cast(extract(epoch from work_schedules.start_time) as integer)').sort_by { |_, v| v }.last.first
-    @least_busy = WorkSchedule.group(:person_id)
-                              .sum('CAST(extract(epoch from work_schedules.end_time) as integer) - cast(extract(epoch from work_schedules.start_time) as integer)').sort_by { |_, v| v }.first.first
+    work_hours_sql = Arel.sql('CAST(extract(epoch from work_schedules.end_time) as integer) - cast(extract(epoch from work_schedules.start_time) as integer)')
+    sorted_busy = WorkSchedule.group(:person_id).sum(work_hours_sql).sort_by { |_, v| v }
+    @most_busy  = sorted_busy.last&.first
+    @least_busy = sorted_busy.first&.first
 
-    @most = Person.find(@most_busy)
-    @least = Person.find(@least_busy)
+    @most  = Person.find(@most_busy)  if @most_busy
+    @least = Person.find(@least_busy) if @least_busy
     @person_without_work = Person.where.not(type: 'Client').where('id NOT IN (SELECT DISTINCT(person_id) FROM work_schedules)').count
     @earliest_worker = Person.where.not(type: 'Client').order(hiredate: :asc).first
     @last_worker = Person.where.not(type: 'Client').order(hiredate: :desc).first
@@ -43,11 +43,11 @@ class Backend::StatisticsController < BackendController
     @avg_salaries = Person.where.not(type: 'Client').average(:salary)
     @day_most_work = WorkSchedule.group(:day_of_week)
                                  .select('day_of_week, COUNT(id) as work_count')
-                                 .order('COUNT(id) DESC').first.day_of_week
+                                 .order(Arel.sql('COUNT(id) DESC')).first&.day_of_week
     @day_most_work_count = WorkSchedule.where(day_of_week: @day_most_work).count
     @day_least_work = WorkSchedule.group(:day_of_week)
                                   .select('day_of_week, COUNT(id) as work_count')
-                                  .order('COUNT(id) ASC').first.day_of_week
+                                  .order(Arel.sql('COUNT(id) ASC')).first&.day_of_week
     @day_least_work_count = WorkSchedule.where(day_of_week: @day_least_work).count
 
     # Newsy

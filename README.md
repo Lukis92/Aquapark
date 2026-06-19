@@ -44,37 +44,64 @@ Raport wykonania Etapu 0 (stabilizacja + feature freeze):
 Raport realizacji Etapu 1 (Ruby 2.7):
 `docs/stage_1_execution.md`.
 
-## Instalacja
- Sklonuj repozytorium i zainstaluj wymagane gemy:
- ```
- $ bundle install --without production
- ```
- Następnie skopiuj database.yml.sample i zmień nazwę tego drugiego na database.yml.
- Skonfiguruj nowy plik z twoim lokalnym kontem PostgreSQL.
+## Wymagania
 
-Następnie, utwórz bazę:
+- **Ruby 3.1.7** — zalecana instalacja przez [RubyInstaller](https://rubyinstaller.org/downloads/) (Windows) lub rbenv/RVM (Linux/macOS)
+- **PostgreSQL** (lokalnie, np. przez [EDB installer](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads))
+- **Bundler** (`gem install bundler`)
 
-```
-$ rails db:create
-```
+## Instalacja i uruchomienie lokalne
 
-Następnie, zmigruj bazę:
+### 1. Sklonuj repozytorium
 
-```
-$ rails db:migrate
+```bash
+git clone <url-repozytorium>
+cd Aquapark
 ```
 
-Następnie, wygeneruj konto użytkownika:
+### 2. Zainstaluj gemy
 
-```
-$ rails db:manager
+```bash
+bundle install
 ```
 
-Finalnie, możesz odpalić serwer i zobaczyć rezultat
+### 3. Skonfiguruj bazę danych
 
+Plik `config/database.yml` jest już gotowy do użycia lokalnego (adapter: PostgreSQL, host: localhost, user: postgres). Jeśli Twój PostgreSQL ma hasło, uzupełnij pole `password:`:
+
+```yaml
+# config/database.yml
+connection: &connection
+  adapter: postgresql
+  username: postgres
+  password: TWOJE_HASŁO   # uzupełnij jeśli wymagane
+  host: localhost
 ```
-$ rails s
+
+### 4. Utwórz i zmigruj bazę danych
+
+```bash
+rails db:create
+rails db:migrate
 ```
+
+### 5. Utwórz konto managera
+
+```bash
+rails db:seed:manager
+```
+
+### 6. Uruchom serwer
+
+```bash
+rails s
+```
+
+Aplikacja będzie dostępna pod adresem **http://localhost:3000**.
+
+### Dane do logowania managera
+
+Dane logowania managera znajdziesz w pliku `db/seeds/manager.rb`.
 
 ## Historia zmian
 * 0.5.4
