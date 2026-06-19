@@ -1,7 +1,7 @@
 <div class="simple-calendar">
-  <%= link_to "Previous", url_for(params.merge(start_date: date_range.first - 1.day)) %>
+  <%= link_to "Previous", url_for(params.to_unsafe_h.merge(start_date: date_range.first - 1.day)) %>
   <%= I18n.t("date.month_names")[start_date.month] %> <%= start_date.year %>
-  <%= link_to "Next", url_for(params.merge(start_date: date_range.last + 1.day)) %>
+  <%= link_to "Next", url_for(params.to_unsafe_h.merge(start_date: date_range.last + 1.day)) %>
 
   <table class="table table-striped">
     <thead>
@@ -17,12 +17,12 @@
         <tr>
           <% week.each do |day| %>
             <%= content_tag :td, class: calendar.td_classes_for(day) do %>
-              <% if defined?(Haml) && respond_to?(:block_is_haml?) && block_is_haml?(block) %>
+              <% if defined?(Haml) && respond_to?(:block_is_haml?) && block_is_haml?(passed_block) %>
                 <% capture_haml do %>
-                  <% block.call day, sorted_events.fetch(day, []) %>
+                  <% passed_block.call day, sorted_events.fetch(day, []) %>
                 <% end %>
               <% else %>
-                <% block.call day, sorted_events.fetch(day, []) %>
+                <% passed_block.call day, sorted_events.fetch(day, []) %>
               <% end %>
             <% end %>
           <% end %>
