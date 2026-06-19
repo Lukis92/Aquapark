@@ -20,10 +20,9 @@ class News < ApplicationRecord
   # **VALIDATIONS***************************#
   validates_presence_of :title, :content, :scope
   # *****************************************#
-  default_scope -> { order(updated_at: :desc) }
 
   include PgSearch
-  pg_search_scope :search, against: [:title, :content, :scope],
+  pg_search_scope :search, against: [:title, :content],
                            associated_against: {
                              person: [:first_name, :last_name]
                            },

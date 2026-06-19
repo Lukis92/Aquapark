@@ -6,11 +6,12 @@ class Backend::IndividualTrainingsController < BackendController
   before_action :set_training_cost, except: :index
   before_action :select_rule_own_trainings, only: [:show]
   before_action :set_rule_to_join, only: [:choose_trainer]
-  helper_method :sort_column, :sort_direction
+  include Sortable
+  helper_method :sort_column
   def index
     @individual_trainings = IndividualTraining.includes(:training_cost)
                                               .includes(:client)
-                                              .order(sort_column + ' ' + sort_direction)
+                                              .order(Arel.sql("#{sort_column} #{sort_direction}"))
                                               .references(:training_costs)
                                               .references(:clients)
                                               .paginate(page: params[:page],
@@ -29,24 +30,28 @@ class Backend::IndividualTrainingsController < BackendController
     @individual_training = IndividualTraining.new(individual_training_params)
     Stripe.api_key = ENV['STRIPE_SECRET_KEY']
     token = params[:stripeToken]
-    if @individual_training.valid?
-      begin
-        charge = Stripe::Charge.create(
-          amount: (@individual_training.training_cost.cost * 100).floor,
-          currency: 'pln',
-          card: token
-        )
 
-        if charge && @individual_training.save
-          redirect_to show_backend_individual_trainings_path(@client), notice: 'Pomyślnie dodano.'
-        else
-          render :new
-        end
-      rescue Stripe::CardError => e
-        flash[:danger] = e.message
-        render :new
+    unless @individual_training.valid?
+      render :new and return
+    end
+
+    begin
+      charge = Stripe::Charge.create(
+        amount: (@individual_training.training_cost.cost * 100).floor,
+        currency: 'pln',
+        card: token
+      )
+
+      unless @individual_training.save
+        Stripe::Refund.create(charge: charge.id) rescue nil
+        flash[:danger] = 'Wystąpił błąd podczas zapisu. Płatność została zwrócona.'
+        render :new and return
       end
-    else
+
+      redirect_to show_backend_individual_trainings_path(@client),
+                  notice: 'Pomyślnie dodano.'
+    rescue Stripe::CardError => e
+      flash[:danger] = e.message
       render :new
     end
   end
@@ -171,17 +176,8 @@ class Backend::IndividualTrainingsController < BackendController
     end
   end
 
-  JOINED_TABLE_COLUMNS = %w(training_costs.cost training_costs.duration
-                            clients.first_name).freeze
   def sort_column
-    if JOINED_TABLE_COLUMNS.include?(params[:sort]) || IndividualTraining.column_names.include?(params[:sort])
-      params[:sort]
-    else
-      'date_of_training'
-    end
-  end
-
-  def sort_direction
-    %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
+    sortable_column(IndividualTraining, default: 'date_of_training',
+                    joined: %w(training_costs.cost training_costs.duration clients.first_name))
   end
 end

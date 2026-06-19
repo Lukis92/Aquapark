@@ -1,12 +1,13 @@
 class Backend::EntryTypesController < BackendController
-  helper_method :sort_column, :sort_direction
+  include Sortable
+  helper_method :sort_column
   before_action :set_entry_type, only: [:edit, :update, :destroy, :show_details]
   before_action :receptionist_access, only: [:new, :edit, :update, :destroy]
   before_action :employee_access, only: [:index]
 
   # GET backend/entry_types
   def index
-    @entry_types = EntryType.order(sort_column + ' ' + sort_direction)
+    @entry_types = EntryType.order(Arel.sql("#{sort_column} #{sort_direction}"))
                             .paginate(page: params[:page], per_page: 20)
   end
 
@@ -39,8 +40,8 @@ class Backend::EntryTypesController < BackendController
   end
 
   def show
-    @tickets = EntryType.order(sort_column + ' ' + sort_direction).where(kind: 'Bilet')
-    @passes = EntryType.order(sort_column + ' ' + sort_direction).where(kind: 'Karnet')
+    @tickets = EntryType.order(Arel.sql("#{sort_column} #{sort_direction}")).where(kind: 'Bilet')
+    @passes = EntryType.order(Arel.sql("#{sort_column} #{sort_direction}")).where(kind: 'Karnet')
   end
 
   def show_details
@@ -55,7 +56,7 @@ class Backend::EntryTypesController < BackendController
   # GET backend/entry_types/search
   def search
     if params[:query].present?
-      @entry_types = EntryType.order(sort_column + ' ' + sort_direction)
+      @entry_types = EntryType.order(Arel.sql("#{sort_column} #{sort_direction}"))
                               .text_search(params[:query])
                               .paginate(page: params[:page], per_page: 20)
     end
@@ -69,17 +70,10 @@ class Backend::EntryTypesController < BackendController
 
   def set_entry_type
     @entry_type = EntryType.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    flash[:danger] = 'Nie istnieje wejściówka o takim id.'
-    redirect_to backend_news_index_path
   end
 
   def sort_column
-    EntryType.column_names.include?(params[:sort]) ? params[:sort] : 'price'
-  end
-
-  def sort_direction
-    %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
+    sortable_column(EntryType, default: 'price')
   end
 
   def receptionist_access
@@ -90,7 +84,7 @@ class Backend::EntryTypesController < BackendController
   end
 
   def employee_access
-    if current_client == 'Client'
+    if current_client
       flash[:danger] = 'Brak dostępu. {employee_access}'
       redirect_to backend_news_index_path
     end

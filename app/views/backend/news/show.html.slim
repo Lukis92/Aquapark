@@ -29,7 +29,7 @@
               = @news.thumbs_down_total
           h5
             .label.label-success
-              = @news.scope
+              = Array(@news.scope).join(', ')
       .visible-xs
         a.btn-sm.comm-bg.rectangle.waves-effect.waves-light
           i.fa.fa-comments

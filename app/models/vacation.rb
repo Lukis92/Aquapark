@@ -23,6 +23,7 @@ class Vacation < ApplicationRecord
   # ****************************************#
 
   include PgSearch
+  include TextSearchable
   pg_search_scope :search, against: [:start_at, :end_at, :reason],
                            associated_against: {
                              person: [:first_name, :last_name]
@@ -60,15 +61,4 @@ class Vacation < ApplicationRecord
     end
   end
 
-  def self.text_search(query, querydate)
-    if query.present? && querydate.blank?
-      search(query)
-    elsif query.present? && querydate.present?
-      search(query + ' ' + querydate)
-    elsif query.blank? && querydate.present?
-      search(querydate)
-    else
-      all
-    end
-  end
 end

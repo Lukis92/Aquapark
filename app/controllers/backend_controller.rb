@@ -1,6 +1,10 @@
 # Controller for backend pages
 class BackendController < ApplicationController
   before_action :require_person
+  rescue_from ActiveRecord::RecordNotFound do |_e|
+    flash[:danger] = 'Nie znaleziono zasobu.'
+    redirect_to backend_news_index_path
+  end
   def show
   end
 

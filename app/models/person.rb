@@ -79,6 +79,7 @@ class Person < ApplicationRecord
   #########################################################################
 
   include PgSearch
+  include TextSearchable
   pg_search_scope :search, against: [:pesel, :first_name, :last_name,
                                      :date_of_birth, :email, :salary,
                                      :hiredate],
@@ -119,18 +120,6 @@ class Person < ApplicationRecord
 
   private
 
-  # Performs full text search across several columns.
-  def self.text_search(query, querydate = '')
-    if query.present? && querydate.blank?
-      search(query)
-    elsif query.present? && querydate.present?
-      search(query + ' ' + querydate)
-    elsif query.blank? && querydate.present?
-      search(querydate)
-    else
-      all
-    end
-  end
   # Normalize email before validation.
   def downcase_email
     self.email = email.downcase if email.present?

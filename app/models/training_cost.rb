@@ -15,6 +15,6 @@ class TrainingCost < ApplicationRecord
   validates :cost, presence: true, format: { with: DECIMAL_REGEX },
                      numericality: { greater_than: 0, less_than: 1000 }
   def full_duration
-    "#{duration} min. - #{cost.nice} zł"
+    "#{duration} min. - #{format('%.2f', cost)} zł"
   end
 end

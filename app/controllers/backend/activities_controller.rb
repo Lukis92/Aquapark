@@ -1,5 +1,6 @@
 class Backend::ActivitiesController < BackendController
-  helper_method :sort_column, :sort_direction
+  include Sortable
+  helper_method :sort_column
   before_action :set_activity, only: [:edit, :update, :destroy, :sign_up,
                                       :preview, :activate, :deactivate]
   before_action :set_trainers
@@ -10,17 +11,17 @@ class Backend::ActivitiesController < BackendController
   # GET backend/activities
   def index
     @activities = Activity.includes(:person)
-                          .order(sort_column + ' ' + sort_direction)
+                          .order(Arel.sql("#{sort_column} #{sort_direction}"))
                           .references(:people)
                           .paginate(page: params[:page], per_page: 20)
     @actual_activities = Activity.includes(:person)
-                                 .order(sort_column + ' ' + sort_direction)
+                                 .order(Arel.sql("#{sort_column} #{sort_direction}"))
                                  .references(:people)
                                  .where('active = ?', true)
                                  .paginate(page: params[:page], per_page: 20)
     @active_activities = ActivitiesPerson.includes(:person)
                                          .order(
-                                         sort_column + ' ' + sort_direction)
+                                         Arel.sql("#{sort_column} #{sort_direction}"))
                                          .references(:people)
                                          .where('activity.active = ?', true)
                                          .paginate(page: params[:page],
@@ -65,9 +66,9 @@ class Backend::ActivitiesController < BackendController
   # POST backend/activities/:id/deactivate
   def deactivate
     @activity.update!(active: false)
-    @activities_people = ActivitiesPerson.where(activity_id: @activity)
-                                         .where('date >= ?', Date.today)
-    @activities_people.each(&:destroy)
+    ActivitiesPerson.where(activity_id: @activity)
+                    .where('date >= ?', Date.today)
+                    .destroy_all
     safe_redirect_back notice: 'Deaktywowano.'
   end
 
@@ -75,7 +76,7 @@ class Backend::ActivitiesController < BackendController
   def requests
     @activity_requests = Activity.includes(:person)
                                  .where(active: false)
-                                 .order(sort_column + ' ' + sort_direction)
+                                 .order(Arel.sql("#{sort_column} #{sort_direction}"))
                                  .references(:people)
                                  .paginate(page: params[:page], per_page: 20)
   end
@@ -92,9 +93,8 @@ class Backend::ActivitiesController < BackendController
 
   # DELETE backend/activities/1
   def destroy
+    ActivitiesPerson.where(activity_id: @activity).destroy_all
     @activity.destroy
-    @activities_people = ActivitiesPerson.where(activity_id: @activity)
-    @activities_people.each(&:destroy)
     safe_redirect_back notice: 'Pomyślnie usunięto.'
   end
 
@@ -132,25 +132,12 @@ class Backend::ActivitiesController < BackendController
                   activities_people: [:date])
   end
 
-  JOINED_TABLE_COLUMNS = %w(people.first_name).freeze
   def sort_column
-    if JOINED_TABLE_COLUMNS.include?(params[:sort]) ||
-       Activity.column_names.include?(params[:sort])
-      params[:sort]
-    else
-      'name'
-    end
-  end
-
-  def sort_direction
-    %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
+    sortable_column(Activity, default: 'name', joined: %w(people.first_name))
   end
 
   def set_activity
     @activity = Activity.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    flash[:danger] = 'Nie ma aktywności o takim id.'
-    redirect_to backend_news_index_path
   end
 
   def set_zone

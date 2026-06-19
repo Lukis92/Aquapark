@@ -32,6 +32,7 @@ class Activity < ApplicationRecord
 
   # **PG_SEARCH***************************************************************#
   include PgSearch
+  include TextSearchable
   pg_search_scope :search, against: [:name, :description, :active, :day_of_week,
                                      :start_on, :end_on, :pool_zone,
                                      :max_people],
@@ -51,14 +52,6 @@ class Activity < ApplicationRecord
   private
 
 
-  # PostgreSQL search
-  def self.text_search(query)
-    if query.present?
-      search(query)
-    else
-      all
-    end
-  end
 
   private
 
@@ -121,11 +114,10 @@ class Activity < ApplicationRecord
   # checks if new activity is while trainer works
   def overlapping_trainer_work_schedule
     work_schedules = WorkSchedule.where(person_id: person_id)
-    work_schedules.each do |ws|
-      unless (start_on...end_on).overlaps?(ws.start_time...ws.end_time)
-        errors.add(:base, 'W tym czasie trener nie pracuje.')
-      end
+    covered = work_schedules.any? do |ws|
+      (start_on...end_on).overlaps?(ws.start_time...ws.end_time)
     end
+    errors.add(:base, 'W tym czasie trener nie pracuje.') unless covered
   end
 
   # validation start_on and end_on

@@ -1,5 +1,6 @@
 class Backend::BoughtDetailsController < BackendController
-  helper_method :sort_bought, :sort_direction
+  include Sortable
+  helper_method :sort_bought
   before_action :set_entry_type, only: [:index, :new, :create]
   before_action :set_bought_detail,
                 only: [:edit, :destroy, :activate, :deactivate]
@@ -8,7 +9,7 @@ class Backend::BoughtDetailsController < BackendController
   # GET backend/bought_details.json
   def index
     @bought_details = BoughtDetail.includes(:person)
-                                  .order(sort_bought + ' ' + sort_direction)
+                                  .order(Arel.sql("#{sort_bought} #{sort_direction}"))
                                   .references(:people)
                                   .where(entry_type_id: @entry_type)
                                   .paginate(page: params[:page], per_page: 20)
@@ -32,6 +33,10 @@ class Backend::BoughtDetailsController < BackendController
       @bought_detail.cost = @bought_detail.entry_type.price
     end
 
+    unless @bought_detail.valid?
+      render :new and return
+    end
+
     Stripe.api_key = ENV['STRIPE_SECRET_KEY']
     token = params[:stripeToken]
 
@@ -42,22 +47,18 @@ class Backend::BoughtDetailsController < BackendController
         card: token
       )
 
-    rescue Stripe::CardError => e
-      @bought_detail.destroy
-      flash[:danger] = e.message
-      render :new
-    end
+      unless @bought_detail.save
+        Stripe::Refund.create(charge: charge.id) rescue nil
+        flash[:danger] = 'Wystąpił błąd podczas zapisu. Płatność została zwrócona.'
+        render :new and return
+      end
 
-    if @bought_detail.save
-      flash[:notice] = "Dziękujemy za zakup!"
+      flash[:notice] = 'Dziękujemy za zakup!'
       redirect_to bought_history_backend_person_path(current_person),
                   notice: flash[:notice]
-    else
-      flash[:danger] = @bought_detail.errors.full_messages
-      charge = nil
-      Stripe.api_key = ENV['STRIPE_SECRET_KEY']
-      token = params[:stripeToken]
-      render :new, notice: flash[:danger]
+    rescue Stripe::CardError => e
+      flash[:danger] = e.message
+      render :new
     end
   end
 
@@ -82,17 +83,8 @@ class Backend::BoughtDetailsController < BackendController
     @bought_detail = BoughtDetail.find(params[:id])
   end
 
-  JOINED_TABLE_COLUMNS = %w(people.first_name).freeze
   def sort_bought
-    if JOINED_TABLE_COLUMNS.include?(params[:sort]) || BoughtDetail.column_names.include?(params[:sort])
-      params[:sort]
-    else
-      'bought_data'
-    end
-  end
-
-  def sort_direction
-    %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
+    sortable_column(BoughtDetail, default: 'bought_data', joined: %w(people.first_name))
   end
 
   # only allow the white list through.

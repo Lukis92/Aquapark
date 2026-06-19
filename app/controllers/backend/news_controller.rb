@@ -65,31 +65,33 @@ class Backend::NewsController < BackendController
 
   def set_news
     @news = News.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    flash[:danger] = 'Nie ma newsa o takim id.'
-    redirect_to backend_news_index_path
   end
 
   def news_params
-    params.require(:news).permit(:title, :content, :scope)
+    p = params.require(:news).permit(:title, :content, scope: [])
+    p.merge(scope: (p[:scope] || []).reject(&:blank?))
   end
 
   def set_visibility
     if current_manager
-      @news = News.where(scope: %w(wszyscy ratownicy trenerzy
-                                   recepcjoniści klienci))
+      @news = News.where("scope && ARRAY[?]::varchar[]",
+                         %w(wszyscy ratownicy trenerzy recepcjoniści klienci))
                   .or(News.where(person_id: current_person))
     elsif current_receptionist
-      @news = News.where(scope: %w(wszyscy pracownicy recepcjonisci klienci))
+      @news = News.where("scope && ARRAY[?]::varchar[]",
+                         %w(wszyscy pracownicy recepcjoniści klienci))
                   .or(News.where(person_id: current_person))
     elsif current_lifeguard
-      @news = News.where(scope: %w(wszyscy pracownicy ratownicy))
+      @news = News.where("scope && ARRAY[?]::varchar[]",
+                         %w(wszyscy pracownicy ratownicy))
                   .or(News.where(person_id: current_person))
     elsif current_trainer
-      @news = News.where(scope: %w(wszyscy pracownicy trenerzy))
+      @news = News.where("scope && ARRAY[?]::varchar[]",
+                         %w(wszyscy pracownicy trenerzy))
                   .or(News.where(person_id: current_person))
     elsif current_client
-      @news = News.where(scope: %w(wszyscy klienci))
+      @news = News.where("scope && ARRAY[?]::varchar[]",
+                         %w(wszyscy klienci))
                   .or(News.where(person_id: current_person))
     end
   end
@@ -110,30 +112,19 @@ class Backend::NewsController < BackendController
 
   def display_news_rules
     unless current_manager
-      if current_client
-        unless @news.scope == 'klienci' || @news.scope == 'wszyscy' ||
-               @news.person == current_person
-          flash[:danger] = 'Brak dostępu. {display_news_rules}'
-          redirect_to backend_news_index_path
+      allowed =
+        if current_client
+          (@news.scope & %w(klienci wszyscy)).any?
+        elsif current_receptionist
+          (@news.scope & %w(recepcjoniści pracownicy wszyscy)).any?
+        elsif current_trainer
+          (@news.scope & %w(trenerzy pracownicy wszyscy)).any?
+        elsif current_lifeguard
+          (@news.scope & %w(ratownicy pracownicy wszyscy)).any?
         end
-      elsif current_receptionist
-        unless @news.scope == 'recepcjonisci' || @news.scope == 'pracownicy' ||
-               @news.scope == 'wszyscy' || @news.person == current_person
-          flash[:danger] = 'Brak dostępu. {display_news_rules}'
-          redirect_to backend_news_index_path
-        end
-      elsif current_trainer
-        unless @news.scope == 'trenerzy' || @news.scope == 'pracownicy' ||
-               @news.scope == 'wszyscy' || @news.person == current_person
-          flash[:danger] = 'Brak dostępu. {display_news_rules}'
-          redirect_to backend_news_index_path
-        end
-      elsif current_lifeguard
-        unless @news.scope == 'ratownicy' || @news.scope == 'pracownicy' ||
-               @news.scope == 'wszyscy' || @news.person == current_person
-          flash[:danger] = 'Brak dostępu. {display_news_rules}'
-          redirect_to backend_news_index_path
-        end
+      unless allowed || @news.person == current_person
+        flash[:danger] = 'Brak dostępu. {display_news_rules}'
+        redirect_to backend_news_index_path
       end
     end
   end

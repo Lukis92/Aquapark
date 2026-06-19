@@ -1,13 +1,14 @@
 class Backend::VacationsController < BackendController
   before_action :set_vacation, only: [:edit, :show, :update, :accept, :destroy]
-  helper_method :sort_column, :sort_direction
+  include Sortable
+  helper_method :sort_column
   before_action :set_person, only: [:index, :new, :create, :edit, :update, :destroy]
   before_action :set_employees
   before_action :select_rule_own_vacations, only: [:list, :new, :edit, :update, :destroy]
   before_action :edit_rule_vacations, only: :edit
   # GET backend/vacations
   def index
-    @vacations = Vacation.order(sort_column + ' ' + sort_direction)
+    @vacations = Vacation.order(Arel.sql("#{sort_column} #{sort_direction}"))
                          .paginate(page: params[:page], per_page: 20)
     @old_vacations = Vacation.where(person_id: @person.id)
                              .where(['end_at < ?', Date.today])
@@ -110,11 +111,7 @@ class Backend::VacationsController < BackendController
   end
 
   def sort_column
-    Vacation.column_names.include?(params[:sort]) ? params[:sort] : 'start_at'
-  end
-
-  def sort_direction
-    %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
+    sortable_column(Vacation, default: 'start_at')
   end
 
   def set_vacation

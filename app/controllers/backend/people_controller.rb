@@ -1,5 +1,6 @@
 class Backend::PeopleController < BackendController
-  helper_method :sort_column, :sort_direction, :sort_bought
+  include Sortable
+  helper_method :sort_column, :sort_bought
   before_action :set_person, only: [:show, :create, :edit, :update, :destroy,
                                     :bought_history, :remove_photo]
   before_action :set_rule_to_edit_client_profile, only: [:edit, :update,
@@ -9,32 +10,32 @@ class Backend::PeopleController < BackendController
 
   def index
     if current_manager
-      @people = Person.order(sort_column + ' ' + sort_direction)
+      @people = Person.order(Arel.sql("#{sort_column} #{sort_direction}"))
                       .paginate(page: params[:page], per_page: 20)
     else
-      @people = Client.order(sort_column + ' ' + sort_direction)
+      @people = Client.order(Arel.sql("#{sort_column} #{sort_direction}"))
                       .paginate(page: params[:page], per_page: 20)
     end
   end
 
   def clients
-    @clients = Client.order(sort_column + ' ' + sort_direction)
+    @clients = Client.order(Arel.sql("#{sort_column} #{sort_direction}"))
                      .paginate(page: params[:page], per_page: 20)
   end
 
   def receptionists
-    @receptionists = Receptionist.order(sort_column + ' ' + sort_direction)
+    @receptionists = Receptionist.order(Arel.sql("#{sort_column} #{sort_direction}"))
                                  .paginate(page: params[:page],
                                            per_page: 10)
   end
 
   def lifeguards
-    @lifequards = Lifeguard.order(sort_column + ' ' + sort_direction)
+    @lifequards = Lifeguard.order(Arel.sql("#{sort_column} #{sort_direction}"))
                            .paginate(page: params[:page], per_page: 10)
   end
 
   def trainers
-    @trainers = Trainer.order(sort_column + ' ' + sort_direction)
+    @trainers = Trainer.order(Arel.sql("#{sort_column} #{sort_direction}"))
                        .paginate(page: params[:page], per_page: 10)
   end
 
@@ -65,11 +66,10 @@ class Backend::PeopleController < BackendController
   end
 
   def destroy
+    @person.destroy
     if @person == current_person
-      @person.destroy
       redirect_to root_path, notice: 'Pomyślnie usunięto.'
     else
-      @person.destroy
       safe_redirect_back notice: 'Pomyślnie usunięto.'
     end
   end
@@ -88,7 +88,7 @@ class Backend::PeopleController < BackendController
 
   def bought_history
     @bought_history = BoughtDetail.includes(:entry_type)
-                                  .order(sort_bought + ' ' + sort_direction)
+                                  .order(Arel.sql("#{sort_bought} #{sort_direction}"))
                                   .references(:entry_types)
                                   .where(person_id: @person)
                                   .paginate(page: params[:page], per_page: 20)
@@ -100,26 +100,14 @@ class Backend::PeopleController < BackendController
 
   def set_person
     @person = Person.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    flash[:danger] = 'Nie ma osoby o takim id.'
-    redirect_to backend_news_index_path
   end
 
-  JOINED_TABLE_COLUMNS = %w(entry_types.kind).freeze
   def sort_bought
-    if JOINED_TABLE_COLUMNS.include?(params[:sort]) || BoughtDetail.column_names.include?(params[:sort])
-      params[:sort]
-    else
-      'bought_data'
-    end
+    sortable_column(BoughtDetail, default: 'bought_data', joined: %w(entry_types.kind))
   end
 
   def sort_column
-    Person.column_names.include?(params[:sort]) ? params[:sort] : 'first_name'
-  end
-
-  def sort_direction
-    %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
+    sortable_column(Person, default: 'first_name')
   end
 
   def person_params
@@ -153,7 +141,7 @@ class Backend::PeopleController < BackendController
   end
 
   def person_exists
-    if @person.blank? && curent_person.present?
+    if @person.blank? && current_person.present?
       flash[:info] = 'Brak takiej osoby.'
       redirect_to backend_news_index_path
     elsif @person.blank? && current_person.blank?

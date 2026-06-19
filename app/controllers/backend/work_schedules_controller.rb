@@ -1,6 +1,7 @@
 class Backend::WorkSchedulesController < BackendController
   before_action :set_work_schedule, only: [:edit, :update, :destroy]
-  helper_method :sort_column, :sort_direction
+  include Sortable
+  helper_method :sort_column
   before_action :set_person, only: [:show]
   before_action :manager_person, only: [:edit, :destroy]
   before_action :select_rule_work_schedules, only: [:index, :new]
@@ -14,43 +15,43 @@ class Backend::WorkSchedulesController < BackendController
       when 'monday'
         @work_schedules = WorkSchedule.includes(:person)
                                       .where(day_of_week: 'Poniedziałek')
-                                      .order(sort_column + ' ' + sort_direction)
+                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
                                       .references(:people)
                                       .paginate(page: params[:page], per_page: 20)
       when 'tuesday'
         @work_schedules = WorkSchedule.includes(:person)
                                       .where(day_of_week: 'Wtorek')
-                                      .order(sort_column + ' ' + sort_direction)
+                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
                                       .references(:people)
                                       .paginate(page: params[:page], per_page: 20)
       when 'wednesday'
         @work_schedules = WorkSchedule.includes(:person)
                                       .where(day_of_week: 'Środa')
-                                      .order(sort_column + ' ' + sort_direction)
+                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
                                       .references(:people)
                                       .paginate(page: params[:page], per_page: 20)
       when 'thursday'
         @work_schedules = WorkSchedule.includes(:person)
                                       .where(day_of_week: 'Czwartek')
-                                      .order(sort_column + ' ' + sort_direction)
+                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
                                       .references(:people)
                                       .paginate(page: params[:page], per_page: 20)
       when 'friday'
         @work_schedules = WorkSchedule.includes(:person)
                                       .where(day_of_week: 'Piątek')
-                                      .order(sort_column + ' ' + sort_direction)
+                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
                                       .references(:people)
                                       .paginate(page: params[:page], per_page: 20)
       when 'saturday'
         @work_schedules = WorkSchedule.includes(:person)
                                       .where(day_of_week: 'Sobota')
-                                      .order(sort_column + ' ' + sort_direction)
+                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
                                       .references(:people)
                                       .paginate(page: params[:page], per_page: 20)
       when 'sunday'
         @work_schedules = WorkSchedule.includes(:person)
                                       .where(day_of_week: 'Niedziela')
-                                      .order(sort_column + ' ' + sort_direction)
+                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
                                       .references(:people)
                                       .paginate(page: params[:page], per_page: 20)
       else
@@ -60,7 +61,7 @@ class Backend::WorkSchedulesController < BackendController
                 THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
                 WHEN 'Sobota' THEN 6
                 WHEN 'Niedziela' THEN 7 END"))
-                                      .order(sort_column + ' ' + sort_direction)
+                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
                                       .references(:people)
                                       .paginate(page: params[:page], per_page: 20)
       end
@@ -73,7 +74,7 @@ class Backend::WorkSchedulesController < BackendController
               THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
               WHEN 'Sobota' THEN 6
               WHEN 'Niedziela' THEN 7 END"))
-                                    .order(sort_column + ' ' + sort_direction)
+                                    .order(Arel.sql("#{sort_column} #{sort_direction}"))
                                     .references(:people)
                                     .paginate(page: params[:page],
                                               per_page: 20)
@@ -178,17 +179,8 @@ class Backend::WorkSchedulesController < BackendController
     @current_person = current_person
   end
 
-  JOINED_TABLE_COLUMNS = %w(people.first_name).freeze
   def sort_column
-    if JOINED_TABLE_COLUMNS.include?(params[:sort]) || WorkSchedule.column_names.include?(params[:sort])
-      params[:sort]
-    else
-      'day_of_week'
-    end
-  end
-
-  def sort_direction
-    %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
+    sortable_column(WorkSchedule, default: 'day_of_week', joined: %w(people.first_name))
   end
 
   # Ability to edit and destroy work schedules

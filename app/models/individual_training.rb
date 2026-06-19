@@ -30,6 +30,7 @@ class IndividualTraining < ApplicationRecord
   # ****************************************#
   attr_accessor :credit_card, :card_code
   include PgSearch
+  include TextSearchable
   pg_search_scope :search, against: [:date_of_training, :end_on, :start_on],
                            associated_against:
                            { trainer: [:first_name, :last_name],
@@ -66,18 +67,15 @@ class IndividualTraining < ApplicationRecord
   # check if trainer work while will be individual_training
   def date_of_training_validation
     unless start_on.blank?
-      trainer.work_schedules.each_with_index do |ti, ind|
-        if ti.day_of_week == BackendController.helpers.translate_date(date_of_training)
-          if (start_on.strftime('%H:%M')..end_on.strftime('%H:%M'))
-             .overlaps?(ti.start_time.strftime('%H:%M')..ti.end_time.strftime('%H:%M'))
-            break
-        else
-            errors.add(:base, 'Trening jest poza grafikiem pracy trenera.')
-            break
-          end
-        elsif ind == trainer.work_schedules.size - 1
-          errors.add(:base, 'Trener w tym dniu nie pracuje.')
-        end
+      work_schedules = trainer.work_schedules.to_a
+      matching = work_schedules.find do |ws|
+        ws.day_of_week == BackendController.helpers.translate_date(date_of_training)
+      end
+      if matching.nil?
+        errors.add(:base, 'Trener w tym dniu nie pracuje.')
+      elsif !(start_on.strftime('%H:%M')..end_on.strftime('%H:%M'))
+               .overlaps?(matching.start_time.strftime('%H:%M')..matching.end_time.strftime('%H:%M'))
+        errors.add(:base, 'Trening jest poza grafikiem pracy trenera.')
       end
     end
   end
@@ -92,11 +90,10 @@ class IndividualTraining < ApplicationRecord
         end
       end
       client.activities_people.where(date: date_of_training)
-                              .where(person_id: client_id).each do |ca|
-        Activity.where(id: ca.activity_id).each do |a|
-          if (start_on...end_on).overlaps?(a.start_on...a.end_on)
-            errors.add(:base, 'Masz w tym czasie zajęcie grupowe.')
-          end
+                              .where(person_id: client_id)
+                              .includes(:activity).each do |ca|
+        if (start_on...end_on).overlaps?(ca.activity.start_on...ca.activity.end_on)
+          errors.add(:base, 'Masz w tym czasie zajęcie grupowe.')
         end
       end
     end
@@ -127,15 +124,4 @@ class IndividualTraining < ApplicationRecord
     end
   end
 
-  def self.text_search(query, querydate = '')
-    if query.present? && querydate.blank?
-      search(query)
-    elsif query.present? && querydate.present?
-      search(query + ' ' + querydate)
-    elsif query.blank? && querydate.present?
-      search(querydate)
-    else
-      all
-    end
-  end
 end

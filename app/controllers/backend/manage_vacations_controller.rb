@@ -1,8 +1,9 @@
 class Backend::ManageVacationsController < BackendController
-  helper_method :sort_column, :sort_direction
+  include Sortable
+  helper_method :sort_column
   before_action :select_rule_vacations, only: :index
   def index
-    @vacations = Vacation.includes(:person).order(sort_column + ' ' + sort_direction).references(:people)
+    @vacations = Vacation.includes(:person).order(Arel.sql("#{sort_column} #{sort_direction}")).references(:people)
                          .paginate(page: params[:page], per_page: 20)
   end
 
@@ -13,16 +14,7 @@ class Backend::ManageVacationsController < BackendController
       redirect_to backend_news_index_path, notice: 'Brak dostępu {select_rule_vacations}'
     end
   end
-  JOINED_TABLE_COLUMNS = %w(people.first_name).freeze
   def sort_column
-    if JOINED_TABLE_COLUMNS.include?(params[:sort]) || Vacation.column_names.include?(params[:sort])
-      params[:sort]
-    else
-      'start_at'
-    end
-  end
-
-  def sort_direction
-    %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
+    sortable_column(Vacation, default: 'start_at', joined: %w(people.first_name))
   end
 end
