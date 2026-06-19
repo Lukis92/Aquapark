@@ -8,23 +8,23 @@ class Backend::ActivitiesPeopleController < BackendController
     # raise 'Dupa'
     if @activities_person.save
       flash[:notice] = 'Pomyślnie dodano.'
-      redirect_to :back
+      safe_redirect_back
     else
       flash[:danger] = "#{@activities_person.errors.full_messages.join('')}"
-      redirect_to :back
+      safe_redirect_back
     end
   end
 
   def update
     if @activities_person.update(activities_person_params)
-      redirect_to :back, notice: 'Pomyślnie zaktualizowano.'
+      safe_redirect_back notice: 'Pomyślnie zaktualizowano.'
     else
       render :edit
     end
   end
   def destroy
     @activities_person.destroy
-    redirect_to :back, notice: 'Pomyślnie zrezygnowano'
+    safe_redirect_back notice: 'Pomyślnie zrezygnowano'
   end
 
   private

@@ -9,15 +9,15 @@
 #  person_id   :integer          not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :work_schedule do
-    start_time '08:00'
-    end_time '12:00'
-    day_of_week 'Wtorek'
+    start_time { '08:00' }
+    end_time { '12:00' }
+    day_of_week { 'Wtorek' }
     association :person, factory: :trainer
 
     trait :wch2 do
-      day_of_week 'Wtorek'
+      day_of_week { 'Wtorek' }
     end
   end
 end

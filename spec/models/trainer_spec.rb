@@ -29,7 +29,7 @@
 require 'rails_helper'
 
 describe Trainer, 'methods' do
-  subject { FactoryGirl.build(:trainer) }
+  subject { FactoryBot.build(:trainer) }
   it { is_expected.to validate_presence_of :salary }
   it { is_expected.to validate_presence_of :hiredate }
 end

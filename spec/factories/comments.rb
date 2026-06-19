@@ -1,6 +1,6 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :comment do
-    body 'Świetny wpis.'
+    body { 'Świetny wpis.' }
     association :person, factory: :client
     association :news
   end

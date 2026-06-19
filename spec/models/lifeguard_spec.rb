@@ -29,7 +29,7 @@
 require 'rails_helper'
 
 describe Lifeguard, 'methods' do
-  subject { FactoryGirl.build(:lifeguard) }
+  subject { FactoryBot.build(:lifeguard) }
   it { is_expected.to validate_presence_of :salary }
   it { is_expected.to validate_presence_of :hiredate }
 end

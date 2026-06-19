@@ -27,35 +27,35 @@
 #
 require 'faker'
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :person do
     pesel { Faker::Number.number(11) }
-    first_name 'Thomas'
-    last_name 'Owel'
+    first_name { 'Thomas' }
+    last_name { 'Owel' }
     date_of_birth { Faker::Time.between('1970-01-01', '2000-12-31') }
     email { Faker::Internet.email }
     password { Faker::Internet.password }
-    type 'Person'
+    type { 'Person' }
   end
 
   factory :client, parent: :person, class: 'Client' do
     pesel { Faker::Number.number(11) }
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    type 'Client'
+    type { 'Client' }
   end
 
   factory :client1, parent: :person, class: 'Client' do
     pesel { Faker::Number.number(11) }
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    type 'Client'
+    type { 'Client' }
   end
 
   factory :trainer, parent: :person, class: 'Trainer' do
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    type 'Trainer'
+    type { 'Trainer' }
     salary { Faker::Number.decimal(4, 2) }
     hiredate { Faker::Time.between('2016-01-01', '2016-04-30') }
   end
@@ -63,7 +63,7 @@ FactoryGirl.define do
   factory :trainer1, parent: :person, class: 'Trainer' do
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    type 'Trainer'
+    type { 'Trainer' }
     salary { Faker::Number.decimal(4, 2) }
     hiredate { Faker::Time.between('2016-01-01', '2016-04-30') }
   end
@@ -71,7 +71,7 @@ FactoryGirl.define do
   factory :receptionist, parent: :person, class: 'Receptionist' do
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    type 'Receptionist'
+    type { 'Receptionist' }
     salary { Faker::Number.decimal(4, 2) }
     hiredate { Faker::Time.between('2016-01-01', '2016-04-30') }
   end
@@ -79,7 +79,7 @@ FactoryGirl.define do
   factory :lifeguard, parent: :person, class: 'Lifeguard' do
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    type 'lifeguard'
+    type { 'lifeguard' }
     salary { Faker::Number.decimal(4, 2) }
     hiredate { Faker::Time.between('2016-01-01', '2016-04-30') }
   end

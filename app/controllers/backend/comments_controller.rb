@@ -10,7 +10,7 @@ class Backend::CommentsController < BackendController
                   notice: 'Komentarz pomyślnie dodano'
     else
       flash[:danger] = 'Komentarz nie został dodany. Wymagana treść, minimum 5 znaków.'
-      redirect_to :back
+      safe_redirect_back
     end
   end
 

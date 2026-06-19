@@ -1,6 +1,6 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :like do
-    like true
+    like { true }
     association :person, factory: :client
     association :news
   end

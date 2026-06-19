@@ -59,7 +59,7 @@ class Backend::ActivitiesController < BackendController
   # POST backend/activities/:id/activate
   def activate
     @activity.update!(active: true)
-    redirect_to :back, notice: 'Aktywowano.'
+    safe_redirect_back notice: 'Aktywowano.'
   end
 
   # POST backend/activities/:id/deactivate
@@ -68,7 +68,7 @@ class Backend::ActivitiesController < BackendController
     @activities_people = ActivitiesPerson.where(activity_id: @activity)
                                          .where('date >= ?', Date.today)
     @activities_people.each(&:destroy)
-    redirect_to :back, notice: 'Deaktywowano.'
+    safe_redirect_back notice: 'Deaktywowano.'
   end
 
   # GET backend/activities/requests
@@ -95,7 +95,7 @@ class Backend::ActivitiesController < BackendController
     @activity.destroy
     @activities_people = ActivitiesPerson.where(activity_id: @activity)
     @activities_people.each(&:destroy)
-    redirect_to :back, notice: 'Pomyślnie usunięto.'
+    safe_redirect_back notice: 'Pomyślnie usunięto.'
   end
 
   # GET backend/activities/:id/preview

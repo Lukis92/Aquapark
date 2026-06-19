@@ -40,7 +40,7 @@ class Backend::TrainingCostsController < BackendController
   # DELETE backend/training_costs/1
   def destroy
     @training_cost.destroy
-    redirect_to :back, notice: 'Pomyślnie usunięto.'
+    safe_redirect_back notice: 'Pomyślnie usunięto.'
   end
 
   private

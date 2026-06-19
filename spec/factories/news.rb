@@ -1,8 +1,8 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :news do
-    title 'Nowy wpis'
-    content 'Długi opis wpisu'
-    scope 'public'
+    title { 'Nowy wpis' }
+    content { 'Długi opis wpisu' }
+    scope { 'public' }
     association :person, factory: :trainer
   end
 end

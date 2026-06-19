@@ -8,7 +8,7 @@
 #  id          :integer          not null, primary key
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :activities_person do
     association :activity, factory: :activity
     association :person, factory: :client

@@ -18,7 +18,7 @@ class Backend::ManageTrainingsController < BackendController
     if current_admin
       @manage_training = IndividualTraining.new(manage_training_params)
       if @manage_training.save
-        redirect_to :back, notice: 'Pomyślnie dodano.'
+        safe_redirect_back notice: 'Pomyślnie dodano.'
       else
         render :new
       end
@@ -28,7 +28,7 @@ class Backend::ManageTrainingsController < BackendController
   # PATCH/PUT backend/individual_trainings/1
   def update
     if @manage_training.update(manage_training_params)
-      redirect_to :back, notice: 'Pomyślnie zaktualizowano.'
+      safe_redirect_back notice: 'Pomyślnie zaktualizowano.'
     else
       render :edit
     end
@@ -37,7 +37,7 @@ class Backend::ManageTrainingsController < BackendController
   # DELETE backend/individual_trainings/1
   def destroy
     @manage_training.destroy
-    redirect_to :back, notice: 'Pomyślnie usunięto.'
+    safe_redirect_back notice: 'Pomyślnie usunięto.'
   end
 
   private

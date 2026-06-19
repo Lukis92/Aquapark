@@ -70,7 +70,7 @@ class Backend::PeopleController < BackendController
       redirect_to root_path, notice: 'Pomyślnie usunięto.'
     else
       @person.destroy
-      redirect_to :back, notice: 'Pomyślnie usunięto.'
+      safe_redirect_back notice: 'Pomyślnie usunięto.'
     end
   end
 
@@ -82,10 +82,10 @@ class Backend::PeopleController < BackendController
 
   def remove_photo
     @person.profile_image.destroy
-    @person.update_attributes(profile_image_file_name: nil,
-                              profile_image_content_type: nil,
-                              profile_image_file_size: nil,
-                              profile_image_updated_at: nil)
+    @person.update(profile_image_file_name: nil,
+                   profile_image_content_type: nil,
+                   profile_image_file_size: nil,
+                   profile_image_updated_at: nil)
     redirect_to backend_person_path(@person),
                 notice: 'Zdjęcie zostało pomyślnie usunięte.'
   end

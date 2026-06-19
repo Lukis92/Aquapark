@@ -36,6 +36,14 @@ Możliwości po stronie kierownika:
 * Rejestracja pracownika(w raz z utworzeniem konta w systemie)
 * Wyświetlenie statystyk dotyczących funkcjonowania aquaparku(m.in bilans zyskóœ i strat)
 
+## Plan modernizacji stacku
+Szczegółowy plan etapowej modernizacji Ruby/Rails znajduje się w:
+`docs/stack_modernization_plan.md`.
+Raport wykonania Etapu 0 (stabilizacja + feature freeze):
+`docs/stage_0_execution.md`.
+Raport realizacji Etapu 1 (Ruby 2.7):
+`docs/stage_1_execution.md`.
+
 ## Instalacja
  Sklonuj repozytorium i zainstaluj wymagane gemy:
  ```

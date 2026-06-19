@@ -79,7 +79,7 @@ describe Activity, 'methods' do
   end
 
   describe '#next_n_days(n=2)' do
-    let(:activity) { FactoryGirl.build(:activity) }
+    let(:activity) { FactoryBot.build(:activity) }
 
     context 'when n is nil' do
       it 'returns 2 nearest dates for day_of_week' do

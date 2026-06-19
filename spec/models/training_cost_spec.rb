@@ -21,7 +21,7 @@ end
 
 describe TrainingCost, 'validations' do
   it { is_expected.to validate_presence_of :duration }
-  subject { FactoryGirl.build(:training_cost) }
+  subject { FactoryBot.build(:training_cost) }
   it { is_expected.to validate_uniqueness_of(:duration) }
 
   it { is_expected.to validate_presence_of :cost }

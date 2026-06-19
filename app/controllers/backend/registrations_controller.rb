@@ -1,6 +1,6 @@
 # Controller for backend registration actions by devise gem
 class Backend::RegistrationsController < Devise::RegistrationsController
-  skip_before_filter :require_no_authentication, only: [:new, :create]
+  skip_before_action :require_no_authentication, only: [:new, :create]
   layout 'backend'
   # GET /resource/sign_up
   def new

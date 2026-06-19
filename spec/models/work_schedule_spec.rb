@@ -28,7 +28,7 @@ describe WorkSchedule, 'validations' do
   it { is_expected.to validate_presence_of :day_of_week }
   it { is_expected.to validate_presence_of :person_id }
 
-  subject { FactoryGirl.build(:work_schedule) }
+  subject { FactoryBot.build(:work_schedule) }
   it { is_expected.to validate_uniqueness_of(:day_of_week).scoped_to(:person_id) }
 end
 

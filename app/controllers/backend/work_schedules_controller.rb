@@ -115,7 +115,7 @@ class Backend::WorkSchedulesController < BackendController
   # DELETE backend/work_schedules/1
   def destroy
     @work_schedule.destroy
-    redirect_to :back, notice: 'Pomyślnie usunięto.'
+    safe_redirect_back notice: 'Pomyślnie usunięto.'
   end
 
   def show

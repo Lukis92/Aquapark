@@ -7,14 +7,14 @@
 #  cost     :decimal(5, 2)    not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :training_cost do
-    duration 140
-    cost 120.00
+    duration { 140 }
+    cost { 120.00 }
 
     factory :tc2 do
-      duration 60
-      cost 100.00
+      duration { 60 }
+      cost { 100.00 }
     end
   end
 end

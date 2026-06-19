@@ -75,7 +75,7 @@ class Backend::VacationsController < BackendController
   # DELETE backend/vacations/1
   def destroy
     @vacation.destroy
-    redirect_to :back, notice: 'Pomyślnie usunięto.'
+    safe_redirect_back notice: 'Pomyślnie usunięto.'
   end
 
   def search
@@ -96,9 +96,9 @@ class Backend::VacationsController < BackendController
       puts invalid.record.errors
     end
     if @vacation.valid?
-      redirect_to :back, notice: 'Zaakceptowano.'
+      safe_redirect_back notice: 'Zaakceptowano.'
     else
-      redirect_to :back, danger: 'Coś poszło nie tak.'
+      safe_redirect_back danger: 'Coś poszło nie tak.'
     end
   end
 

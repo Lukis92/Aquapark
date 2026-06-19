@@ -29,7 +29,7 @@
 require 'rails_helper'
 
 describe Receptionist, 'methods' do
-  subject { FactoryGirl.build(:receptionist) }
+  subject { FactoryBot.build(:receptionist) }
   it { is_expected.to validate_presence_of :salary }
   it { is_expected.to validate_presence_of :hiredate }
 end

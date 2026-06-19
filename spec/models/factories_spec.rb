@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe FactoryGirl do
+describe FactoryBot do
   described_class.factories.map(&:name).each do |factory_name|
     describe "#{factory_name} factory" do
       it 'is valid' do

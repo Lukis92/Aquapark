@@ -58,7 +58,7 @@ class Backend::IndividualTrainingsController < BackendController
   # PATCH/PUT backend/individual_trainings/1
   def update
     if @individual_training.update(individual_training_params)
-      redirect_to :back, notice: 'Pomyślnie zaktualizowano.'
+      safe_redirect_back notice: 'Pomyślnie zaktualizowano.'
     else
       render :edit
     end
@@ -89,7 +89,7 @@ class Backend::IndividualTrainingsController < BackendController
   # DELETE backend/individual_trainings/1
   def destroy
     @individual_training.destroy
-    redirect_to :back, notice: 'Pomyślnie usunięto.'
+    safe_redirect_back notice: 'Pomyślnie usunięto.'
   end
 
   def choose_trainer

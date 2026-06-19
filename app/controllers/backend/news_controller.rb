@@ -44,10 +44,10 @@ class Backend::NewsController < BackendController
     like = Like.create(like: params[:like], person: current_person, news: @news)
     if like.valid?
       flash[:notice] = 'Pomyślnie.'
-      redirect_to :back
+      safe_redirect_back
     else
       flash[:danger] = 'Możesz polubić lub nie tylko raz.'
-      redirect_to :back
+      safe_redirect_back
     end
   end
 
@@ -58,7 +58,7 @@ class Backend::NewsController < BackendController
   # DELETE backend/news/1
   def destroy
     @news.destroy
-    redirect_to :back, notice: 'Pomyślnie usunięto.'
+    safe_redirect_back notice: 'Pomyślnie usunięto.'
   end
 
   private
