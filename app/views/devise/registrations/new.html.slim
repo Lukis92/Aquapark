@@ -1,6 +1,6 @@
 .container.fix
   h2.text-center Rejestracja
-  = simple_form_for(resource, as: resource_name, url: new_client_registration_path(resource_name)) do |f|
+  = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
     = errors_for(resource)
     .form-inputs
       .input-field
