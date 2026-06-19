@@ -62,7 +62,7 @@ Rails.application.routes.draw do
 
     # Manage vacations
     resources :manage_vacations, only: :index
-    resources :individual_trainings, only: [:index, :show, :edit, :search] do
+    resources :individual_trainings, only: [:index, :show, :edit] do
       collection do
         get 'search'
       end
@@ -77,7 +77,7 @@ Rails.application.routes.draw do
         delete 'remove_photo'
         get 'bought_history'
 
-        resources :individual_trainings, only: [:choose_trainer] do
+        resources :individual_trainings, only: [] do
           collection do
             get 'choose_trainer'
             get 'show', as: 'show'

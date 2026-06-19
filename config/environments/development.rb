@@ -1,5 +1,5 @@
 Rails.application.configure do
-  config.cache_classes = false
+  config.enable_reloading = true
   config.eager_load = false
 
   config.consider_all_requests_local       = true
@@ -7,7 +7,7 @@ Rails.application.configure do
 
   config.action_mailer.raise_delivery_errors = true
 
-  config.active_support.deprecation = :log
+  config.active_support.report_deprecations = true
 
   config.active_record.migration_error = :page_load
 

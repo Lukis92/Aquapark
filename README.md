@@ -46,7 +46,7 @@ Raport realizacji Etapu 1 (Ruby 2.7):
 
 ## Wymagania
 
-- **Ruby 3.1.7** — zalecana instalacja przez [RubyInstaller](https://rubyinstaller.org/downloads/) (Windows) lub rbenv/RVM (Linux/macOS)
+- **Ruby 3.4.9** — zalecana instalacja przez [RubyInstaller](https://rubyinstaller.org/downloads/) (Windows) lub rbenv/RVM (Linux/macOS)
 - **PostgreSQL** (lokalnie, np. przez [EDB installer](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads))
 - **Bundler** (`gem install bundler`)
 
@@ -104,6 +104,22 @@ Aplikacja będzie dostępna pod adresem **http://localhost:3000**.
 Dane logowania managera znajdziesz w pliku `db/seeds/manager.rb`.
 
 ## Historia zmian
+* 0.6 *(2026-06-19)*
+  * **Ruby 3.1.7 → 3.4.9** — instalacja przez winget (`RubyInstallerTeam.RubyWithDevKit.3.4`)
+  * **Rails 7.0.10 → 8.1.3** — aktualizacja wszystkich zależności Rails
+  * **Puma 5.x → 6.6.1** — aktualizacja serwera aplikacji
+  * Zastąpiono `sass-rails` przez `sassc-rails` (LibSass przez Sprockets, kompatybilne z Rails 8)
+  * Dodano `sprockets-rails` jawnie do Gemfile (Rails 8 nie dodaje go domyślnie)
+  * Usunięto gem `uglifier` (niezgodny z Rails 8; kompresja JS nie jest wymagana w dev)
+  * `config.load_defaults` zaktualizowane z `7.0` na `8.1`
+  * `config.cache_classes` zastąpione przez `config.enable_reloading` we wszystkich środowiskach
+  * `config.assets.js_compressor = :uglifier` usunięte z `production.rb`
+  * `config.active_support.deprecation` zastąpione przez `config.active_support.report_deprecations`
+  * `config.action_dispatch.show_exceptions = false` → `:none` w `test.rb`
+  * Naprawiono błąd tras: `:search` i `:choose_trainer` usunięte z parametru `only:` w `routes.rb` (błąd `ArgumentError` w Rails 8)
+  * `i18n` odblokowane z wersji `< 1.15` — brak ograniczenia górnego
+  * Zainicjalizowano zestaw kluczy GPG MSYS2 i zainstalowano `libyaml` dla gemu `psych`
+
 * 0.5.4
   * Naprawiono wyszukiwanie nakładających się aktywności oraz tłumaczenie dni (I18n)
   * Dodano komentarze dokumentacyjne

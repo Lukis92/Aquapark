@@ -1,5 +1,5 @@
 Rails.application.configure do
-  config.cache_classes = true
+  config.enable_reloading = false
   config.eager_load = true
 
   config.consider_all_requests_local       = false
@@ -11,14 +11,13 @@ Rails.application.configure do
 
   config.assets.compile = true # Keep compile on for Heroku.
   config.assets.precompile += %w( *.js *.css *.css.erb )
-  config.assets.js_compressor = :uglifier
   config.assets.digest = true
 
   config.log_level = :debug
 
   config.i18n.fallbacks = true
 
-  config.active_support.deprecation = :notify
+  config.active_support.report_deprecations = false
   config.active_support.disallowed_deprecation = :log
   config.active_support.disallowed_deprecation_warnings = []
 

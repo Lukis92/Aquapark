@@ -10,7 +10,7 @@ module Aquapark
   class Application < Rails::Application
     # Load Rails 7.0 defaults. New defaults introduced since Rails 5.2 are
     # activated incrementally here; any that break the app are overridden below.
-    config.load_defaults 7.0
+    config.load_defaults 8.1
 
     config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :pl
