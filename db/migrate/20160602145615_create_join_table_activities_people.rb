@@ -1,4 +1,4 @@
-class CreateJoinTableActivitiesPeople < ActiveRecord::Migration
+class CreateJoinTableActivitiesPeople < ActiveRecord::Migration[4.2]
   def change
     create_join_table :activities, :people do |t|
       t.index [:activity_id, :person_id]

@@ -1,4 +1,4 @@
-class AddPersonsIdToIndividualTrainings < ActiveRecord::Migration
+class AddPersonsIdToIndividualTrainings < ActiveRecord::Migration[4.2]
   def change
     add_reference :individual_trainings, :client, index: true
     add_reference :individual_trainings, :trainer, index: true

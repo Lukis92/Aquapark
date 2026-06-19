@@ -10,7 +10,7 @@ Rails.application.configure do
   config.active_storage.service = :amazon
 
   config.assets.compile = true # Keep compile on for Heroku.
-  config.assets.precompile += %w( *.js ^[^_]*.css *.css.erb )
+  config.assets.precompile += %w( *.js *.css *.css.erb )
   config.assets.js_compressor = :uglifier
   config.assets.digest = true
 

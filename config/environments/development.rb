@@ -14,7 +14,7 @@ Rails.application.configure do
   config.assets.debug = true
   config.assets.digest = true
   config.assets.compile = true
-  config.assets.precompile += %w( *.js ^[^_]*.css *.css.erb )
+  config.assets.precompile += %w( *.js *.css *.css.erb )
   config.assets.raise_runtime_errors = true
 
   config.public_file_server.enabled = true

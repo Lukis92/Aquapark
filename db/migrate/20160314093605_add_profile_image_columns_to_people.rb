@@ -1,9 +1,9 @@
-class AddProfileImageColumnsToPeople < ActiveRecord::Migration
+class AddProfileImageColumnsToPeople < ActiveRecord::Migration[4.2]
   def up
-    add_attachment :people, :profile_image
+    # no-op: Paperclip columns replaced by ActiveStorage
   end
 
   def down
-    remove_attachment :people, :profile_image
+    # no-op
   end
 end

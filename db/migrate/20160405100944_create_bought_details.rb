@@ -1,4 +1,4 @@
-class CreateBoughtDetails < ActiveRecord::Migration
+class CreateBoughtDetails < ActiveRecord::Migration[4.2]
   def change
     create_table :bought_details do |t|
       t.date :bought_data, null: false

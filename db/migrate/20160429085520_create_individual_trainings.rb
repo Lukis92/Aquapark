@@ -1,4 +1,4 @@
-class CreateIndividualTrainings < ActiveRecord::Migration
+class CreateIndividualTrainings < ActiveRecord::Migration[4.2]
   def change
     create_table :individual_trainings do |t|
       t.decimal :cost, precision: 7, scale: 2, null: false

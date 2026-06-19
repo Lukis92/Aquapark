@@ -1,4 +1,4 @@
-class ChangeActivitiesColumns < ActiveRecord::Migration
+class ChangeActivitiesColumns < ActiveRecord::Migration[4.2]
   def change
     change_table :activities do |t|
       t.change :name, :string

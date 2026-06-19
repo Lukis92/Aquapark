@@ -1,4 +1,4 @@
-class CreateEntryTypes < ActiveRecord::Migration
+class CreateEntryTypes < ActiveRecord::Migration[4.2]
   def change
     create_table :entry_types do |t|
       t.string :kind, null: false

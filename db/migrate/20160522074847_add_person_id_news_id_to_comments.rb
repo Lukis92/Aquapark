@@ -1,4 +1,4 @@
-class AddPersonIdNewsIdToComments < ActiveRecord::Migration
+class AddPersonIdNewsIdToComments < ActiveRecord::Migration[4.2]
   def change
     add_reference :comments, :person, index: true
     add_foreign_key :comments, :people

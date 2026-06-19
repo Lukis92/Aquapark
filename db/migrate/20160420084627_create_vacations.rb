@@ -1,4 +1,4 @@
-class CreateVacations < ActiveRecord::Migration
+class CreateVacations < ActiveRecord::Migration[4.2]
   def change
     create_table :vacations do |t|
       t.date :start_at, null: false

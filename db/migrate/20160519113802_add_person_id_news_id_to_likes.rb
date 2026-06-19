@@ -1,4 +1,4 @@
-class AddPersonIdNewsIdToLikes < ActiveRecord::Migration
+class AddPersonIdNewsIdToLikes < ActiveRecord::Migration[4.2]
   def change
     add_reference :likes, :person, index: true
     add_foreign_key :likes, :people

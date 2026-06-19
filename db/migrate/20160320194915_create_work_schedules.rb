@@ -1,4 +1,4 @@
-class CreateWorkSchedules < ActiveRecord::Migration
+class CreateWorkSchedules < ActiveRecord::Migration[4.2]
   def change
     create_table :work_schedules do |t|
       t.time :start_time, null: false

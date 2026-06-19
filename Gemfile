@@ -1,7 +1,9 @@
 source 'https://rubygems.org'
-ruby '3.1.6'
+ruby '3.1.7'
 
 gem 'rails', '~> 7.0.8', '>= 7.0.8.6'
+gem 'puma', '~> 5.0'
+gem 'i18n', '>= 1.14', '< 1.15'
 gem 'pg', '~> 1.5'
 gem 'sass-rails', '~> 6.0'
 gem 'uglifier', '>= 4.0.0'
@@ -21,6 +23,7 @@ gem 'devise', '~> 4.9' # flexible authentication solution for Rails with Warden.
 gem 'font-awesome-rails', '~> 4.7.0.5' # font-awesome font for rails
 gem 'html_truncator', '~>0.2' # truncate an HTML string
 gem 'image_processing', '~> 1.12' # ActiveStorage image variants (resize)
+gem 'active_storage_validations', '~> 1.0' # content_type/size validators for ActiveStorage
 gem 'i18n-tasks', '~> 1.0' # Manage translation for Ruby i18n
 gem 'jquery-ui-rails' # jQuery UI for the Rails asset pipeline
 gem 'lightbox-bootstrap-rails' # lightbox for Bootstrap 3

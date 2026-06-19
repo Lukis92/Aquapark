@@ -5,7 +5,7 @@ html
     title= content_for?(:title) ? yield(:title) : ENV['APP_NAME']
     = stylesheet_link_tag    'application', media: 'all'
     = stylesheet_link_tag 'mdb.min.css'
-    = favicon_link_tag 'Aquapark', href: '/images/brand.png'
+    /= favicon_link_tag 'Aquapark', href: '/images/brand.png'
     = javascript_include_tag "application"
     = csrf_meta_tags
     link href="http://fonts.googleapis.com/css?family=Archivo+Black&subset=latin,latin-ext" rel="stylesheet" type="text/css"
