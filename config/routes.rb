@@ -33,7 +33,8 @@ Rails.application.routes.draw do
     end
     resources :work_schedules do
       collection do
-        get 'search'
+        get  'search'
+        post 'bulk_create'
       end
     end
     resources :activities, except: [:show] do

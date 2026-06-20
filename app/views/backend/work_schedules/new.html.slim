@@ -1,3 +1,135 @@
 h5 Dodawanie harmonogramu pracy
-= info("Na tej stronie możesz dodać harmonogram pracy dla dowolnego pracownika.")
-= render 'form'
+= info("Zaznacz godziny, dni tygodnia i pracowników. Dla każdej kombinacji dzień+pracownik zostanie utworzony oddzielny wpis.")
+
+= form_tag bulk_create_backend_work_schedules_path, method: :post do
+
+  / ── Godziny ───────────────────────────────────────────
+  .panel.panel-default
+    .panel-heading
+      strong
+        i.fa.fa-clock-o
+        |  Godziny pracy
+    .panel-body
+      .row
+        .col-sm-3
+          .form-group
+            label.control-label Godzina od *
+            = text_field_tag :start_time, params[:start_time], class: 'form-control timepicker', placeholder: '08:00', required: true
+        .col-sm-3
+          .form-group
+            label.control-label Godzina do *
+            = text_field_tag :end_time, params[:end_time], class: 'form-control timepicker', placeholder: '16:00', required: true
+
+  / ── Dni tygodnia ──────────────────────────────────────
+  .panel.panel-default
+    .panel-heading
+      strong
+        i.fa.fa-calendar
+        |  Dni tygodnia *
+    .panel-body
+      .bulk-days-grid
+        - WorkSchedule::DAYS.each do |day|
+          label.bulk-day-label
+            = check_box_tag 'days[]', day, Array(params[:days]).include?(day)
+            = day
+      .bulk-select-links.mt-1
+        = link_to 'Zaznacz wszystkie', '#', class: 'js-bulk-check', 'data-group' => 'days'
+        |  ·
+        = link_to 'Odznacz wszystkie', '#', class: 'js-bulk-uncheck', 'data-group' => 'days'
+
+  / ── Pracownicy ─────────────────────────────────────────
+  .panel.panel-default
+    .panel-heading
+      strong
+        i.fa.fa-users
+        |  Pracownicy *
+    .panel-body
+      / Zakładki typów
+      - type_groups = [['Wszyscy', nil], ['Recepcjoniści', 'Receptionist'], ['Ratownicy', 'Lifeguard'], ['Trenerzy', 'Trainer'], ['Kierownicy', 'Manager']]
+      - employees_by_type = @employees.group_by(&:type)
+
+      ul.nav.nav-pills.bulk-type-tabs#bulk-type-tabs
+        - type_groups.each_with_index do |(label, type_val), i|
+          - count = type_val ? (employees_by_type[type_val]&.length || 0) : @employees.length
+          li class=(i == 0 ? 'active' : '')
+            a href='#' data-type=type_val.to_s
+              = label
+              = " (#{count})"
+
+      br
+
+      / Nagłówek z akcjami dla grupy
+      .bulk-employees-header
+        span.text-muted#bulk-visible-count = "Wyświetlono #{@employees.length} pracowników"
+        .pull-right
+          = link_to 'Zaznacz widocznych', '#', class: 'js-bulk-check', 'data-group' => 'employees-visible'
+          |  ·
+          = link_to 'Odznacz wszystkich', '#', class: 'js-bulk-uncheck', 'data-group' => 'employees-all'
+
+      / Sekcje per typ
+      - type_groups.each do |label, type_val|
+        - group_employees = type_val ? (employees_by_type[type_val] || []) : @employees
+        - next if group_employees.empty?
+        .bulk-type-section data-type=type_val.to_s style=(type_val.nil? ? '' : 'display:none')
+          - unless type_val.nil?
+            .bulk-section-header
+              span = "#{label} (#{group_employees.length})"
+              = link_to 'zaznacz grupę', '#', class: 'js-bulk-check pull-right', 'data-group' => "type-#{type_val}"
+          .bulk-employees-grid
+            - group_employees.each do |emp|
+              label.bulk-employee-label data-type=emp.type
+                = check_box_tag 'person_ids[]', emp.id, Array(params[:person_ids]).map(&:to_i).include?(emp.id), class: 'bulk-emp-cb', 'data-type' => emp.type
+                = emp.full_name
+
+  .form-group
+    = submit_tag 'Dodaj grafiki', class: 'btn btn-primary btn-lg'
+    = link_to 'Anuluj', backend_work_schedules_path, class: 'btn btn-default btn-lg'
+
+javascript:
+  $(function() {
+    // Zakładki typów
+    $('#bulk-type-tabs a').on('click', function(e) {
+      e.preventDefault();
+      var type = $(this).data('type');
+      $('#bulk-type-tabs li').removeClass('active');
+      $(this).parent().addClass('active');
+
+      if (!type) {
+        $('.bulk-type-section').show();
+      } else {
+        $('.bulk-type-section').hide();
+        $('.bulk-type-section[data-type="' + type + '"]').show();
+      }
+      updateVisibleCount();
+    });
+
+    // Zaznacz
+    $(document).on('click', '.js-bulk-check', function(e) {
+      e.preventDefault();
+      var group = $(this).data('group');
+      if (group === 'days') {
+        $('[name="days[]"]').prop('checked', true);
+      } else if (group === 'employees-visible') {
+        $('.bulk-type-section:visible .bulk-emp-cb').prop('checked', true);
+      } else if (group.startsWith('type-')) {
+        var t = group.replace('type-', '');
+        $('.bulk-emp-cb[data-type="' + t + '"]').prop('checked', true);
+      }
+    });
+
+    // Odznacz
+    $(document).on('click', '.js-bulk-uncheck', function(e) {
+      e.preventDefault();
+      var group = $(this).data('group');
+      if (group === 'days') {
+        $('[name="days[]"]').prop('checked', false);
+      } else if (group === 'employees-all') {
+        $('.bulk-emp-cb').prop('checked', false);
+      }
+    });
+
+    function updateVisibleCount() {
+      var count = $('.bulk-type-section:visible .bulk-emp-cb').length;
+      $('#bulk-visible-count').text('Wyświetlono ' + count + ' pracowników');
+    }
+  });
