@@ -27,4 +27,14 @@
 #
 
 class Client < Person
+  before_validation :generate_pesel, on: :create, if: -> { pesel.blank? }
+
+  private
+
+  def generate_pesel
+    loop do
+      self.pesel = Array.new(11) { rand(0..9) }.join
+      break unless Person.exists?(pesel: pesel)
+    end
+  end
 end
