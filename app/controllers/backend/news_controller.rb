@@ -6,6 +6,7 @@ class Backend::NewsController < BackendController
   before_action :creation_news_rules, only: :new
   # GET backend/news
   def index
+    @news = @news.where('title ILIKE ?', "%#{params[:title]}%") if params[:title].present?
     @news = @news.paginate(page: params[:page], per_page: 5).order(created_at: :desc)
   end
 

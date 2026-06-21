@@ -4,6 +4,25 @@ h5 Aktualności
     .btn.btn-primary.waves-effect.waves-light
       i.fa.fa-plus
       |  Dodaj news
+
+= form_tag backend_news_index_path, method: :get do
+  .panel.panel-default style="margin-bottom:16px"
+    .panel-heading
+      strong
+        i.fa.fa-filter
+        |  Filtrowanie newsów
+    .panel-body
+      .row
+        .col-md-5.col-sm-8
+          = label_tag :title, 'Tytuł', class: 'control-label'
+          = text_field_tag :title, params[:title], class: 'form-control', placeholder: 'Szukaj po tytule...'
+        .col-md-1.col-sm-2 style="padding-top:22px"
+          = submit_tag 'Filtruj', class: 'btn btn-primary btn-block'
+      - if params[:title].present?
+        .row
+          .col-sm-12 style="margin-top:8px"
+            = link_to 'Wyczyść filtry', backend_news_index_path, class: 'btn btn-default btn-sm'
+
 / Post row
 - unless @news.blank?
   - @news.each do |n|

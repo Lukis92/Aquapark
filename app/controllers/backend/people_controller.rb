@@ -9,13 +9,14 @@ class Backend::PeopleController < BackendController
   before_action :person_exists, only: :show
 
   def index
-    if current_manager
-      @people = Person.order(Arel.sql("#{sort_column} #{sort_direction}"))
-                      .paginate(page: params[:page], per_page: 20)
-    else
-      @people = Client.order(Arel.sql("#{sort_column} #{sort_direction}"))
-                      .paginate(page: params[:page], per_page: 20)
+    scope = current_manager ? Person.all : Client.all
+    if params[:name].present?
+      q = "%#{params[:name]}%"
+      scope = scope.where('first_name ILIKE :q OR last_name ILIKE :q OR CONCAT(first_name, \' \', last_name) ILIKE :q', q: q)
     end
+    scope = scope.where(type: params[:person_type]) if params[:person_type].present? && current_manager
+    @people = scope.order(Arel.sql("#{sort_column} #{sort_direction}"))
+                   .paginate(page: params[:page], per_page: 20)
   end
 
   def clients
