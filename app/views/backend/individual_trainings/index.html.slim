@@ -76,14 +76,3 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
             = training.training_cost.duration
             |  min.
 = will_paginate @individual_trainings, renderer: BootstrapPagination::Rails unless @individual_trainings.blank?
-
-javascript:
-  $(function() {
-    $('.datepicker').pickadate({
-      selectMonths: true,
-      selectYears: 10,
-      format: 'yyyy-mm-dd',
-      formatSubmit: 'yyyy-mm-dd',
-      hiddenName: true
-    });
-  });
