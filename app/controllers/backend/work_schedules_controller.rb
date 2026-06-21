@@ -5,80 +5,30 @@ class Backend::WorkSchedulesController < BackendController
   before_action :set_person, only: [:show]
   before_action :manager_person, only: [:edit, :destroy]
   before_action :select_rule_work_schedules, only: [:index, :new]
-  before_action :manage_rule_work_schedules, only: [:edit, :update, :destroy]
+  before_action :manage_rule_work_schedules, only: [:edit, :update, :destroy, :bulk_create]
   before_action :show_rule_work_schedules, only: :show
   before_action :set_employees
   # GET backend/work_schedules
   def index
-    if @person.blank?
-      case params[:day_of_week]
-      when 'monday'
-        @work_schedules = WorkSchedule.includes(:person)
-                                      .where(day_of_week: 'Poniedziałek')
-                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
-                                      .references(:people)
-                                      .paginate(page: params[:page], per_page: 20)
-      when 'tuesday'
-        @work_schedules = WorkSchedule.includes(:person)
-                                      .where(day_of_week: 'Wtorek')
-                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
-                                      .references(:people)
-                                      .paginate(page: params[:page], per_page: 20)
-      when 'wednesday'
-        @work_schedules = WorkSchedule.includes(:person)
-                                      .where(day_of_week: 'Środa')
-                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
-                                      .references(:people)
-                                      .paginate(page: params[:page], per_page: 20)
-      when 'thursday'
-        @work_schedules = WorkSchedule.includes(:person)
-                                      .where(day_of_week: 'Czwartek')
-                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
-                                      .references(:people)
-                                      .paginate(page: params[:page], per_page: 20)
-      when 'friday'
-        @work_schedules = WorkSchedule.includes(:person)
-                                      .where(day_of_week: 'Piątek')
-                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
-                                      .references(:people)
-                                      .paginate(page: params[:page], per_page: 20)
-      when 'saturday'
-        @work_schedules = WorkSchedule.includes(:person)
-                                      .where(day_of_week: 'Sobota')
-                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
-                                      .references(:people)
-                                      .paginate(page: params[:page], per_page: 20)
-      when 'sunday'
-        @work_schedules = WorkSchedule.includes(:person)
-                                      .where(day_of_week: 'Niedziela')
-                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
-                                      .references(:people)
-                                      .paginate(page: params[:page], per_page: 20)
-      else
-        @work_schedules = WorkSchedule.includes(:person)
-                                      .order(Arel.sql("CASE day_of_week
-                WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa'
-                THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
-                WHEN 'Sobota' THEN 6
-                WHEN 'Niedziela' THEN 7 END"))
-                                      .order(Arel.sql("#{sort_column} #{sort_direction}"))
-                                      .references(:people)
-                                      .paginate(page: params[:page], per_page: 20)
-      end
+    people_scope = Person.where.not(type: 'Client').order(:first_name, :last_name)
 
-    else
-      @work_schedules = WorkSchedule.includes(:person)
-                                    .where(person_id: @person.id)
-                                    .order(Arel.sql("CASE day_of_week
-              WHEN 'Poniedziałek' THEN 1 WHEN 'Wtorek' THEN 2 WHEN 'Środa'
-              THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
-              WHEN 'Sobota' THEN 6
-              WHEN 'Niedziela' THEN 7 END"))
-                                    .order(Arel.sql("#{sort_column} #{sort_direction}"))
-                                    .references(:people)
-                                    .paginate(page: params[:page],
-                                              per_page: 20)
+    if params[:person_id].present?
+      @selected_person = Person.find_by(id: params[:person_id])
+      people_scope = people_scope.where(id: @selected_person.id) if @selected_person
     end
+
+    if params[:person_type].present?
+      people_scope = people_scope.where(type: params[:person_type])
+    end
+
+    people_scope = people_scope.joins(:work_schedules).distinct
+
+    @people = people_scope.paginate(page: params[:page], per_page: 20)
+
+    schedules_by_pid = WorkSchedule.where(person_id: @people.map(&:id))
+                                   .group_by(&:person_id)
+
+    @schedule_data = @people.map { |p| [p, schedules_by_pid.fetch(p.id, [])] }.to_h
   end
 
   def new
@@ -127,6 +77,49 @@ class Backend::WorkSchedulesController < BackendController
             THEN 3 WHEN 'Czwartek' THEN 4 WHEN 'Piątek' THEN 5
             WHEN 'Sobota' THEN 6
             WHEN 'Niedziela' THEN 7 END"))
+  end
+
+  # POST backend/work_schedules/bulk_create
+  def bulk_create
+    days       = Array(params[:days]).reject(&:blank?)
+    person_ids = Array(params[:person_ids]).reject(&:blank?)
+    start_time = params[:start_time]
+    end_time   = params[:end_time]
+
+    if days.empty? || person_ids.empty? || start_time.blank? || end_time.blank?
+      @work_schedule = WorkSchedule.new
+      flash.now[:danger] = 'Wybierz co najmniej jeden dzień, jednego pracownika oraz godziny.'
+      return render :new
+    end
+
+    created = 0
+    skipped = 0
+    errors  = []
+
+    person_ids.each do |pid|
+      days.each do |day|
+        ws = WorkSchedule.new(start_time: start_time, end_time: end_time,
+                              day_of_week: day, person_id: pid)
+        if ws.save
+          created += 1
+        elsif ws.errors[:day_of_week].any?
+          skipped += 1
+        else
+          person_name = Person.find_by(id: pid)&.full_name || "id=#{pid}"
+          errors << "#{person_name} / #{day}: #{ws.errors.full_messages.join(', ')}"
+        end
+      end
+    end
+
+    if errors.empty?
+      msg = "Dodano #{created} grafiów pracy."
+      msg += " Pominięto #{skipped} (już istniały)." if skipped > 0
+      redirect_to backend_work_schedules_path, notice: msg
+    else
+      @work_schedule = WorkSchedule.new
+      flash.now[:danger] = "Dodano #{created}, pominięto #{skipped}. Błędy: #{errors.join(' | ')}"
+      render :new
+    end
   end
 
   # GET backend/work_schedules/search
