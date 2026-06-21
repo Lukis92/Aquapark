@@ -104,6 +104,25 @@ Aplikacja będzie dostępna pod adresem **http://localhost:3000**.
 Dane logowania managera znajdziesz w pliku `db/seeds/manager.rb`.
 
 ## Historia zmian
+* 0.6.2 *(2026-06-21)*
+  * **Filtry na wszystkich stronach backendowych**
+    * Spójny panel filtrów (Bootstrap grid, bez konfliktu z MDB) zastąpił rozbite searchbary na: `/backend/people`, `/backend/activities`, `/backend/entry_types`, `/backend/manage_vacations`, `/backend/news`, `/backend/individual_trainings`
+    * Usunięto zduplikowane searchbary i navbar zakładek typów — jeden panel filtrów na stronę
+    * Filtry: imię/nazwisko/PESEL/typ (osoby), nazwa/status/dzień/strefa/trener (zajęcia), klient/trener/data (treningi), pracownik/data/status (urlopy), rodzaj/szczegóły (wejściówki), tytuł (newsy)
+  * **PESEL — rejestracja klientów**
+    * Pole PESEL usunięte z formularza rejestracji klienta (`/clients/sign_up`) — klienci nie muszą go podawać
+    * Migracja: kolumna `pesel` nullable dla klientów; walidacja pomijana dla typu `Client`
+  * **PESEL — rejestracja pracowników** (`/backend/people/sign_up`)
+    * Walidacja sumy kontrolnej (wagi `1,3,7,9,1,3,7,9,1,3`) zamiast samego sprawdzenia długości
+    * Pole „Data urodzenia" usunięte z formularza — auto-uzupełniane z PESEL po wpisaniu 11 cyfr (JS + `before_validation` w modelu, obsługa stuleci 1800–2299)
+  * **Strona statystyk** (`/backend/statistics`) — pełny redesign
+    * Stat-karty z ikonami Font Awesome, gradientowymi tłami, 4 kolorowe sekcje: Osoby / Finanse / Zatrudnienie / Newsy
+    * Bilans zysk/strata dynamicznie zmienia kolor (zielony/czerwony)
+    * Nowe wskaźniki: urlopy aktywne dziś, bilety sprzedane dziś
+  * **Kompaktowe przyciski akcji w tabelkach** — globalny CSS (`btn-xs` equivalent) bez zmian w widokach
+  * **Dane testowe** (`db/seeds/bought_history.rb`) — 200 rekordów historii zakupów biletów i karnetów dla klientów z ostatnich 18 miesięcy; tworzy domyślne typy wejściówek jeśli brak
+  * **Fix: manager może edytować każdy urlop** — poprzednio blokowany przez status akceptacji lub datę w przeszłości
+
 * 0.6.1 *(2026-06-21)*
   * **Grafik pracy — widok kalendarza** (`/backend/work_schedules`)
     * Zastąpiono tabelę dzienną siatką tygodniową: wiersze = pracownicy, kolumny = dni tygodnia (Pn–Nd)
