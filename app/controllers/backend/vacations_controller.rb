@@ -151,8 +151,10 @@ class Backend::VacationsController < BackendController
   end
 
   def edit_rule_vacations
-    unless (current_manager || current_person == @person) &&
-      (@vacation.accepted == false && @vacation.start_at > Date.today)
+    return if current_manager
+
+    unless current_person == @person &&
+        @vacation.accepted == false && @vacation.start_at > Date.today
       flash[:danger] = 'Brak dostępu {edit_rule_vacations}'
       redirect_to backend_news_index_path
     end
