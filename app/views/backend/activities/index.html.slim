@@ -8,6 +8,27 @@ h5 Zajęcia grupowe
 aquaparku(aktywne) lub te które są na razie nie wdrożone(nieaktywne).")
 
 = render 'shared/a_searchbar'
+
+= form_tag backend_activities_path, method: :get, class: 'form-inline well well-sm' do
+  .form-group
+    = label_tag :name, 'Nazwa:', class: 'control-label'
+    = text_field_tag :name, params[:name], class: 'form-control', placeholder: 'szukaj...', style: 'width:140px'
+  .form-group
+    = label_tag :active, 'Status:', class: 'control-label'
+    = select_tag :active, options_for_select([['Aktywne', 'true'], ['Nieaktywne', 'false']], params[:active]), include_blank: 'Wszystkie'
+  .form-group
+    = label_tag :day_of_week, 'Dzień:', class: 'control-label'
+    = select_tag :day_of_week, options_for_select(Activity::DAYS.map { |d| [d, d] }, params[:day_of_week]), include_blank: 'Wszystkie dni'
+  .form-group
+    = label_tag :pool_zone, 'Strefa:', class: 'control-label'
+    = select_tag :pool_zone, options_for_select(@zones.map { |z| [z, z] }, params[:pool_zone]), include_blank: 'Wszystkie strefy'
+  .form-group
+    = label_tag :trainer_id, 'Trener:', class: 'control-label'
+    = select_tag :trainer_id, options_from_collection_for_select(@trainers, :id, :full_name, params[:trainer_id].to_i), include_blank: 'Wszyscy trenerzy'
+  = submit_tag 'Filtruj', class: 'btn btn-primary'
+  - if params.slice(:name, :active, :day_of_week, :pool_zone, :trainer_id).values.any?(&:present?)
+    = link_to 'Wyczyść', backend_activities_path, class: 'btn btn-default'
+
 .row
   table.table.table-striped.table-bordered.table-list.pretty.table-list-search
     thead
