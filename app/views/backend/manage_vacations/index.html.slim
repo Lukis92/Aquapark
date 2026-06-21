@@ -4,7 +4,34 @@ h5 Urlopy
 p
   | Obecnie w bazie posiadamy #{Vacation.count} zarejestrowanych urlopów.
 
-= render 'shared/v_searchbar'
+= form_tag backend_manage_vacations_path, method: :get do
+  .panel.panel-default style="margin-bottom:16px"
+    .panel-heading
+      strong
+        i.fa.fa-filter
+        |  Filtrowanie urlopów
+    .panel-body
+      .row
+        .col-md-3.col-sm-6
+          = label_tag :person_id, 'Pracownik', class: 'control-label'
+          br
+          = select_tag :person_id, options_from_collection_for_select(@employees, :id, :full_name, params[:person_id].to_i), include_blank: 'Wszyscy pracownicy'
+        .col-md-2.col-sm-4
+          = label_tag :date_from, 'Data od', class: 'control-label'
+          = text_field_tag :date_from, params[:date_from], class: 'form-control datepicker', placeholder: 'rrrr-mm-dd'
+        .col-md-2.col-sm-4
+          = label_tag :date_to, 'Data do', class: 'control-label'
+          = text_field_tag :date_to, params[:date_to], class: 'form-control datepicker', placeholder: 'rrrr-mm-dd'
+        .col-md-2.col-sm-4
+          = label_tag :accepted, 'Status', class: 'control-label'
+          br
+          = select_tag :accepted, options_for_select([['Zaakceptowane', 'true'], ['Oczekujące', 'false']], params[:accepted]), include_blank: 'Wszystkie'
+        .col-md-1.col-sm-2 style="padding-top:22px"
+          = submit_tag 'Filtruj', class: 'btn btn-primary btn-block'
+      - if params.slice(:person_id, :date_from, :date_to, :accepted).values.any?(&:present?)
+        .row
+          .col-sm-12 style="margin-top:8px"
+            = link_to 'Wyczyść filtry', backend_manage_vacations_path, class: 'btn btn-default btn-sm'
 
 - unless @vacations.blank?
   table.table.table-striped.table-bordered.table-list.pretty

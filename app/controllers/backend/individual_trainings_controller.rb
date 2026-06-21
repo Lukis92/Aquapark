@@ -9,13 +9,19 @@ class Backend::IndividualTrainingsController < BackendController
   include Sortable
   helper_method :sort_column
   def index
-    @individual_trainings = IndividualTraining.includes(:training_cost)
-                                              .includes(:client)
-                                              .order(Arel.sql("#{sort_column} #{sort_direction}"))
-                                              .references(:training_costs)
-                                              .references(:clients)
-                                              .paginate(page: params[:page],
-                                                        per_page: 20)
+    @clients  = Client.order(:first_name, :last_name)
+    @trainers = Trainer.order(:first_name, :last_name)
+
+    scope = IndividualTraining.includes(:training_cost, :client, :trainer)
+                              .references(:training_costs, :clients)
+
+    scope = scope.where(client_id: params[:client_id])   if params[:client_id].present?
+    scope = scope.where(trainer_id: params[:trainer_id]) if params[:trainer_id].present?
+    scope = scope.where(date_of_training: params[:date_from]..) if params[:date_from].present?
+    scope = scope.where(date_of_training: ..params[:date_to])   if params[:date_to].present?
+
+    @individual_trainings = scope.order(Arel.sql("#{sort_column} #{sort_direction}"))
+                                 .paginate(page: params[:page], per_page: 20)
     @manage_trainings = @individual_trainings
   end
 

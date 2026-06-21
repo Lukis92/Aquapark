@@ -72,7 +72,7 @@ class Client::RegistrationsController < Devise::RegistrationsController
   private
 
   def sign_up_params
-    params.require(:client).permit(:pesel, :first_name, :last_name,
+    params.require(:client).permit(:first_name, :last_name,
                                    :date_of_birth, :email, :profile_image,
                                    :password, :password_confirmation)
   end

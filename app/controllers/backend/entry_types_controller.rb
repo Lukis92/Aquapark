@@ -7,8 +7,11 @@ class Backend::EntryTypesController < BackendController
 
   # GET backend/entry_types
   def index
-    @entry_types = EntryType.order(Arel.sql("#{sort_column} #{sort_direction}"))
-                            .paginate(page: params[:page], per_page: 20)
+    scope = EntryType.all
+    scope = scope.where(kind: params[:kind])                                        if params[:kind].present?
+    scope = scope.where('kind_details ILIKE ?', "%#{params[:kind_details]}%") if params[:kind_details].present?
+    @entry_types = scope.order(Arel.sql("#{sort_column} #{sort_direction}"))
+                        .paginate(page: params[:page], per_page: 20)
   end
 
   # GET backend/entry_types/new

@@ -10,22 +10,28 @@ class Backend::ActivitiesController < BackendController
                                             :deactivate]
   # GET backend/activities
   def index
-    @activities = Activity.includes(:person)
-                          .order(Arel.sql("#{sort_column} #{sort_direction}"))
-                          .references(:people)
-                          .paginate(page: params[:page], per_page: 20)
-    @actual_activities = Activity.includes(:person)
-                                 .order(Arel.sql("#{sort_column} #{sort_direction}"))
-                                 .references(:people)
-                                 .where('active = ?', true)
-                                 .paginate(page: params[:page], per_page: 20)
+    @zones = Activity.distinct.order(:pool_zone).pluck(:pool_zone).compact
+
+    scope = Activity.includes(:person).references(:people)
+
+    scope = scope.where('activities.name ILIKE ?', "%#{params[:name]}%") if params[:name].present?
+    scope = scope.where(active: params[:active] == 'true') if params[:active].present?
+    scope = scope.where(day_of_week: params[:day_of_week])  if params[:day_of_week].present?
+    scope = scope.where(pool_zone: params[:pool_zone])       if params[:pool_zone].present?
+    scope = scope.where(person_id: params[:trainer_id])     if params[:trainer_id].present?
+
+    @activities = scope.order(Arel.sql("#{sort_column} #{sort_direction}"))
+                       .paginate(page: params[:page], per_page: 20)
+
+    @actual_activities = scope.where(active: true)
+                              .order(Arel.sql("#{sort_column} #{sort_direction}"))
+                              .paginate(page: params[:page], per_page: 20)
+
     @active_activities = ActivitiesPerson.includes(:person)
-                                         .order(
-                                         Arel.sql("#{sort_column} #{sort_direction}"))
+                                         .order(Arel.sql("#{sort_column} #{sort_direction}"))
                                          .references(:people)
                                          .where('activity.active = ?', true)
-                                         .paginate(page: params[:page],
-                                                   per_page: 20)
+                                         .paginate(page: params[:page], per_page: 20)
   end
 
   # GET backend/activities/new

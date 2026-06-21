@@ -6,8 +6,27 @@ h5 Rodzaje wszystkich wejściówek
     .btn.btn-primary.waves-effect.waves-light
       i.fa.fa-plus
       |  Dodaj bilet/karnet
-br
-= render 'shared/et_searchbar'
+= form_tag backend_entry_types_path, method: :get do
+  .panel.panel-default style="margin-bottom:16px"
+    .panel-heading
+      strong
+        i.fa.fa-filter
+        |  Filtrowanie wejściówek
+    .panel-body
+      .row
+        .col-md-3.col-sm-4
+          = label_tag :kind, 'Rodzaj', class: 'control-label'
+          br
+          = select_tag :kind, options_for_select([['Bilet', 'Bilet'], ['Karnet', 'Karnet']], params[:kind]), include_blank: 'Wszystkie'
+        .col-md-4.col-sm-6
+          = label_tag :kind_details, 'Szczegóły', class: 'control-label'
+          = text_field_tag :kind_details, params[:kind_details], class: 'form-control', placeholder: 'Szukaj po szczegółach...'
+        .col-md-1.col-sm-2 style="padding-top:22px"
+          = submit_tag 'Filtruj', class: 'btn btn-primary btn-block'
+      - if params.slice(:kind, :kind_details).values.any?(&:present?)
+        .row
+          .col-sm-12 style="margin-top:8px"
+            = link_to 'Wyczyść filtry', backend_entry_types_path, class: 'btn btn-default btn-sm'
 table.table.table-striped.table-bordered.table-list.pretty.table-list-search
   thead
     tr

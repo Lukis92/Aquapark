@@ -57,12 +57,16 @@ class Person < ApplicationRecord
   # **VALIDATIONS*******************************************************#
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   DECIMAL_REGEX = /\A\d+(?:\.\d{0,2})?\z/
+  PESEL_WEIGHTS = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3].freeze
 
   before_validation :downcase_email
+  before_validation :extract_date_of_birth_from_pesel, unless: -> { is_a?(Client) }
   validates_presence_of :first_name, :last_name, :date_of_birth, :type
   validates :pesel, presence: true,
-                    length: { is: 11 },
-                    uniqueness: true
+                    format: { with: /\A\d{11}\z/, message: 'musi zawierać dokładnie 11 cyfr' },
+                    uniqueness: { allow_nil: true },
+                    unless: -> { is_a?(Client) }
+  validate :pesel_checksum_valid, unless: -> { is_a?(Client) || pesel.blank? || !pesel.match?(/\A\d{11}\z/) }
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
                     format: { with: VALID_EMAIL_REGEX }
@@ -120,8 +124,32 @@ class Person < ApplicationRecord
 
   private
 
-  # Normalize email before validation.
   def downcase_email
     self.email = email.downcase if email.present?
+  end
+
+  def pesel_checksum_valid
+    digits = pesel.chars.map(&:to_i)
+    sum = PESEL_WEIGHTS.each_with_index.sum { |w, i| w * digits[i] }
+    errors.add(:pesel, 'ma nieprawidłową sumę kontrolną') unless (10 - sum % 10) % 10 == digits[10]
+  end
+
+  def extract_date_of_birth_from_pesel
+    return unless pesel.present? && pesel.match?(/\A\d{11}\z/)
+
+    yy = pesel[0..1].to_i
+    mm = pesel[2..3].to_i
+    dd = pesel[4..5].to_i
+
+    year, month = case mm
+                  when  1..12 then [1900 + yy, mm]
+                  when 21..32 then [2000 + yy, mm - 20]
+                  when 41..52 then [2100 + yy, mm - 40]
+                  when 61..72 then [2200 + yy, mm - 60]
+                  when 81..92 then [1800 + yy, mm - 80]
+                  else return
+                  end
+
+    self.date_of_birth = Date.new(year, month, dd) rescue nil
   end
 end
