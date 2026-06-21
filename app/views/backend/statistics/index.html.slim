@@ -1,259 +1,318 @@
-h5 Statystyki
-= info("Poniżej znajdują się statystyki odnoszące się do wszystkich aspketów \
-        rejestrowanych w bazie danych.")
-.row
-  .divider-new
-    | Osoby
-  .col-md-3
-    .panel.panel-primary
-      .panel-heading.text-center Liczba wszystkich użytkowników
-      .panel-body.text-center
-        h3
-          = @all_people
-  .col-md-3
-    .panel.panel-primary
-      .panel-heading.text-center Ilość wszystkich pracowników
-      .panel-body.text-center
-        h3
-          = @employees
-  .col-md-3
-    .panel.panel-primary
-      .panel-heading.text-center Zarejestrowani klienci
-      .panel-body.text-center
-        h3
-          = @clients
-  .col-md-3
-    .panel.panel-primary
-      .panel-heading.text-center Zarejestrowani trenerzy
-      .panel-body.text-center
-        h3
-          = @trainers
-  .col-md-3
-    .panel.panel-primary
-      .panel-heading.text-center Zarejestrowani recepcjoniści
-      .panel-body.text-center
-        h3
-          = @receptionists
-  .col-md-3
-    .panel.panel-primary
-      .panel-heading.text-center Zarejestrowani ratownicy
-      .panel-body.text-center
-        h3
-          = @lifeguards
-  .col-md-3
-    .panel.panel-primary
-      .panel-heading.text-center Zatrudnieni pracownicy w tym miesiącu
-      .panel-body.text-center
-        h3
-          = @month_registered
-  .col-md-3
-    .panel.panel-primary
-      .panel-heading.text-center Zatrudnieni pracownicy w tym roku
-      .panel-body.text-center
-        h3
-          = @year_registered
-.row
-  .divider-new
-    | Finansowe aspekty
-  .col-md-3
-    .panel.panel-warning
-      .panel-heading.text-center Suma płac pracowników
-      .panel-body.text-center
-        h3
-          = @sum_salaries.nice
-          |  zł
-  .col-md-3
-    .panel.panel-warning
-      .panel-heading.text-center Suma przychodów
-      .panel-body.text-center
-        h3
-          = @sum_earnings.nice
-          |  zł
-  .col-md-3
-    .panel.panel-warning
-      .panel-heading.text-center Bilans zysków/strat
-      .panel-body.text-center
+.stats-page
+  .stats-page-header
+    h4
+      i.fa.fa-bar-chart
+      |  Statystyki aquaparku
+    small = "Dane aktualne na #{l(Date.today, format: :long)}"
 
+  / ═══════════════════════════════════════════
+  / OSOBY
+  / ═══════════════════════════════════════════
+  .stats-section
+    .stats-section-title.stats-blue
+      i.fa.fa-users
+      |  Osoby
+
+    .row
+      .col-md-2.col-sm-4
+        .stat-card.stat-blue
+          i.fa.fa-users.stat-icon
+          .stat-body
+            .stat-value = @all_people
+            .stat-label Wszyscy użytkownicy
+      .col-md-2.col-sm-4
+        .stat-card.stat-blue-light
+          i.fa.fa-user.stat-icon
+          .stat-body
+            .stat-value = @clients
+            .stat-label Klienci
+      .col-md-2.col-sm-4
+        .stat-card.stat-blue-light
+          i.fa.fa-briefcase.stat-icon
+          .stat-body
+            .stat-value = @employees
+            .stat-label Pracownicy
+      .col-md-2.col-sm-4
+        .stat-card.stat-blue-light
+          i.fa.fa-graduation-cap.stat-icon
+          .stat-body
+            .stat-value = @trainers
+            .stat-label Trenerzy
+      .col-md-2.col-sm-4
+        .stat-card.stat-blue-light
+          i.fa.fa-life-ring.stat-icon
+          .stat-body
+            .stat-value = @lifeguards
+            .stat-label Ratownicy
+      .col-md-2.col-sm-4
+        .stat-card.stat-blue-light
+          i.fa.fa-phone.stat-icon
+          .stat-body
+            .stat-value = @receptionists
+            .stat-label Recepcjoniści
+
+    .row
+      .col-md-3.col-sm-6
+        .stat-card.stat-teal
+          i.fa.fa-calendar-check-o.stat-icon
+          .stat-body
+            .stat-value = @month_registered
+            .stat-label Nowi pracownicy (30 dni)
+      .col-md-3.col-sm-6
+        .stat-card.stat-teal
+          i.fa.fa-calendar.stat-icon
+          .stat-body
+            .stat-value = @year_registered
+            .stat-label Nowi pracownicy (rok)
+      .col-md-3.col-sm-6
+        .stat-card.stat-orange
+          i.fa.fa-umbrella-beach.stat-icon
+          .stat-body
+            .stat-value = @current_vacations
+            .stat-label Urlopy dziś
+      .col-md-3.col-sm-6
+        .stat-card.stat-orange
+          i.fa.fa-ticket.stat-icon
+          .stat-body
+            .stat-value = @today_tickets
+            .stat-label Bilety sprzedane dziś
+
+  / ═══════════════════════════════════════════
+  / FINANSE
+  / ═══════════════════════════════════════════
+  .stats-section
+    .stats-section-title.stats-green
+      i.fa.fa-money
+      |  Finanse
+
+    .row
+      .col-md-4.col-sm-6
+        .stat-card.stat-green-big
+          i.fa.fa-arrow-up.stat-icon
+          .stat-body
+            .stat-value
+              = @sum_earnings.nice
+              small  zł
+            .stat-label Łączne przychody
+      .col-md-4.col-sm-6
+        .stat-card.stat-orange-big
+          i.fa.fa-arrow-down.stat-icon
+          .stat-body
+            .stat-value
+              = @sum_salaries.nice
+              small  zł
+            .stat-label Fundusz płac
+      .col-md-4.col-sm-6
         - if @sum_risk < 0
-          h3.danger
-            = @sum_risk.nice
-            |  zł
+          .stat-card.stat-red-big
+            i.fa.fa-exclamation-triangle.stat-icon
+            .stat-body
+              .stat-value
+                = @sum_risk.nice
+                small  zł
+              .stat-label Bilans (strata)
         - else
-          h3.success
-            = @sum_risk.nice
-  .col-md-3
-    .panel.panel-warning
-      .panel-heading.text-center Ilość aktywnych karnetów
-      .panel-body.text-center
-        h3
-          = @active_passes
-  .col-md-3
-    .panel.panel-warning
-      .panel-heading.text-center Ilość nieużytych biletów
-      .panel-body.text-center
-        h3
-          = @active_tickets
-  .col-md-3
-    .panel.panel-warning
-      .panel-heading.text-center Kwota zarobiona z biletów
-      .panel-body.text-center
-        h3
-          = @sum_earnings_tickets.nice
-          |  zł
-  .col-md-3
-    .panel.panel-warning
-      .panel-heading.text-center Kwota zarobiona z karnetów
-      .panel-body.text-center
-        h3
-          = @sum_earnings_passes.nice
-          |  zł
-  .col-md-3
-    .panel.panel-warning
-      .panel-heading.text-center Kwota zarobiona z treningów indywidualnych
-      .panel-body.text-center
-        h3
-          = @sum_earnings_trainings.nice
-          |  zł
-  .col-md-3
-    .panel.panel-warning
-      .panel-heading.text-center Najwięcej zarabia
-      .panel-body.text-center
-        h4
-          = @biggest_salary&.full_name || 'Brak danych'
-          - if @biggest_salary
-            |  #{@biggest_salary.salary.nice} zł
-  .col-md-3
-    .panel.panel-warning
-      .panel-heading.text-center Najmniej zarabia
-      .panel-body.text-center
-        h4
-          = @smallest_salary&.full_name || 'Brak danych'
-          - if @smallest_salary
-            |  #{@smallest_salary.salary.nice} zł
-  .col-md-3
-    .panel.panel-warning
-      .panel-heading.text-center Średnie zarobki
-      .panel-body.text-center
-        h3
-          = @avg_salaries.nice
-          |  zł
-.row
-  .divider-new
-    | Zatrudnienie
-  .col-md-3
-    .panel.panel-info
-      .panel-heading.text-center Najbardziej zapracowany pracownik
-      .panel-body.text-center
-        h4
-          = @most&.full_name || 'Brak danych'
-  .col-md-3
-    .panel.panel-info
-      .panel-heading.text-center Najmniej zapracowany pracownik
-      .panel-body.text-center
-        h4
-          = @least&.full_name || 'Brak danych'
-  .col-md-3
-    .panel.panel-info
-      .panel-heading.text-center Ilość osób bez grafiku pracy
-      .panel-body.text-center
-        h3
-          = @person_without_work
-  .col-md-3
-    .panel.panel-info
-      .panel-heading.text-center Najwcześniej zatrudniony
-      .panel-body.text-center
-        h4
-          = @earliest_worker&.full_name || 'Brak danych'
-          - if @earliest_worker
-            |  #{I18n.t(:"activerecord.attributes.work_schedule.pl_person_types.#{@earliest_worker.type}")}
-  .col-md-3
-    .panel.panel-info
-      .panel-heading.text-center Ostatnio zatrudniony
-      .panel-body.text-center
-        h4
-          = @last_worker&.full_name || 'Brak danych'
-          - if @last_worker
-            |  #{I18n.t(:"activerecord.attributes.work_schedule.pl_person_types.#{@last_worker.type}")}
-  .col-md-3
-    .panel.panel-info
-      .panel-heading.text-center Najwięcej osób pracuje w
-      .panel-body.text-center
-        h4
-          = @day_most_work
-          br
-          | #{@day_most_work_count} osób
-  .col-md-3
-    .panel.panel-info
-      .panel-heading.text-center Najmniej osób pracuje w dniu
-      .panel-body.text-center
-        h4
-          = @day_least_work
-          br
-          | #{@day_least_work_count} osób
+          .stat-card.stat-green-big
+            i.fa.fa-check-circle.stat-icon
+            .stat-body
+              .stat-value
+                = @sum_risk.nice
+                small  zł
+              .stat-label Bilans (zysk)
 
-.row
-  .divider-new
-    | Newsy
-  .col-md-3
-    .panel.panel-danger
-      .panel-heading.text-center Ilość wszystkich newsów
-      .panel-body.text-center
-        h4
-          = @all_news
-  .col-md-3
-    .panel.panel-danger
-      .panel-heading.text-center Newsy dot. klientów
-      .panel-body.text-center
-        h4
-          = @client_news
-  .col-md-3
-    .panel.panel-danger
-      .panel-heading.text-center Newsy dot. recepcjonistów
-      .panel-body.text-center
-        h4
-          = @receptionist_news
-  .col-md-3
-    .panel.panel-danger
-      .panel-heading.text-center Newsy dot. trenerów
-      .panel-body.text-center
-        h4
-          = @trainer_news
-  .col-md-3
-    .panel.panel-danger
-      .panel-heading.text-center Newsy dot. ratowników
-      .panel-body.text-center
-        h4
-          = @lifeguard_news
-  .col-md-3
-    .panel.panel-danger
-      .panel-heading.text-center Najbardziej lubiany news
-      .panel-body.text-center
-        - unless @most_liked_news.blank?
-          h5
-            = @most_liked_news.title
-            br
-            i.fa.fa-thumbs-o-up
-              = @most_liked_news_likes_count
-            i.fa.fa-thumbs-o-down
-              = @most_liked_news_dislikes_count
-        - else 
-          h5 = empty_info(@most_liked_news, "BRAK DANYCH")
-  .col-md-3
-    .panel.panel-danger
-      .panel-heading.text-center Najmniej lubiany news
-      .panel-body.text-center
-        - unless @most_liked_news.blank?
-          h5
-            = @most_hated_news.title
-            br
-            i.fa.fa-thumbs-o-up
-              = @most_hated_news_likes_count
-            i.fa.fa-thumbs-o-down
-              = @most_hated_news_dislikes_count
-        - else 
-          h5 = empty_info(@most_hated_news, "BRAK DANYCH")
-  .col-md-3
-    .panel.panel-danger
-      .panel-heading.text-center News posiadający najwięcej komentarzy
-      .panel-body.text-center
-        h5 = empty_info(@news_most_comments, "BRAK DANYCH")
+    .row
+      .col-md-3.col-sm-6
+        .stat-card.stat-green
+          i.fa.fa-ticket.stat-icon
+          .stat-body
+            .stat-value
+              = @sum_earnings_tickets.nice
+              small  zł
+            .stat-label Przychód z biletów
+      .col-md-3.col-sm-6
+        .stat-card.stat-green
+          i.fa.fa-id-card.stat-icon
+          .stat-body
+            .stat-value
+              = @sum_earnings_passes.nice
+              small  zł
+            .stat-label Przychód z karnetów
+      .col-md-3.col-sm-6
+        .stat-card.stat-green
+          i.fa.fa-trophy.stat-icon
+          .stat-body
+            .stat-value
+              = @sum_earnings_trainings.nice
+              small  zł
+            .stat-label Przychód z treningów
+      .col-md-3.col-sm-6
+        .stat-card.stat-teal
+          i.fa.fa-credit-card.stat-icon
+          .stat-body
+            .stat-value
+              = @active_passes
+              |  /
+              = @active_tickets
+            .stat-label Aktywne karnety / bilety
+
+    .row
+      .col-md-4.col-sm-6
+        .stat-card.stat-purple
+          i.fa.fa-arrow-circle-up.stat-icon
+          .stat-body
+            .stat-value = @biggest_salary&.full_name || '—'
+            .stat-label
+              | Najwyższa płaca
+              - if @biggest_salary
+                strong  · #{@biggest_salary.salary.nice} zł
+      .col-md-4.col-sm-6
+        .stat-card.stat-purple
+          i.fa.fa-arrow-circle-down.stat-icon
+          .stat-body
+            .stat-value = @smallest_salary&.full_name || '—'
+            .stat-label
+              | Najniższa płaca
+              - if @smallest_salary
+                strong  · #{@smallest_salary.salary.nice} zł
+      .col-md-4.col-sm-6
+        .stat-card.stat-purple
+          i.fa.fa-calculator.stat-icon
+          .stat-body
+            .stat-value
+              = @avg_salaries.nice
+              small  zł
+            .stat-label Średnia płaca
+
+  / ═══════════════════════════════════════════
+  / ZATRUDNIENIE
+  / ═══════════════════════════════════════════
+  .stats-section
+    .stats-section-title.stats-teal
+      i.fa.fa-clock-o
+      |  Zatrudnienie i harmonogram
+
+    .row
+      .col-md-3.col-sm-6
+        .stat-card.stat-teal
+          i.fa.fa-star.stat-icon
+          .stat-body
+            .stat-value = @most&.full_name || '—'
+            .stat-label Najbardziej zapracowany
+      .col-md-3.col-sm-6
+        .stat-card.stat-teal
+          i.fa.fa-star-o.stat-icon
+          .stat-body
+            .stat-value = @least&.full_name || '—'
+            .stat-label Najmniej zapracowany
+      .col-md-3.col-sm-6
+        .stat-card.stat-orange
+          i.fa.fa-exclamation-circle.stat-icon
+          .stat-body
+            .stat-value = @person_without_work
+            .stat-label Bez grafiku pracy
+      .col-md-3.col-sm-6
+        .stat-card.stat-blue-light
+          i.fa.fa-calendar-o.stat-icon
+          .stat-body
+            .stat-value = @day_most_work || '—'
+            .stat-label
+              | Najbardziej pracowity dzień
+              - if @day_most_work_count
+                strong  · #{@day_most_work_count} os.
+
+    .row
+      .col-md-4.col-sm-6
+        .stat-card.stat-blue-light
+          i.fa.fa-history.stat-icon
+          .stat-body
+            .stat-value = @earliest_worker&.full_name || '—'
+            .stat-label
+              | Najdłużej zatrudniony
+              - if @earliest_worker
+                small  · #{I18n.t(:"activerecord.attributes.work_schedule.pl_person_types.#{@earliest_worker.type}")}
+      .col-md-4.col-sm-6
+        .stat-card.stat-blue-light
+          i.fa.fa-user-plus.stat-icon
+          .stat-body
+            .stat-value = @last_worker&.full_name || '—'
+            .stat-label
+              | Ostatnio zatrudniony
+              - if @last_worker
+                small  · #{I18n.t(:"activerecord.attributes.work_schedule.pl_person_types.#{@last_worker.type}")}
+      .col-md-4.col-sm-6
+        .stat-card.stat-teal
+          i.fa.fa-calendar-times-o.stat-icon
+          .stat-body
+            .stat-value = @day_least_work || '—'
+            .stat-label
+              | Najspokojniejszy dzień
+              - if @day_least_work_count
+                strong  · #{@day_least_work_count} os.
+
+  / ═══════════════════════════════════════════
+  / NEWSY
+  / ═══════════════════════════════════════════
+  .stats-section
+    .stats-section-title.stats-red
+      i.fa.fa-newspaper-o
+      |  Aktualności
+
+    .row
+      .col-md-3.col-sm-6
+        .stat-card.stat-red
+          i.fa.fa-newspaper-o.stat-icon
+          .stat-body
+            .stat-value = @all_news
+            .stat-label Wszystkie newsy
+      .col-md-3.col-sm-6
+        .stat-card.stat-red
+          i.fa.fa-users.stat-icon
+          .stat-body
+            .stat-value = @client_news
+            .stat-label Dla klientów
+      .col-md-3.col-sm-6
+        .stat-card.stat-red
+          i.fa.fa-phone.stat-icon
+          .stat-body
+            .stat-value = @receptionist_news
+            .stat-label Dla recepcji
+      .col-md-3.col-sm-6
+        .stat-card.stat-red
+          i.fa.fa-life-ring.stat-icon
+          .stat-body
+            .stat-value = @lifeguard_news + @trainer_news
+            .stat-label Dla pracowników
+
+    .row
+      .col-md-4.col-sm-6
+        .stat-card.stat-green
+          i.fa.fa-thumbs-up.stat-icon
+          .stat-body
+            .stat-value.stat-value-sm = @most_liked_news&.title || '—'
+            .stat-label
+              | Najbardziej lubiany
+              - if @most_liked_news
+                |  ·
+                i.fa.fa-thumbs-o-up
+                =  " #{@most_liked_news_likes_count}"
+                i.fa.fa-thumbs-o-down
+                =  " #{@most_liked_news_dislikes_count}"
+      .col-md-4.col-sm-6
+        .stat-card.stat-red
+          i.fa.fa-thumbs-down.stat-icon
+          .stat-body
+            .stat-value.stat-value-sm = @most_hated_news&.title || '—'
+            .stat-label
+              | Najmniej lubiany
+              - if @most_hated_news
+                |  ·
+                i.fa.fa-thumbs-o-up
+                =  " #{@most_hated_news_likes_count}"
+                i.fa.fa-thumbs-o-down
+                =  " #{@most_hated_news_dislikes_count}"
+      .col-md-4.col-sm-6
+        .stat-card.stat-orange
+          i.fa.fa-comments.stat-icon
+          .stat-body
+            .stat-value.stat-value-sm = @news_most_comments || '—'
+            .stat-label Najwięcej komentarzy
