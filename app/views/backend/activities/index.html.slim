@@ -24,19 +24,19 @@ aquaparku(aktywne) lub te które są na razie nie wdrożone(nieaktywne).")
           = text_field_tag :name, params[:name], class: 'form-control', placeholder: 'Szukaj po nazwie...'
         .col-md-2.col-sm-4
           = label_tag :active, 'Status', class: 'control-label'
-          %br
+          br
           = select_tag :active, options_for_select([['Aktywne', 'true'], ['Nieaktywne', 'false']], params[:active]), include_blank: 'Wszystkie'
         .col-md-2.col-sm-4
           = label_tag :day_of_week, 'Dzień tygodnia', class: 'control-label'
-          %br
+          br
           = select_tag :day_of_week, options_for_select(Activity::DAYS.map { |d| [d, d] }, params[:day_of_week]), include_blank: 'Wszystkie dni'
         .col-md-2.col-sm-4
           = label_tag :pool_zone, 'Strefa basenu', class: 'control-label'
-          %br
+          br
           = select_tag :pool_zone, options_for_select(@zones.map { |z| [z, z] }, params[:pool_zone]), include_blank: 'Wszystkie strefy'
         .col-md-3.col-sm-8
           = label_tag :trainer_id, 'Trener', class: 'control-label'
-          %br
+          br
           = select_tag :trainer_id, options_from_collection_for_select(@trainers, :id, :full_name, params[:trainer_id].to_i), include_blank: 'Wszyscy trenerzy'
         .col-md-1.col-sm-4 style="padding-top:22px"
           = submit_tag 'Filtruj', class: 'btn btn-primary btn-block'
