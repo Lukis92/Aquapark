@@ -9,39 +9,41 @@ aquaparku(aktywne) lub te które są na razie nie wdrożone(nieaktywne).")
 
 = render 'shared/a_searchbar'
 
+.clearfix style="margin-bottom:16px"
+
 = form_tag backend_activities_path, method: :get do
-  .panel.panel-default
+  .panel.panel-default style="margin-bottom:16px"
     .panel-heading
       strong
         i.fa.fa-filter
         |  Filtrowanie zajęć
     .panel-body
       .row
-        .col-sm-3
-          .form-group
-            = label_tag :name, 'Nazwa', class: 'control-label'
-            = text_field_tag :name, params[:name], class: 'form-control', placeholder: 'Szukaj po nazwie...'
-        .col-sm-2
-          .form-group
-            = label_tag :active, 'Status', class: 'control-label'
-            = select_tag :active, options_for_select([['Aktywne', 'true'], ['Nieaktywne', 'false']], params[:active]), include_blank: 'Wszystkie'
-        .col-sm-2
-          .form-group
-            = label_tag :day_of_week, 'Dzień tygodnia', class: 'control-label'
-            = select_tag :day_of_week, options_for_select(Activity::DAYS.map { |d| [d, d] }, params[:day_of_week]), include_blank: 'Wszystkie dni'
-        .col-sm-2
-          .form-group
-            = label_tag :pool_zone, 'Strefa basenu', class: 'control-label'
-            = select_tag :pool_zone, options_for_select(@zones.map { |z| [z, z] }, params[:pool_zone]), include_blank: 'Wszystkie strefy'
-        .col-sm-3
-          .form-group
-            = label_tag :trainer_id, 'Trener', class: 'control-label'
-            = select_tag :trainer_id, options_from_collection_for_select(@trainers, :id, :full_name, params[:trainer_id].to_i), include_blank: 'Wszyscy trenerzy'
-      .row
-        .col-sm-12
-          = submit_tag 'Filtruj', class: 'btn btn-primary'
-          - if params.slice(:name, :active, :day_of_week, :pool_zone, :trainer_id).values.any?(&:present?)
-            = link_to 'Wyczyść filtry', backend_activities_path, class: 'btn btn-default'
+        .col-md-2.col-sm-4
+          = label_tag :name, 'Nazwa', class: 'control-label'
+          = text_field_tag :name, params[:name], class: 'form-control', placeholder: 'Szukaj po nazwie...'
+        .col-md-2.col-sm-4
+          = label_tag :active, 'Status', class: 'control-label'
+          %br
+          = select_tag :active, options_for_select([['Aktywne', 'true'], ['Nieaktywne', 'false']], params[:active]), include_blank: 'Wszystkie'
+        .col-md-2.col-sm-4
+          = label_tag :day_of_week, 'Dzień tygodnia', class: 'control-label'
+          %br
+          = select_tag :day_of_week, options_for_select(Activity::DAYS.map { |d| [d, d] }, params[:day_of_week]), include_blank: 'Wszystkie dni'
+        .col-md-2.col-sm-4
+          = label_tag :pool_zone, 'Strefa basenu', class: 'control-label'
+          %br
+          = select_tag :pool_zone, options_for_select(@zones.map { |z| [z, z] }, params[:pool_zone]), include_blank: 'Wszystkie strefy'
+        .col-md-3.col-sm-8
+          = label_tag :trainer_id, 'Trener', class: 'control-label'
+          %br
+          = select_tag :trainer_id, options_from_collection_for_select(@trainers, :id, :full_name, params[:trainer_id].to_i), include_blank: 'Wszyscy trenerzy'
+        .col-md-1.col-sm-4 style="padding-top:22px"
+          = submit_tag 'Filtruj', class: 'btn btn-primary btn-block'
+      - if params.slice(:name, :active, :day_of_week, :pool_zone, :trainer_id).values.any?(&:present?)
+        .row
+          .col-sm-12 style="margin-top:8px"
+            = link_to 'Wyczyść filtry', backend_activities_path, class: 'btn btn-default btn-sm'
 
 .row
   table.table.table-striped.table-bordered.table-list.pretty.table-list-search
