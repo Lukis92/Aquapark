@@ -5,19 +5,16 @@
     = errors_for(resource)
     .input-field
       = f.input :pesel, required: true, autofocus: true,
-                input_html: {length: 11, maxlength: 11}
+                input_html: { length: 11, maxlength: 11, id: 'pesel_input', autocomplete: 'off' }
+    #pesel-dob-info.help-block style="display:none; margin-top:-10px; margin-bottom:10px; color:#1a7abf; font-weight:bold;"
+    #pesel-dob-error.help-block style="display:none; margin-top:-10px; margin-bottom:10px; color:#d9534f;"
+    = f.hidden_field :date_of_birth, id: 'pesel_dob_hidden'
     .input-field
       = f.input :first_name, required: true,
                 input_html: {length: 30, maxlength: 30}
     .input-field
       = f.input :last_name, required: true,
                 input_html: {length: 60, maxlength: 60}
-    .row
-      .col-md-5
-        label for="datepicker"* Data urodzenia
-        = f.text_field :date_of_birth, required: true, class: 'datepicker',
-                       placeholder: 'Kliknij'
-
     .input-field
       = f.input :email, required: true, input_html: {length: 254, maxlength: 254}
     .file-field.input-field
@@ -45,3 +42,79 @@
       = f.button :submit, "Zarejestruj", class: "btn btn-primary btn-block"
   - if current_person.blank?
     = render "devise/shared/links"
+
+javascript:
+  (function() {
+    var WEIGHTS = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3];
+
+    function peselChecksum(p) {
+      var sum = 0;
+      for (var i = 0; i < 10; i++) sum += WEIGHTS[i] * parseInt(p[i]);
+      return (10 - sum % 10) % 10 === parseInt(p[10]);
+    }
+
+    function peselDateOfBirth(p) {
+      var yy = parseInt(p.substring(0, 2));
+      var mm = parseInt(p.substring(2, 4));
+      var dd = parseInt(p.substring(4, 6));
+      var year, month;
+      if      (mm >= 1  && mm <= 12) { year = 1900 + yy; month = mm; }
+      else if (mm >= 21 && mm <= 32) { year = 2000 + yy; month = mm - 20; }
+      else if (mm >= 41 && mm <= 52) { year = 2100 + yy; month = mm - 40; }
+      else if (mm >= 61 && mm <= 72) { year = 2200 + yy; month = mm - 60; }
+      else if (mm >= 81 && mm <= 92) { year = 1800 + yy; month = mm - 80; }
+      else return null;
+      var d = new Date(year, month - 1, dd);
+      if (d.getFullYear() !== year || d.getMonth() !== month - 1 || d.getDate() !== dd) return null;
+      return { year: year, month: month, day: dd, date: d };
+    }
+
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+    function onPeselChange() {
+      var val = document.getElementById('pesel_input').value.trim();
+      var info  = document.getElementById('pesel-dob-info');
+      var err   = document.getElementById('pesel-dob-error');
+      var hidden = document.getElementById('pesel_dob_hidden');
+
+      info.style.display  = 'none';
+      err.style.display   = 'none';
+      hidden.value = '';
+
+      if (val.length !== 11) return;
+
+      if (!/^\d{11}$/.test(val)) {
+        err.textContent = 'PESEL może zawierać tylko cyfry.';
+        err.style.display = 'block';
+        return;
+      }
+
+      if (!peselChecksum(val)) {
+        err.textContent = 'Nieprawidłowy PESEL — błędna suma kontrolna.';
+        err.style.display = 'block';
+        return;
+      }
+
+      var dob = peselDateOfBirth(val);
+      if (!dob) {
+        err.textContent = 'Nie można odczytać daty urodzenia z podanego PESEL.';
+        err.style.display = 'block';
+        return;
+      }
+
+      var formatted = pad(dob.day) + '-' + pad(dob.month) + '-' + dob.year;
+      var iso = dob.year + '-' + pad(dob.month) + '-' + pad(dob.day);
+      hidden.value = iso;
+      info.textContent = 'Data urodzenia: ' + formatted;
+      info.style.display = 'block';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var input = document.getElementById('pesel_input');
+      if (input) {
+        input.addEventListener('input', onPeselChange);
+        input.addEventListener('blur', onPeselChange);
+        if (input.value) onPeselChange();
+      }
+    });
+  })();
