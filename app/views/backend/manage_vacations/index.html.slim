@@ -4,9 +4,6 @@ h5 Urlopy
 p
   | Obecnie w bazie posiadamy #{Vacation.count} zarejestrowanych urlopów.
 
-= render 'shared/v_searchbar'
-
-.clearfix style="margin-bottom:16px"
 = form_tag backend_manage_vacations_path, method: :get do
   .panel.panel-default style="margin-bottom:16px"
     .panel-heading
