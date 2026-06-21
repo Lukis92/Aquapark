@@ -104,6 +104,26 @@ Aplikacja będzie dostępna pod adresem **http://localhost:3000**.
 Dane logowania managera znajdziesz w pliku `db/seeds/manager.rb`.
 
 ## Historia zmian
+* 0.6.1 *(2026-06-21)*
+  * **Grafik pracy — widok kalendarza** (`/backend/work_schedules`)
+    * Zastąpiono tabelę dzienną siatką tygodniową: wiersze = pracownicy, kolumny = dni tygodnia (Pn–Nd)
+    * Paginacja 20 pracowników na stronę
+    * Filtr po konkretnym pracowniku (dropdown)
+    * Filtr po typie pracownika: Recepcjonista / Ratownik / Trener / Kierownik
+    * W każdej komórce siatki widoczne godziny pracy oraz przyciski edycji/usunięcia (dla managera)
+  * **Masowe dodawanie grafiku** (`/backend/work_schedules/new`)
+    * Wielokrotny wybór dni tygodnia (checkboxy z przyciskami „zaznacz wszystkie / odznacz wszystkie")
+    * Lista pracowników pogrupowana po typie z zakładkami filtrowania (bez przeładowania strony)
+    * Przyciski „zaznacz grupę" / „zaznacz widocznych" / „odznacz wszystkich"
+    * Kontroler tworzy po jednym `WorkSchedule` dla każdej kombinacji dzień × pracownik; już istniejące grafiki są pomijane z komunikatem
+  * **Dane testowe** (`db/seeds/bulk_data.rb`)
+    * Seed dodający 100 klientów, 15 recepcjonistów, 25 ratowników, 60 trenerów
+    * Automatyczne tworzenie grafiów pracy, zajęć grupowych, treningów indywidualnych, zapisów na zajęcia i urlopów
+    * Uruchomienie: `rails runner db/seeds/bulk_data.rb`
+  * **Fix: manager może edytować każdy urlop** (`VacationsController#edit_rule_vacations`)
+    * Poprzednia logika blokowała managera gdy urlop był już zaakceptowany lub miał datę w przeszłości
+    * Manager ma teraz pełny dostęp do edycji; ograniczenia (niezaakceptowany + przyszła data) dotyczą wyłącznie pracowników edytujących własne urlopy
+
 * 0.6 *(2026-06-19)*
   * **Ruby 3.1.7 → 3.4.9** — instalacja przez winget (`RubyInstallerTeam.RubyWithDevKit.3.4`)
   * **Rails 7.0.10 → 8.1.3** — aktualizacja wszystkich zależności Rails
