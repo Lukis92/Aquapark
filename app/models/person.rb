@@ -62,7 +62,8 @@ class Person < ApplicationRecord
   validates_presence_of :first_name, :last_name, :date_of_birth, :type
   validates :pesel, presence: true,
                     length: { is: 11 },
-                    uniqueness: true
+                    uniqueness: { allow_nil: true },
+                    unless: -> { is_a?(Client) }
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
                     format: { with: VALID_EMAIL_REGEX }
