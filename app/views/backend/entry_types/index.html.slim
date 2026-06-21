@@ -6,10 +6,6 @@ h5 Rodzaje wszystkich wejściówek
     .btn.btn-primary.waves-effect.waves-light
       i.fa.fa-plus
       |  Dodaj bilet/karnet
-br
-= render 'shared/et_searchbar'
-
-.clearfix style="margin-bottom:16px"
 = form_tag backend_entry_types_path, method: :get do
   .panel.panel-default style="margin-bottom:16px"
     .panel-heading
