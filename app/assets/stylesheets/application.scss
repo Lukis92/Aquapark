@@ -356,6 +356,27 @@ body {
   display: inline-block;
   text-align: center;
 }
+
+/* Compact action buttons in tables (i.btn pattern) */
+table i.btn,
+table .btn.btn-default,
+table .btn.btn-danger,
+table .btn.btn-success,
+table .btn.btn-warning,
+table .btn.btn-info,
+table .btn.btn-primary {
+  padding: 3px 7px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+  margin: 1px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+table td:first-child {
+  white-space: nowrap;
+}
 .row .col-md-4 .well {
   width: 300px;
 }
