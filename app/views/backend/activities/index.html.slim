@@ -7,10 +7,6 @@ h5 Zajęcia grupowe
 = info("Jesteś na stronie prezentującej wszystkie zajęcia odbywające się w \
 aquaparku(aktywne) lub te które są na razie nie wdrożone(nieaktywne).")
 
-= render 'shared/a_searchbar'
-
-.clearfix style="margin-bottom:16px"
-
 = form_tag backend_activities_path, method: :get do
   .panel.panel-default style="margin-bottom:16px"
     .panel-heading
