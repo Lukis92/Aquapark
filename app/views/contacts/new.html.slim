@@ -3,6 +3,11 @@
   .text-center
     h2.divider-new Kontakt
     h4 W razie jakichkolwiek pytań skontaktuj się z nami.
+  - if flash[:notice].present?
+    .alert.alert-success
+      button.close aria-hidden="true" data-dismiss="alert" type="button" ×
+      - flash.discard(:notice)
+      = flash[:notice]
   .row
   = simple_form_for @contact do |f|
     = errors_for(@contact)

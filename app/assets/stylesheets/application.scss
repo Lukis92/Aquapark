@@ -471,6 +471,39 @@ table td:first-child {
 .row .col-md-4 .well {
   width: 300px;
 }
+
+/* Trainer cards — equal height, sticky button */
+.trainer-cards-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.trainer-card-col {
+  display: flex;
+  margin-bottom: 20px;
+}
+.trainer-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .trainer-days {
+    flex: 1;
+    small { display: block; color: #777; margin-bottom: 4px; }
+  }
+  .trainer-days-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    .label { font-size: 11px; font-weight: normal; padding: 3px 7px; }
+  }
+  .trainer-card-action {
+    margin-top: 12px;
+  }
+}
 #about {
   font-family: 'Andada', sans-serif;
 }

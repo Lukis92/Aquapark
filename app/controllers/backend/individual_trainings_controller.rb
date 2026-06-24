@@ -106,7 +106,8 @@ class Backend::IndividualTrainingsController < BackendController
   def choose_trainer
     @trainers = Person.includes(:work_schedules).where(type: 'Trainer')
                       .where.not(work_schedules: { person_id: nil })
-                      .paginate(page: params[:page], per_page: 20)
+    @trainers = @trainers.where(work_schedules: { day_of_week: params[:day_of_week] }) if params[:day_of_week].present?
+    @trainers = @trainers.paginate(page: params[:page], per_page: 20)
   end
 
   # GET backend/individual_trainings/search
