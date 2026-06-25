@@ -128,20 +128,6 @@ describe IndividualTraining, 'methods' do
     end
   end
 
-  # describe "#trainer_free_time_validation" do
-  #   let(:work_schedule) { create :work_schedule }
-  #   let(:ind) { create(:ind, trainer_id: work_schedule[:person_id]).tap {|e| p e.valid?; p e.errors} }
-  #   let(:ind2) { build(:ind2, trainer_id: work_schedule[:person_id]).tap {|e| p e.valid?; p e.errors} }
-  #   context 'when trainer has another individual training' do
-  #     it 'raises an error' do
-  #       expect(ind.valid?).to be_truthy
-  #       expect(ind2.valid?).to be_falsey
-  #       expect(ind2.errors.count).to eq 1
-  #       expect(ind2.errors[:base]).to eq(['Trener ma w tym czasie inny trening.'])
-  #     end
-  #   end
-  # end
-
   describe '#set_end_on' do
     let(:training_cost) { create :training_cost }
     let(:individual_training) { build :individual_training, training_cost_id: training_cost[:id] }

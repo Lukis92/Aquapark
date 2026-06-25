@@ -28,17 +28,3 @@ describe ActivitiesPerson, 'validations' do
   let(:activities_person) { create :activities_person}
   it { expect(activities_person).to validate_uniqueness_of(:person_id).scoped_to(:activity_id, :date).case_insensitive }
 end
-
-# describe ActivitiesPerson, 'methods' do
-#   let(:activity) { create :activity }
-#   let(:activities_person) { build_list(:activities_person, 21, activity_id: activity[:id]) }
-#   describe '#check_max_people' do
-#     context 'when the number of people is higher than max_people' do
-#       it 'raises an error' do
-#         expect(activity.valid?).to be_truthy
-#         expect(activities_person.valid?).to be_falsey
-#         expect(activities_person.errors[:base]).to eq 'Została wykorzystana masymalna ilość miejsc na ten trening.'
-#       end
-#     end
-#   end
-# end
