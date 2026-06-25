@@ -1,36 +1,50 @@
+# db/seeds/destroy_all.rb
+# Usuwa wszystkie dane testowe i resetuje sekwencje PK
+# Uruchom: rails runner db/seeds/destroy_all.rb
 
-Activity.destroy_all
-Client.destroy_all
-Receptionist.destroy_all
-Lifeguard.destroy_all
-Trainer.destroy_all
-Manager.destroy_all
-WorkSchedule.destroy_all
-EntryType.destroy_all
-News.destroy_all
-Comment.destroy_all
-Like.destroy_all
-IndividualTraining.destroy_all
-EntryType.destroy_all
-BoughtDetail.destroy_all
-TrainingCost.destroy_all
-Vacation.destroy_all
-WorkSchedule.destroy_all
-ActivitiesPerson.destroy_all
-p "Destroyed tables"
+puts "=== Czyszczenie bazy danych ==="
 
-ActiveRecord::Base.connection.reset_pk_sequence!('people')
-ActiveRecord::Base.connection.reset_pk_sequence!('work_schedules')
-ActiveRecord::Base.connection.reset_pk_sequence!('entry_types')
-ActiveRecord::Base.connection.reset_pk_sequence!('news')
-ActiveRecord::Base.connection.reset_pk_sequence!('comments')
-ActiveRecord::Base.connection.reset_pk_sequence!('likes')
-ActiveRecord::Base.connection.reset_pk_sequence!('individual_trainings')
-ActiveRecord::Base.connection.reset_pk_sequence!('entry_types')
-ActiveRecord::Base.connection.reset_pk_sequence!('bought_details')
-ActiveRecord::Base.connection.reset_pk_sequence!('training_costs')
-ActiveRecord::Base.connection.reset_pk_sequence!('vacations')
-ActiveRecord::Base.connection.reset_pk_sequence!('work_schedules')
-ActiveRecord::Base.connection.reset_pk_sequence!('activities')
-ActiveRecord::Base.connection.reset_pk_sequence!('activities_people')
-p "Reseted PK sequences"
+[
+  Notification,
+  ActivitiesPerson,
+  BoughtDetail,
+  IndividualTraining,
+  Like,
+  Comment,
+  Vacation,
+  WorkSchedule,
+  Activity,
+  TrainingCost,
+  EntryType,
+  News,
+  Client,
+  Receptionist,
+  Lifeguard,
+  Trainer,
+  Manager
+].each do |model|
+  count = model.count
+  model.destroy_all
+  puts "  #{model.name}: usunięto #{count} rekordów"
+end
+
+puts "\nResetowanie sekwencji PK..."
+%w[
+  notifications
+  activities_people
+  bought_details
+  individual_trainings
+  likes
+  comments
+  vacations
+  work_schedules
+  activities
+  training_costs
+  entry_types
+  news
+  people
+].each do |table|
+  ActiveRecord::Base.connection.reset_pk_sequence!(table)
+end
+
+puts "\nGotowe."

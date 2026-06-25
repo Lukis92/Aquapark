@@ -1,12 +1,15 @@
-Manager.create!(
-                  pesel: '11111111111',
-                  first_name: 'Manager',
-                  last_name: "Manager",
-                  date_of_birth: '1967-01-11',
-                  email: 'manager@youremail.com',
-                  password: 'password',
-                  salary: '6500.00',
-                  hiredate: '2016-04-01'
-                )
+# db/seeds/manager.rb
+# Tworzy konto managera (idempotentne)
+# Uruchom: rails runner db/seeds/manager.rb
 
-p "Created #{Manager.count} manager"
+Manager.find_or_create_by!(email: 'manager@youremail.com') do |m|
+  m.pesel         = '11111111111'
+  m.first_name    = 'Manager'
+  m.last_name     = 'Manager'
+  m.date_of_birth = '1967-01-11'
+  m.password      = 'password'
+  m.salary        = 6500.00
+  m.hiredate      = '2016-04-01'
+end
+
+puts "Manager: #{Manager.first.email} (hasło: password)"
