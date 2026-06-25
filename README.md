@@ -104,6 +104,28 @@ Aplikacja będzie dostępna pod adresem **http://localhost:3000**.
 Dane logowania managera znajdziesz w pliku `db/seeds/manager.rb`.
 
 ## Historia zmian
+* 0.6.3 *(2026-06-25)*
+  * **System powiadomień** (`/backend/notifications`)
+    * Nowy model `Notification` z polimorficznym powiązaniem `notifiable` (urlop, trening, zajęcia, bilet)
+    * 11 typów zdarzeń: akceptacja/odrzucenie urlopu, zmiana grafiku pracy, przypisanie/anulowanie treningu indywidualnego, aktywacja/dezaktywacja zajęć, zapis/rezygnacja z zajęć grupowych, zakup biletu/karnetu
+    * Manager widzi wszystkie powiadomienia; pozostałe role widzą wyłącznie swoje
+    * Filtry: grupa pracowników, konkretna osoba, rodzaj zdarzenia, status przeczytania
+    * Paginacja (30 powiadomień na stronę), oznaczanie jako przeczytane (pojedynczo i wszystkie)
+    * Licznik nieprzeczytanych w pasku bocznym (czerwona odznaka)
+    * Powiadomienia generowane automatycznie we wszystkich powiązanych kontrolerach (urlopy, grafiki, treningi, zajęcia, zakupy)
+    * Seed testowy `db/seeds/notifications.rb` — generuje powiadomienia z istniejących danych
+  * **Elegancki styl tabel w całym backendzie**
+    * Globalny CSS dla wszystkich `table.table` w obszarze treści backendu: granatowy gradient w nagłówku, zaokrąglone rogi (6 px), cień, hover i zebra-striping
+    * Wykluczone tabele specjalne: kalendarz grafikoów pracy (`schedule-calendar-grid`), tabela danych profilu (`table-user-information`)
+    * Żadna zmiana w widokach — styl aplikowany przez jeden selektor CSS
+  * **Lista osób** (`/backend/people`)
+    * Nowa kolumna **Typ** z kolorową etykietą (Kierownik/Recepcjonista/Trener/Ratownik/Klient) — widoczna tylko dla managera
+    * Awatar z inicjałami (kolorowe kółko wg typu) zastąpił oddzielne kolumny imię i nazwisko — PESEL widoczny jako podpis pod imieniem
+  * **Stripe Elements v3** (`individual_trainings/_form`, `bought_details/new`)
+    * Pełna migracja z Stripe.js v2 na v3 (`stripe.createToken`, `source: token`)
+    * Formularz treningu indywidualnego obsługuje zarówno klienta (płatność kartą) jak i managera (zapis bez płatności) przez DOM guard w JS
+  * **Formularz kontaktowy** — komunikat potwierdzający wysłanie wiadomości bez duplikowania w layoucie
+
 * 0.6.2 *(2026-06-21)*
   * **Filtry na wszystkich stronach backendowych**
     * Spójny panel filtrów (Bootstrap grid, bez konfliktu z MDB) zastąpił rozbite searchbary na: `/backend/people`, `/backend/activities`, `/backend/entry_types`, `/backend/manage_vacations`, `/backend/news`, `/backend/individual_trainings`
@@ -180,19 +202,6 @@ Dane logowania managera znajdziesz w pliku `db/seeds/manager.rb`.
   * podczas dodawania zajęcia grupowego, sprawdzane jest czy trener ma w tym czasie inne zajęcia lub treningi
   * podczas dołączania klienta do zajęć, sprawdzane jest czy klient ma w tym czasie inne zajęcia lub treningi
   * naprawione przyciski wróć w wynikach wyszukiwania
-* 0.5.2
-  * Naprawienie żle wyświetlających się podstron
-  * Dodanie notatek informacyjnych na każdej podstronie
-  * Wyświetlanie tylko najbliższych terminów zajęć grupowych
-  * Usunięty zielony haczyk przy pustych opisach cen biletów/karnetów
-  * Wyrównane wysokości bloków z cenami
-  * Poprawienie wyglądu komentarza
-  * Sortowane kolumny w activities/requests
-  * Usunięte sortowania z rezultatów wyszukiwań
-  * Dodanie napisu informującego, że dany atrybut nie ma przypisanej wartości
-  * Naprawienie wyszukiwania po dacie rekordów
-  * Dodanie ilości likeów na stronie newsa
-  * naprawienie edycji treningu indywidualnego
 
 ## Autor
 Łukasz Korol - lukas.korol@gmail.com
