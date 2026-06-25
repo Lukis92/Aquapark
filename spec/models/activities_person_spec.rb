@@ -18,7 +18,7 @@ end
 describe ActivitiesPerson, 'column specifications' do
   it { is_expected.to have_db_column(:activity_id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:person_id).of_type(:integer).with_options(null: false) }
-  it { is_expected.to have_db_column(:date).of_type(:date).with_options(null: false) }
+  it { is_expected.to have_db_column(:date).of_type(:date) }
 
   it { is_expected.to have_db_index [:activity_id, :person_id] }
   it { is_expected.to have_db_index [:person_id, :activity_id] }

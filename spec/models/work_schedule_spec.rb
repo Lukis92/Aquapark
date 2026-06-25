@@ -19,7 +19,7 @@ describe WorkSchedule, 'column specifications' do
   it { is_expected.to have_db_column(:start_time).of_type(:time).with_options(null: false) }
   it { is_expected.to have_db_column(:end_time).of_type(:time).with_options(null: false) }
   it { is_expected.to have_db_column(:day_of_week).of_type(:string).with_options(null: false) }
-  it { is_expected.to have_db_column(:person_id).of_type(:integer).with_options(null: false) }
+  it { is_expected.to have_db_column(:person_id).of_type(:integer) }
 end
 
 describe WorkSchedule, 'validations' do

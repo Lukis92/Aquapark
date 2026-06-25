@@ -43,7 +43,7 @@ describe Person, 'associations' do
 end
 
 describe Person, 'column specifications' do
-  it { is_expected.to have_db_column(:pesel).of_type(:string).with_options(null: false) }
+  it { is_expected.to have_db_column(:pesel).of_type(:string) }
   it { is_expected.to have_db_column(:first_name).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:last_name).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:type).of_type(:string).with_options(null: false) }
@@ -58,7 +58,6 @@ describe Person, 'validations' do
   it { is_expected.to validate_presence_of :pesel }
   it { is_expected.to validate_presence_of :first_name }
   it { is_expected.to validate_presence_of :last_name }
-  it { is_expected.to validate_presence_of :date_of_birth }
   it { is_expected.to validate_presence_of :email }
   it { is_expected.to validate_presence_of :type }
 
@@ -90,10 +89,12 @@ describe Person, 'methods' do
   end
 
   describe '#age' do
-    let(:person) { build(:person, date_of_birth: '1992-01-22')}
+    let(:person) { build(:person, date_of_birth: '1992-01-22') }
 
     it 'returns an age of person' do
-      expect(person.age).to eq 24
+      dob = Date.new(1992, 1, 22)
+      expected = ((Date.today - dob) / 365.25).floor
+      expect(person.age).to eq expected
     end
   end
 

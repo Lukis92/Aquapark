@@ -40,6 +40,7 @@ private
 
   # checking client activity overlapping with another activities
   def check_activities_overlapping
+    return unless date.present?
     day_of_week = BackendController.helpers.translate_date(date)
     enrolled = person.activities_people.where(date: date).includes(:activity).to_a
     activities_on_day = person.activities.where(day_of_week: day_of_week).to_a

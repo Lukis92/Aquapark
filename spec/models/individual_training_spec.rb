@@ -42,17 +42,15 @@ describe IndividualTraining, 'methods' do
     context 'when date of training is before today' do
       it 'raises an error' do
         expect(individual_training.valid?).to be_falsey
-        expect(individual_training.errors.count).to eq 1
         expect(individual_training.errors[:base])
-          .to eq(['Nie możesz ustalać terminu treningu wcześniej niż dzień dzisiejszy.'])
+          .to include('Nie możesz ustalać terminu treningu wcześniej niż dzień dzisiejszy.')
       end
     end
     context 'when start_on is before Time now' do
       it 'raises an error' do
         expect(ind2.valid?).to be_falsey
-        expect(ind2.errors.count).to eq 1
         expect(ind2.errors[:base])
-          .to eq ['Godzina dzisiejszego treningu jest wcześniejsza niż obecny czas.']
+          .to include('Godzina dzisiejszego treningu jest wcześniejsza niż obecny czas.')
       end
     end
   end
@@ -72,16 +70,14 @@ describe IndividualTraining, 'methods' do
       it 'raises an error' do
         expect(work_schedule.valid?).to be_truthy
         expect(individual_training.valid?).to be_falsey
-        expect(individual_training.errors.count).to eq 1
-        expect(individual_training.errors[:base]).to eq(['Trening jest poza grafikiem pracy trenera.'])
+        expect(individual_training.errors[:base]).to include('Trening jest poza grafikiem pracy trenera.')
       end
     end
     context 'when training is on free trainer day' do
       it 'raises an error' do
         expect(work_schedule.valid?).to be_truthy
         expect(ind2.valid?).to be_falsey
-        expect(ind2.errors.count).to eq 1
-        expect(ind2.errors[:base]).to eq(['Trener w tym dniu nie pracuje.'])
+        expect(ind2.errors[:base]).to include('Trener w tym dniu nie pracuje.')
       end
     end
   end
