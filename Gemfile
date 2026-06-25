@@ -9,6 +9,7 @@ gem 'sassc-rails'
 gem 'jbuilder', '~> 2.11'
 gem 'nokogiri', '>= 1.16'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
+gem 'fiddle'
 
 # OWN GEMS#
 gem 'annotate'
