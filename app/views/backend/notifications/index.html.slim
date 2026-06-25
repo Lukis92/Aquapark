@@ -1,0 +1,78 @@
+.notifications-page
+  .notifications-header
+    h4
+      i.fa.fa-bell
+      |  Powiadomienia
+      - if current_manager
+        small.text-muted  — wszystkie aktywności
+    - unread_scope = current_manager ? Notification.all : current_person.notifications
+    - unread_count = unread_scope.unread.count
+    - if unread_count > 0
+      = link_to mark_all_as_read_backend_notifications_path, method: :post, class: 'btn btn-default btn-sm' do
+        i.fa.fa-check
+        |  Oznacz wszystkie jako przeczytane
+        span.badge = unread_count
+
+  = form_tag backend_notifications_path, method: :get do
+    .panel.panel-default style="margin-bottom:16px"
+      .panel-heading
+        strong
+          i.fa.fa-filter
+          |  Filtrowanie powiadomień
+      .panel-body
+        .row
+          - if current_manager
+            .col-md-2.col-sm-4
+              = label_tag :person_type, 'Grupa', class: 'control-label'
+              = select_tag :person_type, options_for_select([['Kierownicy', 'Manager'], ['Recepcjoniści', 'Receptionist'], ['Trenerzy', 'Trainer'], ['Ratownicy', 'Lifeguard'], ['Klienci', 'Client']], params[:person_type]), include_blank: 'Wszystkie grupy', onchange: 'this.form.submit()'
+            .col-md-3.col-sm-4
+              = label_tag :person_id, 'Osoba', class: 'control-label'
+              = select_tag :person_id, options_from_collection_for_select(@people_for_filter, :id, :person_full_name_type, params[:person_id].to_i), include_blank: 'Wszystkie osoby'
+            .col-md-3.col-sm-4
+              = label_tag :kind, 'Rodzaj zdarzenia', class: 'control-label'
+              - kind_options = Notification::ICONS.keys.map { |k| [I18n.t("notifications.kinds.#{k}", default: k.humanize), k] }
+              = select_tag :kind, options_for_select(kind_options, params[:kind]), include_blank: 'Wszystkie zdarzenia'
+          .col-md-2.col-sm-4
+            = label_tag :unread, 'Status', class: 'control-label'
+            = select_tag :unread, options_for_select([['Nieprzeczytane', '1']], params[:unread]), include_blank: 'Wszystkie'
+          .col-md-2.col-sm-4 style="padding-top:22px"
+            = submit_tag 'Filtruj', class: 'btn btn-primary'
+        - if params.slice(:person_id, :person_type, :kind, :unread).values.any?(&:present?)
+          .row
+            .col-sm-12 style="margin-top:8px"
+              = link_to 'Wyczyść filtry', backend_notifications_path, class: 'btn btn-default btn-sm'
+
+  - if @notifications.empty?
+    .alert.alert-info
+      i.fa.fa-info-circle
+      |  Brak powiadomień.
+  - else
+    .list-group.notifications-list
+      - @notifications.each do |n|
+        .list-group-item.notification-item class=("notification-unread" unless n.read?)
+          .notification-icon
+            span class="label label-#{n.css_class}"
+              i class="fa #{n.icon}"
+          .notification-body
+            p.notification-message = n.message
+            .notification-meta
+              - if current_manager
+                small.text-muted
+                  i.fa.fa-user-circle
+                  = " #{n.person.full_name} (#{n.person.translate_type})"
+                  |  &nbsp;&bull;&nbsp;
+              small.text-muted
+                i.fa.fa-clock-o
+                = " #{l(n.created_at, format: :long)}"
+              - if n.actor
+                small.text-muted
+                  |  &nbsp;&bull;&nbsp;
+                  i.fa.fa-pencil
+                  = " przez #{n.actor.full_name}"
+          .notification-actions
+            - unless n.read?
+              = link_to mark_as_read_backend_notification_path(n), method: :post, class: 'btn btn-xs btn-default', title: 'Oznacz jako przeczytane' do
+                i.fa.fa-check
+                |  Przeczytano
+
+  = will_paginate @notifications, renderer: BootstrapPagination::Rails

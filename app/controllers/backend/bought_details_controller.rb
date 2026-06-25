@@ -53,6 +53,17 @@ class Backend::BoughtDetailsController < BackendController
         render :new and return
       end
 
+      recipient = Manager.first
+      if recipient
+        Notification.notify(
+          person:     recipient,
+          actor:      current_person,
+          kind:       'ticket_purchased',
+          message:    "#{current_person.full_name} zakupił(a) #{@entry_type.kind} \"#{@entry_type.kind_details}\" za #{@bought_detail.cost} zł.",
+          notifiable: @bought_detail
+        )
+      end
+
       flash[:notice] = 'Dziękujemy za zakup!'
       redirect_to bought_history_backend_person_path(current_person),
                   notice: flash[:notice]

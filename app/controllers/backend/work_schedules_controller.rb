@@ -43,6 +43,13 @@ class Backend::WorkSchedulesController < BackendController
                        WorkSchedule.new(manage_schedule_params)
                      end
     if @work_schedule.save
+      Notification.notify(
+        person:     @work_schedule.person,
+        actor:      current_person,
+        kind:       'work_schedule_added',
+        message:    "Dodano grafik pracy: #{@work_schedule.day_of_week} #{l(@work_schedule.start_time, format: :short)}–#{l(@work_schedule.end_time, format: :short)}.",
+        notifiable: @work_schedule
+      ) if @work_schedule.person != current_person
       redirect_to backend_work_schedules_path, notice: 'Pomyślnie dodano.'
     else
       render :new
@@ -56,8 +63,14 @@ class Backend::WorkSchedulesController < BackendController
   # PATCH/PUT backend/work_schedules/1
   def update
     if @work_schedule.update(work_schedule_params)
-      redirect_to backend_work_schedules_path,
-                  notice: 'Pomyślnie zaktualizowano.'
+      Notification.notify(
+        person:     @work_schedule.person,
+        actor:      current_person,
+        kind:       'work_schedule_updated',
+        message:    "Zmieniono grafik pracy: #{@work_schedule.day_of_week} #{l(@work_schedule.start_time, format: :short)}–#{l(@work_schedule.end_time, format: :short)}.",
+        notifiable: @work_schedule
+      ) if @work_schedule.person != current_person
+      redirect_to backend_work_schedules_path, notice: 'Pomyślnie zaktualizowano.'
     else
       render :edit
     end
@@ -65,7 +78,17 @@ class Backend::WorkSchedulesController < BackendController
 
   # DELETE backend/work_schedules/1
   def destroy
+    person  = @work_schedule.person
+    day     = @work_schedule.day_of_week
+    t_start = l(@work_schedule.start_time, format: :short)
+    t_end   = l(@work_schedule.end_time,   format: :short)
     @work_schedule.destroy
+    Notification.notify(
+      person:  person,
+      actor:   current_person,
+      kind:    'work_schedule_removed',
+      message: "Usunięto grafik pracy: #{day} #{t_start}–#{t_end}."
+    ) if person != current_person
     safe_redirect_back notice: 'Pomyślnie usunięto.'
   end
 

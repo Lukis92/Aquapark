@@ -67,6 +67,19 @@
     - unless current_client
       li class=(active?(requests_backend_activities_path))
         = link_to 'Niezaakceptowane zajęcia', requests_backend_activities_path
+  h5
+    i.fa.fa-bell
+    small
+      b  Powiadomienia
+  ul.nav.nav-pills.nav-stacked
+    - unread_notifications = current_person.notifications.unread.count
+    li class=(active?(backend_notifications_path))
+      = link_to backend_notifications_path do
+        i.fa.fa-bell
+        |  Powiadomienia
+        - if unread_notifications > 0
+          = " "
+          span.badge.badge-danger style="margin-left:4px" = unread_notifications
   - if current_manager
     h5
       i.fa.fa-plane

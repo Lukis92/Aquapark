@@ -66,6 +66,15 @@ class Backend::ActivitiesController < BackendController
   # POST backend/activities/:id/activate
   def activate
     @activity.update!(active: true)
+    if @activity.person
+      Notification.notify(
+        person:     @activity.person,
+        actor:      current_person,
+        kind:       'activity_accepted',
+        message:    "Zajęcia grupowe \"#{@activity.name}\" (#{@activity.day_of_week}) zostały zaakceptowane.",
+        notifiable: @activity
+      )
+    end
     safe_redirect_back notice: 'Aktywowano.'
   end
 
@@ -75,6 +84,15 @@ class Backend::ActivitiesController < BackendController
     ActivitiesPerson.where(activity_id: @activity)
                     .where('date >= ?', Date.today)
                     .destroy_all
+    if @activity.person && @activity.person != current_person
+      Notification.notify(
+        person:     @activity.person,
+        actor:      current_person,
+        kind:       'activity_rejected',
+        message:    "Zajęcia grupowe \"#{@activity.name}\" (#{@activity.day_of_week}) zostały dezaktywowane.",
+        notifiable: @activity
+      )
+    end
     safe_redirect_back notice: 'Deaktywowano.'
   end
 

@@ -75,7 +75,17 @@ class Backend::VacationsController < BackendController
 
   # DELETE backend/vacations/1
   def destroy
+    person = @vacation.person
+    dates  = "#{l(@vacation.start_at)} – #{l(@vacation.end_at)}"
     @vacation.destroy
+    if person != current_person
+      Notification.notify(
+        person:  person,
+        actor:   current_person,
+        kind:    'vacation_rejected',
+        message: "Twój urlop (#{dates}) został odrzucony."
+      )
+    end
     safe_redirect_back notice: 'Pomyślnie usunięto.'
   end
 
@@ -97,6 +107,13 @@ class Backend::VacationsController < BackendController
       puts invalid.record.errors
     end
     if @vacation.valid?
+      Notification.notify(
+        person:     @vacation.person,
+        actor:      current_person,
+        kind:       'vacation_accepted',
+        message:    "Twój urlop (#{l(@vacation.start_at)} – #{l(@vacation.end_at)}) został zaakceptowany.",
+        notifiable: @vacation
+      )
       safe_redirect_back notice: 'Zaakceptowano.'
     else
       safe_redirect_back danger: 'Coś poszło nie tak.'

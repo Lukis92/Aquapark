@@ -5,8 +5,19 @@ class Backend::ActivitiesPeopleController < BackendController
   end
   def create
     @activities_person = ActivitiesPerson.new(activities_person_params)
-    # raise 'Dupa'
     if @activities_person.save
+      activity = @activities_person.activity
+      client   = @activities_person.person
+      recipient = activity.person || Manager.first
+      if recipient
+        Notification.notify(
+          person:     recipient,
+          actor:      client,
+          kind:       'activity_signup',
+          message:    "#{client.full_name} zapisał(a) się na zajęcia \"#{activity.name}\" (#{activity.day_of_week}, #{l(activity.start_on, format: :short)}).",
+          notifiable: @activities_person
+        )
+      end
       flash[:notice] = 'Pomyślnie dodano.'
       safe_redirect_back
     else
@@ -23,7 +34,18 @@ class Backend::ActivitiesPeopleController < BackendController
     end
   end
   def destroy
+    activity  = @activities_person.activity
+    client    = @activities_person.person
+    recipient = activity.person || Manager.first
     @activities_person.destroy
+    if recipient && client != current_person
+      Notification.notify(
+        person:  recipient,
+        actor:   current_person,
+        kind:    'activity_resign',
+        message: "#{client.full_name} zrezygnował(a) z zajęć \"#{activity.name}\" (#{activity.day_of_week}, #{l(activity.start_on, format: :short)})."
+      )
+    end
     safe_redirect_back notice: 'Pomyślnie zrezygnowano'
   end
 
