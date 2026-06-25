@@ -1,39 +1,29 @@
-# == Schema Information
-#
-# Table name: people
-#
-#  id                         :integer          not null, primary key
-#  pesel                      :string           not null
-#  first_name                 :string           not null
-#  last_name                  :string           not null
-#  date_of_birth              :date             not null
-#  email                      :string           not null
-#  type                       :string           not null
-#  salary                     :decimal(6, 2)
-#  hiredate                   :date
-#  encrypted_password         :string           default(""), not null
-#  reset_password_token       :string
-#  reset_password_sent_at     :datetime
-#  remember_created_at        :datetime
-#  sign_in_count              :integer          default(0), not null
-#  current_sign_in_at         :datetime
-#  last_sign_in_at            :datetime
-#  current_sign_in_ip         :inet
-#  last_sign_in_ip            :inet
-#  profile_image_file_name    :string
-#  profile_image_content_type :string
-#  profile_image_file_size    :integer
-#  profile_image_updated_at   :datetime
-#
+manager:
+  pesel: "91021211236"
+  first_name: Adam
+  last_name: Kierownik
+  date_of_birth: "1991-02-12"
+  email: manager@test.com
+  type: Manager
+  salary: 6500.00
+  hiredate: "2020-01-01"
+  encrypted_password: "<%= BCrypt::Password.create('password', cost: BCrypt::Engine::MIN_COST) %>"
 
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+trainer:
+  pesel: "85030512345"
+  first_name: Jan
+  last_name: Trener
+  date_of_birth: "1985-03-05"
+  email: trainer@test.com
+  type: Trainer
+  salary: 5000.00
+  hiredate: "2021-03-01"
+  encrypted_password: "<%= BCrypt::Password.create('password', cost: BCrypt::Engine::MIN_COST) %>"
 
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+client:
+  first_name: Anna
+  last_name: Klientka
+  date_of_birth: "1995-06-15"
+  email: client@test.com
+  type: Client
+  encrypted_password: "<%= BCrypt::Password.create('password', cost: BCrypt::Engine::MIN_COST) %>"
