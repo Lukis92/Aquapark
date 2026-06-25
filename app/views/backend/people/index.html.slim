@@ -33,44 +33,45 @@
         .row
           .col-sm-12 style="margin-top:8px"
             = link_to 'Wyczyść filtry', backend_people_path, class: 'btn btn-default btn-sm'
-table.table.table-striped.table-bordered.table-list.pretty.table-list-search
+table.table.pretty
   thead
     tr
+      th.pt-actions
+        i.fa.fa-cog
+        |  Akcje
       th
-        em.fa.fa-cog
-        |  Zarządzanie
-      th
-        = sortable "pesel", "Pesel"
-      th
-        = sortable "first_name", "Imię"
-      th
-        = sortable "last_name", "Nazwisko"
-      th
-        = sortable "date_of_birth", "Data urodzenia"
+        = sortable "first_name", "Osoba"
       th
         = sortable "email", "Email"
+      th
+        = sortable "date_of_birth", "Data urodzenia"
+      - if current_manager
+        th Typ
   tbody
+    - type_badge  = { 'Manager' => 'danger',  'Receptionist' => 'info', 'Trainer' => 'primary', 'Lifeguard' => 'warning', 'Client' => 'success' }
+    - type_label  = { 'Manager' => 'Kierownik', 'Receptionist' => 'Recepcjonista', 'Trainer' => 'Trener', 'Lifeguard' => 'Ratownik', 'Client' => 'Klient' }
+    - type_avatar = { 'Manager' => 'pa-manager', 'Receptionist' => 'pa-receptionist', 'Trainer' => 'pa-trainer', 'Lifeguard' => 'pa-lifeguard', 'Client' => 'pa-client' }
     - @people.each do |person|
       tr
+        td.pt-actions
+          = link_to backend_person_path(person), title: 'Profil', class: 'btn btn-success btn-xs' do
+            i.fa.fa-user
+          = link_to edit_backend_person_path(person), title: 'Edytuj', class: 'btn btn-default btn-xs' do
+            i.fa.fa-pencil
+          = link_to backend_person_path(person), title: 'Usuń', method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: 'btn btn-danger btn-xs' do
+            i.fa.fa-trash
         td
-          = link_to backend_person_path(person), title: 'Profil' do
-            i.btn.btn-success
-              i.fa.fa-user
-          = link_to edit_backend_person_path(person), title: 'Edytuj' do
-            i.btn.btn-default
-              i.fa.fa-pencil
-          = link_to backend_person_path(person), title: 'Usuń', method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
-            i.btn.btn-danger
-              i.fa.fa-trash
-        td
-          = person.pesel
-        td
-          = person.first_name
-        td
-          = person.last_name
-        td
-          = l(person.date_of_birth)
-        td
-          = person.email
+          .person-cell
+            span.person-avatar class=type_avatar.fetch(person.type, 'pa-client')
+              = "#{person.first_name[0]}#{person.last_name[0]}"
+            span.person-info
+              span.person-name = "#{person.first_name} #{person.last_name}"
+              span.person-pesel = person.pesel
+        td = person.email
+        td = l(person.date_of_birth)
+        - if current_manager
+          td
+            span class="label label-#{type_badge.fetch(person.type, 'default')}"
+              = type_label.fetch(person.type, person.type)
 
 = will_paginate @people, renderer: BootstrapPagination::Rails
