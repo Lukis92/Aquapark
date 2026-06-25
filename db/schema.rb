@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_19_000002) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_24_090024) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -123,6 +123,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_19_000002) do
     t.index ["person_id"], name: "index_news_on_person_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.integer "actor_id"
+    t.datetime "created_at", null: false
+    t.string "kind", null: false
+    t.text "message", null: false
+    t.integer "notifiable_id"
+    t.string "notifiable_type"
+    t.integer "person_id", null: false
+    t.datetime "read_at"
+    t.datetime "updated_at", null: false
+    t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable_type_and_notifiable_id"
+    t.index ["person_id"], name: "index_notifications_on_person_id"
+    t.index ["read_at"], name: "index_notifications_on_read_at"
+  end
+
   create_table "people", id: :serial, force: :cascade do |t|
     t.datetime "current_sign_in_at", precision: nil
     t.inet "current_sign_in_ip"
@@ -134,7 +149,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_19_000002) do
     t.string "last_name", null: false
     t.datetime "last_sign_in_at", precision: nil
     t.inet "last_sign_in_ip"
-    t.string "pesel", null: false
+    t.string "pesel"
     t.datetime "remember_created_at", precision: nil
     t.datetime "reset_password_sent_at", precision: nil
     t.string "reset_password_token"
@@ -198,6 +213,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_19_000002) do
   add_foreign_key "likes", "news"
   add_foreign_key "likes", "people"
   add_foreign_key "news", "people"
+  add_foreign_key "notifications", "people"
+  add_foreign_key "notifications", "people", column: "actor_id"
   add_foreign_key "vacations", "people"
   add_foreign_key "work_schedules", "people"
 end

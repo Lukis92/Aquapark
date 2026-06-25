@@ -45,7 +45,7 @@ class Backend::IndividualTrainingsController < BackendController
       charge = Stripe::Charge.create(
         amount: (@individual_training.training_cost.cost * 100).floor,
         currency: 'pln',
-        card: token
+        source: token
       )
 
       unless @individual_training.save
@@ -54,6 +54,14 @@ class Backend::IndividualTrainingsController < BackendController
         render :new and return
       end
 
+      training_info = "#{l(@individual_training.date_of_training)} #{l(@individual_training.start_on, format: :short)}–#{l(@individual_training.end_on, format: :short)}"
+      Notification.notify(
+        person:     @individual_training.trainer,
+        actor:      current_person,
+        kind:       'individual_training_assigned',
+        message:    "Przypisano nowy trening indywidualny: #{training_info} z klientem #{@individual_training.client.full_name}.",
+        notifiable: @individual_training
+      )
       redirect_to show_backend_individual_trainings_path(@client),
                   notice: 'Pomyślnie dodano.'
     rescue Stripe::CardError => e
@@ -99,14 +107,27 @@ class Backend::IndividualTrainingsController < BackendController
 
   # DELETE backend/individual_trainings/1
   def destroy
+    training_info = "#{l(@individual_training.date_of_training)} #{l(@individual_training.start_on, format: :short)}–#{l(@individual_training.end_on, format: :short)}"
+    trainer = @individual_training.trainer
+    client  = @individual_training.client
     @individual_training.destroy
+    [trainer, client].uniq.each do |person|
+      next if person == current_person
+      Notification.notify(
+        person:  person,
+        actor:   current_person,
+        kind:    'individual_training_cancelled',
+        message: "Anulowano trening indywidualny: #{training_info}."
+      )
+    end
     safe_redirect_back notice: 'Pomyślnie usunięto.'
   end
 
   def choose_trainer
     @trainers = Person.includes(:work_schedules).where(type: 'Trainer')
                       .where.not(work_schedules: { person_id: nil })
-                      .paginate(page: params[:page], per_page: 20)
+    @trainers = @trainers.where(work_schedules: { day_of_week: params[:day_of_week] }) if params[:day_of_week].present?
+    @trainers = @trainers.paginate(page: params[:page], per_page: 20)
   end
 
   # GET backend/individual_trainings/search

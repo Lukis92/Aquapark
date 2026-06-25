@@ -98,6 +98,14 @@ Rails.application.routes.draw do
         resources :vacations, param: :vacation_id, except: [:show]
       end
     end
+    resources :notifications, only: [:index] do
+      collection do
+        post 'mark_all_as_read'
+      end
+      member do
+        post 'mark_as_read'
+      end
+    end
     resources :statistics, only: [:index]
     # /das/dsa/users?kind=client|manager|
     [:managers, :clients, :receptionists, :lifeguards].each do |type|

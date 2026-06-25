@@ -44,13 +44,24 @@ class Backend::BoughtDetailsController < BackendController
       charge = Stripe::Charge.create(
         amount: (@bought_detail.cost * 100).floor,
         currency: 'pln',
-        card: token
+        source: token
       )
 
       unless @bought_detail.save
         Stripe::Refund.create(charge: charge.id) rescue nil
         flash[:danger] = 'Wystąpił błąd podczas zapisu. Płatność została zwrócona.'
         render :new and return
+      end
+
+      recipient = Manager.first
+      if recipient
+        Notification.notify(
+          person:     recipient,
+          actor:      current_person,
+          kind:       'ticket_purchased',
+          message:    "#{current_person.full_name} zakupił(a) #{@entry_type.kind} \"#{@entry_type.kind_details}\" za #{@bought_detail.cost} zł.",
+          notifiable: @bought_detail
+        )
       end
 
       flash[:notice] = 'Dziękujemy za zakup!'
@@ -89,9 +100,9 @@ class Backend::BoughtDetailsController < BackendController
 
   # only allow the white list through.
   def bought_detail_params
-    params.require(:bought_detail).permit(:bought_data, :start_on, :end_on,
-                                          :entry_type_id, :days, :person_id,
-                                          :credit_card, :card_code)
+    params.fetch(:bought_detail, {}).permit(:bought_data, :start_on, :end_on,
+                                            :entry_type_id, :days, :person_id,
+                                            :credit_card, :card_code)
   end
 
   def set_rule_to_display_bought_details

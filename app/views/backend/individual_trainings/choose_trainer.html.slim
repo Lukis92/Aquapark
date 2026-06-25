@@ -1,38 +1,48 @@
 h5.section-title.st-blue
   | 1 krok
-  small Wybór trenera
-h5 Trenerzy
-= info("Poniżej znajduje się lista dostępnych trenerów, z którymi możesz \
-        przeprowadzić indywidualny trening.")
+  small  Wybór trenera
+= info("Poniżej znajduje się lista dostępnych trenerów, z którymi możesz przeprowadzić indywidualny trening.")
 
+= form_tag choose_trainer_backend_individual_trainings_path(current_person), method: :get, class: 'form-inline well well-sm' do
+  .form-group
+    = label_tag :day_of_week, 'Dostępny w:', class: 'control-label'
+    = select_tag :day_of_week,
+                 options_for_select(WorkSchedule::DAYS.map { |d| [d, d] }, params[:day_of_week]),
+                 include_blank: 'Wszystkie dni',
+                 class: 'form-control'
+  = submit_tag 'Filtruj', class: 'btn btn-primary'
+  - if params[:day_of_week].present?
+    = link_to 'Wyczyść', choose_trainer_backend_individual_trainings_path(current_person), class: 'btn btn-default'
 
-- @trainers.each do |t|
-  .col-md-4
-    .testimonial-card.z-depth-1
-      .card-up.default-color-dark
-      .avatar
-        - if t.profile_image.attached?
-          = image_tag t.profile_image.variant(:thumb), class: 'img-circle img-responsive'
-        - else
-          = image_tag '/images/user_default.png', class: 'img-circle img-responsive'
-      .card-content
-        h5
-          = t.full_name
-        p
-          | Wiek:
-          = t.age
-        p
-          | Dostępny w dni:
-          - t.work_schedules.each_with_index do |w, i|
-            - if i == t.work_schedules.size - 1
-              |  #{w.day_of_week}
+- if @trainers.empty?
+  .alert.alert-info
+    i.fa.fa-info-circle
+    |  Brak trenerów dostępnych w wybranym dniu.
+- else
+  .row.trainer-cards-row
+    - @trainers.each do |trainer|
+      .col-md-4.trainer-card-col
+        .testimonial-card.z-depth-1.trainer-card
+          .card-up.default-color-dark
+          .avatar
+            - if trainer.profile_image.attached?
+              = image_tag trainer.profile_image.variant(:thumb), class: 'img-circle img-responsive'
             - else
-              |  #{w.day_of_week + ', '}
-        h5
-          = link_to new_backend_trainer_individual_training_path(current_person, t.id) do
-            .btn.btn-border-default.waves-effect
-              i.fa.fa-check-circle-o
-              | Wybieram
-
+              = image_tag '/images/user_default.png', class: 'img-circle img-responsive'
+          .card-content
+            h5 = trainer.full_name
+            p
+              | Wiek:
+              =  trainer.age
+            p.trainer-days
+              small Dostępny w dni:
+              .trainer-days-badges
+                - trainer.work_schedules.map(&:day_of_week).each do |day|
+                  span.label.label-info = day
+            .trainer-card-action
+              = link_to new_backend_trainer_individual_training_path(current_person, trainer),
+                        class: 'btn btn-primary btn-block waves-effect' do
+                i.fa.fa-check-circle-o
+                |  Wybieram
 
 = will_paginate @trainers, renderer: BootstrapPagination::Rails

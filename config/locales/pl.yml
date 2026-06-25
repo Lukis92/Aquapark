@@ -1,5 +1,19 @@
 ---
 pl:
+  notifications:
+    kinds:
+      vacation_accepted: "Urlop zaakceptowany"
+      vacation_rejected: "Urlop odrzucony"
+      work_schedule_added: "Grafik dodany"
+      work_schedule_updated: "Grafik zmieniony"
+      work_schedule_removed: "Grafik usunięty"
+      individual_training_assigned: "Trening przypisany"
+      individual_training_cancelled: "Trening anulowany"
+      activity_accepted: "Zajęcia zaakceptowane"
+      activity_rejected: "Zajęcia dezaktywowane"
+      activity_signup: "Zapis na zajęcia"
+      activity_resign: "Rezygnacja z zajęć"
+      ticket_purchased: "Zakup biletu/karnetu"
   attributes:
     kind: Rodzaj
     kind_details: Szczegóły
@@ -448,6 +462,7 @@ pl:
     formats:
       default: "%d %B %Y r. | %H:%M"
       short: "%H:%M"
+      long: "%d %B %Y r., %H:%M"
   views:
     devise:
       shared:

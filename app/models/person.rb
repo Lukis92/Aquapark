@@ -52,6 +52,7 @@ class Person < ApplicationRecord
   has_many :activities_as_trainer,
            class_name: 'Activity',
            foreign_key: 'person_id'
+  has_many :notifications, dependent: :destroy
   ##########################
 
   # **VALIDATIONS*******************************************************#
