@@ -1,7 +1,5 @@
 # Shared helper methods used across the application views.
 module ApplicationHelper
-  require 'html_truncator'
-
   # Returns 'active' if the current page matches any of the provided paths.
   def active?(*paths)
     'active' if paths.any? { |path| current_page?(path) }
