@@ -30,6 +30,9 @@ table.table.table-striped.table-bordered.table-list
             = link_to backend_training_cost_path(tc), title: 'Usuń', method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
               i.btn.btn-danger
                 i.fa.fa-trash
+            = link_to backend_training_cost_price_changes_path(tc), title: 'Historia cen' do
+              i.btn.btn-info
+                i.fa.fa-line-chart
         td
           = tc.duration
           |  min.

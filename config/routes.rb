@@ -17,10 +17,14 @@ Rails.application.routes.draw do
 
     resources :entry_types do
       resources :bought_details, except: [:show, :edit, :update]
+      resources :price_changes, only: [:index]
       collection do
         get 'bought_list', to: 'entry_types#show'
         get 'search'
       end
+    end
+    resources :training_costs, except: [:show] do
+      resources :price_changes, only: [:index]
     end
     get 'trainers', to: 'people#trainers'
 
@@ -68,7 +72,6 @@ Rails.application.routes.draw do
         get 'search'
       end
     end
-    resources :training_costs, except: [:show]
     resources :people, except: [:new, :create] do
       collection do
         get 'search'

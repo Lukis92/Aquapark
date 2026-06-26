@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_24_090024) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_26_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -167,6 +167,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_24_090024) do
     t.string "searchable_type"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
+  end
+
+  create_table "price_changes", id: :serial, force: :cascade do |t|
+    t.datetime "changed_at", precision: nil, null: false
+    t.string "changed_by"
+    t.decimal "new_price", precision: 8, scale: 2, null: false
+    t.decimal "old_price", precision: 8, scale: 2, null: false
+    t.integer "priceable_id", null: false
+    t.string "priceable_type", null: false
+    t.index ["priceable_type", "priceable_id"], name: "index_price_changes_on_priceable_type_and_priceable_id"
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
