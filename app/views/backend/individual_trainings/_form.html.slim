@@ -1,23 +1,50 @@
 = simple_form_for(@individual_training, url: backend_trainer_individual_trainings_path) do |f|
   = errors_for(@individual_training)
-  .row
-    - if current_client
-      .col-md-6
-        #stripe_ind_error.alert.alert-danger style="display:none"
-        .panel.panel-success
-          .panel-heading Dane do płatności
-          .panel-body
-            label Dane karty
-            #card-element-training style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;"
-    .col-md-6
-      label for='datepicker'* Data treningu
-      = f.text_field :date_of_training, as: :date, class: 'datepicker', placeholder: 'Kliknij'
-      label for='input_starttime'* Godzina rozpoczęcia
-      = f.text_field :start_on, class: 'timepicker', required: true, id: 'input_starttime', placeholder: 'Kliknij'
-      = f.input :training_cost_id, required: true, label: "Czas trwania", collection: @training_costs.map { |tc| [tc.full_duration, tc.id] }, prompt: 'Wybierz czas trwania treningu'
-      = f.input :trainer_id, as: :hidden, input_html: { value: @trainer.id }
-      = f.input :client_id, as: :hidden, input_html: { value: @client.id }
-      = f.button :submit, class: "btn btn-primary btn-block"
+
+  - if current_client
+    .ef-section
+      h6.ef-section__label
+        i.fa.fa-credit-card
+        |  Dane do płatności
+      #stripe_ind_error.ef-stripe-error style="display:none"
+      #card-element-training.ef-stripe-card
+
+  .ef-section
+    h6.ef-section__label
+      i.fa.fa-calendar
+      |  Termin treningu
+
+    .ef-row
+      .ef-field
+        label.ef-label
+          | Data treningu
+          span.ef-required  *
+        = f.text_field :date_of_training, as: :date, class: 'ef-input datepicker', placeholder: 'Kliknij'
+      .ef-field
+        label.ef-label
+          | Godzina rozpoczęcia
+          span.ef-required  *
+        = f.text_field :start_on, class: 'ef-input timepicker', required: true, id: 'input_starttime', placeholder: 'Kliknij'
+
+    .ef-field
+      label.ef-label
+        | Czas trwania
+        span.ef-required  *
+      = f.select :training_cost_id,
+                 options_for_select(@training_costs.map { |tc| [tc.full_duration, tc.id] }, @individual_training.training_cost_id),
+                 { prompt: 'Wybierz czas trwania treningu' },
+                 { class: 'ef-select browser-default', required: true }
+
+    = f.input :trainer_id, as: :hidden, input_html: { value: @trainer.id }
+    = f.input :client_id, as: :hidden, input_html: { value: @client.id }
+
+  .ef-actions
+    button.ef-submit type="submit"
+      i.fa.fa-paper-plane
+      |  Potwierdź rezerwację
+    = link_to :back, class: "ef-cancel" do
+      i.fa.fa-times
+      |  Anuluj
 
 javascript:
   jQuery(function() {
@@ -35,11 +62,9 @@ javascript:
     card.mount('#card-element-training');
 
     card.on('change', function(event) {
-      if (event.error) {
-        $('#stripe_ind_error').text(event.error.message).show();
-      } else {
-        $('#stripe_ind_error').hide();
-      }
+      var err = document.getElementById('stripe_ind_error');
+      if (event.error) { err.textContent = event.error.message; err.style.display = 'block'; }
+      else { err.style.display = 'none'; }
     });
 
     $('#new_individual_training').submit(function(e) {

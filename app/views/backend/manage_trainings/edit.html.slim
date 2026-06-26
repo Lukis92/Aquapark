@@ -1,71 +1,97 @@
-.row
-  .col-md-6
-    h5
-      | Trener
-      = @manage_training.trainer.full_name
+.ef-page
+  .ef-header
+    = link_to backend_manage_trainings_path, class: "ef-back" do
+      i.fa.fa-arrow-left
+      |  Powrót do treningów
+    h4.ef-title
+      i.fa.fa-pencil
+      |  Edycja treningu
+    p.ef-subtitle = "#{@manage_training.client.full_name} z #{@manage_training.trainer.full_name}"
 
-    h6
-      | Harmonogram pracy:
-.row
-  .col-md-12
-    table.table.table-striped.table-bordered.table-list
-      thead
-        tr
-          th Dzień tygodnia
-          th Najbliższe daty dla dnia tygodnia
-          th Godzina od
-          th Godzina do
-      tbody
-        - @manage_training.trainer.work_schedules.each do |tw|
-          tr
-            td
-              = tw.day_of_week
-            td
-              - next_n_days(4, tw.day_of_week).each_with_index do |n, i|
-                - unless i == next_n_days(4, tw.day_of_week).size - 1
-                  = l(n)+' | '
-                - else
-                  = l(n)
-            td
-              = l(tw.start_time, format: :short)
-            td
-              = l(tw.end_time, format: :short)
-
-.row
-  .col-md-6
-    table.table.table-striped.table-bordered.table-list
-      thead
-        tr
-          th Data treningu
-          th Treningi
-        - unless @manage_training.trainer.individual_trainings_as_trainer.blank?
-          - trainings = @manage_training.trainer.individual_trainings_as_trainer.group_by(&:date_of_training)
-          - trainings.keys.each do |ti|
-            tr
-              td
-                = l(ti)
-              td
-                - @manage_training.trainer.individual_trainings_as_trainer.each_with_index do |tit, i|
-                  - unless i == @manage_training.trainer.individual_trainings_as_trainer.size - 1
-                    = l(tit.start_on, format: :short)
-                    | -
-                    | #{l(tit.end_on, format: :short)}
-                    |
-                  - else
-                    = l(tit.start_on, format: :short)
-                    | -
-                    | #{l(tit.end_on, format: :short)}
+  .mt-edit-layout
+    .mt-info-col
+      .mt-info-card
+        h6.mt-info-card__title
+          i.fa.fa-user
+          |  Harmonogram pracy trenera:
+          strong  #{@manage_training.trainer.full_name}
+        - if @manage_training.trainer.work_schedules.any?
+          table.tc-table
+            thead
+              tr
+                th Dzień
+                th Najbliższe daty
+                th Od
+                th Do
+            tbody
+              - @manage_training.trainer.work_schedules.each do |tw|
+                tr
+                  td = tw.day_of_week
+                  td.tc-dates
+                    = next_n_days(4, tw.day_of_week).map { |n| l(n) }.join(' | ')
+                  td = l(tw.start_time, format: :short)
+                  td = l(tw.end_time, format: :short)
         - else
-          | Dostępny cały dzień
-.col-md-6
-  h5 Edycja treningu
-  = simple_form_for([:backend, @manage_training], as: :manage_training, url: backend_manage_training_path(@manage_training) ) do |f|
-    = errors_for(@manage_training)
-    = f.input :client_id, label: "Klient", :collection => @clients.map{|c| [c.person_full_name_type, c.id]}, prompt: "Wybierz klienta"
-    = f.input :trainer_id, label: "Trener", :collection => @trainers.map{|c| [c.person_full_name_type, c.id]}, prompt: "Wybierz trenera"
-    = f.input :training_cost_id, label: "Czas trwania" ,
-      collection: @training_costs.map{ |tc| [tc.full_duration, tc.id] },
-      prompt: 'Wybierz czas trwania treningu'
-    label for="datepicker"* Data treningu
-    = f.text_field :date_of_training, class: 'datepicker', placeholer: 'Kliknij'
-    = f.button :submit, class: "btn btn-primary btn-block"
+          p.ef-hint Brak grafiku pracy.
+
+      .mt-info-card
+        h6.mt-info-card__title
+          i.fa.fa-calendar-times-o
+          |  Zajęty grafik treningów
+        - trainings = @manage_training.trainer.individual_trainings_as_trainer.where('date_of_training >= ?', Date.today).group_by(&:date_of_training)
+        - if trainings.any?
+          table.tc-table
+            thead
+              tr
+                th Data
+                th Godziny
+            tbody
+              - trainings.each do |date, ts|
+                tr
+                  td = l(date)
+                  td = ts.map { |t| "#{l(t.start_on, format: :short)}–#{l(t.end_on, format: :short)}" }.join(', ')
+        - else
+          p.ef-hint Dostępny cały dzień.
+
+    .ef-card
+      h6.ef-section__label
+        i.fa.fa-pencil
+        |  Dane treningu
+
+      = simple_form_for([:backend, @manage_training], as: :manage_training, url: backend_manage_training_path(@manage_training)) do |f|
+        = errors_for(@manage_training)
+
+        .ef-field
+          label.ef-label
+            | Klient
+            span.ef-required  *
+          = f.select :client_id, options_for_select(@clients.map { |c| [c.person_full_name_type, c.id] }, @manage_training.client_id),
+                     { prompt: 'Wybierz klienta' }, { class: 'ef-select browser-default' }
+
+        .ef-field
+          label.ef-label
+            | Trener
+            span.ef-required  *
+          = f.select :trainer_id, options_for_select(@trainers.map { |c| [c.person_full_name_type, c.id] }, @manage_training.trainer_id),
+                     { prompt: 'Wybierz trenera' }, { class: 'ef-select browser-default' }
+
+        .ef-field
+          label.ef-label
+            | Czas trwania
+            span.ef-required  *
+          = f.select :training_cost_id, options_for_select(@training_costs.map { |tc| [tc.full_duration, tc.id] }, @manage_training.training_cost_id),
+                     { prompt: 'Wybierz czas trwania' }, { class: 'ef-select browser-default' }
+
+        .ef-field
+          label.ef-label
+            | Data treningu
+            span.ef-required  *
+          = f.text_field :date_of_training, class: 'ef-input datepicker', placeholder: 'Kliknij'
+
+        .ef-actions
+          button.ef-submit type="submit"
+            i.fa.fa-save
+            |  Zapisz zmiany
+          = link_to backend_manage_trainings_path, class: "ef-cancel" do
+            i.fa.fa-times
+            |  Anuluj

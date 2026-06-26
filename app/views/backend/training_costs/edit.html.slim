@@ -1,24 +1,36 @@
-h5 Edycja cennika
-.row
-  .col-md-6
-    h5 Dodawanie cennika
-    = info("Na tej stronie możesz dodać cennik dla treningów indywidualnych")
-    = render 'form'
-  .col-md-6
-    h5 Aktualny cennik
-    table.table.table-striped.table-bordered
-      thead
-        tr
-          th
-            | Czas trwania
-          th
-            | Koszt
-      tbody
-        - @training_costs.each do |tc|
-          tr
-            td
-              = tc.duration
-              | min.
-            td
-              = tc.cost.nice
-              | zł
+.ef-page
+  .ef-header
+    = link_to backend_training_costs_path, class: "ef-back" do
+      i.fa.fa-arrow-left
+      |  Powrót do cennika
+    h4.ef-title
+      i.fa.fa-pencil
+      |  Edycja cennika treningów
+    p.ef-subtitle = "#{@training_cost.duration} min — #{@training_cost.cost.nice} zł"
+
+  .tc-edit-layout
+    .ef-card
+      h6.ef-section__label
+        i.fa.fa-pencil
+        |  Zmień wartości
+      = render 'form'
+
+    .tc-current-card
+      h6.tc-current-card__title
+        i.fa.fa-list
+        |  Aktualny cennik
+      - if @training_costs.any?
+        table.tc-table
+          thead
+            tr
+              th Czas
+              th Koszt
+          tbody
+            - @training_costs.each do |tc|
+              tr class=(@training_cost.id == tc.id ? 'tc-table__row--active' : '')
+                td
+                  span.tc-duration = "#{tc.duration} min"
+                td
+                  strong = "#{tc.cost.nice} zł"
+      - else
+        p.ef-hint Brak pozycji cennika.

@@ -1,5 +1,12 @@
-h5 Dodawanie newsa.
-= info("Jesteś na podstronie dodawania newsa na strone aktualności. Poniżej masz \
-        dostęp do prostego edytora tekstowego, który umożliwi w elegancki sposób \
-        sformatowanie treści.")
-= render 'form'
+.ef-page
+  .ef-header
+    = link_to backend_news_index_path, class: "ef-back" do
+      i.fa.fa-arrow-left
+      |  Powrót do aktualności
+    h4.ef-title
+      i.fa.fa-plus-circle
+      |  Dodawanie aktualności
+    p.ef-subtitle Wypełnij formularz i opublikuj nowy wpis.
+
+  .ef-card.ef-card--wide
+    = render 'form'

@@ -1,3 +1,12 @@
-= render 'shared/back'
-h5 Edycja wejściówki
-= render 'form'
+.ef-page
+  .ef-header
+    = link_to backend_entry_types_path, class: "ef-back" do
+      i.fa.fa-arrow-left
+      |  Powrót do wejściówek
+    h4.ef-title
+      i.fa.fa-pencil
+      |  Edycja wejściówki
+    p.ef-subtitle = "#{@entry_type.kind} — #{@entry_type.kind_details}"
+
+  .ef-card
+    = render 'form'

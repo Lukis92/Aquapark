@@ -1,2 +1,12 @@
-h5 Edytowanie aktualności
-= render 'form'
+.ef-page
+  .ef-header
+    = link_to backend_news_index_path, class: "ef-back" do
+      i.fa.fa-arrow-left
+      |  Powrót do aktualności
+    h4.ef-title
+      i.fa.fa-pencil
+      |  Edytowanie aktualności
+    p.ef-subtitle = @news.title
+
+  .ef-card.ef-card--wide
+    = render 'form'

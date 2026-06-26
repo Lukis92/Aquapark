@@ -1,2 +1,12 @@
-h5 Dodawanie treningu
-= render 'form'
+.ef-page
+  .ef-header
+    = link_to backend_manage_trainings_path, class: "ef-back" do
+      i.fa.fa-arrow-left
+      |  Powrót do treningów
+    h4.ef-title
+      i.fa.fa-plus-circle
+      |  Dodawanie treningu
+    p.ef-subtitle Dodaj trening indywidualny dla klienta.
+
+  .ef-card
+    = render 'form'

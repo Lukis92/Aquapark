@@ -1,15 +1,32 @@
-= simple_form_for(@manage_trainings, url: backend_trainer_individual_trainings_path ) do |f|
+= simple_form_for(@manage_trainings, url: backend_trainer_individual_trainings_path) do |f|
   = errors_for(@manage_trainings)
-  .col-md-6
-  label for="datepicker"* Data treningu
-  = f.text_field :date_of_training, as: :date, class: 'datepicker',
-      placeholder: 'Kliknij'
-    label for='input_starttime'* Godzina rozpoczęcia
-    = f.text_field :start_on, class: 'timepicker', required: true,
-      id: 'input_starttime', placeholder: 'Kliknij'
-    = f.input :training_cost_id, required: true, label: "Czas trwania" ,
-      collection: @training_costs.map{ |tc| [tc.full_duration, tc.id] },
-      prompt: 'Wybierz czas trwania treningu'
-    = f.input :trainer_id, as: :hidden, input_html: { value: @trainer.id }
-    = f.input :client_id, as: :hidden, input_html: { value: @client.id }
-  = f.button :submit, class: "btn btn-primary btn-block"
+
+  .ef-row
+    .ef-field
+      label.ef-label
+        | Data treningu
+        span.ef-required  *
+      = f.text_field :date_of_training, as: :date, class: 'ef-input datepicker', placeholder: 'Kliknij'
+    .ef-field
+      label.ef-label
+        | Godzina rozpoczęcia
+        span.ef-required  *
+      = f.text_field :start_on, class: 'ef-input timepicker', required: true, id: 'input_starttime', placeholder: 'Kliknij'
+
+  .ef-field
+    label.ef-label
+      | Czas trwania
+      span.ef-required  *
+    = f.select :training_cost_id, options_for_select(@training_costs.map { |tc| [tc.full_duration, tc.id] }),
+               { prompt: 'Wybierz czas trwania treningu' }, { class: 'ef-select browser-default', required: true }
+
+  = f.input :trainer_id, as: :hidden, input_html: { value: @trainer.id }
+  = f.input :client_id, as: :hidden, input_html: { value: @client.id }
+
+  .ef-actions
+    button.ef-submit type="submit"
+      i.fa.fa-save
+      |  Zapisz
+    = link_to backend_manage_trainings_path, class: "ef-cancel" do
+      i.fa.fa-times
+      |  Anuluj
