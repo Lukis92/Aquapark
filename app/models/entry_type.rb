@@ -10,6 +10,8 @@
 #
 
 class EntryType < ApplicationRecord
+  include HasPriceHistory
+
   KIND = %w(Bilet Karnet).freeze
 
   scope :tickets, -> { where(kind: 'Bilet') }

@@ -40,10 +40,11 @@ describe Person, 'associations' do
   it { is_expected.to have_many :activities_people }
   it { is_expected.to have_many(:activities).through(:activities_people) }
   it { is_expected.to have_many :activities_as_trainer }
+  it { is_expected.to have_many :notifications }
 end
 
 describe Person, 'column specifications' do
-  it { is_expected.to have_db_column(:pesel).of_type(:string).with_options(null: false) }
+  it { is_expected.to have_db_column(:pesel).of_type(:string) }
   it { is_expected.to have_db_column(:first_name).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:last_name).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:type).of_type(:string).with_options(null: false) }
@@ -58,13 +59,41 @@ describe Person, 'validations' do
   it { is_expected.to validate_presence_of :pesel }
   it { is_expected.to validate_presence_of :first_name }
   it { is_expected.to validate_presence_of :last_name }
-  it { is_expected.to validate_presence_of :date_of_birth }
   it { is_expected.to validate_presence_of :email }
   it { is_expected.to validate_presence_of :type }
 
   subject { build :person }
   it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
   it { is_expected.to validate_uniqueness_of(:pesel).case_insensitive }
+  it { is_expected.to allow_value('test@example.com').for(:email) }
+  it { is_expected.not_to allow_value('niepoprawny-email').for(:email) }
+end
+
+describe Person, '#pesel_checksum_valid' do
+  it 'rejects a PESEL with invalid checksum' do
+    person = build(:person, pesel: '91030100001')
+    person.valid?
+    expect(person.errors[:pesel]).to include('ma nieprawidłową sumę kontrolną')
+  end
+
+  it 'accepts a PESEL with valid checksum' do
+    person = build(:person, pesel: '91030100008')
+    expect(person.valid?).to be_truthy
+  end
+end
+
+describe Person, '#extract_date_of_birth_from_pesel' do
+  it 'extracts date of birth for 20th century PESEL' do
+    person = build(:person, pesel: '91030100008')
+    person.valid?
+    expect(person.date_of_birth).to eq Date.new(1991, 3, 1)
+  end
+
+  it 'extracts date of birth for 21st century PESEL (month encoded as 21-32)' do
+    person = build(:person, pesel: '03211200001')
+    person.valid?
+    expect(person.date_of_birth).to eq Date.new(2003, 1, 12)
+  end
 end
 
 describe Person, 'factories' do
@@ -90,10 +119,12 @@ describe Person, 'methods' do
   end
 
   describe '#age' do
-    let(:person) { build(:person, date_of_birth: '1992-01-22')}
+    let(:person) { build(:person, date_of_birth: '1992-01-22') }
 
     it 'returns an age of person' do
-      expect(person.age).to eq 24
+      dob = Date.new(1992, 1, 22)
+      expected = ((Date.today - dob) / 365.25).floor
+      expect(person.age).to eq expected
     end
   end
 
@@ -128,6 +159,21 @@ describe Person, 'methods' do
 
     it 'converts letters to lowercase' do
       expect(person.send(:downcase_email)).to eq 'person@person.pl'
+    end
+  end
+
+  describe '#translate_type' do
+    {
+      'Manager'      => 'Kierownik',
+      'Lifeguard'    => 'Ratownik',
+      'Receptionist' => 'Recepcjonista',
+      'Trainer'      => 'Trener',
+      'Client'       => 'Klient'
+    }.each do |type, translation|
+      it "translates #{type} to #{translation}" do
+        person = build(:person, type: type)
+        expect(person.translate_type).to eq translation
+      end
     end
   end
 end

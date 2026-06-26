@@ -56,6 +56,7 @@ class Vacation < ApplicationRecord
   end
 
   def start_at_must_be_before_end_at
+    return unless start_at.present?
     if end_at < start_at
       errors.add(:base, 'Data od musi być wcześniejszy niż data do.')
     end

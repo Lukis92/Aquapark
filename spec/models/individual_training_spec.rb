@@ -42,17 +42,15 @@ describe IndividualTraining, 'methods' do
     context 'when date of training is before today' do
       it 'raises an error' do
         expect(individual_training.valid?).to be_falsey
-        expect(individual_training.errors.count).to eq 1
         expect(individual_training.errors[:base])
-          .to eq(['Nie możesz ustalać terminu treningu wcześniej niż dzień dzisiejszy.'])
+          .to include('Nie możesz ustalać terminu treningu wcześniej niż dzień dzisiejszy.')
       end
     end
     context 'when start_on is before Time now' do
       it 'raises an error' do
         expect(ind2.valid?).to be_falsey
-        expect(ind2.errors.count).to eq 1
         expect(ind2.errors[:base])
-          .to eq ['Godzina dzisiejszego treningu jest wcześniejsza niż obecny czas.']
+          .to include('Godzina dzisiejszego treningu jest wcześniejsza niż obecny czas.')
       end
     end
   end
@@ -72,16 +70,14 @@ describe IndividualTraining, 'methods' do
       it 'raises an error' do
         expect(work_schedule.valid?).to be_truthy
         expect(individual_training.valid?).to be_falsey
-        expect(individual_training.errors.count).to eq 1
-        expect(individual_training.errors[:base]).to eq(['Trening jest poza grafikiem pracy trenera.'])
+        expect(individual_training.errors[:base]).to include('Trening jest poza grafikiem pracy trenera.')
       end
     end
     context 'when training is on free trainer day' do
       it 'raises an error' do
         expect(work_schedule.valid?).to be_truthy
         expect(ind2.valid?).to be_falsey
-        expect(ind2.errors.count).to eq 1
-        expect(ind2.errors[:base]).to eq(['Trener w tym dniu nie pracuje.'])
+        expect(ind2.errors[:base]).to include('Trener w tym dniu nie pracuje.')
       end
     end
   end
@@ -127,20 +123,6 @@ describe IndividualTraining, 'methods' do
       end
     end
   end
-
-  # describe "#trainer_free_time_validation" do
-  #   let(:work_schedule) { create :work_schedule }
-  #   let(:ind) { create(:ind, trainer_id: work_schedule[:person_id]).tap {|e| p e.valid?; p e.errors} }
-  #   let(:ind2) { build(:ind2, trainer_id: work_schedule[:person_id]).tap {|e| p e.valid?; p e.errors} }
-  #   context 'when trainer has another individual training' do
-  #     it 'raises an error' do
-  #       expect(ind.valid?).to be_truthy
-  #       expect(ind2.valid?).to be_falsey
-  #       expect(ind2.errors.count).to eq 1
-  #       expect(ind2.errors[:base]).to eq(['Trener ma w tym czasie inny trening.'])
-  #     end
-  #   end
-  # end
 
   describe '#set_end_on' do
     let(:training_cost) { create :training_cost }

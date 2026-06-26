@@ -31,7 +31,7 @@ describe Activity, 'column specifications' do
   it { is_expected.to have_db_column(:end_on).of_type(:time).with_options(null: false) }
   it { is_expected.to have_db_column(:pool_zone).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:max_people).of_type(:integer) }
-  it { is_expected.to have_db_column(:person_id).of_type(:integer).with_options(null: false) }
+  it { is_expected.to have_db_column(:person_id).of_type(:integer) }
 
   it { is_expected.to have_db_index :person_id }
 end

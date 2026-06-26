@@ -34,6 +34,7 @@ class BoughtDetail < ApplicationRecord
   private
 
   def timeline
+    return unless person.present? && entry_type.present?
     et_bought_details = person.bought_details.includes(:entry_type).where('entry_types.kind = ?', entry_type.kind).references(:entry_type)
     if et_bought_details.exists?
       overlapping_bought_details = person.bought_details.where('((start_on <= :start_on AND end_on >= :end_on) OR

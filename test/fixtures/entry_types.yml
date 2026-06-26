@@ -1,22 +1,11 @@
-# == Schema Information
-#
-# Table name: entry_types
-#
-#  id           :integer          not null, primary key
-#  kind         :string           not null
-#  kind_details :string           not null
-#  description  :text
-#  price        :decimal(5, 2)    not null
-#
+bilet_jednorazowy:
+  kind: Bilet
+  kind_details: Bilet jednorazowy
+  description: Jednorazowe wejście na teren aquaparku
+  price: 25.00
 
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+karnet_miesięczny:
+  kind: Karnet
+  kind_details: Karnet miesięczny
+  description: Karnet na 30 dni
+  price: 150.00

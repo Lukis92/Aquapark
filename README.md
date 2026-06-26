@@ -36,13 +36,6 @@ Możliwości po stronie kierownika:
 * Rejestracja pracownika(w raz z utworzeniem konta w systemie)
 * Wyświetlenie statystyk dotyczących funkcjonowania aquaparku(m.in bilans zyskóœ i strat)
 
-## Plan modernizacji stacku
-Szczegółowy plan etapowej modernizacji Ruby/Rails znajduje się w:
-`docs/stack_modernization_plan.md`.
-Raport wykonania Etapu 0 (stabilizacja + feature freeze):
-`docs/stage_0_execution.md`.
-Raport realizacji Etapu 1 (Ruby 2.7):
-`docs/stage_1_execution.md`.
 
 ## Wymagania
 
@@ -104,6 +97,19 @@ Aplikacja będzie dostępna pod adresem **http://localhost:3000**.
 Dane logowania managera znajdziesz w pliku `db/seeds/manager.rb`.
 
 ## Historia zmian
+* 0.6.4 *(2026-06-26)*
+  * **Historyzacja zmian cen** (`/backend/entry_types/:id/price_changes`, `/backend/training_costs/:id/price_changes`)
+    * Nowy model `PriceChange` z polimorficznym powiązaniem `priceable` — obsługuje zarówno `EntryType` (bilet/karnet) jak i `TrainingCost` (cennik treningów)
+    * Concern `HasPriceHistory` z callbackiem `before_update` — przy każdej zmianie ceny automatycznie zapisywana jest poprzednia wartość, nowa wartość, data/godzina zmiany oraz imię i nazwisko zalogowanej osoby
+    * Widok historii: tabela z datą zmiany, starą ceną, nową ceną, różnicą (strzałka w górę / czerwona = podwyżka, strzałka w dół / zielona = obniżka) i informacją kto zmienił
+    * Przyciski dostępu do historii (ikona wykresu) w listach biletów/karnetów i cennika treningów — dostępne tylko dla menedżera i recepcjonisty
+  * **Przeprojektowanie strony cennika** (`/layouts/_price.html.slim`)
+    * Siatka flex z kartami BEM zastąpiła karuzelę — lepsza responsywność i czytelność
+    * Efekt glassmorphism w navbarze; taby Bilety/Karnety z przezroczystym tłem na ciemnym tle strony
+    * Zaktualizowane dane seed: realistyczne ceny i rodzaje biletów/karnetów
+  * **Porządek w Gemfile** — usunięto 13 nieużywanych gemów (`decent_exposure`, `html_truncator`, `rolify`, `jbuilder`, `capybara` i inne); dodano gem `fiddle` eliminujący ostrzeżenie Ruby 4.0.0
+  * **Testy RSpec** — naprawiono 65 błędów w fabrykach i modelach; baza testowa: 58 testów, 0 błędów; dodano nowe specs: `notification_spec`, `vacation_spec`, `person_spec`, `client_spec`, `bought_detail_spec`
+
 * 0.6.3 *(2026-06-25)*
   * **System powiadomień** (`/backend/notifications`)
     * Nowy model `Notification` z polimorficznym powiązaniem `notifiable` (urlop, trening, zajęcia, bilet)

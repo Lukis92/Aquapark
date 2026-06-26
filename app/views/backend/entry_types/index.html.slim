@@ -56,6 +56,9 @@ table.table.table-striped.table-bordered.table-list.pretty.table-list-search
             = link_to backend_entry_type_bought_details_path(entry), title: 'Historia zakupów' do
               .btn.btn-warning
                 i.fa.fa-history
+            = link_to backend_entry_type_price_changes_path(entry), title: 'Historia cen' do
+              .btn.btn-info
+                i.fa.fa-line-chart
         td
           = entry.kind
         td

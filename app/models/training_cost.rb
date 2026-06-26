@@ -8,6 +8,12 @@
 #
 
 class TrainingCost < ApplicationRecord
+  include HasPriceHistory
+
+  def self.price_attribute
+    :cost
+  end
+
   DECIMAL_REGEX = /\A\d+(?:\.\d{0,2})?\z/
   has_many :individual_trainings
 

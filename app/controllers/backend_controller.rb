@@ -1,6 +1,7 @@
 # Controller for backend pages
 class BackendController < ApplicationController
   before_action :require_person
+  before_action :set_current_person_for_audit
   rescue_from ActiveRecord::RecordNotFound do |_e|
     flash[:danger] = 'Nie znaleziono zasobu.'
     redirect_to backend_news_index_path
@@ -23,6 +24,10 @@ class BackendController < ApplicationController
   end
 
   private
+
+  def set_current_person_for_audit
+    Thread.current[:current_person_name] = current_person&.full_name
+  end
 
   def safe_redirect_back(**options)
     fallback_location = options.delete(:fallback_location) || backend_root_path

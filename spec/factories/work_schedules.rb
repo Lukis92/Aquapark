@@ -11,10 +11,18 @@
 
 FactoryBot.define do
   factory :work_schedule do
-    start_time { '08:00' }
-    end_time { '12:00' }
+    start_time  { '08:00' }
+    end_time    { '12:00' }
     day_of_week { 'Wtorek' }
     association :person, factory: :trainer
+
+    after(:build) do |ws|
+      unless ws.person&.persisted?
+        trainer    = create(:trainer)
+        ws.person    = trainer
+        ws.person_id = trainer.id
+      end
+    end
 
     trait :wch2 do
       day_of_week { 'Wtorek' }

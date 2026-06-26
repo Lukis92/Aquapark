@@ -124,10 +124,6 @@ body {
 .checkbox-fix {
   margin-left: 20px;
 }
-/*Text in price tables*/
-#price p {
-  color: #000;
-}
 /*Box below slider */
 .description {
   border-color: #000;
@@ -321,26 +317,277 @@ body {
     display: none;
   }
 }
-// /* Height for price cards in main page depend on width of browser */
-@media (min-width: 892px) and (max-width: 1080px) {
-  #price-card.card-content {
-    min-height: 635px;
+/* ═══════════════════════════════════════════════════
+   Navbar — glassmorphism over dark background
+   ═══════════════════════════════════════════════════ */
+
+nav.navbar.navbar-fixed-top {
+  background: rgba(6, 10, 28, 0.82) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.45) !important;
+}
+
+/* ═══════════════════════════════════════════════════
+   Price section — tickets & passes
+   ═══════════════════════════════════════════════════ */
+
+#price {
+  padding: 56px 0 0;
+
+  h2.divider-new {
+    color: #fff;
+
+    &::before, &::after {
+      background: rgba(255,255,255,0.3);
+    }
+  }
+
+  h4 {
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 28px;
   }
 }
-@media (min-width: 692px) and (max-width: 892px) {
-  #price-card.card-content {
-    min-height: 843px;
+
+.price-tabs-nav {
+  border-bottom: none !important;
+  background: transparent !important;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 36px;
+
+  > li {
+    float: none;
+    background: transparent !important;
+
+    > a {
+      border: 2px solid rgba(255,255,255,0.25) !important;
+      border-radius: 30px !important;
+      padding: 10px 32px !important;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.75) !important;
+      background: rgba(255,255,255,0.08) !important;
+      transition: all 0.2s ease;
+      margin: 0 !important;
+
+      i { margin-right: 7px; }
+
+      &:hover {
+        background: rgba(255,255,255,0.15) !important;
+        color: #fff !important;
+        border-color: rgba(255,255,255,0.5) !important;
+      }
+    }
+
+    &.active > a,
+    &.active > a:focus,
+    &.active > a:hover {
+      background: rgba(255,255,255,0.08) !important;
+      color: rgba(255,255,255,0.75) !important;
+      border-color: rgba(255,255,255,0.25) !important;
+    }
+
+    &:first-child.active > a,
+    &:first-child.active > a:focus,
+    &:first-child.active > a:hover {
+      background: linear-gradient(135deg, #43a047, #1b5e20) !important;
+      color: #fff !important;
+      border-color: transparent !important;
+    }
+
+    &:last-child.active > a,
+    &:last-child.active > a:focus,
+    &:last-child.active > a:hover {
+      background: linear-gradient(135deg, #1976d2, #0d47a1) !important;
+      color: #fff !important;
+      border-color: transparent !important;
+    }
   }
 }
-@media (min-width: 1080px) {
-  #price-card.card-content {
-    min-height: 400px;
+
+.price-tab-content,
+.price-tab-content .tab-pane {
+  background: transparent !important;
+  border: none !important;
+}
+
+.price-cards-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  padding: 0 8px 48px;
+}
+
+.price-card-col {
+  flex: 0 0 calc(33.333% - 24px);
+  max-width: 340px;
+  min-width: 240px;
+}
+
+@media (max-width: 992px) {
+  .price-card-col {
+    flex: 0 0 calc(50% - 24px);
+    max-width: 400px;
   }
 }
-@media (min-width: 0px) and (max-width: 692px) {
-  #price-card.card-content {
-    min-height: 0;
+
+@media (max-width: 600px) {
+  .price-card-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+    min-width: 0;
   }
+}
+
+.price-card {
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.10);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+
+  &__header {
+    padding: 18px 22px 16px;
+
+    h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+  }
+
+  &__price-block {
+    padding: 12px 22px 18px;
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  &__amount {
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  &__currency {
+    font-size: 1.2rem;
+    font-weight: 600;
+    opacity: 0.75;
+  }
+
+  &__label {
+    width: 100%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.6;
+    margin: 3px 0 0;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  &__body {
+    padding: 14px 22px;
+    flex: 1;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  &__features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 7px 0;
+      font-size: 0.88rem;
+      color: #444;
+      border-bottom: 1px solid #f5f5f5;
+
+      &:last-child { border-bottom: none; }
+
+      i {
+        margin-top: 2px;
+        flex-shrink: 0;
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  &__cta {
+    display: block;
+    text-align: center;
+    padding: 14px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-decoration: none !important;
+    transition: filter 0.2s ease;
+
+    &:hover { filter: brightness(1.1); }
+
+    i { margin-right: 7px; }
+  }
+
+  &--ticket {
+    .price-card__header {
+      background: linear-gradient(135deg, #43a047, #1b5e20);
+    }
+
+    .price-card__price-block {
+      background: #f1f8f1;
+      color: #1b5e20;
+    }
+
+    .price-card__features li i { color: #43a047; }
+
+    .price-card__cta {
+      background: #2e7d32;
+      color: #fff !important;
+    }
+  }
+
+  &--pass {
+    .price-card__header {
+      background: linear-gradient(135deg, #1976d2, #0d47a1);
+    }
+
+    .price-card__price-block {
+      background: #e8f1fb;
+      color: #0d47a1;
+    }
+
+    .price-card__features li i { color: #1976d2; }
+
+    .price-card__cta {
+      background: #1565c0;
+      color: #fff !important;
+    }
+  }
+}
+
+.price-empty {
+  padding: 48px;
+  color: #aaa;
+  font-size: 1rem;
 }
 /*****************************************************************/
 /* Override Bootstrap 3 font locations */

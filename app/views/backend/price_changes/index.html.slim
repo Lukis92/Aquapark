@@ -1,0 +1,44 @@
+h5
+  i.fa.fa-history
+  |  Historia zmian ceny —
+  =  " #{@priceable_label}"
+
+= info("Lista wszystkich zmian ceny dla wybranego elementu cennika, posortowana od najnowszej.")
+
+= link_to :back, class: 'btn btn-default' do
+  i.fa.fa-arrow-left
+  |  Wróć
+
+- if @price_changes.empty?
+  .alert.alert-info style="margin-top:16px"
+    | Brak historii zmian ceny.
+- else
+  table.table.table-striped.table-bordered.table-list style="margin-top:16px"
+    thead
+      tr
+        th | Data zmiany
+        th | Poprzednia cena
+        th | Nowa cena
+        th | Różnica
+        th | Zmienił/a
+    tbody
+      - @price_changes.each do |pc|
+        tr
+          td = l(pc.changed_at, format: :long)
+          td
+            strong = number_to_currency(pc.old_price, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')
+          td
+            strong = number_to_currency(pc.new_price, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')
+          td
+            - diff = pc.difference
+            - if pc.increase?
+              span.text-danger
+                i.fa.fa-arrow-up
+                = " +#{number_to_currency(diff.abs, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')}"
+            - else
+              span.text-success
+                i.fa.fa-arrow-down
+                = " −#{number_to_currency(diff.abs, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')}"
+          td = pc.changed_by.presence || '—'
+
+  = will_paginate @price_changes, renderer: BootstrapPagination::Rails
