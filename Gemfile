@@ -32,6 +32,7 @@ gem 'slim-rails'
 gem 'sprockets', '~> 4.0'
 gem 'sprockets-rails'
 gem 'stripe'
+gem 'html_truncator'
 gem 'will_paginate-bootstrap'
 
 group :development do
