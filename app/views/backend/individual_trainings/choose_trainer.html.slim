@@ -1,48 +1,55 @@
-h5.section-title.st-blue
-  | 1 krok
-  small  Wybór trenera
-= info("Poniżej znajduje się lista dostępnych trenerów, z którymi możesz przeprowadzić indywidualny trening.")
+.choose-trainer-page
+  .ct-stepper
+    .ct-stepper__step.ct-stepper__step--active
+      .ct-stepper__circle 1
+      .ct-stepper__label Wybór trenera
+    .ct-stepper__line
+    .ct-stepper__step
+      .ct-stepper__circle 2
+      .ct-stepper__label Wybór terminu
 
-= form_tag choose_trainer_backend_individual_trainings_path(current_person), method: :get, class: 'form-inline well well-sm' do
-  .form-group
-    = label_tag :day_of_week, 'Dostępny w:', class: 'control-label'
-    = select_tag :day_of_week,
-                 options_for_select(WorkSchedule::DAYS.map { |d| [d, d] }, params[:day_of_week]),
-                 include_blank: 'Wszystkie dni',
-                 class: 'form-control'
-  = submit_tag 'Filtruj', class: 'btn btn-primary'
-  - if params[:day_of_week].present?
-    = link_to 'Wyczyść', choose_trainer_backend_individual_trainings_path(current_person), class: 'btn btn-default'
+  .ct-filter
+    = form_tag choose_trainer_backend_individual_trainings_path(current_person), method: :get do
+      .ct-filter__inner
+        label.ct-filter__label
+          i.fa.fa-calendar
+          |  Dostępny w:
+        select.ct-filter__select name="day_of_week"
+          option value="" Wszystkie dni
+          - WorkSchedule::DAYS.each do |day|
+            option value=day selected=(params[:day_of_week] == day ? 'selected' : nil) = day
+        button.ct-filter__btn type="submit"
+          i.fa.fa-filter
+          |  Filtruj
+        - if params[:day_of_week].present?
+          = link_to choose_trainer_backend_individual_trainings_path(current_person), class: "ct-filter__clear" do
+            i.fa.fa-times
+            |  Wyczyść
 
-- if @trainers.empty?
-  .alert.alert-info
-    i.fa.fa-info-circle
-    |  Brak trenerów dostępnych w wybranym dniu.
-- else
-  .row.trainer-cards-row
-    - @trainers.each do |trainer|
-      .col-md-4.trainer-card-col
-        .testimonial-card.z-depth-1.trainer-card
-          .card-up.default-color-dark
-          .avatar
+  - if @trainers.empty?
+    .ct-empty
+      i.fa.fa-user-times.ct-empty__icon
+      p Brak trenerów dostępnych w wybranym dniu.
+  - else
+    .ct-trainers-grid
+      - @trainers.each do |trainer|
+        .ct-trainer-card
+          .ct-trainer-card__avatar
             - if trainer.profile_image.attached?
-              = image_tag trainer.profile_image.variant(:thumb), class: 'img-circle img-responsive'
+              = image_tag trainer.profile_image.variant(:thumb), class: "ct-trainer-card__img"
             - else
-              = image_tag '/images/user_default.png', class: 'img-circle img-responsive'
-          .card-content
-            h5 = trainer.full_name
-            p
-              | Wiek:
-              =  trainer.age
-            p.trainer-days
-              small Dostępny w dni:
-              .trainer-days-badges
-                - trainer.work_schedules.map(&:day_of_week).each do |day|
-                  span.label.label-info = day
-            .trainer-card-action
-              = link_to new_backend_trainer_individual_training_path(current_person, trainer),
-                        class: 'btn btn-primary btn-block waves-effect' do
-                i.fa.fa-check-circle-o
-                |  Wybieram
+              .ct-trainer-card__img-placeholder
+                i.fa.fa-user
+          .ct-trainer-card__body
+            h5.ct-trainer-card__name = trainer.full_name
+            p.ct-trainer-card__age
+              i.fa.fa-birthday-cake
+              |  #{trainer.age} lat
+            .ct-trainer-card__days
+              - trainer.work_schedules.map(&:day_of_week).uniq.each do |day|
+                span.ct-day-badge = day
+          = link_to new_backend_trainer_individual_training_path(current_person, trainer), class: "ct-trainer-card__cta" do
+            i.fa.fa-check-circle
+            |  Wybieram
 
-= will_paginate @trainers, renderer: BootstrapPagination::Rails
+  = will_paginate @trainers, renderer: BootstrapPagination::Rails

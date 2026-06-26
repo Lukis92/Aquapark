@@ -1,44 +1,37 @@
-h5 Cennik Treningów Indywidualnych
-= info("Jesteś na stronie aktualnego cennika treningów indywidualnych. \
-        Koszt zależny jest od czasu trwania.")
+.tcosts-page
+  .tcosts-header
+    .tcosts-header__text
+      h4.tcosts-header__title
+        i.fa.fa-clock-o
+        |  Cennik treningów indywidualnych
+      p.tcosts-header__subtitle Koszt treningu zależy od czasu trwania.
+    - if current_manager || current_receptionist
+      = link_to new_backend_training_cost_path, class: "tcosts-header__add" do
+        i.fa.fa-plus
+        |  Dodaj wariant
 
-- if current_manager || current_receptionist
-  = link_to new_backend_training_cost_path do
-    i.btn.btn-primary
-      i.fa.fa-plus
-      |  Dodaj
-
-table.table.table-striped.table-bordered.table-list
-  thead
-    tr
-      - if current_manager || current_receptionist
-        th
-          em.fa.fa-cog
-          |  Zarządzanie
-      th
-        | Czas trwania
-      th
-        | Koszt
-  tbody
-    - @training_costs.each do |tc|
-      tr
-        - if current_manager || current_receptionist
-          td
-            = link_to edit_backend_training_cost_path(tc), title: 'Edytuj' do
-              i.btn.btn-default
+  - if @training_costs.empty?
+    .tcosts-empty
+      i.fa.fa-clock-o.tcosts-empty__icon
+      p Brak zdefiniowanych wariantów cenowych.
+  - else
+    .tcosts-grid
+      - @training_costs.each do |tc|
+        .tcost-card
+          - if current_manager || current_receptionist
+            .tcost-card__actions
+              = link_to edit_backend_training_cost_path(tc), class: "tcost-action tcost-action--edit", title: "Edytuj" do
                 i.fa.fa-pencil
-            = link_to backend_training_cost_path(tc), title: 'Usuń', method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
-              i.btn.btn-danger
-                i.fa.fa-trash
-            = link_to backend_training_cost_price_changes_path(tc), title: 'Historia cen' do
-              i.btn.btn-info
+              = link_to backend_training_cost_price_changes_path(tc), class: "tcost-action tcost-action--history", title: "Historia cen" do
                 i.fa.fa-line-chart
-        td
-          = tc.duration
-          |  min.
-        td
-          = tc.cost.nice
-          |  zł
+              = link_to backend_training_cost_path(tc), class: "tcost-action tcost-action--delete", title: "Usuń", method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
+                i.fa.fa-trash
+          .tcost-card__duration
+            span.tcost-card__minutes = tc.duration
+            span.tcost-card__unit min.
+          .tcost-card__divider
+          .tcost-card__price
+            span.tcost-card__amount = tc.cost.nice
+            span.tcost-card__currency zł
 
-
-= will_paginate @training_costs, renderer: BootstrapPagination::Rails
+  = will_paginate @training_costs, renderer: BootstrapPagination::Rails

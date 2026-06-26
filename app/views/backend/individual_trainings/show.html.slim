@@ -1,57 +1,66 @@
-h5 Moje treningi indywidualne
-= info("Jesteś na stronie wszystkich zarejestrowanych treningów indywidualnych \
-        dotyczących Ciebie.")
-- if @person.type == 'Client'
-  .row
-    .col-md-6
-      - unless @nearest_training.blank?
-        ul.collection
-          li.collection-item
-            h5 Najbliższy trening:
-          li.collection-item
-            - if @days > 1
-              p
-                | Już za #{@days} dni!
-            - elsif @days == 1
-              p
-                |  Już jutro!
-            - elsif @days == 0
-              p
-                |  Już dziś!
-          li.collection-item
-            p
-              | Data: #{l(@nearest_training.date_of_training)}
-            p
-              | Godzina: #{l(@nearest_training.start_on, format: :short)}
-              br
-              | Czas trwania:
-              |  #{@nearest_training.training_cost.duration}
-              |  min.
-  = month_calendar attribute: :date_of_training, events: @individual_trainings do |date_of_training, trainings|
-    = date_of_training.strftime("%d")
-    br
-    - trainings.each_with_index do |training, index|
-      - if index < 3
-        | #{l(training.start_on, format: :short)} - #{l(training.end_on, format: :short)}
-        |  #{training.trainer.full_name}
-        br
-        - if index == 2
-          = link_to show_details_backend_individual_trainings_path(@person, date_of_training: training.date_of_training) do
-            .btn.btn-warning.btn-xs
-              | Więcej
-  br
+.trainings-page
+  .trainings-header
+    .trainings-header__text
+      h4.trainings-header__title
+        i.fa.fa-child
+        |  Moje treningi indywidualne
+      p.trainings-header__subtitle Poniżej znajdziesz kalendarz zaplanowanych treningów.
+    - if @person.type == 'Client'
+      = link_to choose_trainer_backend_individual_trainings_path(@person), class: "trainings-header__cta" do
+        i.fa.fa-plus
+        |  Zapisz się na trening
 
-- elsif @person.type == 'Trainer'
-  = month_calendar attribute: :date_of_training, events: @trainer_individual_trainings do |date_of_training, trainings|
-    = date_of_training.strftime("%d")
-    br
-    - trainings.each_with_index do |training, index|
-      - if index < 3
-        | #{l(training.start_on, format: :short)} - #{l(training.end_on, format: :short)}
-        |  #{training.trainer.full_name}
-        br
-        - if index == 2
-          = link_to show_details_backend_individual_trainings_path(@person, date_of_training: training.date_of_training) do
-            .btn.btn-warning.btn-xs
-              | Więcej
-    br
+  - if @person.type == 'Client'
+    - if @nearest_training.present?
+      .training-next
+        .training-next__countdown
+          - if @days == 0
+            span.training-next__days Dziś!
+          - elsif @days == 1
+            span.training-next__days Jutro
+          - else
+            span.training-next__days = @days
+            span.training-next__days-label dni
+        .training-next__details
+          p.training-next__label Najbliższy trening
+          .training-next__row
+            i.fa.fa-calendar
+            = l(@nearest_training.date_of_training)
+          .training-next__row
+            i.fa.fa-clock-o
+            = l(@nearest_training.start_on, format: :short)
+            |  •
+            = @nearest_training.training_cost.duration
+            |  min.
+          .training-next__row
+            i.fa.fa-user
+            = @nearest_training.trainer.full_name
+
+    = month_calendar attribute: :date_of_training, events: @individual_trainings do |date_of_training, trainings|
+      = date_of_training.strftime("%d")
+      - trainings.each_with_index do |training, index|
+        - if index < 3
+          .training-event
+            span.training-event__time
+              = l(training.start_on, format: :short)
+              | –
+              = l(training.end_on, format: :short)
+            span.training-event__trainer = training.trainer.full_name
+        - if index == 2 && trainings.size > 3
+          = link_to show_details_backend_individual_trainings_path(@person, date_of_training: date_of_training), class: "training-more" do
+            | +#{trainings.size - 3} więcej
+
+  - elsif @person.type == 'Trainer'
+    = month_calendar attribute: :date_of_training, events: @trainer_individual_trainings do |date_of_training, trainings|
+      = date_of_training.strftime("%d")
+      - trainings.each_with_index do |training, index|
+        - if index < 3
+          .training-event
+            span.training-event__time
+              = l(training.start_on, format: :short)
+              | –
+              = l(training.end_on, format: :short)
+            span.training-event__trainer = training.trainer.full_name
+        - if index == 2 && trainings.size > 3
+          = link_to show_details_backend_individual_trainings_path(@person, date_of_training: date_of_training), class: "training-more" do
+            | +#{trainings.size - 3} więcej

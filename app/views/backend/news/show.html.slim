@@ -1,58 +1,58 @@
-= render 'shared/back'
-.row
-  .col-md-12.blog-column
-    .card-panel.text-center.hoverable
-      h4.black-text
-        = @news.title
-      h6
-        | Napisane przez:
-        |  #{link_to @news.person.full_name, backend_person_path(@news.person_id)}
-        |
-        |  #{l(@news.created_at)}
-      / Social Counter
-      .hidden-xs
+.news-show-page
+  .news-show-back
+    = link_to backend_news_index_path, class: "news-back-link" do
+      i.fa.fa-arrow-left
+      |  Powrót do aktualności
+
+  article.news-article
+    .news-article__header
+      .news-article__meta
+        .news-article__scopes
+          - Array(@news.scope).each do |s|
+            span.news-scope-badge = s
+        span.news-article__date
+          i.fa.fa-clock-o
+          = l(@news.created_at, format: :short)
+      h2.news-article__title = @news.title
+      .news-article__byline
+        i.fa.fa-user
+        | Autor:
+        = link_to @news.person.full_name, backend_person_path(@news.person), class: "news-article__author-link"
+      .news-article__toolbar
+        .news-article__likes
+          = link_to like_backend_news_path(@news, like: true), method: :post, class: "news-like news-like--up" do
+            i.fa.fa-thumbs-o-up
+            span = @news.thumbs_up_total
+          = link_to like_backend_news_path(@news, like: false), method: :post, class: "news-like news-like--down" do
+            i.fa.fa-thumbs-o-down
+            span = @news.thumbs_down_total
         - if current_manager || current_person == @news.person
-          = link_to edit_backend_news_path(@news) do
-            .btn.btn-warning.waves-effect.waves-light
-              i.fa.fa-pencil-square
-              | Edytuj
-          = link_to backend_news_path(@news),  method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
-            .btn.btn-danger.waves-effect.waves-light
+          .news-article__actions
+            = link_to edit_backend_news_path(@news), class: "news-action news-action--edit" do
+              i.fa.fa-pencil
+              |  Edytuj
+            = link_to backend_news_path(@news), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "news-action news-action--delete" do
               i.fa.fa-trash
-              | Usuń
-          br
-          = link_to like_backend_news_path(@news, like: true), method: :post do
-            i.fa.fa-thumbs-o-up.fa-2x
-              = @news.thumbs_up_total
-          = link_to like_backend_news_path(@news, like: false), method: :post do
-            i.fa.fa-thumbs-o-down.fa-2x
-              = @news.thumbs_down_total
-          h5
-            .label.label-success
-              = Array(@news.scope).join(', ')
-      .visible-xs
-        a.btn-sm.comm-bg.rectangle.waves-effect.waves-light
+              |  Usuń
+
+    .news-article__content
+      = @news.content.html_safe
+
+  .news-comments
+    .news-comments__form-card
+      h5.news-comments__section-title
+        i.fa.fa-comment-o
+        |  Zostaw komentarz
+      = simple_form_for([:backend, @news, @comment]) do |f|
+        .news-comment-form
+          = f.input :body, label: false, input_html: { class: "news-comment-textarea", placeholder: "Napisz komentarz...", rows: 3 }
+          = f.button :submit, "Wyślij komentarz", class: "news-comment-submit"
+
+    - if @news.comments.any?
+      .news-comments__list-header
+        h5.news-comments__section-title
           i.fa.fa-comments
-        span.badge.social-counter 5
-      / /.Social Counters for mobile
-      hr/
-      p.text-left
-        = @news.content.html_safe
-
-    .card-panel.reply-section.hoverable
-      .row
-        h5.text-center Zostaw komentarz
-        hr/
-        = simple_form_for([:backend, @news, @comment]) do |f|
-          .input-field
-            = f.input :body, input_html: { class: "materialize-textarea" }
-          = f.button :submit, class: "btn btn-primary btn-block"
-
-.row
-  .card-panel.horizontal-listing.no-padding.comments-section
-    h5.text-center.title
-      | Komentarze
-      .label.label-pill.label.danger
-        = @news.comments.count
-    hr/
-    = render @news.comments
+          |  Komentarze
+          span.news-comments__count = @news.comments.count
+      .news-comments__list
+        = render @news.comments
