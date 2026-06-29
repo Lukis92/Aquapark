@@ -1,24 +1,59 @@
-= render 'shared/back'
-- if current_manager
-  h5 Dodaj urlop
-- else
-  h5 Dodaj prośbę o urlop
-  = info("Jesteś na stronie na której możesz wysłać podanie o urlop do kierownika.")
-= simple_form_for(@vacation, url: backend_vacations_path(@person)) do |f|
-  = errors_for(@vacation)
-  .row
-    .col-md-6
-      label for="datepicker"* Data od
-      = f.text_field :start_at, required: true, class: 'datepicker', placeholder: 'Kliknij'
-    .col-md-6
-      label for="datepicker"* Data do
-      = f.text_field :end_at, required: true, class: 'datepicker', placeholder: 'Kliknij'
-    .col-md-12
-      - if current_manager
-        = f.input :free, as: :boolean
-        = f.input :accepted, as: :hidden, input_html: { value: true }
-      = f.input :person_id, as: :hidden, input_html: { value: @person.id }
-    .col-md-12.input-field
-      = f.input :reason, as: :text, input_html: { class: "materialize-textarea" }
-    .col-md-12
-      = f.button :submit, class: "btn btn-primary btn-block"
+.b-page
+  .b-header
+    = link_to backend_vacations_path(@person), class: "b-back" do
+      i.fa.fa-arrow-left
+      |  Powrót do urlopów
+    - if current_manager
+      h4.b-header__title
+        i.fa.fa-calendar-plus-o
+        |  Dodaj urlop
+      p.b-header__subtitle = @person.full_name
+    - else
+      h4.b-header__title
+        i.fa.fa-calendar-plus-o
+        |  Poproś o urlop
+      p.b-header__subtitle Twoja prośba trafi do kierownika do zatwierdzenia.
+
+  .b-card
+    = simple_form_for(@vacation, url: backend_vacations_path(@person)) do |f|
+      = errors_for(@vacation)
+
+      .ef-section
+        h6.ef-section__label
+          i.fa.fa-calendar
+          |  Daty urlopu
+
+        .ef-row
+          .ef-field
+            label.ef-label
+              | Data od
+              span.ef-required  *
+            = f.text_field :start_at, required: true, class: 'ef-input datepicker', placeholder: 'Kliknij'
+          .ef-field
+            label.ef-label
+              | Data do
+              span.ef-required  *
+            = f.text_field :end_at, required: true, class: 'ef-input datepicker', placeholder: 'Kliknij'
+
+        .ef-field
+          label.ef-label Powód
+          = f.text_area :reason, class: 'ef-textarea', rows: 3, placeholder: 'Opcjonalny powód urlopu...'
+
+        - if current_manager
+          .ef-check
+            = f.check_box :free, class: 'ef-checkbox', id: 'vacation_free'
+            label.ef-check-label for="vacation_free" Urlop płatny
+          = f.input :accepted, as: :hidden, input_html: { value: true }
+
+        = f.input :person_id, as: :hidden, input_html: { value: @person.id }
+
+      .ef-actions
+        button.ef-submit type="submit"
+          i.fa.fa-paper-plane
+          - if current_manager
+            |  Dodaj urlop
+          - else
+            |  Wyślij prośbę
+        = link_to backend_vacations_path(@person), class: "ef-cancel" do
+          i.fa.fa-times
+          |  Anuluj

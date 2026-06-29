@@ -1,44 +1,49 @@
-h5
-  i.fa.fa-history
-  |  Historia zmian ceny —
-  =  " #{@priceable_label}"
+.b-page
+  .b-index-header
+    .b-index-header__text
+      h4.b-index-header__title
+        i.fa.fa-history
+        |  Historia zmian ceny
+      p.b-index-header__subtitle = @priceable_label
+    .b-index-header__actions
+      = link_to :back, class: "b-back" do
+        i.fa.fa-arrow-left
+        |  Wróć
 
-= info("Lista wszystkich zmian ceny dla wybranego elementu cennika, posortowana od najnowszej.")
-
-= link_to :back, class: 'btn btn-default' do
-  i.fa.fa-arrow-left
-  |  Wróć
-
-- if @price_changes.empty?
-  .alert.alert-info style="margin-top:16px"
-    | Brak historii zmian ceny.
-- else
-  table.table.table-striped.table-bordered.table-list style="margin-top:16px"
-    thead
-      tr
-        th | Data zmiany
-        th | Poprzednia cena
-        th | Nowa cena
-        th | Różnica
-        th | Zmienił/a
-    tbody
-      - @price_changes.each do |pc|
-        tr
-          td = l(pc.changed_at, format: :long)
-          td
-            strong = number_to_currency(pc.old_price, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')
-          td
-            strong = number_to_currency(pc.new_price, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')
-          td
+  - if @price_changes.empty?
+    .b-empty
+      i.fa.fa-history.b-empty__icon
+      p Brak historii zmian ceny.
+  - else
+    .b-table-wrap
+      table.b-table
+        thead
+          tr
+            th Data zmiany
+            th Poprzednia cena
+            th Nowa cena
+            th Różnica
+            th Zmienił/a
+        tbody
+          - @price_changes.each do |pc|
             - diff = pc.difference
-            - if pc.increase?
-              span.text-danger
-                i.fa.fa-arrow-up
-                = " +#{number_to_currency(diff.abs, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')}"
-            - else
-              span.text-success
-                i.fa.fa-arrow-down
-                = " −#{number_to_currency(diff.abs, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')}"
-          td = pc.changed_by.presence || '—'
+            tr
+              td
+                span.b-date
+                  i.fa.fa-clock-o
+                  = l(pc.changed_at, format: :long)
+              td = number_to_currency(pc.old_price, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')
+              td
+                strong = number_to_currency(pc.new_price, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')
+              td
+                - if pc.increase?
+                  span.b-badge.b-badge--red
+                    i.fa.fa-arrow-up
+                    = " +#{number_to_currency(diff.abs, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')}"
+                - else
+                  span.b-badge.b-badge--green
+                    i.fa.fa-arrow-down
+                    = " −#{number_to_currency(diff.abs, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')}"
+              td = pc.changed_by.presence || '—'
 
-  = will_paginate @price_changes, renderer: BootstrapPagination::Rails
+    = will_paginate @price_changes, renderer: BootstrapPagination::Rails

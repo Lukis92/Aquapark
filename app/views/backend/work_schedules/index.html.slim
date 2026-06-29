@@ -1,68 +1,83 @@
-.row
-  h5 Grafik pracy pracowników
-  = info("Przeglądaj tygodniowy grafik pracy. Każdy wiersz to jeden pracownik, kolumny to dni tygodnia. Możesz filtrować po konkretnym pracowniku.")
+- type_avatar = { 'Manager' => 'pa-manager', 'Receptionist' => 'pa-receptionist', 'Trainer' => 'pa-trainer', 'Lifeguard' => 'pa-lifeguard' }
+- type_label  = { 'Manager' => 'Kierownik', 'Receptionist' => 'Recepcjonista', 'Trainer' => 'Trener', 'Lifeguard' => 'Ratownik' }
+- type_badge_cls = { 'Manager' => 'manager', 'Receptionist' => 'receptionist', 'Trainer' => 'trainer', 'Lifeguard' => 'lifeguard' }
+- weekend_days = ['Sobota', 'Niedziela']
 
-.row.schedule-toolbar
-  .col-md-8
-    = form_tag backend_work_schedules_path, method: :get, class: 'form-inline' do
-      .form-group
-        = label_tag :person_type, 'Typ:', class: 'control-label'
+.ws-page
+  .ws-header
+    .ws-header__text
+      h4.ws-header__title
+        i.fa.fa-calendar
+        |  Grafik pracy pracowników
+      p.ws-header__subtitle Tygodniowy rozkład godzin pracy. Każdy wiersz to jeden pracownik, kolumny — dni tygodnia.
+    - if current_manager
+      = link_to new_backend_work_schedule_path, class: "ws-header__add" do
+        i.fa.fa-plus
+        |  Dodaj grafik
+
+  = form_tag backend_work_schedules_path, method: :get do
+    .ws-filter
+      .ws-filter__field
+        label.ws-filter__label Typ pracownika
         - type_options = [['Recepcjonista', 'Receptionist'], ['Ratownik', 'Lifeguard'], ['Trener', 'Trainer'], ['Kierownik', 'Manager']]
-        = select_tag :person_type, options_for_select(type_options, params[:person_type]), include_blank: 'Wszyscy'
-      .form-group
-        = label_tag :person_id, 'Pracownik:', class: 'control-label'
-        = select_tag :person_id, options_from_collection_for_select(@employees, :id, :full_name, params[:person_id].to_i), include_blank: 'Wszyscy pracownicy'
-      = submit_tag 'Filtruj', class: 'btn btn-primary'
+        = select_tag :person_type, options_for_select(type_options, params[:person_type]), include_blank: 'Wszyscy', class: 'ws-filter__select browser-default'
+      .ws-filter__field
+        label.ws-filter__label Pracownik
+        = select_tag :person_id, options_from_collection_for_select(@employees, :id, :full_name, params[:person_id].to_i), include_blank: 'Wszyscy pracownicy', class: 'ws-filter__select browser-default'
+      .ws-filter__field.ws-filter__field--btn
+        label.ws-filter__label
+        button.ws-filter__btn type="submit"
+          i.fa.fa-filter
+          |  Filtruj
       - if params[:person_id].present? || params[:person_type].present?
-        = link_to 'Wyczyść', backend_work_schedules_path, class: 'btn btn-default'
-  .col-md-4.text-right
-    = link_to new_backend_work_schedule_path, class: 'btn btn-success' do
-      i.fa.fa-plus
-      |  Dodaj grafik
+        .ws-filter__field.ws-filter__field--btn
+          label.ws-filter__label
+          = link_to backend_work_schedules_path, class: "ws-filter__clear" do
+            i.fa.fa-times
+            |  Wyczyść
 
-br
-
-.table-responsive
-  table.table.table-bordered.schedule-calendar-grid
-    thead
-      tr
-        th.schedule-employee-col Pracownik
-        - WorkSchedule::DAYS.each do |day|
-          th.text-center.schedule-day-col = day
-    tbody
-      - if @schedule_data.empty?
-        tr
-          td.text-center colspan="8"
-            em Brak zdefiniowanych grafiów pracy.
-      - else
-        - @schedule_data.each do |person, schedules|
+  - if @schedule_data.empty?
+    .ws-empty
+      i.fa.fa-calendar-o.ws-empty__icon
+      p Brak zdefiniowanych grafiów pracy dla wybranych kryteriów.
+  - else
+    .ws-grid-wrap
+      table.ws-grid
+        thead
           tr
-            td.schedule-employee-cell
-              strong
-                = link_to person.full_name, backend_person_path(person)
-              br
-              - type_key = :"activerecord.attributes.work_schedule.pl_person_types.#{person.type}"
-              small
-                i.label.label-info = I18n.t(type_key, default: person.type)
+            th.ws-grid__emp-col Pracownik
             - WorkSchedule::DAYS.each do |day|
-              - ws = schedules.find { |s| s.day_of_week == day }
-              - if ws
-                td.text-center.schedule-day-active
-                  .schedule-hours
-                    strong
-                      = l(ws.start_time, format: :short)
-                    |  –
-                    = l(ws.end_time, format: :short)
-                  - if current_manager
-                    .schedule-actions
-                      = link_to edit_backend_work_schedule_path(ws), class: 'btn btn-xs btn-default' do
-                        i.fa.fa-pencil
-                      = link_to backend_work_schedule_path(ws),
-                          method: :delete,
-                          data: { confirm: 'Jesteś pewny/a?' },
-                          class: 'btn btn-xs btn-danger' do
-                        i.fa.fa-trash
-              - else
-                td.schedule-day-empty
+              th class="ws-grid__day-col #{'ws-grid__day-col--weekend' if weekend_days.include?(day)}"
+                = day
+        tbody
+          - @schedule_data.each do |person, schedules|
+            tr
+              td.ws-grid__emp-cell
+                .person-cell
+                  span.person-avatar class=type_avatar.fetch(person.type, 'pa-client')
+                    = "#{person.first_name[0]}#{person.last_name[0]}"
+                  span.person-info
+                    = link_to person.full_name, backend_person_path(person), class: "ws-person-link"
+                    span.profile-type-badge class="profile-type-badge--#{type_badge_cls.fetch(person.type, 'client')}"
+                      = type_label.fetch(person.type, person.type)
+              - WorkSchedule::DAYS.each do |day|
+                - ws = schedules.find { |s| s.day_of_week == day }
+                - is_weekend = weekend_days.include?(day)
+                - if ws
+                  td class="ws-grid__day ws-grid__day--active #{'ws-grid__day--weekend' if is_weekend}"
+                    .ws-shift
+                      i.fa.fa-clock-o.ws-shift__icon
+                      span.ws-shift__hours
+                        = l(ws.start_time, format: :short)
+                        |  –
+                        = l(ws.end_time, format: :short)
+                    - if current_manager
+                      .ws-shift__actions
+                        = link_to edit_backend_work_schedule_path(ws), class: "ws-action ws-action--edit", title: "Edytuj" do
+                          i.fa.fa-pencil
+                        = link_to backend_work_schedule_path(ws), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "ws-action ws-action--delete", title: "Usuń" do
+                          i.fa.fa-trash
+                - else
+                  td class="ws-grid__day ws-grid__day--empty #{'ws-grid__day--weekend' if is_weekend}"
 
-= will_paginate @people, renderer: BootstrapPagination::Rails
+    = will_paginate @people, renderer: BootstrapPagination::Rails

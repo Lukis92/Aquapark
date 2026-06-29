@@ -1,16 +1,34 @@
-.col-md-10
-  = simple_form_for([:backend, @news], as: :news) do |f|
-    = errors_for(@news)
-    .row
-      .input-field
-        = f.input :title
-      .form-group
-        = f.text_area :content, class: 'materialize-textarea2', rows: 10
-      = f.label :scope, '* Zasięg (zaznacz co najmniej jedną grupę)'
-      = hidden_field_tag 'news[scope][]', ''
+= simple_form_for([:backend, @news], as: :news) do |f|
+  = errors_for(@news)
+
+  .ef-field
+    label.ef-label
+      | Tytuł
+      span.ef-required  *
+    = f.text_field :title, class: 'ef-input', placeholder: 'Tytuł aktualności'
+
+  .ef-field
+    label.ef-label
+      | Treść
+      span.ef-required  *
+    = f.text_area :content, class: 'ef-textarea', placeholder: 'Treść aktualności', rows: 10
+
+  .ef-field
+    label.ef-label
+      | Zasięg
+      span.ef-required  *
+    p.ef-hint Zaznacz co najmniej jedną grupę odbiorców.
+    = hidden_field_tag 'news[scope][]', ''
+    .ef-scope-grid
       - [['Wszyscy', 'wszyscy'], ['Pracownicy', 'pracownicy'], ['Ratownicy', 'ratownicy'], ['Trenerzy', 'trenerzy'], ['Recepcjoniści', 'recepcjoniści'], ['Klienci', 'klienci']].each do |text, value|
-        .checkbox
-          label
-            = check_box_tag 'news[scope][]', value, Array(@news.scope).include?(value)
-            = text
-    = f.button :submit, class: "btn btn-primary btn-block"
+        label.ef-scope-label
+          = check_box_tag 'news[scope][]', value, Array(@news.scope).include?(value), class: 'ef-scope-cb'
+          span = text
+
+  .ef-actions
+    button.ef-submit type="submit"
+      i.fa.fa-save
+      |  Zapisz aktualność
+    = link_to backend_news_index_path, class: "ef-cancel" do
+      i.fa.fa-times
+      |  Anuluj

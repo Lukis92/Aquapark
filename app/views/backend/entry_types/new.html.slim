@@ -1,4 +1,9 @@
-= render 'shared/back'
-h5 Dodawanie wejściówki
-= info("Poniższy formularz umożliwia dodanie różnych rodzai biletów/karnetów.")
-= render 'form'
+.b-page
+  = render 'shared/b_page_header',
+    back_path: backend_entry_types_path,
+    back_label: 'Powrót do wejściówek',
+    title: 'Dodawanie wejściówki',
+    icon: 'plus-circle',
+    subtitle: 'Dodaj nowy bilet lub karnet do cennika.'
+  .b-card
+    = render 'form'

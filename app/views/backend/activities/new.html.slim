@@ -1,8 +1,17 @@
-- if current_manager || current_receptionist
-  h5 Dodawanie zajęcia grupowego
-  = info("Jesteś na podstronie dodawania zajęć grupowych do grafiku aquaparku.")
-- else
-  h5 Proponowanie zajęcia
-  = info("W tym miejscu możesz zaproponować zajęcie grupowe, które według \
-          Ciebie powinno być włączone do harmonogramu wszystkich aktywności.")
-= render 'form'
+.b-page
+  .b-header
+    = link_to backend_activities_path, class: "b-back" do
+      i.fa.fa-arrow-left
+      |  Powrót do zajęć
+    - if current_manager || current_receptionist
+      h4.b-header__title
+        i.fa.fa-plus-circle
+        |  Dodawanie zajęcia grupowego
+      p.b-header__subtitle Nowe zajęcia zostaną od razu dodane do harmonogramu.
+    - else
+      h4.b-header__title
+        i.fa.fa-lightbulb-o
+        |  Proponowanie zajęcia
+      p.b-header__subtitle Twoja propozycja trafi do kierownika i recepcji do zatwierdzenia.
+  .b-card
+    = render 'form'

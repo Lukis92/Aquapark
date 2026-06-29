@@ -1,2 +1,9 @@
-h5 Dodawanie treningu
-= render 'form'
+.b-page
+  = render 'shared/b_page_header',
+    back_path: backend_manage_trainings_path,
+    back_label: 'Powrót do treningów',
+    title: 'Dodawanie treningu',
+    icon: 'plus-circle',
+    subtitle: 'Dodaj trening indywidualny dla klienta.'
+  .b-card
+    = render 'form'

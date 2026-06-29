@@ -1,47 +1,107 @@
-h4
-  | Edycja profilu:
-  br
-h5
-  = @person.full_name
-= info("W tym miejsu edytujesz dane osobowe użytkownika.")
-.col-md-6
-  = simple_form_for([:backend, @person], as: :person, url: {action: "update"}, html: { class: 'form-horizontal' }) do |f|
-    = errors_for(@person)
-    .form-group
-      = f.input :pesel, required: true, autofocus: true
-    .form-group
-      = f.input :first_name, required: true
-    .form-group
-      = f.input :last_name, required: true
-    .form-group
-      label for="datepicker"* Data urodzenia
-      = f.text_field :date_of_birth, required: true, class: 'datepicker',
-                     placeholder: 'Kliknij'
-    .form-group
-      = f.input :email, required: true
-    .col-md-6
-      .form-group
-        = f.input :profile_image, as: :file
-    - if @person.profile_image.attached?
-      .col-md-6
-        = link_to remove_photo_backend_person_path(@person), method: :delete, data: {confirm: 'Czy na pewno?'}, class: "btn btn-sm btn-danger" do
-          i.fa.fa-trash-o
-          |  Usuń zdjęcie profilowe
-    - if @person.type == 'Manager'
-      .form-group
-        = f.input :salary, required: true
-      .form-group
-        label for="datepicker"* Data zatrudnienia
-        = f.text_field :hiredate, required: true, class: 'datepicker',
-                       placeholder: 'Kliknij'
-    - if @person == current_person
-      .form-group
-        i (zostaw puste, jeżeli nie chcesz zmieniać)
-        = f.input :password, hint: ("minimum #{@minimum_password_length} znaków" if @minimum_password_length)
-      .form-group
-        = f.input :password_confirmation
-      .form-group
-        i (potrzebujemy hasło do potwierdzenia zmian)
-        = f.input :current_password, required: true, autocomplete: "off"
-    .form-actions
-      = f.button :submit, "Zapisz", class: "btn btn-primary btn-block"
+.b-page
+  .b-header
+    = link_to backend_person_path(@person), class: "b-back" do
+      i.fa.fa-arrow-left
+      |  Powrót do profilu
+    h4.b-header__title
+      i.fa.fa-pencil
+      |  Edycja profilu
+    p.b-header__subtitle = @person.full_name
+
+  .b-card
+    = simple_form_for([:backend, @person], as: :person, url: { action: "update" }) do |f|
+      = errors_for(@person)
+
+      .ef-section
+        h6.ef-section__label
+          i.fa.fa-id-card
+          |  Dane osobowe
+
+        .ef-field
+          label.ef-label
+            | PESEL
+            span.ef-required  *
+          = f.text_field :pesel, required: true, autofocus: true, class: 'ef-input'
+
+        .ef-row
+          .ef-field
+            label.ef-label
+              | Imię
+              span.ef-required  *
+            = f.text_field :first_name, required: true, class: 'ef-input'
+          .ef-field
+            label.ef-label
+              | Nazwisko
+              span.ef-required  *
+            = f.text_field :last_name, required: true, class: 'ef-input'
+
+        .ef-row
+          .ef-field
+            label.ef-label
+              | Data urodzenia
+              span.ef-required  *
+            = f.text_field :date_of_birth, required: true, class: 'ef-input datepicker', placeholder: 'Kliknij'
+          .ef-field
+            label.ef-label
+              | Email
+              span.ef-required  *
+            = f.email_field :email, required: true, class: 'ef-input'
+
+      .ef-section
+        h6.ef-section__label
+          i.fa.fa-image
+          |  Zdjęcie profilowe
+
+        .ef-field
+          label.ef-label Nowe zdjęcie
+          = f.file_field :profile_image, class: 'ef-file'
+        - if @person.profile_image.attached?
+          = link_to remove_photo_backend_person_path(@person), method: :delete, data: { confirm: 'Czy na pewno usunąć zdjęcie?' }, class: "ef-danger-link" do
+            i.fa.fa-trash-o
+            |  Usuń obecne zdjęcie
+
+      - if @person.type != 'Client'
+        .ef-section
+          h6.ef-section__label
+            i.fa.fa-briefcase
+            |  Zatrudnienie
+
+          .ef-row
+            .ef-field
+              label.ef-label Wynagrodzenie
+              = f.number_field :salary, class: 'ef-input', step: '0.01', min: '0', placeholder: '0.00'
+            .ef-field
+              label.ef-label Data zatrudnienia
+              = f.text_field :hiredate, class: 'ef-input datepicker', placeholder: 'Kliknij'
+
+      - if @person == current_person
+        .ef-section
+          h6.ef-section__label
+            i.fa.fa-lock
+            |  Zmiana hasła
+
+          p.ef-hint Zostaw puste, jeżeli nie chcesz zmieniać hasła.
+
+          .ef-row
+            .ef-field
+              label.ef-label Nowe hasło
+              = f.password_field :password, class: 'ef-input',
+                                 placeholder: @minimum_password_length ? "min. #{@minimum_password_length} znaków" : ''
+            .ef-field
+              label.ef-label Powtórz hasło
+              = f.password_field :password_confirmation, class: 'ef-input', placeholder: '...'
+
+          .ef-field
+            label.ef-label
+              | Obecne hasło
+              span.ef-required  *
+            p.ef-hint Wymagane do potwierdzenia zmian.
+            = f.password_field :current_password, required: true, autocomplete: 'off', class: 'ef-input'
+
+      .ef-actions
+        button.ef-submit type="submit"
+          i.fa.fa-save
+          |  Zapisz zmiany
+        = link_to backend_person_path(@person), class: "ef-cancel" do
+          i.fa.fa-times
+          |  Anuluj

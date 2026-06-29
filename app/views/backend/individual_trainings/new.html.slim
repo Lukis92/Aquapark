@@ -1,74 +1,58 @@
-= render 'shared/back'
-h5.section-title.st-blue
-  | 2 krok
-  small Wybór terminu i płatność
-= info("Jesteś na stronie wyboru dogodnego terminu treningu oraz finalizacji \
-        płatności. Przed wyborem daty i godziny zapoznaj się z harmonogramem \
-        pracy trenera.")
--unless @trainer.blank?
-  .row
-    .col-md-6
-      h5
-        | Trener
-        |  #{@trainer.full_name}
+.b-page
+  .b-header
+    = link_to :back, class: "b-back" do
+      i.fa.fa-arrow-left
+      |  Powrót
+    h4.b-header__title
+      i.fa.fa-plus-circle
+      |  Krok 2 — Wybór terminu i płatność
+    - unless @trainer.blank?
+      p.b-header__subtitle = "Trener: #{@trainer.full_name}"
 
-      h6
-        | Harmonogram pracy:
-.row
-  .col-md-12
-    table.table.table-striped.table-bordered.table-list
-      thead
-        tr
-          th Dzień tygodnia
-          th Najbliższe daty dla dnia tygodnia
-          th Godzina od
-          th Godzina do
-      tbody
-        - @trainer.work_schedules.each do |tw|
-          tr
-            td
-              = tw.day_of_week
-            td
-              - next_n_days(4, tw.day_of_week).each_with_index do |n, i|
-                - unless i == next_n_days(4, tw.day_of_week).size - 1
-                  = l(n)+' | '
-                - else
-                  = l(n)
-            td
-              = l(tw.start_time, format: :short)
-            td
-              = l(tw.end_time, format: :short)
-.row
-  .col-md-12
-    h5 Zajęty grafik treningów
-    - unless @trainer.individual_trainings_as_trainer.blank?
-      table.table.table-striped.table-bordered.table-list
-        thead
-          tr
-            th Data treningu
-            th Treningi
-        tbody
-          - trainings = @trainer.individual_trainings_as_trainer.where('date_of_training >= ?', Date.today).group_by(&:date_of_training)
-          - unless trainings.blank?
-            - trainings.keys.each do |ti|
-              tr
-                td
-                  = l(ti)
-                td
-                  - @trainer.individual_trainings_as_trainer.order(date_of_training: :desc).order(start_on: :asc).each_with_index do |tit, i|
-                    - if tit.date_of_training == ti
-                      - unless i == @trainer.individual_trainings_as_trainer.size - 1
-                        | #{l(tit.start_on, format: :short)} - #{l(tit.end_on, format: :short)}
-                        |, 
-                      - else
-                        | #{l(tit.start_on, format: :short)} - #{l(tit.end_on, format: :short)}
+  .b-split
+    - unless @trainer.blank?
+      .b-split__side
+        .b-info-card
+          h6.b-info-card__title
+            i.fa.fa-calendar
+            |  Harmonogram pracy trenera
+          - if @trainer.work_schedules.any?
+            table.b-mini-table
+              thead
+                tr
+                  th Dzień
+                  th Najbliższe daty
+                  th Od
+                  th Do
+              tbody
+                - @trainer.work_schedules.each do |tw|
+                  tr
+                    td = tw.day_of_week
+                    td style="font-size:0.78rem;color:#888"
+                      = next_n_days(4, tw.day_of_week).map { |n| l(n) }.join(' | ')
+                    td = l(tw.start_time, format: :short)
+                    td = l(tw.end_time, format: :short)
           - else
-            tr
-              td colspan="2"
-                .text-center
-                  | Brak treningów
-    - else
-        | Dostępny cały dzień
+            p.ef-hint Brak zdefiniowanego grafiku pracy.
 
-.col-md-12
-  = render 'form'
+        .b-info-card
+          h6.b-info-card__title
+            i.fa.fa-calendar-times-o
+            |  Zajęty grafik treningów
+          - trainings = @trainer.individual_trainings_as_trainer.where('date_of_training >= ?', Date.today).group_by(&:date_of_training)
+          - if trainings.any?
+            table.b-mini-table
+              thead
+                tr
+                  th Data
+                  th Godziny
+              tbody
+                - trainings.each do |date, ts|
+                  tr
+                    td = l(date)
+                    td = ts.sort_by(&:start_on).map { |t| "#{l(t.start_on, format: :short)}–#{l(t.end_on, format: :short)}" }.join(', ')
+          - else
+            p.ef-hint Dostępny cały dzień.
+
+    .b-card
+      = render 'form'

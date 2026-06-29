@@ -97,6 +97,22 @@ Aplikacja będzie dostępna pod adresem **http://localhost:3000**.
 Dane logowania managera znajdziesz w pliku `db/seeds/manager.rb`.
 
 ## Historia zmian
+* 0.6.5 *(2026-06-29)*
+  * **Kompletny redesign backendu — spójny system wizualny**
+    * Przeprojektowano ponad 30 widoków Slim: zastąpiono panele Bootstrap/MDB i stare tabele nowoczesnymi komponentami BEM
+    * Czcionki Google Fonts: **Inter** (UI) i **Lora** (treść artykułów)
+    * Przeprojektowane widoki: `notifications`, `manage_vacations`, `vacations` (requests/index/edit/new), `registrations/new`, `activities` (form/edit/new/preview/requests), `work_schedules/edit`, `people/edit`, `individual_trainings` (edit/new), `entry_types` (form/edit/new), `news` (form/edit/new), `training_costs` (form/edit/new), `manage_trainings` (index/edit/new), `price_changes/index`
+  * **Scentralizowany system komponentów backendu (`.b-*`)**
+    * Jeden blok CSS w `application.scss` definiuje wszystkie strukturalne elementy backendu — zmiana wyglądu w jednym miejscu aktualizuje wszystkie podstrony jednocześnie
+    * Unified klasy: `.b-page`, `.b-index-header`, `.b-header`, `.b-card`, `.b-table`, `.b-empty`, `.b-filter`, `.b-action`, `.b-badge`, `.b-status`, `.b-list-card`, `.b-info-card`, `.b-split` i inne
+    * Zastąpiono dziesiątki page-specific prefiksów (`.mv-*`, `.vr-*`, `.notif-*`, `.act-req-*`, `.vacind-*`, `.reg-*`, `.ef-page`, `.act-form-*`) zunifikowanymi klasami
+  * **Shared partial nagłówka** (`shared/_b_page_header.html.slim`)
+    * Wszystkie strony edit/new używają jednego partiala — zmiana nagłówka = jeden plik
+  * **Ulepszenia UX formularzy**
+    * Override MDB — pola formularzy mają obramowanie i normalne wyrównanie naraz ze wszystkimi filtrami
+    * `browser-default` na selectach eliminuje konflikty z Material Design Bootstrap
+    * Walidacja PESEL live (JS) zachowana w formularzu rejestracji pracownika
+
 * 0.6.4 *(2026-06-26)*
   * **Historyzacja zmian cen** (`/backend/entry_types/:id/price_changes`, `/backend/training_costs/:id/price_changes`)
     * Nowy model `PriceChange` z polimorficznym powiązaniem `priceable` — obsługuje zarówno `EntryType` (bilet/karnet) jak i `TrainingCost` (cennik treningów)
@@ -196,18 +212,6 @@ Dane logowania managera znajdziesz w pliku `db/seeds/manager.rb`.
   * Zaktualizowano komentarz dotyczący czyszczenia bazy danych
   * Zrefaktoryzowano kontroler home i scope’y typu wpisu
   * Dodano brakujące testy jednostkowe
-
-* 0.5.3
-  * Zabezpieczenie przed niepowołanym wejściem w sekcję urlopów
-  * Poprawienie walidacji nachodzenia na siebie urlopów
-  * Usunięty błąd z akceptowaniem urlopu przez kierownika
-  * naprawione statystyki dot. newsów
-  * umożliwienie recepcjonistom zarządzaniem komentarzami
-  * zablokowanie możliwości edycji urlopów pracownikom poza niezatwierdzonymi
-  * widoczność własnych newsów mimo należności do innej kategorii
-  * podczas dodawania zajęcia grupowego, sprawdzane jest czy trener ma w tym czasie inne zajęcia lub treningi
-  * podczas dołączania klienta do zajęć, sprawdzane jest czy klient ma w tym czasie inne zajęcia lub treningi
-  * naprawione przyciski wróć w wynikach wyszukiwania
 
 ## Autor
 Łukasz Korol - lukas.korol@gmail.com

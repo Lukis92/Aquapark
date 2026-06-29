@@ -2,88 +2,116 @@ h4 Zakupy
 = info("Jesteś na stronie płatności. Poniżej po lewej stronie masz informacje \
         o zakupie. Wprowadź numer karty płatniczej, kod CVV oraz datę ważności, \
         a następnie kliknij ZAPŁAĆ.")
+
 = simple_form_for([:backend, @entry_type, @bought_detail], url: {action: "create"}) do |f|
   = errors_for(@bought_detail)
-  .row
-    .col-md-5
-      ul.collection
-        li.collection-item
-          h5 Szczegóły:
-        li.collection-item
-          b
-            | Aktualnie kupujesz:
-          |  #{@entry_type.kind}
-        li.collection-item
-          b
-            | Szczegóły:
-          |  #{@entry_type.kind_details}
-        li.collection-item
-          b
-            | Opis:
-          |  #{@entry_type.description}
-        li.collection-item
-          b
-            | Cena:
-          |  #{@entry_type.price.nice}
-          - if @entry_type.kind == 'Karnet'
-            | zł / miesiąc
-          - else
-            | zł
-  .row
-    .col-md-5
-      #stripe_error.alert.alert-danger style="display:none"
-      .panel.panel-success
-        .panel-heading Dane do płatności
-        .panel-body
-          .row.input-field
-            .col-md-12
-              label Dane karty
-              #card-element style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;"
 
-    - if @entry_type.kind == 'Karnet'
-      .col-md-offset-1.col-md-5
-        .panel.panel-success
-          .panel-heading Karnet
-          .panel-body
-            .row
-              = f.select :days, [['1 miesiąc', 30], ['2 miesiące', 60], ['3 miesiące', 90]], prompt: 'Wybierz czas trwania', required: true
-            .row
-              = f.input :start_on, start_year: Date.today.year, end_year: Date.today.year + 1, hint: "Pozostaw bez zmian, jeśli chcesz, aby karnet był aktywny od razu po zakupie."
-  .col-md-offset-3.col-md-5
-    .row
-      = f.button :submit, class: "btn btn-primary btn-block"
+  .checkout-layout
+    .checkout-summary
+      - is_pass = @entry_type.kind == 'Karnet'
+      .price-card class=("price-card--#{is_pass ? 'pass' : 'ticket'}")
+        .price-card__header
+          h3.price-card__name = @entry_type.kind
+        .price-card__price-block
+          span.price-card__amount = @entry_type.price.nice
+          span.price-card__currency ZŁ
+          p.price-card__label
+            - if is_pass
+              | Karnet miesięczny
+            - else
+              | Bilet wstępu
+        .price-card__body
+          ul.price-card__features
+            - if @entry_type.kind_details.present?
+              li
+                i.fa.fa-check
+                = @entry_type.kind_details
+            - if @entry_type.description.present?
+              li
+                i.fa.fa-check
+                = @entry_type.description
+
+    .checkout-form
+      .checkout-card
+        .checkout-card__title
+          i.fa.fa-credit-card
+          |  Dane do płatności
+        #stripe_error.alert.alert-danger style="display:none"
+        .checkout-field
+          label.checkout-label Dane karty
+          #card-element.checkout-card-element
+
+      - if is_pass
+        .checkout-card
+          .checkout-card__title
+            i.fa.fa-calendar
+            |  Czas trwania karnetu
+          .checkout-field
+            = f.select :days, [['1 miesiąc', 30], ['2 miesiące', 60], ['3 miesiące', 90]], { prompt: 'Wybierz czas trwania' }, { required: true, class: 'checkout-select' }
+          .checkout-field
+            = f.input :start_on, start_year: Date.today.year, end_year: Date.today.year + 1, hint: "Pozostaw bez zmian, jeśli chcesz, aby karnet był aktywny od razu po zakupie.", wrapper_html: { class: 'checkout-datepicker' }
+
+      = f.button :submit, class: "checkout-submit"
 
 javascript:
-  jQuery(function() {
-    var stripe = Stripe($('meta[name="stripe-key"]').attr('content'));
-    var elements = stripe.elements();
-    var card = elements.create('card', {
-      style: {
-        base: { fontSize: '16px', color: '#424770' },
-        invalid: { color: '#9e2146' }
+  (function() {
+    function initStripe() {
+      var stripeKey = $('meta[name="stripe-key"]').attr('content');
+      if (!stripeKey) {
+        $('#stripe_error').text('Brak klucza Stripe. Skontaktuj się z administratorem.').show();
+        return;
       }
-    });
-    card.mount('#card-element');
 
-    card.on('change', function(event) {
-      if (event.error) {
-        $('#stripe_error').text(event.error.message).show();
-      } else {
-        $('#stripe_error').hide();
+      var stripe, card;
+      try {
+        stripe = Stripe(stripeKey);
+        var elements = stripe.elements();
+        card = elements.create('card', {
+          style: {
+            base: { fontSize: '16px', color: '#424770', fontFamily: 'Arial, sans-serif', '::placeholder': { color: '#aab7c4' } },
+            invalid: { color: '#9e2146' }
+          },
+          hidePostalCode: true
+        });
+        card.mount('#card-element');
+      } catch(e) {
+        $('#stripe_error').text('Błąd inicjalizacji płatności: ' + e.message).show();
+        return;
       }
-    });
 
-    $('#new_bought_detail').submit(function(e) {
-      e.preventDefault();
-      $('input[type=submit]').attr('disabled', true);
-      stripe.createToken(card).then(function(result) {
-        if (result.error) {
-          $('#stripe_error').text(result.error.message).show();
-          $('input[type=submit]').attr('disabled', false);
+      card.on('change', function(event) {
+        if (event.error) {
+          $('#stripe_error').text(event.error.message).show();
         } else {
-          $('#new_bought_detail').append($('<input type="hidden" name="stripeToken" />').val(result.token.id));
-          $('#new_bought_detail')[0].submit();
+          $('#stripe_error').hide();
         }
       });
-    });
-  });
+
+      $('#new_bought_detail').on('submit', function(e) {
+        e.preventDefault();
+        var $submitBtn = $('[type=submit]', this);
+        $submitBtn.prop('disabled', true);
+        stripe.createToken(card).then(function(result) {
+          if (result.error) {
+            $('#stripe_error').text(result.error.message).show();
+            $submitBtn.prop('disabled', false);
+          } else {
+            $('#new_bought_detail').append($('<input type="hidden" name="stripeToken" />').val(result.token.id));
+            $('#new_bought_detail')[0].submit();
+          }
+        });
+      });
+    }
+
+    if (typeof Stripe !== 'undefined') {
+      jQuery(initStripe);
+    } else {
+      window.addEventListener('load', function() {
+        if (typeof Stripe !== 'undefined') {
+          initStripe();
+        } else {
+          $('#stripe_error').text('Nie można załadować biblioteki płatności. Sprawdź połączenie z internetem.').show();
+        }
+      });
+    }
+  })();

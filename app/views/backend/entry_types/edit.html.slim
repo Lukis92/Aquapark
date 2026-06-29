@@ -1,3 +1,9 @@
-= render 'shared/back'
-h5 Edycja wejściówki
-= render 'form'
+.b-page
+  = render 'shared/b_page_header',
+    back_path: backend_entry_types_path,
+    back_label: 'Powrót do wejściówek',
+    title: 'Edycja wejściówki',
+    icon: 'pencil',
+    subtitle: "#{@entry_type.kind} — #{@entry_type.kind_details}"
+  .b-card
+    = render 'form'

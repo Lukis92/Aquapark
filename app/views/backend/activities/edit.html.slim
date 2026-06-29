@@ -1,5 +1,9 @@
-= render 'shared/back'
-= info("Jesteś na stronie edycji informacji dot. konkretnego zajęcia grupowego.")
-h5 Edytowanie zajęcia grupowego
-
-= render 'form'
+.b-page
+  = render 'shared/b_page_header',
+    back_path: backend_activities_path,
+    back_label: 'Powrót do zajęć',
+    title: 'Edytowanie zajęcia grupowego',
+    icon: 'pencil',
+    subtitle: @activity.name
+  .b-card
+    = render 'form'

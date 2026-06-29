@@ -1,78 +1,85 @@
-h5 Treningi indywidualne klientów.
-p
-  | Obecnie w bazie posiadamy #{IndividualTraining.count} zarejestrowanych
-  |  treningów.
-= info("Poniżej znajduje się lista wszystkich zarejestrowanych treningów \
-        indywidualnych odbytych lub zaplanowanych w najbliższym czasie.")
+.it-page
+  .it-header
+    .it-header__text
+      h4.it-header__title
+        i.fa.fa-child
+        |  Treningi indywidualne
+      p.it-header__subtitle
+        | Łącznie w bazie:
+        strong  #{IndividualTraining.count}
+        |  zarejestrowanych treningów.
 
-= form_tag backend_individual_trainings_path, method: :get, class: 'form-inline well well-sm' do
-  .form-group
-    = label_tag :client_id, 'Klient:', class: 'control-label'
-    = select_tag :client_id, options_from_collection_for_select(@clients, :id, :full_name, params[:client_id].to_i), include_blank: 'Wszyscy klienci'
-  .form-group
-    = label_tag :trainer_id, 'Trener:', class: 'control-label'
-    = select_tag :trainer_id, options_from_collection_for_select(@trainers, :id, :full_name, params[:trainer_id].to_i), include_blank: 'Wszyscy trenerzy'
-  .form-group
-    = label_tag :date_from, 'Data od:', class: 'control-label'
-    = text_field_tag :date_from, params[:date_from], class: 'form-control datepicker', placeholder: 'rrrr-mm-dd', style: 'width:130px'
-  .form-group
-    = label_tag :date_to, 'Data do:', class: 'control-label'
-    = text_field_tag :date_to, params[:date_to], class: 'form-control datepicker', placeholder: 'rrrr-mm-dd', style: 'width:130px'
-  = submit_tag 'Filtruj', class: 'btn btn-primary'
-  - if params[:client_id].present? || params[:trainer_id].present? || params[:date_from].present? || params[:date_to].present?
-    = link_to 'Wyczyść', backend_individual_trainings_path, class: 'btn btn-default'
+  = form_tag backend_individual_trainings_path, method: :get do
+    .it-filter
+      .it-filter__field
+        label.it-filter__label Klient
+        = select_tag :client_id, options_from_collection_for_select(@clients, :id, :full_name, params[:client_id].to_i), include_blank: 'Wszyscy klienci', class: 'it-filter__select browser-default'
+      .it-filter__field
+        label.it-filter__label Trener
+        = select_tag :trainer_id, options_from_collection_for_select(@trainers, :id, :full_name, params[:trainer_id].to_i), include_blank: 'Wszyscy trenerzy', class: 'it-filter__select browser-default'
+      .it-filter__field
+        label.it-filter__label Data od
+        = text_field_tag :date_from, params[:date_from], class: 'it-filter__input datepicker', placeholder: 'rrrr-mm-dd'
+      .it-filter__field
+        label.it-filter__label Data do
+        = text_field_tag :date_to, params[:date_to], class: 'it-filter__input datepicker', placeholder: 'rrrr-mm-dd'
+      .it-filter__field.it-filter__field--btn
+        label.it-filter__label
+        button.it-filter__btn type="submit"
+          i.fa.fa-filter
+          |  Filtruj
+      - if params[:client_id].present? || params[:trainer_id].present? || params[:date_from].present? || params[:date_to].present?
+        .it-filter__field.it-filter__field--btn
+          label.it-filter__label
+          = link_to backend_individual_trainings_path, class: "it-filter__clear" do
+            i.fa.fa-times
+            |  Wyczyść
 
-table.table.table-striped.table-bordered.table-list.pretty.table-list-search
-  thead
-    tr
-      th
-        em.fa.fa-cog
-        |  Zarządzanie
-      th
-        = sortable "training_costs.cost", "Koszt"
-      th
-        = sortable "clients.first_name", "Klient"
-      th
-        = sortable "people.first_name", "Trener"
-      th
-        = sortable "date_of_training", "Data"
-      th
-        = sortable "start_on", "Godzina rozpoczęcia"
-      th
-        = sortable "end_on", "Godzina zakończenia"
-      th
-        = sortable "training_costs.duration", "Czas trwania"
-  tbody
-    - if @individual_trainings.empty?
-      tr
-        td.text-center colspan="8"
-          em Brak treningów spełniających kryteria.
-    - else
-      - @individual_trainings.each do |training|
-        tr
-          td
-            = link_to edit_backend_trainer_individual_training_path(training.client, training.trainer, training) do
-              i.btn.btn-default
-                i.fa.fa-pencil
-            = link_to backend_individual_training_path(training), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
-              i.btn.btn-danger
-                i.fa.fa-trash
-          td
-            = training.training_cost.cost.nice
-            |  zł
-          td
-            = link_to backend_person_path(training.client) do
-              = training.client.full_name
-          td
-            = link_to backend_person_path(training.trainer) do
-              = training.trainer.full_name
-          td
-            = l(training.date_of_training)
-          td
-            = l(training.start_on, format: :short)
-          td
-            = l(training.end_on, format: :short)
-          td
-            = training.training_cost.duration
-            |  min.
-= will_paginate @individual_trainings, renderer: BootstrapPagination::Rails unless @individual_trainings.blank?
+  - if @individual_trainings.empty?
+    .it-empty
+      i.fa.fa-child.it-empty__icon
+      p Brak treningów spełniających kryteria.
+  - else
+    .it-table-wrap
+      table.it-table
+        thead
+          tr
+            th = sortable "date_of_training", "Data"
+            th = sortable "start_on", "Godzina"
+            th = sortable "training_costs.duration", "Czas"
+            th = sortable "clients.first_name", "Klient"
+            th = sortable "people.first_name", "Trener"
+            th = sortable "training_costs.cost", "Koszt"
+            th.text-center Akcje
+        tbody
+          - @individual_trainings.each do |training|
+            - past = training.date_of_training < Date.today
+            tr class=(past ? 'it-row--past' : 'it-row--upcoming')
+              td
+                .it-date
+                  i.fa.fa-calendar
+                  = l(training.date_of_training)
+              td
+                span.it-time
+                  = l(training.start_on, format: :short)
+                  span.it-time-sep  –
+                  = l(training.end_on, format: :short)
+              td
+                span.it-duration
+                  = training.training_cost.duration
+                  |  min
+              td
+                = link_to training.client.full_name, backend_person_path(training.client), class: "it-person-link"
+              td
+                = link_to training.trainer.full_name, backend_person_path(training.trainer), class: "it-person-link it-person-link--trainer"
+              td
+                strong.it-cost = training.training_cost.cost.nice
+                span.it-cost-currency  zł
+              td
+                .it-actions
+                  = link_to edit_backend_trainer_individual_training_path(training.client, training.trainer, training), class: "it-action it-action--edit", title: "Edytuj" do
+                    i.fa.fa-pencil
+                  = link_to backend_individual_training_path(training), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "it-action it-action--delete", title: "Usuń" do
+                    i.fa.fa-trash
+
+    = will_paginate @individual_trainings, renderer: BootstrapPagination::Rails

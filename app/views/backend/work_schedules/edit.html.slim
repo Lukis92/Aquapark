@@ -1,3 +1,76 @@
-h5 Edycja harmonogramu
-= info("Na tej stronie możesz edytować wybrany harmonogram pracy.")
-= render 'form'
+.b-page
+  .b-header
+    = link_to backend_work_schedules_path, class: "b-back" do
+      i.fa.fa-arrow-left
+      |  Powrót do grafiku
+    h4.b-header__title
+      i.fa.fa-calendar
+      |  Edycja harmonogramu pracy
+    - if @work_schedule.person.present?
+      p.b-header__subtitle = "#{@work_schedule.person.full_name} — #{@work_schedule.day_of_week}"
+
+  .b-card
+    - unless @person.blank?
+      = simple_form_for([:backend, @work_schedule], as: :manage_schedule) do |f|
+        = errors_for(@work_schedule)
+        .ef-row
+          .ef-field
+            label.ef-label
+              | Godzina od
+              span.ef-required  *
+            = f.text_field :start_time, required: true, class: 'ef-input timepicker', id: 'input_starttime', placeholder: 'Kliknij'
+          .ef-field
+            label.ef-label
+              | Godzina do
+              span.ef-required  *
+            = f.text_field :end_time, required: true, class: 'ef-input timepicker', id: 'input_endtime', placeholder: 'Kliknij'
+        .ef-field
+          label.ef-label
+            | Dzień tygodnia
+            span.ef-required  *
+          = f.select :day_of_week, options_for_select(WorkSchedule::DAYS, @work_schedule.day_of_week),
+                     { include_blank: 'Wybierz dzień' },
+                     { class: 'ef-select browser-default' }
+        = f.input :person_id, as: :hidden, input_html: { value: @person.id }
+        .ef-actions
+          button.ef-submit type="submit"
+            i.fa.fa-save
+            |  Zapisz zmiany
+          = link_to backend_work_schedules_path, class: "ef-cancel" do
+            i.fa.fa-times
+            |  Anuluj
+    - else
+      = simple_form_for([:backend, @work_schedule], as: :work_schedule) do |f|
+        = errors_for(@work_schedule)
+        .ef-row
+          .ef-field
+            label.ef-label
+              | Godzina od
+              span.ef-required  *
+            = f.text_field :start_time, required: true, class: 'ef-input timepicker', id: 'input_starttime', placeholder: 'Kliknij'
+          .ef-field
+            label.ef-label
+              | Godzina do
+              span.ef-required  *
+            = f.text_field :end_time, required: true, class: 'ef-input timepicker', id: 'input_endtime', placeholder: 'Kliknij'
+        .ef-field
+          label.ef-label
+            | Dzień tygodnia
+            span.ef-required  *
+          = f.select :day_of_week, options_for_select(WorkSchedule::DAYS, @work_schedule.day_of_week),
+                     { include_blank: 'Wybierz dzień' },
+                     { class: 'ef-select browser-default' }
+        .ef-field
+          label.ef-label
+            | Pracownik
+            span.ef-required  *
+          = f.select :person_id, options_for_select(@employees.map { |e| [e.person_full_name_type, e.id] }, @work_schedule.person_id),
+                     { prompt: 'Wybierz pracownika' },
+                     { class: 'ef-select browser-default' }
+        .ef-actions
+          button.ef-submit type="submit"
+            i.fa.fa-save
+            |  Zapisz zmiany
+          = link_to backend_work_schedules_path, class: "ef-cancel" do
+            i.fa.fa-times
+            |  Anuluj

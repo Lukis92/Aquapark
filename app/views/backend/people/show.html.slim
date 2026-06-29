@@ -1,82 +1,102 @@
-.panel.panel-info
-  .panel-heading
-    h3.panel-title
-      = @person.full_name
-  .panel-body
-    .row
-      .col-md-3
+.profile-page
+  .profile-card
+    .profile-card__cover
+    .profile-card__main
+      .profile-card__avatar-wrap
         - if @person.profile_image.attached?
-          = image_tag @person.profile_image.variant(:medium), class: 'img-circle img-responsive'
+          = image_tag @person.profile_image.variant(:medium), class: "profile-card__avatar"
         - else
-          = image_tag '/images/user_default.png', class: 'img-circle img-responsive'
+          .profile-card__avatar-placeholder
+            i.fa.fa-user
 
-      .col-md-9
-        table.table.table-user-information
-          tbody
-            tr
-              td Pesel:
-              td
-                = @person.pesel
-            tr
-              td Imię:
-              td
-                = @person.first_name
-            tr
-              td Nazwisko:
-              td
-                = @person.last_name
-            tr
-              td Data urodzenia:
-              td
-                = l(@person.date_of_birth)
-            tr
-              td Email:
-              td
-                a href="mailto:#{@person.email}"
-                  = @person.email
-            - if @person.type != "Client"
-              tr
-                td Zarobki
-                td
-                  = @person.salary.nice
-                  | zł
-              tr
-                td Data zatrudnienia:
-                td
-                  = l(@person.hiredate)
-              tr
-                td Zarejestrowany jako:
-                td
-                  = @person.translate_type
-        br
+      .profile-card__info
+        .profile-card__name-row
+          h2.profile-card__name = @person.full_name
+          - type_class = { 'Manager' => 'manager', 'Receptionist' => 'receptionist', 'Trainer' => 'trainer', 'Client' => 'client' }[@person.type] || 'client'
+          span.profile-type-badge class="profile-type-badge--#{type_class}"
+            = @person.translate_type
 
-        = link_to bought_history_backend_person_path(@person), class: "btn btn-primary" do
-          i.fa.fa-shopping-cart
-          |  Zakupione bilety/karnety
-        = link_to show_backend_individual_trainings_path(@person), class: "btn btn-primary" do
-          i.fa.fa-child
-          |  Treningi indywidualne
+        .profile-card__meta
+          span.profile-card__meta-item
+            i.fa.fa-envelope
+            a href="mailto:#{@person.email}" = @person.email
+          span.profile-card__meta-item
+            i.fa.fa-birthday-cake
+            = l(@person.date_of_birth)
+          - if @person.current_sign_in_at
+            span.profile-card__meta-item.profile-card__meta-item--online
+              i.fa.fa-circle
+              | Ostatnie logowanie:
+              = l(@person.current_sign_in_at, format: :short)
+          - else
+            span.profile-card__meta-item.profile-card__meta-item--offline
+              i.fa.fa-circle
+              | Brak logowania
+
+      .profile-card__toolbar
+        = link_to edit_backend_person_path(@person), class: "profile-toolbar-btn profile-toolbar-btn--edit" do
+          i.fa.fa-pencil
+          |  Edytuj
+        - if current_manager || current_client || current_manager != @person
+          = link_to backend_person_path(@person), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "profile-toolbar-btn profile-toolbar-btn--delete" do
+            i.fa.fa-trash
+            |  Zamknij konto
+
+  .profile-body
+    .profile-details
+      h5.profile-section-title
+        i.fa.fa-id-card
+        |  Dane osobowe
+      .profile-fields
+        .profile-field
+          span.profile-field__label PESEL
+          span.profile-field__value = @person.pesel
+        .profile-field
+          span.profile-field__label Imię
+          span.profile-field__value = @person.first_name
+        .profile-field
+          span.profile-field__label Nazwisko
+          span.profile-field__value = @person.last_name
+        .profile-field
+          span.profile-field__label Data urodzenia
+          span.profile-field__value = l(@person.date_of_birth)
+        .profile-field
+          span.profile-field__label Email
+          span.profile-field__value
+            a.profile-email-link href="mailto:#{@person.email}" = @person.email
+        - if @person.type != 'Client'
+          .profile-field
+            span.profile-field__label Zarobki
+            span.profile-field__value
+              strong = @person.salary.nice
+              |  zł
+          .profile-field
+            span.profile-field__label Data zatrudnienia
+            span.profile-field__value = l(@person.hiredate)
+          .profile-field
+            span.profile-field__label Rola
+            span.profile-field__value = @person.translate_type
+
+    .profile-actions
+      h5.profile-section-title
+        i.fa.fa-th-large
+        |  Sekcje
+      .profile-nav-grid
+        = link_to bought_history_backend_person_path(@person), class: "profile-nav-card" do
+          .profile-nav-card__icon.profile-nav-card__icon--green
+            i.fa.fa-shopping-cart
+          span.profile-nav-card__label Zakupy
+        = link_to show_backend_individual_trainings_path(@person), class: "profile-nav-card" do
+          .profile-nav-card__icon.profile-nav-card__icon--blue
+            i.fa.fa-child
+          span.profile-nav-card__label Treningi
         - unless current_client
-          = link_to backend_work_schedule_path(@person), class: "btn btn-primary" do
-            i.fa.fa-calendar
-            |  Harmonogram pracy
+          = link_to backend_work_schedule_path(@person), class: "profile-nav-card" do
+            .profile-nav-card__icon.profile-nav-card__icon--purple
+              i.fa.fa-calendar
+            span.profile-nav-card__label Harmonogram
         - if @current_person.type == 'Manager' && @person.type != 'Client'
-          = link_to new_backend_vacation_path(@person), class: "btn btn-primary" do
-            i.fa.fa-plane
-            |  Przydziel urlop
-  .panel-footer
-    - if @person.current_sign_in_at
-      .btn.btn-border-success.waves-effect
-        | Ostatnie logowanie:
-        = l(@person.current_sign_in_at)
-    - else
-      .btn.btn-border-danger.waves-effect
-        | Brak logowania
-    i.pull-right
-      = link_to edit_backend_person_path(@person), class: "btn btn-sm btn-warning" do
-        i.fa.fa-pencil-square
-        |  Edytuj
-      - if current_manager || current_client || current_manager != @person
-        = link_to backend_person_path(@person), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "btn btn-sm btn-danger" do
-          i.fa.fa-trash
-          |  Zamknij konto
+          = link_to new_backend_vacation_path(@person), class: "profile-nav-card" do
+            .profile-nav-card__icon.profile-nav-card__icon--orange
+              i.fa.fa-plane
+            span.profile-nav-card__label Urlop

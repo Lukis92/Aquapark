@@ -1,8 +1,36 @@
 = simple_form_for([:backend, @entry_type]) do |f|
   = errors_for(@entry_type)
-  = f.input :kind, as: :radio_buttons, collection: EntryType::KIND
-  = f.input :kind_details, hint: 'np. bilet normalny, ulgowy itp.', input_html: {length: 30, maxlength: 30}
-  = f.input :description, hint: 'Szczegółowy opis wejściówki m.in kogo obowiązuje',
-            as: :text, input_html: {class: "materialize-textarea"}
-  = f.input :price
-  = f.button :submit, class: "btn btn-primary btn-block"
+
+  .ef-field
+    label.ef-label
+      | Rodzaj
+      span.ef-required  *
+    .ef-radio-group
+      - EntryType::KIND.each do |kind|
+        label.ef-radio-label
+          = f.radio_button :kind, kind, class: 'ef-radio'
+          = kind
+
+  .ef-field
+    label.ef-label
+      | Szczegóły
+      span.ef-required  *
+    = f.text_field :kind_details, maxlength: 30, class: 'ef-input', placeholder: 'np. bilet normalny, ulgowy itp.'
+
+  .ef-field
+    label.ef-label Opis
+    = f.text_area :description, class: 'ef-textarea', rows: 3, placeholder: 'Szczegółowy opis wejściówki — kogo obowiązuje itp.'
+
+  .ef-field
+    label.ef-label
+      | Cena (zł)
+      span.ef-required  *
+    = f.number_field :price, class: 'ef-input', step: '0.01', min: '0', placeholder: '0.00'
+
+  .ef-actions
+    button.ef-submit type="submit"
+      i.fa.fa-save
+      |  Zapisz
+    = link_to backend_entry_types_path, class: "ef-cancel" do
+      i.fa.fa-times
+      |  Anuluj

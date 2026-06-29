@@ -1,5 +1,22 @@
 = simple_form_for([:backend, @training_cost], as: :training_cost, validate: true) do |f|
   = errors_for(@training_cost)
-  = f.input :duration
-  = f.input :cost
-  = f.button :submit, class: "btn btn-primary btn-block"
+
+  .ef-row
+    .ef-field
+      label.ef-label
+        | Czas trwania (min)
+        span.ef-required  *
+      = f.number_field :duration, class: 'ef-input', min: 1, placeholder: 'np. 60'
+    .ef-field
+      label.ef-label
+        | Koszt (zł)
+        span.ef-required  *
+      = f.number_field :cost, class: 'ef-input', step: '0.01', min: '0', placeholder: '0.00'
+
+  .ef-actions
+    button.ef-submit type="submit"
+      i.fa.fa-save
+      |  Zapisz
+    = link_to backend_training_costs_path, class: "ef-cancel" do
+      i.fa.fa-times
+      |  Anuluj

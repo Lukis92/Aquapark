@@ -1,166 +1,113 @@
-h5 Zajęcia grupowe
-- if current_manager || current_receptionist
-  p
-    = link_to new_backend_activity_path, class: 'btn btn-primary' do
-      i.fa.fa-plus
-      |  Dodaj zajęcia
-= info("Jesteś na stronie prezentującej wszystkie zajęcia odbywające się w \
-aquaparku(aktywne) lub te które są na razie nie wdrożone(nieaktywne).")
+.activities-page
+  .activities-header
+    .activities-header__text
+      h4.activities-header__title
+        i.fa.fa-object-group
+        |  Zajęcia grupowe
+      p.activities-header__subtitle
+        - if current_client
+          | Poniżej znajdziesz aktywne zajęcia grupowe, na które możesz się zapisać.
+        - else
+          | Lista wszystkich zajęć grupowych w aquaparku.
+    - if current_manager || current_receptionist
+      = link_to new_backend_activity_path, class: "activities-header__add" do
+        i.fa.fa-plus
+        |  Dodaj zajęcia
 
-= form_tag backend_activities_path, method: :get do
-  .panel.panel-default style="margin-bottom:16px"
-    .panel-heading
-      strong
-        i.fa.fa-filter
-        |  Filtrowanie zajęć
-    .panel-body
-      .row
-        .col-md-2.col-sm-4
-          = label_tag :name, 'Nazwa', class: 'control-label'
-          = text_field_tag :name, params[:name], class: 'form-control', placeholder: 'Szukaj po nazwie...'
-        .col-md-2.col-sm-4
-          = label_tag :active, 'Status', class: 'control-label'
-          br
-          = select_tag :active, options_for_select([['Aktywne', 'true'], ['Nieaktywne', 'false']], params[:active]), include_blank: 'Wszystkie'
-        .col-md-2.col-sm-4
-          = label_tag :day_of_week, 'Dzień tygodnia', class: 'control-label'
-          br
-          = select_tag :day_of_week, options_for_select(Activity::DAYS.map { |d| [d, d] }, params[:day_of_week]), include_blank: 'Wszystkie dni'
-        .col-md-2.col-sm-4
-          = label_tag :pool_zone, 'Strefa basenu', class: 'control-label'
-          br
-          = select_tag :pool_zone, options_for_select(@zones.map { |z| [z, z] }, params[:pool_zone]), include_blank: 'Wszystkie strefy'
-        .col-md-3.col-sm-8
-          = label_tag :trainer_id, 'Trener', class: 'control-label'
-          br
-          = select_tag :trainer_id, options_from_collection_for_select(@trainers, :id, :full_name, params[:trainer_id].to_i), include_blank: 'Wszyscy trenerzy'
-        .col-md-1.col-sm-4 style="padding-top:22px"
-          = submit_tag 'Filtruj', class: 'btn btn-primary btn-block'
+  = form_tag backend_activities_path, method: :get do
+    .act-filter
+      .act-filter__field
+        label.act-filter__label Nazwa
+        = text_field_tag :name, params[:name], class: 'act-filter__input', placeholder: 'Szukaj...'
+      - unless current_client
+        .act-filter__field
+          label.act-filter__label Status
+          = select_tag :active, options_for_select([['Aktywne', 'true'], ['Nieaktywne', 'false']], params[:active]), include_blank: 'Wszystkie', class: 'act-filter__select browser-default'
+      .act-filter__field
+        label.act-filter__label Dzień tygodnia
+        = select_tag :day_of_week, options_for_select(Activity::DAYS.map { |d| [d, d] }, params[:day_of_week]), include_blank: 'Wszystkie dni', class: 'act-filter__select browser-default'
+      .act-filter__field
+        label.act-filter__label Strefa basenu
+        = select_tag :pool_zone, options_for_select(@zones.map { |z| [z, z] }, params[:pool_zone]), include_blank: 'Wszystkie strefy', class: 'act-filter__select browser-default'
+      .act-filter__field
+        label.act-filter__label Trener
+        = select_tag :trainer_id, options_from_collection_for_select(@trainers, :id, :full_name, params[:trainer_id].to_i), include_blank: 'Wszyscy trenerzy', class: 'act-filter__select browser-default'
+      .act-filter__field.act-filter__field--btn
+        label.act-filter__label
+        button.act-filter__btn type="submit"
+          i.fa.fa-filter
+          |  Filtruj
       - if params.slice(:name, :active, :day_of_week, :pool_zone, :trainer_id).values.any?(&:present?)
-        .row
-          .col-sm-12 style="margin-top:8px"
-            = link_to 'Wyczyść filtry', backend_activities_path, class: 'btn btn-default btn-sm'
+        .act-filter__field.act-filter__field--btn
+          label.act-filter__label
+          = link_to backend_activities_path, class: "act-filter__clear" do
+            i.fa.fa-times
+            |  Wyczyść
 
-.row
-  table.table.table-striped.table-bordered.table-list.pretty.table-list-search
-    thead
-      tr
-        th
-          em.fa.fa-cog
-          |  Zarządzanie
-        th
-          = sortable 'name', 'Nazwa'
-        th
-          = sortable 'description', 'Opis'
-        th
-          = sortable 'active', 'Aktywne?'
-        th
-          = sortable 'day_of_week', 'Dzień tygodnia'
-        th
-          = sortable 'start_on', 'Godzina rozpoczęcia'
-        th
-          = sortable 'end_on', 'Godzina zakończenia'
-        th
-          = sortable 'pool_zone', 'Strefa basenu'
-        th
-          = sortable 'people.first_name', 'Trener'
-        th
-          = sortable 'max_people', 'Maksymalna ilość osób'
-    tbody
-      -unless current_client
-        - @activities.each do |activity|
+  - activities_list = current_client ? @actual_activities : @activities
+  - if activities_list.empty?
+    .act-empty
+      i.fa.fa-object-group.act-empty__icon
+      p Brak zajęć spełniających kryteria.
+  - else
+    .act-table-wrap
+      table.act-table
+        thead
           tr
-            td
-              - if current_receptionist || current_manager
-                = link_to edit_backend_activity_path(activity), title: 'Edytuj' do
-                  .btn.btn-default
-                    i.fa.fa-pencil
-                = link_to backend_activity_path(activity), title: 'Usuń', method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
-                  .btn.btn-danger
-                    i.fa.fa-trash
-                - if activity.active
-                  - if current_receptionist || current_manager
-                    = link_to deactivate_backend_activity_path(activity), title: 'Deaktywuj', method: :post do
-                      .btn.btn-danger
-                        i.fa.fa-calendar-minus-o
-                - unless activity.active
-                  = link_to activate_backend_activity_path(activity), title: 'Aktywuj', method: :post do
-                    .btn.btn-success
-                      i.fa.fa-calendar-plus-o
-              - if current_client
-                = link_to sign_up_backend_activity_path(activity), title: 'Dołącz' do
-                  .btn.btn-success
-                    i.fa.fa-user-plus
-              = link_to preview_backend_activity_path(activity), title: 'Lista uczestników' do
-                i.btn.btn-warning
-                  i.fa.fa-search
-            td
-              = activity.name
-            td
-              = empty_info(activity.description, "--BRAK OPISU--")
-            td
-              = show_status(activity.active)
-            td
-              = activity.day_of_week
-            td
-              = l(activity.start_on, format: :short)
-            td
-              = l(activity.end_on, format: :short)
-            td
-              = link_to pool_zone_backend_activities_path(zone: activity.pool_zone) do
-                .btn.btn-warning
+            th Zajęcia
+            th = sortable 'day_of_week', 'Dzień'
+            th = sortable 'start_on', 'Godzina'
+            th = sortable 'pool_zone', 'Strefa'
+            th = sortable 'people.first_name', 'Trener'
+            th = sortable 'max_people', 'Maks. osób'
+            - unless current_client
+              th = sortable 'active', 'Status'
+            th.text-center Akcje
+        tbody
+          - activities_list.each do |activity|
+            tr class=(activity.active ? '' : 'act-row--inactive')
+              td
+                strong = activity.name
+                - if activity.description.present?
+                  small.act-description = activity.description
+              td = activity.day_of_week
+              td
+                = l(activity.start_on, format: :short)
+                span.act-time-sep  –
+                = l(activity.end_on, format: :short)
+              td
+                = link_to pool_zone_backend_activities_path(zone: activity.pool_zone), class: "act-zone-badge" do
                   = activity.pool_zone
-            td
-              = link_to backend_person_path(activity.person) do
-                = activity.person.full_name
-            td
-              = empty_info(activity.max_people, "--BRAK OGRANICZENIA--")
-      - else
-        - @actual_activities.each do |activity|
-          tr
-            td
-              - if current_receptionist || current_manager
-                = link_to edit_backend_activity_path(activity), title: 'Edytuj' do
-                  i.btn.btn-default
-                    i.fa.fa-pencil
-                = link_to backend_activity_path(activity), title: 'Usuń', method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
-                  i.btn.btn-danger
-                    i.fa.fa-trash
-                - if activity.active
-                  - if current_receptionist || current_manager
-                    = link_to deactivate_backend_activity_path(activity, active: false), title: 'Deaktywuj', method: :post do
-                      i.btn.btn-danger
-                        i.fa.fa-calendar-minus-o
-                - unless activity.active
-                  = link_to activate_backend_activity_path(activity, active: true), title: 'Aktywuj', method: :post do
-                    i.btn.btn-success
-                      i.fa.fa-calendar-plus-o
-              = link_to sign_up_backend_activity_path(activity), title: 'Dołącz' do
-                i.btn.btn-success
-                  i.fa.fa-user-plus
-              = link_to preview_backend_activity_path(activity), title: 'Lista uczestników' do
-                i.btn.btn-warning
-                  i.fa.fa-search
-            td
-              = activity.name
-            td
-              = empty_info(activity.description, "--BRAK OPISU--")
-            td
-              = show_status(activity.active)
-            td
-              = activity.day_of_week
-            td
-              = l(activity.start_on, format: :short)
-            td
-              = l(activity.end_on, format: :short)
-            td
-              = link_to pool_zone_backend_activities_path(zone: activity.pool_zone) do
-                .btn.btn-warning
-                  = activity.pool_zone
-            td
-              = link_to backend_person_path(activity.person) do
-                = activity.person.full_name
-            td
-              = empty_info(activity.max_people, "--BRAK OGRANICZENIA--")
+              td
+                = link_to activity.person.full_name, backend_person_path(activity.person), class: "act-trainer-link"
+              td.text-center
+                - if activity.max_people.present?
+                  = activity.max_people
+                - else
+                  span.act-no-limit ∞
+              - unless current_client
+                td.text-center
+                  - if activity.active
+                    span.act-status-badge.act-status-badge--active Aktywne
+                  - else
+                    span.act-status-badge.act-status-badge--inactive Nieaktywne
+              td
+                .act-actions
+                  = link_to preview_backend_activity_path(activity), class: "act-action act-action--preview", title: "Lista uczestników" do
+                    i.fa.fa-users
+                  - if current_client
+                    = link_to sign_up_backend_activity_path(activity), class: "act-action act-action--signup", title: "Zapisz się" do
+                      i.fa.fa-user-plus
+                  - if current_manager || current_receptionist
+                    = link_to edit_backend_activity_path(activity), class: "act-action act-action--edit", title: "Edytuj" do
+                      i.fa.fa-pencil
+                    - if activity.active
+                      = link_to deactivate_backend_activity_path(activity), class: "act-action act-action--deactivate", title: "Deaktywuj", method: :post do
+                        i.fa.fa-toggle-on
+                    - else
+                      = link_to activate_backend_activity_path(activity), class: "act-action act-action--activate", title: "Aktywuj", method: :post do
+                        i.fa.fa-toggle-off
+                    = link_to backend_activity_path(activity), class: "act-action act-action--delete", title: "Usuń", method: :delete, data: {confirm: 'Jesteś pewny/a?'} do
+                      i.fa.fa-trash
 
-  = will_paginate @activities, renderer: BootstrapPagination::Rails
+    = will_paginate activities_list, renderer: BootstrapPagination::Rails

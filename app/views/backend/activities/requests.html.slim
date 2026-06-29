@@ -1,65 +1,52 @@
-h5 Zajęcia czekające na zatwierdzenie
-= info("Jesteś na stronie listy zajęć, które czekają na zatwierdzenie dołączenia \
-        ich do aktywności odbywających się na terenie aquaparku.")
-.col-md-6
-  = render 'shared/a_searchbar'
-table.table.table-striped.table-bordered.table-list.pretty.table-list-search
-  thead
-    tr
-      - if current_receptionist || current_manager
-        th
-          em.fa.fa-cog
-          |  Zarządzanie
-      th
-        = sortable "name", "Nazwa"
-      th
-        = sortable "description", "Opis"
-      th
-        = sortable "active", "Aktywne?"
-      th
-        = sortable "day_of_week", "Dzień tygodnia"
-      th
-        = sortable "start_on", "Godzina rozpoczęcia"
-      th
-        = sortable "end_on", "Godzina zakończenia"
-      th
-        = sortable "pool_zone", "Strefa basenu"
-      th
-        = sortable "people.first_name", "Trener"
-      th
-        = sortable "max_people", "Maksymalna ilość osób"
-  tbody
-    - @activity_requests.each do |activity|
-      tr
-        - if current_receptionist || current_manager
-          td
-            = link_to edit_backend_activity_path(activity), title: 'Edytuj' do
-              i.btn.btn-default
-                i.fa.fa-pencil
-            = link_to activate_backend_activity_path(activity, active: true), title: 'Aktywuj', method: :post do
-              i.btn.btn-success
-                i.fa.fa-calendar-plus-o
+.b-page
+  .b-index-header
+    .b-index-header__text
+      h4.b-index-header__title
+        i.fa.fa-hourglass-half
+        |  Zajęcia do zatwierdzenia
+      p.b-index-header__subtitle Propozycje zajęć złożone przez trenerów, oczekujące na aktywację.
 
-        td
-          = activity.name
-        td
-          = empty_info(activity.description, "--BRAK OPISU--")
-        td
-          = show_status(activity.active)
-        td
-          = activity.day_of_week
-        td
-          = l(activity.start_on, format: :short)
-        td
-          = l(activity.end_on, format: :short)
-        td
-          = link_to pool_zone_backend_activities_path(zone: activity.pool_zone) do
-            .btn.btn-warning
-              = activity.pool_zone
-        td
-          = link_to backend_person_path(activity.person) do
-            = activity.person.full_name
-        td
-          = empty_info(activity.max_people, "--BRAK OGRANICZENIA--")
+  - if @activity_requests.empty?
+    .b-empty
+      i.fa.fa-check-circle.b-empty__icon
+      p Brak zajęć oczekujących na zatwierdzenie.
+  - else
+    .b-list
+      - @activity_requests.each do |activity|
+        .b-list-card
+          .b-list-card__stripe
+          .b-list-card__body
+            .b-list-card__info
+              h5.b-list-card__title = activity.name
+              .b-list-card__meta
+                span.b-meta-chip
+                  i.fa.fa-calendar
+                  = activity.day_of_week
+                span.b-meta-chip
+                  i.fa.fa-clock-o
+                  = l(activity.start_on, format: :short)
+                  span.b-meta-sep  –
+                  = l(activity.end_on, format: :short)
+                span.b-meta-chip
+                  i.fa.fa-map-marker
+                  = link_to activity.pool_zone, pool_zone_backend_activities_path(zone: activity.pool_zone), class: "b-person-link"
+                span.b-meta-chip
+                  i.fa.fa-user
+                  = link_to activity.person.full_name, backend_person_path(activity.person), class: "b-person-link"
+                - if activity.max_people.present?
+                  span.b-meta-chip
+                    i.fa.fa-users
+                    = "max #{activity.max_people} os."
+              - if activity.description.present?
+                p.b-list-card__desc = activity.description
 
-= will_paginate @activity_requests, renderer: BootstrapPagination::Rails
+            - if current_receptionist || current_manager
+              .b-list-card__actions
+                = link_to activate_backend_activity_path(activity, active: true), method: :post, class: "b-btn b-btn--approve" do
+                  i.fa.fa-check
+                  |  Zatwierdź
+                = link_to edit_backend_activity_path(activity), class: "b-btn b-btn--edit" do
+                  i.fa.fa-pencil
+                  |  Edytuj
+
+    = will_paginate @activity_requests, renderer: BootstrapPagination::Rails

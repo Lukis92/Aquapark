@@ -1,77 +1,93 @@
-- if current_manager
-  h5 Wszyscy
-  p
-    | Obecnie w bazie posiadamy #{Person.count} zarejestrowanych użytkowników.
-  = info("Jesteś na stronie prezentującej listę wszystkich klientów i pracowników.")
-- elsif current_receptionist
-  h5 Klienci
-  p
-    | Obecnie w bazie posiadamy #{Client.count} zarejestrowanych klientów.
-  = info("Jesteś na stronie prezentującej listę wszystkich klientów.")
-= form_tag backend_people_path, method: :get do
-  .panel.panel-default style="margin-bottom:16px"
-    .panel-heading
-      strong
-        i.fa.fa-filter
-        |  Filtrowanie osób
-    .panel-body
-      .row
-        .col-md-4.col-sm-6
-          = label_tag :name, 'Imię lub nazwisko', class: 'control-label'
-          = text_field_tag :name, params[:name], class: 'form-control', placeholder: 'Szukaj po imieniu lub nazwisku...'
-        .col-md-3.col-sm-4
-          = label_tag :pesel_q, 'PESEL', class: 'control-label'
-          = text_field_tag :pesel_q, params[:pesel_q], class: 'form-control', placeholder: 'Szukaj po PESEL...'
-        - if current_manager
-          .col-md-2.col-sm-4
-            = label_tag :person_type, 'Typ', class: 'control-label'
-            br
-            = select_tag :person_type, options_for_select([['Recepcjonista', 'Receptionist'], ['Ratownik', 'Lifeguard'], ['Trener', 'Trainer'], ['Kierownik', 'Manager'], ['Klient', 'Client']], params[:person_type]), include_blank: 'Wszyscy'
-        .col-md-1.col-sm-2 style="padding-top:22px"
-          = submit_tag 'Filtruj', class: 'btn btn-primary btn-block'
-      - if params.slice(:name, :pesel_q, :person_type).values.any?(&:present?)
-        .row
-          .col-sm-12 style="margin-top:8px"
-            = link_to 'Wyczyść filtry', backend_people_path, class: 'btn btn-default btn-sm'
-table.table.pretty
-  thead
-    tr
-      th.pt-actions
-        i.fa.fa-cog
-        |  Akcje
-      th
-        = sortable "first_name", "Osoba"
-      th
-        = sortable "email", "Email"
-      th
-        = sortable "date_of_birth", "Data urodzenia"
-      - if current_manager
-        th Typ
-  tbody
-    - type_badge  = { 'Manager' => 'danger',  'Receptionist' => 'info', 'Trainer' => 'primary', 'Lifeguard' => 'warning', 'Client' => 'success' }
-    - type_label  = { 'Manager' => 'Kierownik', 'Receptionist' => 'Recepcjonista', 'Trainer' => 'Trener', 'Lifeguard' => 'Ratownik', 'Client' => 'Klient' }
-    - type_avatar = { 'Manager' => 'pa-manager', 'Receptionist' => 'pa-receptionist', 'Trainer' => 'pa-trainer', 'Lifeguard' => 'pa-lifeguard', 'Client' => 'pa-client' }
-    - @people.each do |person|
-      tr
-        td.pt-actions
-          = link_to backend_person_path(person), title: 'Profil', class: 'btn btn-success btn-xs' do
-            i.fa.fa-user
-          = link_to edit_backend_person_path(person), title: 'Edytuj', class: 'btn btn-default btn-xs' do
-            i.fa.fa-pencil
-          = link_to backend_person_path(person), title: 'Usuń', method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: 'btn btn-danger btn-xs' do
-            i.fa.fa-trash
-        td
-          .person-cell
-            span.person-avatar class=type_avatar.fetch(person.type, 'pa-client')
-              = "#{person.first_name[0]}#{person.last_name[0]}"
-            span.person-info
-              span.person-name = "#{person.first_name} #{person.last_name}"
-              span.person-pesel = person.pesel
-        td = person.email
-        td = l(person.date_of_birth)
-        - if current_manager
-          td
-            span class="label label-#{type_badge.fetch(person.type, 'default')}"
-              = type_label.fetch(person.type, person.type)
+- type_avatar = { 'Manager' => 'pa-manager', 'Receptionist' => 'pa-receptionist', 'Trainer' => 'pa-trainer', 'Lifeguard' => 'pa-lifeguard', 'Client' => 'pa-client' }
+- type_badge_cls = { 'Manager' => 'manager', 'Receptionist' => 'receptionist', 'Trainer' => 'trainer', 'Lifeguard' => 'lifeguard', 'Client' => 'client' }
+- type_label = { 'Manager' => 'Kierownik', 'Receptionist' => 'Recepcjonista', 'Trainer' => 'Trener', 'Lifeguard' => 'Ratownik', 'Client' => 'Klient' }
 
-= will_paginate @people, renderer: BootstrapPagination::Rails
+.people-page
+  .people-header
+    .people-header__text
+      h4.people-header__title
+        i.fa.fa-users
+        - if current_manager
+          |  Użytkownicy
+        - else
+          |  Klienci
+      p.people-header__subtitle
+        - if current_manager
+          | Łącznie w bazie:
+          strong  #{Person.count}
+          |  zarejestrowanych użytkowników.
+        - else
+          | Łącznie w bazie:
+          strong  #{Client.count}
+          |  zarejestrowanych klientów.
+    - if current_manager
+      = link_to new_backend_person_registration_path, class: "people-header__add" do
+        i.fa.fa-user-plus
+        |  Zarejestruj pracownika
+
+  = form_tag backend_people_path, method: :get do
+    .people-filter
+      .people-filter__field
+        label.people-filter__label Imię lub nazwisko
+        = text_field_tag :name, params[:name], class: 'people-filter__input', placeholder: 'Szukaj...'
+      .people-filter__field
+        label.people-filter__label PESEL
+        = text_field_tag :pesel_q, params[:pesel_q], class: 'people-filter__input', placeholder: 'Szukaj po PESEL...'
+      - if current_manager
+        .people-filter__field
+          label.people-filter__label Typ
+          = select_tag :person_type, options_for_select([['Recepcjonista', 'Receptionist'], ['Ratownik', 'Lifeguard'], ['Trener', 'Trainer'], ['Kierownik', 'Manager'], ['Klient', 'Client']], params[:person_type]), include_blank: 'Wszyscy', class: 'people-filter__select browser-default'
+      .people-filter__field.people-filter__field--btn
+        label.people-filter__label
+        button.people-filter__btn type="submit"
+          i.fa.fa-filter
+          |  Filtruj
+      - if params.slice(:name, :pesel_q, :person_type).values.any?(&:present?)
+        .people-filter__field.people-filter__field--btn
+          label.people-filter__label
+          = link_to backend_people_path, class: "people-filter__clear" do
+            i.fa.fa-times
+            |  Wyczyść
+
+  - if @people.empty?
+    .people-empty
+      i.fa.fa-users.people-empty__icon
+      p Brak osób spełniających kryteria wyszukiwania.
+  - else
+    .people-table-wrap
+      table.people-table
+        thead
+          tr
+            th = sortable "first_name", "Osoba"
+            th = sortable "email", "Email"
+            th = sortable "date_of_birth", "Data urodzenia"
+            - if current_manager
+              th = sortable "type", "Rola"
+            th.text-center Akcje
+        tbody
+          - @people.each do |person|
+            tr
+              td
+                .person-cell
+                  span.person-avatar class=type_avatar.fetch(person.type, 'pa-client')
+                    = "#{person.first_name[0]}#{person.last_name[0]}"
+                  span.person-info
+                    span.person-name = person.full_name
+                    span.person-pesel = person.pesel
+              td
+                a.people-email-link href="mailto:#{person.email}" = person.email
+              td = l(person.date_of_birth)
+              - if current_manager
+                td
+                  span.profile-type-badge class="profile-type-badge--#{type_badge_cls.fetch(person.type, 'client')}"
+                    = type_label.fetch(person.type, person.type)
+              td
+                .people-actions
+                  = link_to backend_person_path(person), class: "people-action people-action--profile", title: "Profil" do
+                    i.fa.fa-user
+                  = link_to edit_backend_person_path(person), class: "people-action people-action--edit", title: "Edytuj" do
+                    i.fa.fa-pencil
+                  = link_to backend_person_path(person), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "people-action people-action--delete", title: "Usuń" do
+                    i.fa.fa-trash
+
+    = will_paginate @people, renderer: BootstrapPagination::Rails

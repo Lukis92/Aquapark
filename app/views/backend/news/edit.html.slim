@@ -1,2 +1,9 @@
-h5 Edytowanie aktualności
-= render 'form'
+.b-page
+  = render 'shared/b_page_header',
+    back_path: backend_news_index_path,
+    back_label: 'Powrót do aktualności',
+    title: 'Edytowanie aktualności',
+    icon: 'pencil',
+    subtitle: @news.title
+  .b-card.b-card--wide
+    = render 'form'
