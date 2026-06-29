@@ -11,7 +11,7 @@
     label.ef-label
       | Treść
       span.ef-required  *
-    = f.input :content, input_html: { class: 'materialize-textarea2' }, as: :wysihtml5, wysihtml5: { locale: "pl-PL" }, label: false, wrapper: false
+    = f.text_area :content, class: 'ef-textarea', placeholder: 'Treść aktualności', rows: 10
 
   .ef-field
     label.ef-label
