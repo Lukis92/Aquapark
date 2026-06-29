@@ -15,8 +15,6 @@
 //= require jquery-ui
 //= require bootstrap-sprockets
 //= require rails-timeago-all
-//= require bootstrap-wysihtml5
-//= require bootstrap-wysihtml5/locales
 //= require locales/jquery.timeago.pl.js
 //= require_tree .
 

@@ -5,7 +5,7 @@
       .input-field
         = f.input :title
       .form-group
-        = f.input :content, input_html: { class: 'materialize-textarea2' }, as: :wysihtml5, wysihtml5: { locale: "pl-PL"}
+        = f.text_area :content, class: 'materialize-textarea2', rows: 10
       = f.label :scope, '* Zasięg (zaznacz co najmniej jedną grupę)'
       = hidden_field_tag 'news[scope][]', ''
       - [['Wszyscy', 'wszyscy'], ['Pracownicy', 'pracownicy'], ['Ratownicy', 'ratownicy'], ['Trenerzy', 'trenerzy'], ['Recepcjoniści', 'recepcjoniści'], ['Klienci', 'klienci']].each do |text, value|
