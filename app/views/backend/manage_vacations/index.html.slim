@@ -1,84 +1,101 @@
-h5 Urlopy
-= info("Jesteś na stronie prezentującej listę wszystkich urlopów \
-        (zaakceptowanych i tych czekających na decyzję)")
-p
-  | Obecnie w bazie posiadamy #{Vacation.count} zarejestrowanych urlopów.
+.b-page
+  .b-index-header
+    .b-index-header__text
+      h4.b-index-header__title
+        i.fa.fa-calendar-check-o
+        |  Urlopy pracowników
+      p.b-index-header__subtitle
+        | Łącznie w bazie:
+        strong  #{Vacation.count}
+        |  zarejestrowanych urlopów.
 
-= form_tag backend_manage_vacations_path, method: :get do
-  .panel.panel-default style="margin-bottom:16px"
-    .panel-heading
-      strong
-        i.fa.fa-filter
-        |  Filtrowanie urlopów
-    .panel-body
-      .row
-        .col-md-3.col-sm-6
-          = label_tag :person_id, 'Pracownik', class: 'control-label'
-          br
-          = select_tag :person_id, options_from_collection_for_select(@employees, :id, :full_name, params[:person_id].to_i), include_blank: 'Wszyscy pracownicy'
-        .col-md-2.col-sm-4
-          = label_tag :date_from, 'Data od', class: 'control-label'
-          = text_field_tag :date_from, params[:date_from], class: 'form-control datepicker', placeholder: 'rrrr-mm-dd'
-        .col-md-2.col-sm-4
-          = label_tag :date_to, 'Data do', class: 'control-label'
-          = text_field_tag :date_to, params[:date_to], class: 'form-control datepicker', placeholder: 'rrrr-mm-dd'
-        .col-md-2.col-sm-4
-          = label_tag :accepted, 'Status', class: 'control-label'
-          br
-          = select_tag :accepted, options_for_select([['Zaakceptowane', 'true'], ['Oczekujące', 'false']], params[:accepted]), include_blank: 'Wszystkie'
-        .col-md-1.col-sm-2 style="padding-top:22px"
-          = submit_tag 'Filtruj', class: 'btn btn-primary btn-block'
+  = form_tag backend_manage_vacations_path, method: :get do
+    .b-filter
+      .b-filter__field
+        label.b-filter__label Pracownik
+        = select_tag :person_id, options_from_collection_for_select(@employees, :id, :full_name, params[:person_id].to_i), include_blank: 'Wszyscy pracownicy', class: 'b-filter__select browser-default'
+      .b-filter__field
+        label.b-filter__label Data od
+        = text_field_tag :date_from, params[:date_from], class: 'b-filter__input datepicker', placeholder: 'rrrr-mm-dd'
+      .b-filter__field
+        label.b-filter__label Data do
+        = text_field_tag :date_to, params[:date_to], class: 'b-filter__input datepicker', placeholder: 'rrrr-mm-dd'
+      .b-filter__field
+        label.b-filter__label Status
+        = select_tag :accepted, options_for_select([['Zaakceptowane', 'true'], ['Oczekujące', 'false']], params[:accepted]), include_blank: 'Wszystkie', class: 'b-filter__select browser-default'
+      .b-filter__field.b-filter__field--btn
+        label.b-filter__label
+        button.b-filter__btn type="submit"
+          i.fa.fa-filter
+          |  Filtruj
       - if params.slice(:person_id, :date_from, :date_to, :accepted).values.any?(&:present?)
-        .row
-          .col-sm-12 style="margin-top:8px"
-            = link_to 'Wyczyść filtry', backend_manage_vacations_path, class: 'btn btn-default btn-sm'
+        .b-filter__field.b-filter__field--btn
+          label.b-filter__label
+          = link_to backend_manage_vacations_path, class: "b-filter__clear" do
+            i.fa.fa-times
+            |  Wyczyść
 
-- unless @vacations.blank?
-  table.table.table-striped.table-bordered.table-list.pretty
-    thead
-      tr
-        - if current_manager
-          th
-            em.fa.fa-cog
-            |  Zarządzanie
-        th
-          = sortable "start_at", "Data rozpoczęcia"
-        th
-          = sortable "end_at", "Data zakończenia"
-        th
-          = sortable "free", "Płatny?"
-        th
-          = sortable "reason", "Powód"
-        th
-          = sortable "people.first_name", "Pracownik"
-        th
-          = sortable "accepted", "Zaakceptowano?"
-    tbody
-      - @vacations.each do |vacation|
-        tr
-          - if current_manager
-            td
-              = link_to edit_backend_vacation_path(vacation.person, vacation), title: 'Edytuj' do
-                i.btn.btn-default
-                  i.fa.fa-pencil
-              = link_to backend_vacation_path(vacation.person, vacation), title: 'Usuń', method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
-                i.btn.btn-danger
-                  i.fa.fa-trash
-          td
-            = l(vacation.start_at)
-          td
-            = l(vacation.end_at)
-          td
-            = show_status(vacation.free)
-          td
-            = empty_info(HTML_Truncator.truncate(vacation.reason, 40), "--BRAK POWODU--")
-          td
-            = link_to backend_person_path(vacation.person) do
-              = vacation.person.full_name
-          td
-            = show_accept_status(vacation.accepted)
-  = will_paginate @vacations, renderer: BootstrapPagination::Rails
-- else
-  .alert.alert-info.col-md-6.col-md-offset-3
-    .text-center
-      | Brak urlopów.
+  - if @vacations.blank?
+    .b-empty
+      i.fa.fa-calendar-o.b-empty__icon
+      p Brak urlopów spełniających kryteria.
+  - else
+    .b-table-wrap
+      table.b-table
+        thead
+          tr
+            th = sortable "start_at", "Data od"
+            th = sortable "end_at", "Data do"
+            th Dni
+            th = sortable "people.first_name", "Pracownik"
+            th = sortable "reason", "Powód"
+            th = sortable "free", "Płatny"
+            th = sortable "accepted", "Status"
+            - if current_manager
+              th.text-center Akcje
+        tbody
+          - @vacations.each do |vacation|
+            - days = (vacation.end_at - vacation.start_at).to_i + 1
+            tr class=(vacation.accepted ? '' : 'b-table__row--warning')
+              td
+                span.b-date
+                  i.fa.fa-calendar
+                  = l(vacation.start_at)
+              td
+                span.b-date
+                  i.fa.fa-calendar
+                  = l(vacation.end_at)
+              td
+                span.b-badge.b-badge--blue = "#{days} dni"
+              td
+                = link_to backend_person_path(vacation.person), class: "b-person-link" do
+                  i.fa.fa-user
+                  = vacation.person.full_name
+              td = empty_info(HTML_Truncator.truncate(vacation.reason.to_s, 40), "—")
+              td
+                - if vacation.free
+                  span.b-badge.b-badge--green
+                    i.fa.fa-check
+                    |  Tak
+                - else
+                  span.b-badge.b-badge--red
+                    i.fa.fa-times
+                    |  Nie
+              td
+                - if vacation.accepted
+                  span.b-status.b-status--approved
+                    i.fa.fa-check-circle
+                    |  Zaakceptowany
+                - else
+                  span.b-status.b-status--pending
+                    i.fa.fa-clock-o
+                    |  Oczekujący
+              - if current_manager
+                td
+                  .b-actions
+                    = link_to edit_backend_vacation_path(vacation.person, vacation), class: "b-action b-action--edit", title: "Edytuj" do
+                      i.fa.fa-pencil
+                    = link_to backend_vacation_path(vacation.person, vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "b-action b-action--delete", title: "Usuń" do
+                      i.fa.fa-trash
+
+    = will_paginate @vacations, renderer: BootstrapPagination::Rails

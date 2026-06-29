@@ -1,22 +1,20 @@
-.ef-page
-  .ef-header
-    = link_to backend_manage_trainings_path, class: "ef-back" do
-      i.fa.fa-arrow-left
-      |  Powrót do treningów
-    h4.ef-title
-      i.fa.fa-pencil
-      |  Edycja treningu
-    p.ef-subtitle = "#{@manage_training.client.full_name} z #{@manage_training.trainer.full_name}"
+.b-page
+  = render 'shared/b_page_header',
+    back_path: backend_manage_trainings_path,
+    back_label: 'Powrót do treningów',
+    title: 'Edycja treningu',
+    icon: 'pencil',
+    subtitle: "#{@manage_training.client.full_name} z #{@manage_training.trainer.full_name}"
 
-  .mt-edit-layout
-    .mt-info-col
-      .mt-info-card
-        h6.mt-info-card__title
+  .b-split
+    .b-split__side
+      .b-info-card
+        h6.b-info-card__title
           i.fa.fa-user
           |  Harmonogram pracy trenera:
           strong  #{@manage_training.trainer.full_name}
         - if @manage_training.trainer.work_schedules.any?
-          table.tc-table
+          table.b-mini-table
             thead
               tr
                 th Dzień
@@ -27,20 +25,20 @@
               - @manage_training.trainer.work_schedules.each do |tw|
                 tr
                   td = tw.day_of_week
-                  td.tc-dates
+                  td style="font-size:0.78rem;color:#888"
                     = next_n_days(4, tw.day_of_week).map { |n| l(n) }.join(' | ')
                   td = l(tw.start_time, format: :short)
                   td = l(tw.end_time, format: :short)
         - else
           p.ef-hint Brak grafiku pracy.
 
-      .mt-info-card
-        h6.mt-info-card__title
+      .b-info-card
+        h6.b-info-card__title
           i.fa.fa-calendar-times-o
           |  Zajęty grafik treningów
         - trainings = @manage_training.trainer.individual_trainings_as_trainer.where('date_of_training >= ?', Date.today).group_by(&:date_of_training)
         - if trainings.any?
-          table.tc-table
+          table.b-mini-table
             thead
               tr
                 th Data
@@ -53,7 +51,7 @@
         - else
           p.ef-hint Dostępny cały dzień.
 
-    .ef-card
+    .b-card
       h6.ef-section__label
         i.fa.fa-pencil
         |  Dane treningu

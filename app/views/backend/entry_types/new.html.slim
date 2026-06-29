@@ -1,12 +1,9 @@
-.ef-page
-  .ef-header
-    = link_to backend_entry_types_path, class: "ef-back" do
-      i.fa.fa-arrow-left
-      |  Powrót do wejściówek
-    h4.ef-title
-      i.fa.fa-plus-circle
-      |  Dodawanie wejściówki
-    p.ef-subtitle Dodaj nowy bilet lub karnet do cennika.
-
-  .ef-card
+.b-page
+  = render 'shared/b_page_header',
+    back_path: backend_entry_types_path,
+    back_label: 'Powrót do wejściówek',
+    title: 'Dodawanie wejściówki',
+    icon: 'plus-circle',
+    subtitle: 'Dodaj nowy bilet lub karnet do cennika.'
+  .b-card
     = render 'form'

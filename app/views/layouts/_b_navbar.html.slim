@@ -1,36 +1,79 @@
 - if current_person.present?
-  nav.navbar.primary-color
-    .container-fluid
-      .navbar-header
-        .navbar-brand
-          = current_person.translate_type
-          | - Panel
-      ul.nav.navbar-nav
-        li class=(active?(backend_news_index_path))
-          = link_to 'Aktualności', backend_news_index_path
-        - if current_manager
-          li class=(active?(backend_statistics_path))
-            = link_to 'Statystyki', backend_statistics_path
-        - unless current_client
-          li class=(active?(backend_vacations_path(current_person)))
-            = link_to 'Urlop', backend_vacations_path(current_person)
-        - if current_manager
-          li class=(active?(new_backend_person_registration_path))
-            = link_to 'Rejestracja pracowników', new_backend_person_registration_path
+  nav.b-navbar
+    .b-navbar__inner
+      .b-navbar__brand
+        i.fa.fa-tint
+        span Pure Space
+        span.b-navbar__panel-label Panel
 
-      ul.nav.navbar-nav.navbar-right
-        li.dropdown
-          a.dropdown-toggle data-toggle="dropdown" href=backend_person_path(current_person)
-            i.fa.fa-user
-            |  #{current_person.full_name}
-            i.caret
-          ul.dropdown-menu
+      ul.b-navbar__nav
+        li class=(active?(backend_news_index_path) ? 'b-navbar__item--active' : '')
+          = link_to backend_news_index_path, class: "b-navbar__link" do
+            i.fa.fa-newspaper-o
+            span Aktualności
+        - if current_manager
+          li class=(active?(backend_statistics_path) ? 'b-navbar__item--active' : '')
+            = link_to backend_statistics_path, class: "b-navbar__link" do
+              i.fa.fa-bar-chart
+              span Statystyki
+        - unless current_client
+          li class=(active?(backend_vacations_path(current_person)) ? 'b-navbar__item--active' : '')
+            = link_to backend_vacations_path(current_person), class: "b-navbar__link" do
+              i.fa.fa-plane
+              span Urlop
+        - if current_manager
+          li class=(active?(new_backend_person_registration_path) ? 'b-navbar__item--active' : '')
+            = link_to new_backend_person_registration_path, class: "b-navbar__link" do
+              i.fa.fa-user-plus
+              span Rejestracja
+
+      .b-navbar__right
+        - unread_count = current_person.notifications.unread.count
+        = link_to backend_notifications_path, class: "b-navbar__notif #{'b-navbar__notif--active' if unread_count > 0}" do
+          i.fa.fa-bell
+          - if unread_count > 0
+            span.b-navbar__notif-badge = unread_count
+
+        .b-navbar__user-menu#b-user-menu
+          button.b-navbar__user-btn#b-user-btn type="button"
+            - if current_person.profile_image.attached?
+              = image_tag current_person.profile_image.variant(:thumb), class: "b-navbar__user-avatar"
+            - else
+              .b-navbar__user-avatar-placeholder
+                i.fa.fa-user
+            span.b-navbar__user-name = current_person.first_name
+            i.fa.fa-chevron-down.b-navbar__user-caret#b-user-caret
+
+          ul.b-navbar__dropdown#b-user-dropdown
+            li.b-navbar__dropdown-header
+              strong = current_person.full_name
+              small = current_person.translate_type
+            li.b-navbar__dropdown-divider
             li
-              = link_to backend_person_path(current_person) do
-                i.fa.fa-bars
-                |  Profil
-            li.divider
+              = link_to backend_person_path(current_person), class: "b-navbar__dropdown-link" do
+                i.fa.fa-id-card
+                |  Mój profil
+            li.b-navbar__dropdown-divider
             li
-              = link_to destroy_person_session_path, method: :delete do
+              = link_to destroy_person_session_path, method: :delete, class: "b-navbar__dropdown-link b-navbar__dropdown-link--danger" do
                 i.fa.fa-sign-out
                 |  Wyloguj
+
+  javascript:
+    (function() {
+      var btn = document.getElementById('b-user-btn');
+      var dropdown = document.getElementById('b-user-dropdown');
+      var caret = document.getElementById('b-user-caret');
+      if (!btn || !dropdown) return;
+
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var open = dropdown.classList.toggle('b-navbar__dropdown--open');
+        caret.style.transform = open ? 'rotate(180deg)' : '';
+      });
+
+      document.addEventListener('click', function() {
+        dropdown.classList.remove('b-navbar__dropdown--open');
+        caret.style.transform = '';
+      });
+    })();

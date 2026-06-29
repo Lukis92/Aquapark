@@ -1,23 +1,23 @@
-.ef-page
-  .ef-header
-    = link_to :back, class: "ef-back" do
+.b-page
+  .b-header
+    = link_to :back, class: "b-back" do
       i.fa.fa-arrow-left
       |  Powrót
-    h4.ef-title
+    h4.b-header__title
       i.fa.fa-plus-circle
       |  Krok 2 — Wybór terminu i płatność
     - unless @trainer.blank?
-      p.ef-subtitle = "Trener: #{@trainer.full_name}"
+      p.b-header__subtitle = "Trener: #{@trainer.full_name}"
 
-  .mt-edit-layout
+  .b-split
     - unless @trainer.blank?
-      .mt-info-col
-        .mt-info-card
-          h6.mt-info-card__title
+      .b-split__side
+        .b-info-card
+          h6.b-info-card__title
             i.fa.fa-calendar
             |  Harmonogram pracy trenera
           - if @trainer.work_schedules.any?
-            table.tc-table
+            table.b-mini-table
               thead
                 tr
                   th Dzień
@@ -28,19 +28,20 @@
                 - @trainer.work_schedules.each do |tw|
                   tr
                     td = tw.day_of_week
-                    td.tc-dates = next_n_days(4, tw.day_of_week).map { |n| l(n) }.join(' | ')
+                    td style="font-size:0.78rem;color:#888"
+                      = next_n_days(4, tw.day_of_week).map { |n| l(n) }.join(' | ')
                     td = l(tw.start_time, format: :short)
                     td = l(tw.end_time, format: :short)
           - else
             p.ef-hint Brak zdefiniowanego grafiku pracy.
 
-        .mt-info-card
-          h6.mt-info-card__title
+        .b-info-card
+          h6.b-info-card__title
             i.fa.fa-calendar-times-o
             |  Zajęty grafik treningów
           - trainings = @trainer.individual_trainings_as_trainer.where('date_of_training >= ?', Date.today).group_by(&:date_of_training)
           - if trainings.any?
-            table.tc-table
+            table.b-mini-table
               thead
                 tr
                   th Data
@@ -53,5 +54,5 @@
           - else
             p.ef-hint Dostępny cały dzień.
 
-    .ef-card
+    .b-card
       = render 'form'

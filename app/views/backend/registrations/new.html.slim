@@ -1,47 +1,100 @@
-.container.fix
-  h2.text-center Rejestracja pracowników
-  = info("Jesteś na stronie prezentującej formularz rejestracyjny pracowników.")
-  = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-    = errors_for(resource)
-    .input-field
-      = f.input :pesel, required: true, autofocus: true,
-                input_html: { length: 11, maxlength: 11, id: 'pesel_input', autocomplete: 'off' }
-    #pesel-dob-info.help-block style="display:none; margin-top:-10px; margin-bottom:10px; color:#1a7abf; font-weight:bold;"
-    #pesel-dob-error.help-block style="display:none; margin-top:-10px; margin-bottom:10px; color:#d9534f;"
-    = f.hidden_field :date_of_birth, id: 'pesel_dob_hidden'
-    .input-field
-      = f.input :first_name, required: true,
-                input_html: {length: 30, maxlength: 30}
-    .input-field
-      = f.input :last_name, required: true,
-                input_html: {length: 60, maxlength: 60}
-    .input-field
-      = f.input :email, required: true, input_html: {length: 254, maxlength: 254}
-    .file-field.input-field
-    = f.input :profile_image, as: :file
-    .input-field
-      = f.input :salary, required: true
-    .row
-      .col-md-5
-        label for="datepicker"* Data zatrudnienia
-        = f.text_field :hiredate, required: true, class: 'datepicker',
-                       placeholder: 'Kliknij'
-    label for="type"* Typ pracownika
-    = f.select :type, options_for_select([["Recepcjonista", "Receptionist"],
-                                          ["Trener", "Trainer"],
-                                          ["Ratownik", "Lifeguard"]]),
-                                          prompt: 'Wybierz typ pracownika', class: 'type', required: true
-    .input-field
-      = f.input :password, required: true,
-                 hint: ("minimum #{@minimum_password_length} znaków " if @minimum_password_length),
-                 input_html: {length: 50, maxlength: 50}
-    .input-field
-      = f.input :password_confirmation, required: true,
-                input_html: {length: 50, maxlength: 50}
-    .form-actions
-      = f.button :submit, "Zarejestruj", class: "btn btn-primary btn-block"
-  - if current_person.blank?
-    = render "devise/shared/links"
+.b-page
+  .reg-card
+    .reg-card__header
+      i.fa.fa-user-plus.reg-card__icon
+      h4.reg-card__title Rejestracja pracownika
+      p.reg-card__subtitle Wypełnij formularz aby zarejestrować nowe konto pracownika.
+
+    = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+      = errors_for(resource)
+
+      .reg-section
+        h6.reg-section__label
+          i.fa.fa-id-card
+          |  Dane osobowe
+
+        .reg-field
+          label.reg-label
+            | PESEL
+            span.reg-required  *
+          = f.text_field :pesel, required: true, autofocus: true, maxlength: 11,
+                         id: 'pesel_input', autocomplete: 'off',
+                         class: 'reg-input', placeholder: '12345678901'
+          #pesel-dob-info.reg-pesel-info style="display:none"
+          #pesel-dob-error.reg-pesel-error style="display:none"
+          = f.hidden_field :date_of_birth, id: 'pesel_dob_hidden'
+
+        .reg-row
+          .reg-field
+            label.reg-label
+              | Imię
+              span.reg-required  *
+            = f.text_field :first_name, required: true, maxlength: 30, class: 'reg-input', placeholder: 'Jan'
+          .reg-field
+            label.reg-label
+              | Nazwisko
+              span.reg-required  *
+            = f.text_field :last_name, required: true, maxlength: 60, class: 'reg-input', placeholder: 'Kowalski'
+
+        .reg-field
+          label.reg-label
+            | Email
+            span.reg-required  *
+          = f.email_field :email, required: true, maxlength: 254, class: 'reg-input', placeholder: 'jan.kowalski@example.com'
+
+        .reg-row
+          .reg-field
+            label.reg-label
+              | Typ pracownika
+              span.reg-required  *
+            = f.select :type, options_for_select([["Recepcjonista", "Receptionist"], ["Trener", "Trainer"], ["Ratownik", "Lifeguard"]]),
+                        { prompt: 'Wybierz typ...' },
+                        { class: 'reg-select browser-default', required: true }
+          .reg-field
+            label.reg-label
+              | Data zatrudnienia
+              span.reg-required  *
+            = f.text_field :hiredate, required: true, class: 'reg-input datepicker', placeholder: 'Kliknij aby wybrać'
+
+      .reg-section
+        h6.reg-section__label
+          i.fa.fa-image
+          |  Zdjęcie profilowe
+
+        .reg-field
+          label.reg-label Zdjęcie (opcjonalne)
+          = f.file_field :profile_image, class: 'reg-file-input'
+
+      .reg-section
+        h6.reg-section__label
+          i.fa.fa-money
+          |  Wynagrodzenie i dostęp
+
+        .reg-row
+          .reg-field
+            label.reg-label
+              | Wynagrodzenie
+              span.reg-required  *
+            = f.number_field :salary, required: true, class: 'reg-input', placeholder: '0.00', step: '0.01', min: '0'
+          .reg-field
+            label.reg-label
+              | Hasło
+              span.reg-required  *
+            = f.password_field :password, required: true, maxlength: 50, class: 'reg-input',
+                               placeholder: "#{"minimum #{@minimum_password_length} znaków" if @minimum_password_length}"
+          .reg-field
+            label.reg-label
+              | Powtórz hasło
+              span.reg-required  *
+            = f.password_field :password_confirmation, required: true, maxlength: 50, class: 'reg-input', placeholder: '...'
+
+      .reg-actions
+        button.reg-submit type="submit"
+          i.fa.fa-user-plus
+          |  Zarejestruj pracownika
+        = link_to backend_people_path, class: "reg-cancel" do
+          i.fa.fa-arrow-left
+          |  Wróć do listy
 
 javascript:
   (function() {
@@ -73,12 +126,12 @@ javascript:
 
     function onPeselChange() {
       var val = document.getElementById('pesel_input').value.trim();
-      var info  = document.getElementById('pesel-dob-info');
-      var err   = document.getElementById('pesel-dob-error');
+      var info   = document.getElementById('pesel-dob-info');
+      var err    = document.getElementById('pesel-dob-error');
       var hidden = document.getElementById('pesel_dob_hidden');
 
-      info.style.display  = 'none';
-      err.style.display   = 'none';
+      info.style.display = 'none';
+      err.style.display  = 'none';
       hidden.value = '';
 
       if (val.length !== 11) return;

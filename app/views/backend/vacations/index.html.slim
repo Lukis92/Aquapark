@@ -1,202 +1,71 @@
-h5 Lista wszystkich urlopów
-= info("Jesteś na stronie wszystkich urlopów.")
-
-= link_to new_backend_vacation_path(@person), class: 'btn btn-primary' do
-  i.fa.fa-plus
-  - unless current_manager
-    |  Poproś o urlop
-  - else
-    |  Dodaj urlop
-
-.row
-  .col-md-6
-    - unless @nearest_vacation.blank?
-      ul.collection
-        li.collection-item
-          h5 Najbliższy urlop:
-        li.collection-item
-          p
-            | Już za #{@days} dni!
-          p
-            | Data:
-            |  #{l(@nearest_vacation.start_at)}
-
-    - unless @current_vacation.blank?
-      ul.collection
-        li.collection-item
-          h5 Obecnie masz urlop!
-        li.collection-item
-          p
-            | Już za #{@end_vacation} dni wracasz do pracy!
-          p
-            | Wykorzystaj ten czas dobrze :)
-h5.divider-new Obecny urlop
-- unless @current_vacation.blank?
-  table.table.table-striped.table-bordered.table-list.pretty
-    thead
-      tr
+.b-page
+  .b-index-header
+    .b-index-header__text
+      h4.b-index-header__title
+        i.fa.fa-calendar-check-o
+        |  Urlopy pracownika:
+        = link_to " #{@person.full_name}", backend_person_path(@person), class: "b-person-link"
+    .b-index-header__actions
+      = link_to new_backend_vacation_path(@person), class: "b-btn b-btn--approve" do
+        i.fa.fa-plus
         - if current_manager
-          th
-            em.fa.fa-cog
-            |  Zarządzanie
-        th
-          = sortable "start_at", "Data rozpoczęcia"
-        th
-          = sortable "end_at", "Data zakończenia"
-        th
-          = sortable "free", "Płatny?"
-        th
-          = sortable "reason", "Powód"
-        th
-          | Zaakceptowano?
-    tbody
-      tr
-        - if current_manager
-          td
-            = link_to edit_backend_vacation_path(current_person, @current_vacation) do
-              i.btn.btn-default
-                i.fa.fa-pencil
-            = link_to backend_vacation_path(current_person, @current_vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
-              i.btn.btn-danger
-                i.fa.fa-trash
-        td
-          = l(@current_vacation.start_at)
-        td
-          = l(@current_vacation.end_at)
-        td
-          = show_status(@current_vacation.free)
-        td
-          = empty_info(@current_vacation.reason, "--BRAK POWODU--")
-        td
-          = show_accept_status(@current_vacation.accepted)
-- else
-  = notice_info("Brak urlopów.")
+          |  Dodaj urlop
+        - else
+          |  Poproś o urlop
 
+  - if @current_vacation.present?
+    .vacind-banner.vacind-banner--active
+      .vacind-banner__icon
+        i.fa.fa-sun-o
+      .vacind-banner__text
+        strong Jesteś teraz na urlopie!
+        span  Wracasz za #{@end_vacation} #{@end_vacation == 1 ? 'dzień' : 'dni'} (#{l(@current_vacation.end_at)}).
+  - elsif @nearest_vacation.present?
+    .vacind-banner.vacind-banner--upcoming
+      .vacind-banner__icon
+        i.fa.fa-calendar
+      .vacind-banner__text
+        strong Najbliższy urlop za #{@days} #{@days == 1 ? 'dzień' : 'dni'}
+        span  — od #{l(@nearest_vacation.start_at)} do #{l(@nearest_vacation.end_at)}.
 
-h5.divider-new Nadchodzące Urlopy
-- unless @nearest_vacations.blank?
-  table.table.table-striped.table-bordered.table-list.pretty
-    thead
-      tr
-        - if current_manager
-          th
-            em.fa.fa-cog
-            |  Zarządzanie
-        th
-          = sortable "start_at", "Data rozpoczęcia"
-        th
-          = sortable "end_at", "Data zakończenia"
-        th
-          = sortable "free", "Płatny?"
-        th
-          = sortable "reason", "Powód"
-        th
-          | Zaakceptowano?
-    tbody
+  .vacind-section
+    h5.vacind-section__title
+      span.vacind-dot.vacind-dot--active
+      |  Obecny urlop
+    - if @current_vacation.present?
+      = render 'vacation_row', vacation: @current_vacation, show_actions: current_manager.present?, actor: current_person
+    - else
+      p.vacind-none Brak aktywnego urlopu.
+
+  .vacind-section
+    h5.vacind-section__title
+      span.vacind-dot.vacind-dot--upcoming
+      |  Nadchodzące urlopy
+    - if @nearest_vacations.present?
       - @nearest_vacations.each do |vacation|
-        tr
-          - if current_manager
-            td
-              = link_to edit_backend_vacation_path(vacation.person, vacation) do
-                i.btn.btn-default
-                  i.fa.fa-pencil
-              = link_to backend_vacation_path(vacation.person, vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
-                i.btn.btn-danger
-                  i.fa.fa-trash
-          td
-            = l(vacation.start_at)
-          td
-            = l(vacation.end_at)
-          td
-            = show_status(vacation.free)
-          td
-            = empty_info(vacation.reason, "--BRAK POWODU--")
-          td
-            = show_accept_status(vacation.accepted)
-  = will_paginate @nearest_vacations, renderer: BootstrapPagination::Rails
-- else
-  = notice_info("Brak urlopów.")
-h5.divider-new Niezatwierdzone urlopy
-- unless @unapproved_vacations.blank?
-  table.table.table-striped.table-bordered.table-list.pretty
-    thead
-      tr
-        th
-          em.fa.fa-cog
-          |  Zarządzanie
-        th
-          = sortable "start_at", "Data rozpoczęcia"
-        th
-          = sortable "end_at", "Data zakończenia"
-        th
-          = sortable "free", "Płatny?"
-        th
-          = sortable "reason", "Powód"
-        th
-          | Zaakceptowano?
-    tbody
+        = render 'vacation_row', vacation: vacation, show_actions: current_manager.present?, actor: vacation.person
+      = will_paginate @nearest_vacations, renderer: BootstrapPagination::Rails
+    - else
+      p.vacind-none Brak nadchodzących urlopów.
+
+  .vacind-section
+    h5.vacind-section__title
+      span.vacind-dot.vacind-dot--pending
+      |  Niezatwierdzone
+    - if @unapproved_vacations.present?
       - @unapproved_vacations.each do |vacation|
-        tr
-          td
-            = link_to edit_backend_vacation_path(vacation.person, vacation.id) do
-              i.btn.btn-default
-                i.fa.fa-pencil
-            = link_to backend_vacation_path(vacation.person, vacation.id), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
-              i.btn.btn-danger
-                i.fa.fa-trash
-          td
-            = l(vacation.start_at)
-          td
-            = l(vacation.end_at)
-          td
-            = show_status(vacation.free)
-          td
-            = empty_info(vacation.reason, "--BRAK POWODU--")
-          td
-            = show_accept_status(vacation.accepted)
-  = will_paginate @unapproved_vacations, renderer: BootstrapPagination::Rails
-- else
-  = notice_info("Brak urlopów.")
-h5.divider-new Archiwalne Urlopy
-- unless @old_vacations.blank?
-  table.table.table-striped.table-bordered.table-list.pretty
-    thead
-      tr
-        - if current_manager
-          th
-            em.fa.fa-cog
-            |  Zarządzanie
-        th
-          = sortable "start_at", "Data rozpoczęcia"
-        th
-          = sortable "end_at", "Data zakończenia"
-        th
-          = sortable "free", "Płatny?"
-        th
-          = sortable "reason", "Powód"
-        th
-          | Zaakceptowano?
-    tbody
+        = render 'vacation_row', vacation: vacation, show_actions: true, actor: vacation.person
+      = will_paginate @unapproved_vacations, renderer: BootstrapPagination::Rails
+    - else
+      p.vacind-none Brak niezatwierdzonych urlopów.
+
+  .vacind-section
+    h5.vacind-section__title
+      span.vacind-dot.vacind-dot--past
+      |  Archiwalne
+    - if @old_vacations.present?
       - @old_vacations.each do |vacation|
-        tr
-          - if current_manager
-            td
-              = link_to edit_backend_vacation_path(vacation.person, vacation) do
-                i.btn.btn-default
-                  i.fa.fa-pencil
-              = link_to backend_vacation_path(vacation.person, vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
-                i.btn.btn-danger
-                  i.fa.fa-trash
-          td
-            = l(vacation.start_at)
-          td
-            = l(vacation.end_at)
-          td
-            = show_status(vacation.free)
-          td
-            = empty_info(vacation.reason, "--BRAK POWODU--")
-          td
-            = show_accept_status(vacation.accepted)
-  = will_paginate @old_vacations, renderer: BootstrapPagination::Rails
-- else
-  = notice_info("Brak urlopów.")
+        = render 'vacation_row', vacation: vacation, show_actions: current_manager.present?, actor: vacation.person
+      = will_paginate @old_vacations, renderer: BootstrapPagination::Rails
+    - else
+      p.vacind-none Brak archiwalnych urlopów.

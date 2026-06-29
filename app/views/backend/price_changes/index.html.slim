@@ -1,21 +1,22 @@
-.mv-page
-  .mv-header
-    .mv-header__text
-      h4.mv-header__title
+.b-page
+  .b-index-header
+    .b-index-header__text
+      h4.b-index-header__title
         i.fa.fa-history
         |  Historia zmian ceny
-      p.mv-header__subtitle = @priceable_label
-    = link_to :back, class: "ef-back" do
-      i.fa.fa-arrow-left
-      |  Wróć
+      p.b-index-header__subtitle = @priceable_label
+    .b-index-header__actions
+      = link_to :back, class: "b-back" do
+        i.fa.fa-arrow-left
+        |  Wróć
 
   - if @price_changes.empty?
-    .mv-empty
-      i.fa.fa-history.mv-empty__icon
+    .b-empty
+      i.fa.fa-history.b-empty__icon
       p Brak historii zmian ceny.
   - else
-    .mv-table-wrap
-      table.mv-table
+    .b-table-wrap
+      table.b-table
         thead
           tr
             th Data zmiany
@@ -28,20 +29,19 @@
             - diff = pc.difference
             tr
               td
-                span.mv-date
+                span.b-date
                   i.fa.fa-clock-o
                   = l(pc.changed_at, format: :long)
+              td = number_to_currency(pc.old_price, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')
               td
-                span.pc-price = number_to_currency(pc.old_price, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')
-              td
-                strong.pc-price = number_to_currency(pc.new_price, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')
+                strong = number_to_currency(pc.new_price, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')
               td
                 - if pc.increase?
-                  span.pc-diff.pc-diff--up
+                  span.b-badge.b-badge--red
                     i.fa.fa-arrow-up
                     = " +#{number_to_currency(diff.abs, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')}"
                 - else
-                  span.pc-diff.pc-diff--down
+                  span.b-badge.b-badge--green
                     i.fa.fa-arrow-down
                     = " −#{number_to_currency(diff.abs, unit: 'zł', separator: ',', delimiter: ' ', format: '%n %u')}"
               td = pc.changed_by.presence || '—'

@@ -1,0 +1,14 @@
+/ locals: back_path, back_label, title, icon, subtitle (optional)
+- back_label = local_assigns.fetch(:back_label, 'Powrót')
+- icon       = local_assigns.fetch(:icon, 'file-o')
+- subtitle   = local_assigns[:subtitle]
+
+.b-header
+  = link_to local_assigns[:back_path], class: "b-back" do
+    i.fa.fa-arrow-left
+    = " #{back_label}"
+  h4.b-header__title
+    i class="fa fa-#{icon}"
+    = " #{local_assigns[:title]}"
+  - if subtitle.present?
+    p.b-header__subtitle = subtitle

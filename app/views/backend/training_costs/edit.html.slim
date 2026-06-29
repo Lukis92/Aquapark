@@ -1,35 +1,32 @@
-.ef-page
-  .ef-header
-    = link_to backend_training_costs_path, class: "ef-back" do
-      i.fa.fa-arrow-left
-      |  Powrót do cennika
-    h4.ef-title
-      i.fa.fa-pencil
-      |  Edycja cennika treningów
-    p.ef-subtitle = "#{@training_cost.duration} min — #{@training_cost.cost.nice} zł"
+.b-page
+  = render 'shared/b_page_header',
+    back_path: backend_training_costs_path,
+    back_label: 'Powrót do cennika',
+    title: 'Edycja cennika treningów',
+    icon: 'pencil',
+    subtitle: "#{@training_cost.duration} min — #{@training_cost.cost.nice} zł"
 
-  .tc-edit-layout
-    .ef-card
+  .b-split
+    .b-card
       h6.ef-section__label
         i.fa.fa-pencil
         |  Zmień wartości
       = render 'form'
 
-    .tc-current-card
-      h6.tc-current-card__title
+    .b-info-card
+      h6.b-info-card__title
         i.fa.fa-list
         |  Aktualny cennik
       - if @training_costs.any?
-        table.tc-table
+        table.b-mini-table
           thead
             tr
               th Czas
               th Koszt
           tbody
             - @training_costs.each do |tc|
-              tr class=(@training_cost.id == tc.id ? 'tc-table__row--active' : '')
-                td
-                  span.tc-duration = "#{tc.duration} min"
+              tr class=(@training_cost.id == tc.id ? 'b-table__row--active' : '')
+                td = "#{tc.duration} min"
                 td
                   strong = "#{tc.cost.nice} zł"
       - else

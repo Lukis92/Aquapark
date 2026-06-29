@@ -1,0 +1,36 @@
+- days = (vacation.end_at - vacation.start_at).to_i + 1
+.vacind-row
+  .vacind-row__dates
+    span.vacind-row__date
+      i.fa.fa-arrow-right
+      = l(vacation.start_at)
+      span.vacind-row__sep  —
+      = l(vacation.end_at)
+    span.vacind-days-badge = "#{days} #{days == 1 ? 'dzień' : 'dni'}"
+  .vacind-row__badges
+    - if vacation.free
+      span.vacind-paid.vacind-paid--yes
+        i.fa.fa-check
+        |  Płatny
+    - else
+      span.vacind-paid.vacind-paid--no
+        i.fa.fa-times
+        |  Bezpłatny
+    - if vacation.accepted
+      span.vacind-status.vacind-status--ok
+        i.fa.fa-check-circle
+        |  Zaakceptowany
+    - else
+      span.vacind-status.vacind-status--wait
+        i.fa.fa-clock-o
+        |  Oczekujący
+  - if vacation.reason.present?
+    p.vacind-row__reason
+      i.fa.fa-comment-o
+      = vacation.reason
+  - if show_actions
+    .vacind-row__actions
+      = link_to edit_backend_vacation_path(vacation.person, vacation), class: "vacind-action vacind-action--edit", title: "Edytuj" do
+        i.fa.fa-pencil
+      = link_to backend_vacation_path(vacation.person, vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "vacind-action vacind-action--delete", title: "Usuń" do
+        i.fa.fa-trash

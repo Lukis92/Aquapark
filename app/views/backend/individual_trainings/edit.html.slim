@@ -1,4 +1,85 @@
-= render 'shared/back'
-h5 Edycja treningu
-= info("Jesteś na stronie edycji szczegółów dot. treningu indywidualnego.")
-= render 'form'
+.b-page
+  .b-header
+    = link_to backend_individual_trainings_path, class: "b-back" do
+      i.fa.fa-arrow-left
+      |  Powrót do treningów
+    h4.b-header__title
+      i.fa.fa-pencil
+      |  Edycja treningu indywidualnego
+    p.b-header__subtitle
+      = "#{@client.full_name} z #{@trainer.full_name}"
+
+  .b-card
+    = simple_form_for(@individual_training, url: backend_trainer_individual_training_path(@client, @trainer, @individual_training), method: :patch) do |f|
+      = errors_for(@individual_training)
+
+      - if current_client
+        .ef-section
+          h6.ef-section__label
+            i.fa.fa-credit-card
+            |  Dane do płatności
+          #stripe_ind_error.ef-stripe-error style="display:none"
+          #card-element-training.ef-stripe-card
+
+      .ef-section
+        h6.ef-section__label
+          i.fa.fa-calendar
+          |  Szczegóły treningu
+
+        .ef-row
+          .ef-field
+            label.ef-label
+              | Data treningu
+              span.ef-required  *
+            = f.text_field :date_of_training, class: 'ef-input datepicker', placeholder: 'Kliknij'
+          .ef-field
+            label.ef-label
+              | Godzina rozpoczęcia
+              span.ef-required  *
+            = f.text_field :start_on, class: 'ef-input timepicker', required: true, id: 'input_starttime', placeholder: 'Kliknij'
+
+        .ef-field
+          label.ef-label
+            | Czas trwania
+            span.ef-required  *
+          = f.select :training_cost_id,
+                     options_for_select(@training_costs.map { |tc| [tc.full_duration, tc.id] }, @individual_training.training_cost_id),
+                     { prompt: 'Wybierz czas trwania' },
+                     { class: 'ef-select browser-default' }
+
+        = f.input :trainer_id, as: :hidden, input_html: { value: @trainer.id }
+        = f.input :client_id, as: :hidden, input_html: { value: @client.id }
+
+      .ef-actions
+        button.ef-submit type="submit"
+          i.fa.fa-save
+          |  Zapisz zmiany
+        = link_to backend_individual_trainings_path, class: "ef-cancel" do
+          i.fa.fa-times
+          |  Anuluj
+
+javascript:
+  jQuery(function() {
+    var cardEl = document.getElementById('card-element-training');
+    if (!cardEl) return;
+
+    var stripe = Stripe($('meta[name="stripe-key"]').attr('content'));
+    var elements = stripe.elements();
+    var card = elements.create('card', {
+      style: {
+        base: { fontSize: '16px', color: '#424770' },
+        invalid: { color: '#9e2146' }
+      }
+    });
+    card.mount('#card-element-training');
+
+    card.on('change', function(event) {
+      var err = document.getElementById('stripe_ind_error');
+      if (event.error) {
+        err.textContent = event.error.message;
+        err.style.display = 'block';
+      } else {
+        err.style.display = 'none';
+      }
+    });
+  });

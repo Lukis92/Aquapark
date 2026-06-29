@@ -1,72 +1,77 @@
-h5 Rodzaje wszystkich wejściówek
-= info("Jesteś na stronie prezentującej listę wszystkich rodzajów \
-        biletów/karnetów zarejestrowanych w bazie.")
-- if current_manager || current_receptionist
-  = link_to new_backend_entry_type_path do
-    .btn.btn-primary.waves-effect.waves-light
-      i.fa.fa-plus
-      |  Dodaj bilet/karnet
-= form_tag backend_entry_types_path, method: :get do
-  .panel.panel-default style="margin-bottom:16px"
-    .panel-heading
-      strong
-        i.fa.fa-filter
-        |  Filtrowanie wejściówek
-    .panel-body
-      .row
-        .col-md-3.col-sm-4
-          = label_tag :kind, 'Rodzaj', class: 'control-label'
-          br
-          = select_tag :kind, options_for_select([['Bilet', 'Bilet'], ['Karnet', 'Karnet']], params[:kind]), include_blank: 'Wszystkie'
-        .col-md-4.col-sm-6
-          = label_tag :kind_details, 'Szczegóły', class: 'control-label'
-          = text_field_tag :kind_details, params[:kind_details], class: 'form-control', placeholder: 'Szukaj po szczegółach...'
-        .col-md-1.col-sm-2 style="padding-top:22px"
-          = submit_tag 'Filtruj', class: 'btn btn-primary btn-block'
-      - if params.slice(:kind, :kind_details).values.any?(&:present?)
-        .row
-          .col-sm-12 style="margin-top:8px"
-            = link_to 'Wyczyść filtry', backend_entry_types_path, class: 'btn btn-default btn-sm'
-table.table.table-striped.table-bordered.table-list.pretty.table-list-search
-  thead
-    tr
-      - if current_manager || current_receptionist
-        th
-          em.fa.fa-cog
-          |  Zarządzanie
-      th
-        = sortable "kind", "Bilet/Karnet"
-      th
-        = sortable "kind_details", "Szczegóły"
-      th
-        = sortable "description", "Opis"
-      th
-        = sortable "price", "Cena"
-  tbody
-    - @entry_types.each do |entry|
-      tr
-        - if current_manager || current_receptionist
-          td
-            = link_to edit_backend_entry_type_path(entry), title: 'Edytuj' do
-              .btn.btn-default
-                i.fa.fa-pencil
-            = link_to backend_entry_type_path(entry), title: 'Usuń', method: :delete, data: { confirm: 'Jesteś pewny/a?' } do
-              .btn.btn-danger
-                i.fa.fa-trash
-            = link_to backend_entry_type_bought_details_path(entry), title: 'Historia zakupów' do
-              .btn.btn-warning
-                i.fa.fa-history
-            = link_to backend_entry_type_price_changes_path(entry), title: 'Historia cen' do
-              .btn.btn-info
-                i.fa.fa-line-chart
-        td
-          = entry.kind
-        td
-          = entry.kind_details
-        td
-          = empty_info(entry.description, "--BRAK OPISU--")
-        td
-          = entry.price.nice
-          | zł
+.entry-types-page
+  .entry-types-header
+    .entry-types-header__text
+      h4.entry-types-header__title
+        i.fa.fa-ticket
+        |  Wejściówki
+      p.entry-types-header__subtitle Lista wszystkich biletów i karnetów dostępnych w aquaparku.
+    - if current_manager || current_receptionist
+      = link_to new_backend_entry_type_path, class: "entry-types-header__add" do
+        i.fa.fa-plus
+        |  Dodaj wejściówkę
 
-= will_paginate @entry_types, renderer: BootstrapPagination::Rails
+  = form_tag backend_entry_types_path, method: :get do
+    .et-filter
+      .et-filter__field
+        label.et-filter__label Rodzaj
+        = select_tag :kind, options_for_select([['Bilet', 'Bilet'], ['Karnet', 'Karnet']], params[:kind]), include_blank: 'Wszystkie', class: 'et-filter__select browser-default'
+      .et-filter__field
+        label.et-filter__label Szczegóły
+        = text_field_tag :kind_details, params[:kind_details], class: 'et-filter__input', placeholder: 'Szukaj po szczegółach...'
+      .et-filter__field.et-filter__field--btn
+        label.et-filter__label
+        button.et-filter__btn type="submit"
+          i.fa.fa-filter
+          |  Filtruj
+      - if params.slice(:kind, :kind_details).values.any?(&:present?)
+        .et-filter__field.et-filter__field--btn
+          label.et-filter__label
+          = link_to backend_entry_types_path, class: "et-filter__clear" do
+            i.fa.fa-times
+            |  Wyczyść
+
+  - if @entry_types.empty?
+    .et-empty
+      i.fa.fa-ticket.et-empty__icon
+      p Brak wejściówek spełniających kryteria.
+  - else
+    .et-table-wrap
+      table.et-table
+        thead
+          tr
+            th = sortable "kind", "Rodzaj"
+            th = sortable "kind_details", "Szczegóły"
+            th = sortable "description", "Opis"
+            th = sortable "price", "Cena"
+            - if current_manager || current_receptionist
+              th.text-center Akcje
+        tbody
+          - @entry_types.each do |entry|
+            - is_pass = entry.kind == 'Karnet'
+            tr
+              td
+                span class="et-kind-badge #{is_pass ? 'et-kind-badge--pass' : 'et-kind-badge--ticket'}"
+                  i class="fa #{is_pass ? 'fa-clone' : 'fa-ticket'}"
+                  = entry.kind
+              td = entry.kind_details
+              td.et-description
+                - if entry.description.present?
+                  = entry.description
+                - else
+                  span.et-no-value —
+              td
+                strong.et-price = entry.price.nice
+                span.et-currency  zł
+              - if current_manager || current_receptionist
+                td
+                  .et-actions
+                    = link_to edit_backend_entry_type_path(entry), class: "et-action et-action--edit", title: "Edytuj" do
+                      i.fa.fa-pencil
+                    = link_to backend_entry_type_bought_details_path(entry), class: "et-action et-action--history", title: "Historia zakupów" do
+                      i.fa.fa-history
+                    = link_to backend_entry_type_price_changes_path(entry), class: "et-action et-action--prices", title: "Historia cen" do
+                      i.fa.fa-line-chart
+                    = link_to backend_entry_type_path(entry), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "et-action et-action--delete", title: "Usuń" do
+                      i.fa.fa-trash
+
+    = will_paginate @entry_types, renderer: BootstrapPagination::Rails

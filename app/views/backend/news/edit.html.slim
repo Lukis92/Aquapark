@@ -1,12 +1,9 @@
-.ef-page
-  .ef-header
-    = link_to backend_news_index_path, class: "ef-back" do
-      i.fa.fa-arrow-left
-      |  Powrót do aktualności
-    h4.ef-title
-      i.fa.fa-pencil
-      |  Edytowanie aktualności
-    p.ef-subtitle = @news.title
-
-  .ef-card.ef-card--wide
+.b-page
+  = render 'shared/b_page_header',
+    back_path: backend_news_index_path,
+    back_label: 'Powrót do aktualności',
+    title: 'Edytowanie aktualności',
+    icon: 'pencil',
+    subtitle: @news.title
+  .b-card.b-card--wide
     = render 'form'

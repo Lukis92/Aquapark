@@ -1,20 +1,20 @@
-.ef-page
-  .ef-header
-    = link_to backend_vacations_path(@person), class: "ef-back" do
+.b-page
+  .b-header
+    = link_to backend_vacations_path(@person), class: "b-back" do
       i.fa.fa-arrow-left
       |  Powrót do urlopów
     - if current_manager
-      h4.ef-title
+      h4.b-header__title
         i.fa.fa-calendar-plus-o
         |  Dodaj urlop
-      p.ef-subtitle = @person.full_name
+      p.b-header__subtitle = @person.full_name
     - else
-      h4.ef-title
+      h4.b-header__title
         i.fa.fa-calendar-plus-o
         |  Poproś o urlop
-      p.ef-subtitle Twoja prośba trafi do kierownika do zatwierdzenia.
+      p.b-header__subtitle Twoja prośba trafi do kierownika do zatwierdzenia.
 
-  .ef-card
+  .b-card
     = simple_form_for(@vacation, url: backend_vacations_path(@person)) do |f|
       = errors_for(@vacation)
 

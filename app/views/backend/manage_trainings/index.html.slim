@@ -1,21 +1,21 @@
-.mv-page
-  .mv-header
-    .mv-header__text
-      h4.mv-header__title
+.b-page
+  .b-index-header
+    .b-index-header__text
+      h4.b-index-header__title
         i.fa.fa-child
         |  Treningi indywidualne — zarządzanie
-      p.mv-header__subtitle
+      p.b-index-header__subtitle
         | Łącznie w bazie:
         strong  #{IndividualTraining.count}
         |  zakupionych treningów.
 
   - if @manage_trainings.blank?
-    .mv-empty
-      i.fa.fa-child.mv-empty__icon
+    .b-empty
+      i.fa.fa-child.b-empty__icon
       p Brak treningów w bazie.
   - else
-    .mv-table-wrap
-      table.mv-table
+    .b-table-wrap
+      table.b-table
         thead
           tr
             th = sortable "date_of_training", "Data"
@@ -28,33 +28,33 @@
         tbody
           - @manage_trainings.each do |training|
             - past = training.date_of_training < Date.today
-            tr class=(past ? 'mv-row--past' : '')
+            tr class=(past ? 'b-table__row--muted' : '')
               td
-                span.mv-date
+                span.b-date
                   i.fa.fa-calendar
                   = l(training.date_of_training)
               td
-                span.mv-date
+                span.b-date
                   = l(training.start_on, format: :short)
                   |  –
                   = l(training.end_on, format: :short)
               td
-                span.mv-days-badge = "#{training.training_cost.duration} min"
+                span.b-badge.b-badge--blue = "#{training.training_cost.duration} min"
               td
                 strong = "#{training.training_cost.cost.nice} zł"
               td
-                = link_to backend_person_path(training.client), class: "mv-person-link" do
+                = link_to backend_person_path(training.client), class: "b-person-link" do
                   i.fa.fa-user
                   = training.client.full_name
               td
-                = link_to backend_person_path(training.trainer), class: "mv-person-link" do
+                = link_to backend_person_path(training.trainer), class: "b-person-link" do
                   i.fa.fa-user
                   = training.trainer.full_name
               td
-                .mv-actions
-                  = link_to edit_backend_manage_training_path(training), class: "mv-action mv-action--edit", title: "Edytuj" do
+                .b-actions
+                  = link_to edit_backend_manage_training_path(training), class: "b-action b-action--edit", title: "Edytuj" do
                     i.fa.fa-pencil
-                  = link_to backend_manage_training_path(training), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "mv-action mv-action--delete", title: "Usuń" do
+                  = link_to backend_manage_training_path(training), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "b-action b-action--delete", title: "Usuń" do
                     i.fa.fa-trash
 
     = will_paginate @manage_trainings, renderer: BootstrapPagination::Rails

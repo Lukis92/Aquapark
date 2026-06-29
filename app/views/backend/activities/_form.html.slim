@@ -1,37 +1,86 @@
 = simple_form_for([:backend, @activity]) do |f|
   = errors_for(@activity)
-  .row
-    .input-field
-      = f.input :name
-    .input-field
-      = f.input :description, input_html: {class:'materialize-textarea'}
+
+  .act-form-section
+    h6.act-form-section__label
+      i.fa.fa-info-circle
+      |  Podstawowe informacje
+
+    .act-form-field
+      label.act-form-label
+        | Nazwa zajęcia
+        span.act-form-required  *
+      = f.text_field :name, required: true, class: 'act-form-input', placeholder: 'np. Aqua aerobik'
+
+    .act-form-field
+      label.act-form-label Opis
+      = f.text_area :description, class: 'act-form-textarea', rows: 3, placeholder: 'Krótki opis zajęć (opcjonalnie)'
+
     - if current_manager || current_receptionist
-      .checkbox-fix
-        = f.input :active
+      .act-form-check
+        = f.check_box :active, class: 'act-form-checkbox', id: 'activity_active'
+        label.act-form-check-label for="activity_active"
+          | Aktywne (widoczne w harmonogramie)
     - else
-      = f.input :active, as: :hidden, input_html: { value: false}
-    .col-md-6
-      .form-group
-        label for='input_starttime'* Czas rozpoczęcia
-        = f.text_field :start_on, class: 'timepicker',
-          id: 'input_starttime', id: 'input_starttime', placeholder: 'Kliknij'
-    .col-md-6
-      .form-group
-        label for='input_endtime'* Czas zakończenia
-        = f.text_field :end_on, class: 'timepicker', id: 'input_endtime',
-          required: true, placeholder: 'Kliknij'
-    .form-group
-      = f.input :day_of_week, as: :select, collection: Activity::DAYS,
-                              prompt: "Wybierz dzień tygodnia"
-    .form-group
-      = f.input :pool_zone, collection: [['A', 'A'], ['B', 'B'], ['C', 'C'],
-      ['D', 'D'], ['E', 'E'], ['F', 'F']], prompt: 'Wybierz strefę'
-    - unless current_trainer
-      .form-group
-        = f.input :person_id, collection: @trainers.map{|t| [t.full_name, t.id]},
-                              prompt: "Wybierz trenera"
-    - else
-      = f.input :person_id, as: :hidden, input_html: { value: current_trainer.id}
-    .input-field
-      = f.input :max_people
-    = f.button :submit, class: "btn btn-primary btn-block"
+      = f.input :active, as: :hidden, input_html: { value: false }
+
+  .act-form-section
+    h6.act-form-section__label
+      i.fa.fa-clock-o
+      |  Harmonogram
+
+    .act-form-row
+      .act-form-field
+        label.act-form-label
+          | Dzień tygodnia
+          span.act-form-required  *
+        = f.select :day_of_week, options_for_select(Activity::DAYS, @activity.day_of_week),
+                   { prompt: 'Wybierz dzień' },
+                   { class: 'act-form-select browser-default' }
+      .act-form-field
+        label.act-form-label
+          | Strefa basenu
+          span.act-form-required  *
+        = f.select :pool_zone, options_for_select([['A','A'],['B','B'],['C','C'],['D','D'],['E','E'],['F','F']], @activity.pool_zone),
+                   { prompt: 'Wybierz strefę' },
+                   { class: 'act-form-select browser-default' }
+
+    .act-form-row
+      .act-form-field
+        label.act-form-label
+          | Godzina rozpoczęcia
+          span.act-form-required  *
+        = f.text_field :start_on, class: 'act-form-input timepicker', id: 'input_starttime', placeholder: 'Kliknij'
+      .act-form-field
+        label.act-form-label
+          | Godzina zakończenia
+          span.act-form-required  *
+        = f.text_field :end_on, class: 'act-form-input timepicker', id: 'input_endtime', placeholder: 'Kliknij'
+
+  .act-form-section
+    h6.act-form-section__label
+      i.fa.fa-users
+      |  Trener i limit
+
+    .act-form-row
+      - unless current_trainer
+        .act-form-field
+          label.act-form-label
+            | Trener
+            span.act-form-required  *
+          = f.select :person_id, options_for_select(@trainers.map { |t| [t.full_name, t.id] }, @activity.person_id),
+                     { prompt: 'Wybierz trenera' },
+                     { class: 'act-form-select browser-default' }
+      - else
+        = f.input :person_id, as: :hidden, input_html: { value: current_trainer.id }
+      .act-form-field
+        label.act-form-label Maks. liczba uczestników
+        = f.number_field :max_people, class: 'act-form-input', placeholder: 'bez limitu', min: 1
+
+  .act-form-actions
+    button.act-form-submit type="submit"
+      i.fa.fa-save
+      |  Zapisz zmiany
+    = link_to backend_activities_path, class: "act-form-cancel" do
+      i.fa.fa-arrow-left
+      |  Anuluj

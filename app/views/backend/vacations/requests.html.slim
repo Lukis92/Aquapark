@@ -1,60 +1,59 @@
-h5 Urlopy do zaakceptowania
-= info("Jesteś na stronie listy urlopów czekających na zatwierdzenie. W przypadku \
-        nieakceptacji usuń daną prośbę.")
-p
-  | Obecnie w bazie posiadamy #{@un_vacations.count} nie zaakceptowanych urlopów.
-.row
-  = render 'shared/v_searchbar'
-.row
-  - unless @un_vacations.blank?
-    table.table.table-striped.table-bordered.table-list.pretty
-      thead
-        tr
-          - if current_manager
-            th
-              em.fa.fa-cog
-              |  Zarządzanie
-          th
-            = sortable "start_at", "Data rozpoczęcia"
-          th
-            = sortable "end_at", "Data zakończenia"
-          th
-            = sortable "free", "Płatny?"
-          th
-            = sortable "reason", "Powód"
-          th
-            = sortable "person_id", "Pracownik"
-          th
-            = sortable "accepted", "Zaakceptowano?"
-      tbody
-        - @un_vacations.each do |vacation|
-          tr
-            - if current_manager
-              td
-                = link_to edit_backend_vacation_path(vacation.person, vacation), title: 'Edytuj' do
-                  i.btn.btn-default
-                    i.fa.fa-pencil
-                = link_to backend_vacation_path(vacation.person, vacation), method: :delete, title: 'Usuń', data: { confirm: 'Jesteś pewny/a?' } do
-                  i.btn.btn-danger
-                    i.fa.fa-trash
-                = link_to accept_backend_vacation_path(vacation, accepted: true), title: 'Akceptuj', method: :post do
-                  i.btn.btn-success
-                    i.fa.fa-check-square
-            td
-              = l(vacation.start_at)
-            td
-              = l(vacation.end_at)
-            td
-              = show_status(vacation.free)
-            td
-              = empty_info(HTML_Truncator.truncate(vacation.reason, 40), "--BRAK POWODU--")
-            td
-              = link_to backend_person_path(vacation.person) do
-                = vacation.person.full_name unless vacation.person.blank?
-            td
-              = show_accept_status(vacation.accepted)
-    = will_paginate @un_vacations, renderer: BootstrapPagination::Rails
+.b-page
+  .b-index-header
+    .b-index-header__text
+      h4.b-index-header__title
+        i.fa.fa-hourglass-half
+        |  Urlopy do zatwierdzenia
+      p.b-index-header__subtitle
+        | Łącznie oczekuje:
+        strong  #{@un_vacations.count}
+        |  urlopów na decyzję.
+
+  - if @un_vacations.blank?
+    .b-empty
+      i.fa.fa-check-circle.b-empty__icon
+      p Brak urlopów oczekujących na zatwierdzenie.
   - else
-    .alert.alert-info.col-md-6.col-md-offset-3
-      .text-center
-        | Brak urlopów.
+    .b-list
+      - @un_vacations.each do |vacation|
+        - days = (vacation.end_at - vacation.start_at).to_i + 1
+        .b-list-card
+          .b-list-card__stripe
+          .b-list-card__body
+            .b-list-card__info
+              .b-list-card__person
+                i.fa.fa-user-circle
+                = link_to vacation.person.full_name, backend_person_path(vacation.person), class: "b-person-link"
+              .b-list-card__meta
+                span.b-meta-chip
+                  i.fa.fa-calendar
+                  strong = l(vacation.start_at)
+                  span.b-meta-sep  —
+                  strong = l(vacation.end_at)
+                span.b-badge.b-badge--blue = "#{days} #{days == 1 ? 'dzień' : 'dni'}"
+                - if vacation.free
+                  span.b-badge.b-badge--green
+                    i.fa.fa-check
+                    |  Płatny
+                - else
+                  span.b-badge.b-badge--red
+                    i.fa.fa-times
+                    |  Bezpłatny
+              - if vacation.reason.present?
+                p.b-list-card__reason
+                  i.fa.fa-comment-o
+                  = vacation.reason
+
+            - if current_manager || current_receptionist
+              .b-list-card__actions
+                = link_to accept_backend_vacation_path(vacation, accepted: true), method: :post, class: "b-btn b-btn--approve" do
+                  i.fa.fa-check
+                  |  Zatwierdź
+                = link_to edit_backend_vacation_path(vacation.person, vacation), class: "b-btn b-btn--edit" do
+                  i.fa.fa-pencil
+                  |  Edytuj
+                = link_to backend_vacation_path(vacation.person, vacation), method: :delete, data: { confirm: 'Jesteś pewny/a?' }, class: "b-btn b-btn--delete" do
+                  i.fa.fa-trash
+                  |  Usuń
+
+    = will_paginate @un_vacations, renderer: BootstrapPagination::Rails
