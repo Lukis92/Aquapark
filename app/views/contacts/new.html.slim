@@ -8,7 +8,6 @@
       button.close aria-hidden="true" data-dismiss="alert" type="button" ×
       - flash.discard(:notice)
       = flash[:notice]
-  .row
   = simple_form_for @contact do |f|
     = errors_for(@contact)
     .input-field.col-md-6

@@ -22,6 +22,7 @@
 body,
 html {
   height: 100%;
+  scroll-behavior: smooth;
 }
 #wrap {
   min-height: 100%;
@@ -2293,7 +2294,7 @@ table td:first-child {
   white-space: nowrap;
 }
 .row .col-md-4 .well {
-  width: 300px;
+  width: 100%;
 }
 
 /* Notifications page */

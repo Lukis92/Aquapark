@@ -2,7 +2,12 @@ doctype html
 html
   head
     meta content=("text/html; charset=UTF-8") http-equiv="Content-Type"
+    meta name="viewport" content="width=device-width, initial-scale=1"
     title= content_for?(:title) ? yield(:title) : ENV['APP_NAME']
+    - if content_for?(:meta_description)
+      meta name="description" content=yield(:meta_description)
+    - else
+      meta name="description" content="Pure Space – nowoczesny aquapark w Warszawie. 4 baseny, sauny, jacuzzi, zjeżdżalnie i zajęcia wodne. Czynny 24/7. Sprawdź cennik i kup bilet online!"
     = stylesheet_link_tag    'application', media: 'all'
     = stylesheet_link_tag 'mdb.min.css'
     /= favicon_link_tag 'Aquapark', href: '/images/brand.png'
