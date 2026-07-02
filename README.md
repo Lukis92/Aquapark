@@ -97,6 +97,15 @@ Aplikacja będzie dostępna pod adresem **http://localhost:3000**.
 Dane logowania managera znajdziesz w pliku `db/seeds/manager.rb`.
 
 ## Historia zmian
+* 0.6.6 *(2026-07-02)*
+  * **Edytor WYSIWYG Quill w formularzu aktualności**
+    * Zastąpiono zwykłe `textarea` bogatym edytorem Quill 1.3.7 (motyw snow)
+    * Toolbar: nagłówki H1–H3, pogrubienie, kursywa, podkreślenie, przekreślenie, listy numerowane i punktowane, linki, obrazki, czyszczenie formatowania
+    * Styl edytora (`.ef-quill-editor`, `.ql-toolbar`) dopasowany do systemu komponentów `.ef-*` backendu
+    * Obsługa trybu edycji — istniejąca treść HTML wczytywana do edytora przy edycji posta
+    * Layout backendu obsługuje blok `:head` — umożliwia dołączanie zasobów specyficznych dla danego widoku
+  * **Poprawa strony głównej — jakość HTML, UX, SEO i dostępność**
+
 * 0.6.5 *(2026-06-29)*
   * **Kompletny redesign backendu — spójny system wizualny**
     * Przeprojektowano ponad 30 widoków Slim: zastąpiono panele Bootstrap/MDB i stare tabele nowoczesnymi komponentami BEM
@@ -202,16 +211,6 @@ Dane logowania managera znajdziesz w pliku `db/seeds/manager.rb`.
   * Naprawiono błąd tras: `:search` i `:choose_trainer` usunięte z parametru `only:` w `routes.rb` (błąd `ArgumentError` w Rails 8)
   * `i18n` odblokowane z wersji `< 1.15` — brak ograniczenia górnego
   * Zainicjalizowano zestaw kluczy GPG MSYS2 i zainstalowano `libyaml` dla gemu `psych`
-
-* 0.5.4
-  * Naprawiono wyszukiwanie nakładających się aktywności oraz tłumaczenie dni (I18n)
-  * Dodano komentarze dokumentacyjne
-  * Poprawiono literówkę w changelogu
-  * Naprawiono walidację wolnego czasu klienta i dodano testy jednostkowe
-  * Dodano testy walidacji obecności dla BoughtDetail
-  * Zaktualizowano komentarz dotyczący czyszczenia bazy danych
-  * Zrefaktoryzowano kontroler home i scope’y typu wpisu
-  * Dodano brakujące testy jednostkowe
 
 ## Autor
 Łukasz Korol - lukas.korol@gmail.com
