@@ -1,27 +1,27 @@
 nav.navbar.blue.darken-4.navbar-fixed-top.sticky.z-depth-1.scrollspy role="navigation"
   .container-fluid
     .navbar-header
-      button.navbar-toggle.collapsed data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" type="button"
-      span.sr-only Toggle navigation
-      span.icon-bar
-      span.icon-bar
-      span.icon-bar
-        a.navbar-brand.waves-effect.waves-light href=root_path
-          b
-            .fix-brand
-              img.fix-img src="/images/brand.png" /
-              |  Pure Space
+      button.navbar-toggle.collapsed data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" type="button" aria-label="Otwórz menu nawigacyjne"
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand.waves-effect.waves-light href=root_path
+        b
+          .fix-brand
+            img.fix-img src="/images/brand.png" /
+            |  Pure Space
 
     #bs-example-navbar-collapse-1.collapse.navbar-collapse
       ul.nav.navbar-nav
         li
-          a.waves-effect.waves-light href="#slider" data-toggle="tab" Strona Główna
+          a.waves-effect.waves-light href="#slider" Strona Główna
         li
-          a.waves-effect.waves-light href="#about" data-toggle="tab" O nas
+          a.waves-effect.waves-light href="#about" O nas
         li
-          a.waves-effect.waves-light href="#price" data-toggle="tab" Cennik
+          a.waves-effect.waves-light href="#price" Cennik
         li
-          a.waves-effect.waves-light href="#contact" data-toggle="tab" Kontakt
+          a.waves-effect.waves-light href="#contact" Kontakt
       ul.nav.navbar-nav.navbar-right
         - unless person_signed_in?
           li
