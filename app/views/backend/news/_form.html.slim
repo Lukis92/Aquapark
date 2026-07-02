@@ -1,3 +1,7 @@
+- content_for :head do
+  link rel="stylesheet" href="https://cdn.quilljs.com/1.3.7/quill.snow.css"
+  script src="https://cdn.quilljs.com/1.3.7/quill.min.js" type="text/javascript"
+
 = simple_form_for([:backend, @news], as: :news) do |f|
   = errors_for(@news)
 
@@ -11,7 +15,8 @@
     label.ef-label
       | Treść
       span.ef-required  *
-    = f.text_area :content, class: 'ef-textarea', placeholder: 'Treść aktualności', rows: 10
+    = f.hidden_field :content, id: 'news_content_hidden'
+    #quill-editor.ef-quill-editor
 
   .ef-field
     label.ef-label
@@ -32,3 +37,30 @@
     = link_to backend_news_index_path, class: "ef-cancel" do
       i.fa.fa-times
       |  Anuluj
+
+javascript:
+  (function() {
+    var quill = new Quill('#quill-editor', {
+      theme: 'snow',
+      placeholder: 'Treść aktualności...',
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['link', 'image'],
+          ['clean']
+        ]
+      }
+    });
+
+    var hiddenField = document.getElementById('news_content_hidden');
+
+    if (hiddenField.value) {
+      quill.clipboard.dangerouslyPasteHTML(hiddenField.value);
+    }
+
+    hiddenField.closest('form').addEventListener('submit', function() {
+      hiddenField.value = quill.root.innerHTML;
+    });
+  })();
